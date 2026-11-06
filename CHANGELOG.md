@@ -1,3 +1,12 @@
+## [2.6.8] - 2026-11-05
+
+### HA 2026.11 Compatibility & Node 26 LTS Modernization
+- Upgraded Python runtime target to Python 3.14 (HA 2026.11 ADR-0020 compatibility) with support range `>=3.14,<3.16`.
+- Upgraded Node.js CI and runtime target to Node 26.13 LTS.
+- Updated frontend dependencies: `nanoid` 6.0.2, `react` 19.3.1, `react-dom` 19.3.1, `react-grid-layout` 2.3.0, `react-resizable` 4.0.2, `@vitejs/plugin-react` 6.2.1, `vite` 8.3.6, and `vitest` 5.1.0 with 0 vulnerabilities.
+- Recompiled production React dashboard bundle (`argus-frontend.js`) with cache-bust version `v=2.6.8`.
+- Updated version contracts and CI validation matrices across regression test suites.
+
 ## [2.6.7] - 2026-10-10
 
 - Añadir un diagnóstico descargable de configuración con conteos agregados y estado básico de TTS. Omite IDs de entidades, PIN, destinos TTS y nombres de reproductores.

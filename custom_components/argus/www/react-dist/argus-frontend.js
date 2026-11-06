@@ -1,5 +1,5 @@
-//#region \0rolldown/runtime.js
-var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescriptor, r = Object.getOwnPropertyNames, i = Object.getPrototypeOf, a = Object.prototype.hasOwnProperty, o = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), s = (e, i, o, s) => {
+// \0rolldown/runtime.js
+var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescriptor, r = Object.getOwnPropertyNames, i = Object.getPrototypeOf, a = Object.prototype.hasOwnProperty, o = (e, t) => () => (t || (e((t = { exports: {} }).exports, t, t.exports), e = null), t.exports), s = (e, i, o, s) => {
 	if (i && typeof i == "object" || typeof i == "function") for (var c = r(i), l = 0, u = c.length, d; l < u; l++) d = c[l], !a.call(e, d) && d !== o && t(e, d, {
 		get: ((e) => i[e]).bind(null, d),
 		enumerable: !(s = n(i, d)) || s.enumerable
@@ -270,8 +270,7 @@ function d(e) {
 		s = !0, C(), clearInterval(M), D(!1), E(!1), c && c.release(), y.remove(), e.shadowRoot.querySelector(".argus-night-settings")?.remove(), e.shadowRoot.removeEventListener("pointerdown", k, !0), e.shadowRoot.removeEventListener("keydown", k, !0), e.shadowRoot.removeEventListener("click", A, !0), e.removeEventListener("argus-fullscreen-changed", j), document.removeEventListener("visibilitychange", j);
 	};
 }
-//#endregion
-//#region src/legacy/argus-panel.ts
+// src/legacy/argus-panel.ts
 var f = [
 	{
 		code: "auto",
@@ -1462,11 +1461,8 @@ var h = class extends HTMLElement {
 		let e = this._walkTestPollGeneration;
 		this._walkTestTimer = setInterval(async () => {
 			if (!this._walkTestPollInFlight && this.isConnected) {
-				if (this._walkTestPollInFlight = !0, !this.shadowRoot.getElementById("walk-test-modal")?.classList.contains("open") && !this._walkTestSession?.active) {
-					this._stopWalkTestPoll(), this._walkTestPollInFlight = !1;
-					return;
-				}
-				try {
+				if (this._walkTestPollInFlight = !0, !this.shadowRoot.getElementById("walk-test-modal")?.classList.contains("open") && !this._walkTestSession?.active) this._stopWalkTestPoll(), this._walkTestPollInFlight = !1;
+				else try {
 					let t = await this._send("argus/get_walk_test_status");
 					if (!this.isConnected || e !== this._walkTestPollGeneration) return;
 					let n = this._walkTestSession?.tested_count || 0;
@@ -1689,36 +1685,7 @@ var h = class extends HTMLElement {
 				await this._loadActivityTimeline(t), this._renderActivityLog(), n.style.opacity = "1", n.textContent = "✓ " + (this._t("history_refresh") || "Actualizado"), setTimeout(() => {
 					n && (n.textContent = "🔄 " + (this._t("history_refresh") || "Actualizar").replace(/^🔄\s*/, ""));
 				}, 1500);
-				return;
-			}
-			if (t.closest("#btn-export-forensic, .btn-export-forensic")) {
-				e.preventDefault(), e.stopPropagation(), this._openHistoryExportModal();
-				return;
-			}
-			if (t.closest("#btn-clear-log, .btn-clear-log")) {
-				e.preventDefault(), e.stopPropagation(), this._clearHistory();
-				return;
-			}
-			if (t.closest("#history-export-close")) {
-				e.preventDefault(), this._closeHistoryExportModal();
-				return;
-			}
-			if (t.closest("#btn-do-download-pdf")) {
-				e.preventDefault(), this._exportHistoryPDF();
-				return;
-			}
-			if (t.closest("#btn-do-download-txt")) {
-				e.preventDefault(), this._exportHistoryText();
-				return;
-			}
-			if (t.closest("#btn-do-download-json")) {
-				e.preventDefault(), this._exportForensicTimeline();
-				return;
-			}
-			if (t.closest(".exit-kiosk-btn, button[data-exit-fullscreen]")) {
-				e.preventDefault(), e.stopPropagation(), this._exitFullscreenView();
-				return;
-			}
+			} else t.closest("#btn-export-forensic, .btn-export-forensic") ? (e.preventDefault(), e.stopPropagation(), this._openHistoryExportModal()) : t.closest("#btn-clear-log, .btn-clear-log") ? (e.preventDefault(), e.stopPropagation(), this._clearHistory()) : t.closest("#history-export-close") ? (e.preventDefault(), this._closeHistoryExportModal()) : t.closest("#btn-do-download-pdf") ? (e.preventDefault(), this._exportHistoryPDF()) : t.closest("#btn-do-download-txt") ? (e.preventDefault(), this._exportHistoryText()) : t.closest("#btn-do-download-json") ? (e.preventDefault(), this._exportForensicTimeline()) : t.closest(".exit-kiosk-btn, button[data-exit-fullscreen]") && (e.preventDefault(), e.stopPropagation(), this._exitFullscreenView());
 		}));
 	}
 	disconnectedCallback() {
@@ -1771,19 +1738,13 @@ var h = class extends HTMLElement {
 		return this._completeBootAndReveal();
 	}
 	_ensureInitialized() {
-		if (this.isConnected && this._hass && !this._dashboard && !this._initPromise) {
-			if (this._hass.connected === !1) {
-				this._setBootProgress(15, this._t("connection_lost") || "Sin conexión con Home Assistant", !0);
-				return;
-			}
-			this._setBootProgress(35), this._initPromise = this._init().catch((e) => {
-				console.error("Argus initialization failed:", e), this.isConnected && (this._setBootProgress(15, (this._t("connection_lost") || "Sin conexión con Home Assistant") + ": " + (e.message || ""), !0), setTimeout(() => {
-					this._completeBootAndReveal(), this._renderInitializationError(e);
-				}, 1800));
-			}).finally(() => {
-				this._initPromise = null;
-			});
-		}
+		this.isConnected && this._hass && !this._dashboard && !this._initPromise && (this._hass.connected === !1 ? this._setBootProgress(15, this._t("connection_lost") || "Sin conexión con Home Assistant", !0) : (this._setBootProgress(35), this._initPromise = this._init().catch((e) => {
+			console.error("Argus initialization failed:", e), this.isConnected && (this._setBootProgress(15, (this._t("connection_lost") || "Sin conexión con Home Assistant") + ": " + (e.message || ""), !0), setTimeout(() => {
+				this._completeBootAndReveal(), this._renderInitializationError(e);
+			}, 1800));
+		}).finally(() => {
+			this._initPromise = null;
+		})));
 	}
 	_bindSOS() {
 		if (this._sosBound) return;
@@ -1811,7 +1772,7 @@ var h = class extends HTMLElement {
 		}), e.addEventListener("pointerdown", o), e.addEventListener("pointermove", s), e.addEventListener("pointerup", c), e.addEventListener("pointercancel", c), this._sosBound = !0;
 	}
 	async _init() {
-		this._mode = "disarmed", this._staticBound ||= (this._bindStatic(), !0), this._setBootProgress(45), await this._connect(), this._applyTranslations(), this._setBootProgress(70), await this._load(), this._dashboard && (this._initWidgetGrid(), !this._postLoadBound && (this._postLoadBound = !0, this.shadowRoot.getElementById("history-export-modal")?.addEventListener("click", (e) => {
+		this._mode = "disarmed", this._staticBound ||= (this._bindStatic(), !0), this._setBootProgress(45), await this._connect(), this._applyTranslations(), this._setBootProgress(70), await this._load(), this._dashboard && (this._initWidgetGrid(), this._postLoadBound || (this._postLoadBound = !0, this.shadowRoot.getElementById("history-export-modal")?.addEventListener("click", (e) => {
 			e.target && e.target.id === "history-export-modal" && this._closeHistoryExportModal();
 		}), this.shadowRoot.getElementById("btn-export-config")?.addEventListener("click", () => this._exportConfig()), this.shadowRoot.getElementById("btn-import-trigger")?.addEventListener("click", () => this.shadowRoot.getElementById("import-config-file").click()), this.shadowRoot.getElementById("import-config-file")?.addEventListener("change", (e) => this._importConfig(e)), this.shadowRoot.getElementById("btn-reset-config")?.addEventListener("click", () => this._resetConfig()), this.shadowRoot.getElementById("btn-undo-reset")?.addEventListener("click", () => this._undoResetConfig()), this.shadowRoot.getElementById("btn-save-personalization-standalone")?.addEventListener("click", () => this._savePersonalization()), this.shadowRoot.getElementById("btn-select-sos-outputs")?.addEventListener("click", () => this._openModal("panic")), this._configureEmergencyCall()));
 	}
@@ -2319,7 +2280,7 @@ var h = class extends HTMLElement {
 		let v = this.shadowRoot.getElementById("chk-hub-bg-sound");
 		v && (v.checked = this._hubBgSound), this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._isAdmin = i.current_profile?.role === "admin", this._permissions = i.current_profile?.permissions || {};
 		let y = i.entries?.[0]?.entity_id;
-		if (y ? ((!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = y), this._loadRetryTimeout &&= (clearTimeout(this._loadRetryTimeout), null)) : (!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = null), this._isAdmin) try {
+		if (y ? (this._modeEntryId && this._modeEntryId !== "default" || (this._modeEntryId = y), this._loadRetryTimeout &&= (clearTimeout(this._loadRetryTimeout), null)) : this._modeEntryId && this._modeEntryId !== "default" || (this._modeEntryId = null), this._isAdmin) try {
 			let e = await this._send("argus/get_ha_users");
 			this._haUsersList = e?.ha_users || [];
 		} catch (e) {
@@ -2561,11 +2522,7 @@ var h = class extends HTMLElement {
 			} catch {}
 			(this._kioskTarget || this.shadowRoot.querySelector(".entry.ios-fullscreen"))?.classList.remove("ios-fullscreen"), this.shadowRoot.querySelectorAll(".entry.ios-fullscreen").forEach((e) => e.classList.remove("ios-fullscreen")), this.classList.remove("fullscreen-active"), this._fullscreenIdx = -1, this._kioskLocked = !1, this._kioskEntryId = null, this._kioskTarget = null, document.body.style.overflow = "", this.dispatchEvent(new CustomEvent("argus-fullscreen-changed", { detail: { fullscreen: !1 } })), this._renderEntries(!0);
 		};
-		if (!n) {
-			await r();
-			return;
-		}
-		this._showPinModal(async (e) => {
+		n ? this._showPinModal(async (e) => {
 			try {
 				await this._send("argus/verify_master_pin_for_screen_unlock", {
 					entry_id: t.entry_id,
@@ -2575,7 +2532,7 @@ var h = class extends HTMLElement {
 				let e = this.shadowRoot.getElementById("pin-error");
 				e && (e.textContent = "❌ PIN incorrecto o error de acceso", e.style.color = "#ff4a4a");
 			}
-		});
+		}) : await r();
 	}
 	_requestKioskUnlock() {
 		if (!this._kioskLocked) return;
@@ -2589,11 +2546,7 @@ var h = class extends HTMLElement {
 				e.classList.remove("ios-fullscreen");
 			}), this.classList.remove("fullscreen-active"), this._fullscreenIdx = -1, this._kioskLocked = !1, this._kioskEntryId = null, this._kioskTarget = null, document.body.style.overflow = "", this.dispatchEvent(new CustomEvent("argus-fullscreen-changed", { detail: { fullscreen: !1 } })), this._renderEntries(!0);
 		};
-		if (e.pin_configured !== !0) {
-			r();
-			return;
-		}
-		t && (t.textContent = ""), this._showPinModal(async (n) => {
+		e.pin_configured === !0 ? (t && (t.textContent = ""), this._showPinModal(async (n) => {
 			try {
 				await this._send("argus/verify_master_pin_for_screen_unlock", {
 					entry_id: e.entry_id,
@@ -2602,7 +2555,7 @@ var h = class extends HTMLElement {
 			} catch (e) {
 				t && (t.textContent = e.message || this._t("pin_disarm_error"), t.style.color = "#ff4a4a");
 			}
-		});
+		})) : r();
 	}
 	_toggleFullscreen(e) {
 		if (this._kioskLocked) {
@@ -3041,7 +2994,7 @@ var h = class extends HTMLElement {
 			dashboard: {}
 		}), (!this._ui.modes || typeof this._ui.modes != "object" || Array.isArray(this._ui.modes)) && (this._ui.modes = {}), (!this._ui.modes.__by_entity__ || typeof this._ui.modes.__by_entity__ != "object" || Array.isArray(this._ui.modes.__by_entity__)) && (this._ui.modes.__by_entity__ = {});
 		let t = this._modeEntryId;
-		(!t || t === "default") && (t = this._dashboard?.entries?.[0]?.entity_id || "default"), this._modeEntryId = t, this._mode = this._mode || "disarmed";
+		t && t !== "default" || (t = this._dashboard?.entries?.[0]?.entity_id || "default"), this._modeEntryId = t, this._mode = this._mode || "disarmed";
 		let n = !!this._ui.modes.__by_entity__[t];
 		if (!this._ui.modes.__by_entity__[t] || typeof this._ui.modes.__by_entity__[t] != "object" || Array.isArray(this._ui.modes.__by_entity__[t])) {
 			this._ui.modes.__by_entity__[t] = {};
@@ -3308,7 +3261,7 @@ var h = class extends HTMLElement {
 			return;
 		}
 		let r = this._currentModeConfig(), i = t === "sensor" ? "sensors" : t === "bypass" ? "bypassed_sensors" : t === "entry" ? "entry_sensors" : t === "external_panel" ? "external_panels" : "sirens", a = this._modeEntryId;
-		(!a || a === "default") && (a = this._dashboard?.entries?.[0]?.entity_id || "default"), this._modeEntryId = a, this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {}, this._ui.modes.__by_entity__[a] = this._ui.modes.__by_entity__[a] || {}, this._ui.modes.__by_entity__[a][this._mode] = {
+		a && a !== "default" || (a = this._dashboard?.entries?.[0]?.entity_id || "default"), this._modeEntryId = a, this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {}, this._ui.modes.__by_entity__[a] = this._ui.modes.__by_entity__[a] || {}, this._ui.modes.__by_entity__[a][this._mode] = {
 			...r,
 			[i]: (r[i] || []).filter((e) => e !== n)
 		}, this._renderModeView(), this._renderEntries(), this.dispatchEvent(new CustomEvent("argus-state-update"));
@@ -3361,11 +3314,8 @@ var h = class extends HTMLElement {
 	_renderAutomations() {
 		let e = this.shadowRoot.getElementById("auto-view");
 		if (e) {
-			if (!this._dashboard?.entries?.length || !this._hass) {
-				e.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t("searching_auto")}</div>`;
-				return;
-			}
-			try {
+			if (!this._dashboard?.entries?.length || !this._hass) e.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t("searching_auto")}</div>`;
+			else try {
 				if (!this._relatedAutomationsQueried) {
 					this._relatedAutomationsQueried = !0, this._cachedRelatedAutomations = /* @__PURE__ */ new Set(), (async () => {
 						try {
@@ -4158,11 +4108,8 @@ var h = class extends HTMLElement {
 			return;
 		}
 		let r = this.shadowRoot.getElementById("new-pin-1").value;
-		if (r !== this.shadowRoot.getElementById("new-pin-2").value) {
-			e ? (e.textContent = this._t("pin_mismatch"), e.className = "status err") : alert(this._t("pin_mismatch"));
-			return;
-		}
-		try {
+		if (r !== this.shadowRoot.getElementById("new-pin-2").value) e ? (e.textContent = this._t("pin_mismatch"), e.className = "status err") : alert(this._t("pin_mismatch"));
+		else try {
 			await this._send("argus/update_master_pin", {
 				pin: r,
 				current_pin: n
@@ -4176,9 +4123,7 @@ var h = class extends HTMLElement {
 		if (this._hass?.user?.is_admin !== !0) {
 			let n = this._t("pin_reset_admin_only");
 			e && (e.textContent = n, e.className = "status err"), t && (t.textContent = n);
-			return;
-		}
-		if (confirm(this._t("pin_reset_confirm"))) try {
+		} else if (confirm(this._t("pin_reset_confirm"))) try {
 			await this._send("argus/update_master_pin", {
 				pin: "",
 				force_reset: !0
@@ -4195,11 +4140,7 @@ var h = class extends HTMLElement {
 	_showArgusInputModal({ title: e = "", label: t = "", placeholder: n = "", initialValue: r = "", type: i = "text", numeric: a = !1, options: o = null } = {}) {
 		return new Promise((s) => {
 			let c = `_aim_${Date.now()}`, l = document.createElement("div");
-			l.id = c, l.setAttribute("role", "dialog"), l.setAttribute("aria-modal", "true"), l.style.cssText = [
-				"position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center",
-				"background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
-				"animation:argus-modal-in .18s ease"
-			].join(";");
+			l.id = c, l.setAttribute("role", "dialog"), l.setAttribute("aria-modal", "true"), l.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:argus-modal-in .18s ease";
 			let u = t.replace(/'/g, "&#39;"), d = e.replace(/'/g, "&#39;"), f = n.replace(/'/g, "&#39;"), p = this._t("modal_cancel") || "Cancelar", m = this._t("modal_save") || "Guardar";
 			l.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
@@ -4239,11 +4180,7 @@ var h = class extends HTMLElement {
 	_showArgusPermissionsModal(e) {
 		return new Promise((t) => {
 			let n = document.createElement("div");
-			n.style.cssText = [
-				"position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center",
-				"background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
-				"animation:argus-modal-in .18s ease"
-			].join(";");
+			n.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:argus-modal-in .18s ease";
 			let r = this._t("modal_cancel") || "Cancelar", i = this._t("modal_save") || "Guardar", a = e.permissions || {};
 			n.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
@@ -4323,11 +4260,7 @@ var h = class extends HTMLElement {
 	_showArgusConfirmModal(e = "", { confirmLabel: t = "", confirmStyle: n = "", cancelLabel: r = "" } = {}) {
 		return new Promise((i) => {
 			let a = document.createElement("div");
-			a.setAttribute("role", "alertdialog"), a.setAttribute("aria-modal", "true"), a.style.cssText = [
-				"position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center",
-				"background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
-				"animation:argus-modal-in .18s ease"
-			].join(";");
+			a.setAttribute("role", "alertdialog"), a.setAttribute("aria-modal", "true"), a.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:argus-modal-in .18s ease";
 			let o = t || this._t("modal_confirm") || "Confirmar";
 			a.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
@@ -4535,7 +4468,7 @@ var h = class extends HTMLElement {
 		}
 		this._ui.modes || (this._ui.modes = {}), this._ui.modes.__by_entity__ || (this._ui.modes.__by_entity__ = {});
 		let e = this._modeEntryId;
-		(!e || e === "default") && (e = this._dashboard?.entries?.[0]?.entity_id || "default"), this._modeEntryId = e, this._ui.modes.__by_entity__[e] || (this._ui.modes.__by_entity__[e] = {});
+		e && e !== "default" || (e = this._dashboard?.entries?.[0]?.entity_id || "default"), this._modeEntryId = e, this._ui.modes.__by_entity__[e] || (this._ui.modes.__by_entity__[e] = {});
 		let t = {
 			sensors: [],
 			bypassed_sensors: [],
@@ -5428,11 +5361,8 @@ var h = class extends HTMLElement {
 		});
 		let s = async () => {
 			if (!n.dataset.processing) {
-				if (n.dataset.processing = "1", !r.value) {
-					n.dataset.processing = "";
-					return;
-				}
-				try {
+				if (n.dataset.processing = "1", !r.value) n.dataset.processing = "";
+				else try {
 					await this._send("argus/verify_access_pin", {
 						argus_user_id: e.id,
 						pin: r.value
@@ -5633,11 +5563,7 @@ var h = class extends HTMLElement {
 		let t = this.shadowRoot.getElementById("widget-grid");
 		t && (e || Array.from(t.children).filter((e) => e.classList.contains("panel") && !e.classList.contains("dashboard-instances"))).forEach((e) => {
 			e._dragBound || (e._dragBound = !0, e.addEventListener("dragstart", (t) => {
-				if (!this._widgetEditing) {
-					t.preventDefault();
-					return;
-				}
-				e.classList.add("dragging"), t.dataTransfer.setData("text/plain", e.id), t.dataTransfer.effectAllowed = "move";
+				this._widgetEditing ? (e.classList.add("dragging"), t.dataTransfer.setData("text/plain", e.id), t.dataTransfer.effectAllowed = "move") : t.preventDefault();
 			}), e.addEventListener("dragend", () => {
 				e.classList.remove("dragging"), this._saveWidgetLayout();
 			}), e.addEventListener("dragover", (n) => {
@@ -5679,8 +5605,7 @@ customElements.define("argus-panel-v2018", h);
 try {
 	customElements.get("argus-panel") || customElements.define("argus-panel", h);
 } catch {}
-//#endregion
-//#region src/legacy/argus-card.ts
+// src/legacy/argus-card.ts
 var g = "2.2.93";
 console.info(`%c🛡️ ARGUS ALARM CARD %c v${g} `, "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;", "color:#0a1628;background:#38bdf8;font-weight:700;padding:4px 8px;border-radius:0 4px 4px 0;");
 function _(e) {
@@ -6042,8 +5967,7 @@ S.has("argus-panel-card") || window.customCards.push({
 	preview: !0,
 	documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
-//#endregion
-//#region node_modules/react/cjs/react.production.js
+// node_modules/react/cjs/react.production.js
 var C = /* @__PURE__ */ o(((e) => {
 	var t = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), r = Symbol.for("react.fragment"), i = Symbol.for("react.strict_mode"), a = Symbol.for("react.profiler"), o = Symbol.for("react.consumer"), s = Symbol.for("react.context"), c = Symbol.for("react.forward_ref"), l = Symbol.for("react.suspense"), u = Symbol.for("react.memo"), d = Symbol.for("react.lazy"), f = Symbol.for("react.activity"), p = Symbol.for("react.view_transition"), m = Symbol.iterator;
 	function h(e) {
@@ -6338,7 +6262,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		return T.H.useSyncExternalStore(e, t, n);
 	}, e.useTransition = function() {
 		return T.H.useTransition();
-	}, e.version = "19.3.0";
+	}, e.version = "19.3.1";
 })), w = /* @__PURE__ */ o(((e, t) => {
 	t.exports = C();
 })), T = /* @__PURE__ */ o(((e) => {
@@ -6669,7 +6593,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		return l.H.useFormState(e, t, n);
 	}, e.useFormStatus = function() {
 		return l.H.useHostTransitionStatus();
-	}, e.version = "19.3.0";
+	}, e.version = "19.3.1";
 })), O = /* @__PURE__ */ o(((e, t) => {
 	function n() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE == "function") try {
@@ -7449,11 +7373,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function en(e, t, n) {
-		if (t != null && (t = "" + Ut(t), t !== e.value && (e.value = t), n == null)) {
-			e.defaultValue !== t && (e.defaultValue = t);
-			return;
-		}
-		e.defaultValue = n == null ? "" : "" + Ut(n);
+		t != null && (t = "" + Ut(t), t !== e.value && (e.value = t), n == null) ? e.defaultValue !== t && (e.defaultValue = t) : e.defaultValue = n == null ? "" : "" + Ut(n);
 	}
 	function tn(e, t, n, r) {
 		if (t == null) {
@@ -8914,9 +8834,7 @@ var C = /* @__PURE__ */ o(((e) => {
 				shared: r.shared,
 				callbacks: r.callbacks
 			}, e.updateQueue = n;
-			return;
-		}
-		e = n.lastBaseUpdate, e === null ? n.firstBaseUpdate = t : e.next = t, n.lastBaseUpdate = t;
+		} else e = n.lastBaseUpdate, e === null ? n.firstBaseUpdate = t : e.next = t, n.lastBaseUpdate = t;
 	}
 	var co = !1;
 	function lo() {
@@ -9384,15 +9302,9 @@ var C = /* @__PURE__ */ o(((e) => {
 					if (Yi) {
 						if (Ji) {
 							b: {
-								for (var i = Ji, a = Zi; i.nodeType !== 8;) {
-									if (!a) {
-										i = null;
-										break b;
-									}
-									if (i = lm(i.nextSibling), i === null) {
-										i = null;
-										break b;
-									}
+								for (var i = Ji, a = Zi; i.nodeType !== 8;) if (!a || (i = lm(i.nextSibling), i === null)) {
+									i = null;
+									break b;
 								}
 								a = i.data, i = a === "F!" || a === "F" ? i : null;
 							}
@@ -11017,13 +10929,13 @@ var C = /* @__PURE__ */ o(((e) => {
 					r.push(s), s.view && (a = !0);
 				} else a || Op(o).view && (a = !0);
 				jl = !0, Tp(o, Il === 0 ? t : t + "_" + Il, n), Il++;
-			} else (e.tag !== 22 || e.memoizedState === null) && (e.tag === 30 && i || Rl(e.child, t, n, r, i) && (a = !0));
+			} else e.tag === 22 && e.memoizedState !== null || e.tag === 30 && i || Rl(e.child, t, n, r, i) && (a = !0);
 			e = e.sibling;
 		}
 		return a;
 	}
 	function zl(e, t) {
-		for (; e !== null;) e.tag === 5 ? Ep(e.stateNode, e.memoizedProps) : (e.tag !== 22 || e.memoizedState === null) && (e.tag === 30 && t || zl(e.child, t)), e = e.sibling;
+		for (; e !== null;) e.tag === 5 ? Ep(e.stateNode, e.memoizedProps) : e.tag === 22 && e.memoizedState !== null || e.tag === 30 && t || zl(e.child, t), e = e.sibling;
 	}
 	function Bl(e) {
 		if (e.subtreeFlags & 18874368) for (e = e.child; e !== null;) {
@@ -12091,7 +12003,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function jd(e, t, n) {
-		(e === Ju && (Zu === 2 || Zu === 9) || e.cancelPendingCommit !== null) && (Rd(e, 0), Fd(e, Xu, sd, !1)), it(e, n), (!(qu & 2) || e !== Ju) && (e === Ju && (!(qu & 2) && (ad |= n), rd === 4 && Fd(e, Xu, sd, !1)), wf(e));
+		(e === Ju && (Zu === 2 || Zu === 9) || e.cancelPendingCommit !== null) && (Rd(e, 0), Fd(e, Xu, sd, !1)), it(e, n), qu & 2 && e === Ju || (e === Ju && (!(qu & 2) && (ad |= n), rd === 4 && Fd(e, Xu, sd, !1)), wf(e));
 	}
 	function Md(e, t, n) {
 		if (qu & 6) throw Error(i(327));
@@ -12101,65 +12013,64 @@ var C = /* @__PURE__ */ o(((e) => {
 				ed && !r && Fd(e, t, 0, !1);
 				break;
 			}
-			if (n = e.current.alternate, o && !Pd(n)) {
-				a = Wd(e, t, !1), o = !1;
-				continue;
-			}
-			if (a === 2) {
-				if (o = t, e.errorRecoveryDisabledLanes & o) var s = 0;
-				else s = e.pendingLanes & -536870913, s = s === 0 ? s & 536870912 ? 536870912 : 0 : s;
-				if (s !== 0) {
-					t = s;
-					a: {
-						var c = e;
-						a = ld;
-						var l = c.current.memoizedState.isDehydrated;
-						if (l && (Rd(c, s).flags |= 256), s = Wd(c, s, !1), s !== 2 && s !== 6) {
-							if (td && !l) {
-								c.errorRecoveryDisabledLanes |= o, ad |= o, a = 4;
-								break a;
+			if (n = e.current.alternate, o && !Pd(n)) a = Wd(e, t, !1), o = !1;
+			else {
+				if (a === 2) {
+					if (o = t, e.errorRecoveryDisabledLanes & o) var s = 0;
+					else s = e.pendingLanes & -536870913, s = s === 0 ? s & 536870912 ? 536870912 : 0 : s;
+					if (s !== 0) {
+						t = s;
+						a: {
+							var c = e;
+							a = ld;
+							var l = c.current.memoizedState.isDehydrated;
+							if (l && (Rd(c, s).flags |= 256), s = Wd(c, s, !1), s !== 2 && s !== 6) {
+								if (td && !l) {
+									c.errorRecoveryDisabledLanes |= o, ad |= o, a = 4;
+									break a;
+								}
+								o = ud, ud = a, o !== null && (ud === null ? ud = o : ud.push.apply(ud, o));
 							}
-							o = ud, ud = a, o !== null && (ud === null ? ud = o : ud.push.apply(ud, o));
+							a = s;
 						}
-						a = s;
+						if (o = !1, a !== 2) continue;
 					}
-					if (o = !1, a !== 2) continue;
 				}
-			}
-			if (a === 1) {
-				Rd(e, 0), Fd(e, t, 0, !0);
+				if (a === 1) {
+					Rd(e, 0), Fd(e, t, 0, !0);
+					break;
+				}
+				a: {
+					switch (r = e, o = a, o) {
+						case 0:
+						case 1: throw Error(i(345));
+						case 4: if ((t & 4194048) !== t && (t & 62914560) !== t) break;
+						case 6:
+							Fd(r, t, sd, !$u);
+							break a;
+						case 2:
+							ud = null;
+							break;
+						case 3:
+						case 5: break;
+						default: throw Error(i(329));
+					}
+					if ((t & 62914560) === t && (a = fd + 300 - Me(), 10 < a)) {
+						if (Fd(r, t, sd, !$u), Qe(r, 0, !0) !== 0) break a;
+						yd = t, r.timeoutHandle = gp(Nd.bind(null, r, n, ud, hd, dd, t, sd, ad, cd, $u, o, "Throttled", -0, 0), a);
+						break a;
+					}
+					Nd(r, n, ud, hd, dd, t, sd, ad, cd, $u, o, null, -0, 0);
+				}
 				break;
 			}
-			a: {
-				switch (r = e, o = a, o) {
-					case 0:
-					case 1: throw Error(i(345));
-					case 4: if ((t & 4194048) !== t && (t & 62914560) !== t) break;
-					case 6:
-						Fd(r, t, sd, !$u);
-						break a;
-					case 2:
-						ud = null;
-						break;
-					case 3:
-					case 5: break;
-					default: throw Error(i(329));
-				}
-				if ((t & 62914560) === t && (a = fd + 300 - Me(), 10 < a)) {
-					if (Fd(r, t, sd, !$u), Qe(r, 0, !0) !== 0) break a;
-					yd = t, r.timeoutHandle = gp(Nd.bind(null, r, n, ud, hd, dd, t, sd, ad, cd, $u, o, "Throttled", -0, 0), a);
-					break a;
-				}
-				Nd(r, n, ud, hd, dd, t, sd, ad, cd, $u, o, null, -0, 0);
-			}
-			break;
 		} while (1);
 		wf(e);
 	}
 	function Nd(e, t, n, r, i, a, o, s, c, l, u, d, f, p) {
 		e.timeoutHandle = -1;
 		var m = t.subtreeFlags, h = (a & 335544064) === a;
-		if (d = null, (h || m & 8192 || (m & 16785408) == 16785408) && (d = {
+		d = null, (h || m & 8192 || (m & 16785408) == 16785408) && (d = {
 			stylesheets: null,
 			count: 0,
 			imgCount: 0,
@@ -12168,11 +12079,7 @@ var C = /* @__PURE__ */ o(((e) => {
 			waitingForImages: !0,
 			waitingForViewTransition: !1,
 			unsuspend: dn
-		}, Ml = null, zu(t, a, d), h && (m = d, h = e.containerInfo, h = (h.nodeType === 9 ? h : h.ownerDocument).__reactViewTransition, h != null && (m.count++, m.waitingForViewTransition = !0, m = nh.bind(m), h.finished.then(m, m))), m = (a & 62914560) === a ? fd - Me() : (a & 4194048) === a ? pd - Me() : 0, m = eh(d, m), m !== null)) {
-			yd = a, e.cancelPendingCommit = m($d.bind(null, e, t, a, n, r, i, o, s, c, l, u, d, null, f, p)), Fd(e, a, o, !l);
-			return;
-		}
-		$d(e, t, a, n, r, i, o, s, c, l, u, d);
+		}, Ml = null, zu(t, a, d), h && (m = d, h = e.containerInfo, h = (h.nodeType === 9 ? h : h.ownerDocument).__reactViewTransition, h != null && (m.count++, m.waitingForViewTransition = !0, m = nh.bind(m), h.finished.then(m, m))), m = (a & 62914560) === a ? fd - Me() : (a & 4194048) === a ? pd - Me() : 0, m = eh(d, m), m !== null) ? (yd = a, e.cancelPendingCommit = m($d.bind(null, e, t, a, n, r, i, o, s, c, l, u, d, null, f, p)), Fd(e, a, o, !l)) : $d(e, t, a, n, r, i, o, s, c, l, u, d);
 	}
 	function Pd(e) {
 		for (var t = e;;) {
@@ -13090,11 +12997,7 @@ var C = /* @__PURE__ */ o(((e) => {
 			}
 			case "src":
 			case "href":
-				if (r === "" && (t !== "a" || n !== "href")) {
-					e.removeAttribute(n);
-					break;
-				}
-				if (r == null || typeof r == "function" || typeof r == "symbol" || typeof r == "boolean") {
+				if (r === "" && (t !== "a" || n !== "href") || r == null || typeof r == "function" || typeof r == "symbol" || typeof r == "boolean") {
 					e.removeAttribute(n);
 					break;
 				}
@@ -13908,7 +13811,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		this._observers === null && (this._observers = /* @__PURE__ */ new Set()), this._observers.add(e), f(this._fragmentFiber.child, !1, Wp, e, void 0, void 0);
 	};
 	function Wp(e, t) {
-		return e.tag !== 6 && (e = _(e), t.observe(e), !1);
+		return e.tag === 6 || (e = _(e), t.observe(e)), !1;
 	}
 	Fp.prototype.unobserveUsing = function(e) {
 		var t = this._observers;
@@ -13922,7 +13825,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		}
 	};
 	function Gp(e, t) {
-		return e.tag !== 6 && (e = _(e), t.unobserve(e), !1);
+		return e.tag === 6 || (e = _(e), t.unobserve(e)), !1;
 	}
 	var Kp = [], qp = !1;
 	function Jp(e, t, n) {
@@ -15066,7 +14969,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		}
 	};
 	var Kh = n.version;
-	if (Kh !== "19.3.0") throw Error(i(527, Kh, "19.3.0"));
+	if (Kh !== "19.3.1") throw Error(i(527, Kh, "19.3.1"));
 	B.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(i(188)) : (e = Object.keys(e).join(","), Error(i(268, e)));
@@ -15074,10 +14977,10 @@ var C = /* @__PURE__ */ o(((e) => {
 	};
 	var qh = {
 		bundleType: 0,
-		version: "19.3.0",
+		version: "19.3.1",
 		rendererPackageName: "react-dom",
 		currentDispatcherRef: z,
-		reconcilerVersion: "19.3.0"
+		reconcilerVersion: "19.3.1"
 	};
 	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
 		var Jh = __REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -15167,8 +15070,7 @@ var C = /* @__PURE__ */ o(((e) => {
 		}) : this.props.children;
 	}
 };
-//#endregion
-//#region node_modules/react-grid-layout/dist/chunk-ZYNFVPDS.mjs
+// node_modules/react-grid-layout/dist/chunk-ZYNFVPDS.mjs
 function te(e) {
 	let { margin: t, containerPadding: n, containerWidth: r, cols: i } = e;
 	return (r - t[0] * (i - 1) - n[0] * 2) / i;
@@ -15349,8 +15251,7 @@ function _e(e, t, n, r, i, a) {
 	let l = o ? n.x + 1 : void 0, u = s ? n.y + 1 : void 0;
 	return l === void 0 && u === void 0 ? [...e] : U(e, n, l, u, r, c, i);
 }
-//#endregion
-//#region node_modules/react-grid-layout/dist/chunk-VBU6B7II.mjs
+// node_modules/react-grid-layout/dist/chunk-VBU6B7II.mjs
 function W(e, t, n) {
 	return Math.max(t, Math.min(n, e));
 }
@@ -15665,8 +15566,7 @@ function et(e, t) {
 	}
 	return [10, 10];
 }
-//#endregion
-//#region node_modules/prop-types/lib/ReactPropTypesSecret.js
+// node_modules/prop-types/lib/ReactPropTypesSecret.js
 var tt = /* @__PURE__ */ o(((e, t) => {
 	t.exports = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
 })), nt = /* @__PURE__ */ o(((e, t) => {
@@ -15727,8 +15627,7 @@ function st() {
 	for (var e, t, n = 0, r = "", i = arguments.length; n < i; n++) (e = arguments[n]) && (t = ot(e)) && (r && (r += " "), r += t);
 	return r;
 }
-//#endregion
-//#region node_modules/react-draggable/build/cjs/chunk-ACOTSM7X.mjs
+// node_modules/react-draggable/build/cjs/chunk-ACOTSM7X.mjs
 function ct(e, t) {
 	for (let n = 0, r = e.length; n < r; n++) if (t.apply(t, [
 		e[n],
@@ -16003,16 +15902,13 @@ var Jt = {
 				n = this.lastX + e, r = this.lastY + t;
 			}
 			let i = Wt(this, n, r);
-			if (this.props.onDrag(e, i) === !1 || this.mounted === !1) {
-				try {
-					this.handleDragStop(new MouseEvent("mouseup"));
-				} catch {
-					let e = document.createEvent("MouseEvents");
-					e.initMouseEvent("mouseup", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), this.handleDragStop(e);
-				}
-				return;
+			if (this.props.onDrag(e, i) === !1 || this.mounted === !1) try {
+				this.handleDragStop(new MouseEvent("mouseup"));
+			} catch {
+				let e = document.createEvent("MouseEvents");
+				e.initMouseEvent("mouseup", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), this.handleDragStop(e);
 			}
-			this.lastX = n, this.lastY = r;
+			else this.lastX = n, this.lastY = r;
 		}, this.handleDragStop = (e) => {
 			if (!this.dragging) return;
 			let t = Ut(e, this.touchIdentifier, this);
@@ -16226,8 +16122,7 @@ Zt.displayName = "Draggable", Zt.propTypes = {
 	},
 	scale: 1
 };
-//#endregion
-//#region node_modules/clsx/dist/clsx.js
+// node_modules/clsx/dist/clsx.js
 var Qt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		var t, r, i = "";
@@ -16540,16 +16435,13 @@ var Qt = /* @__PURE__ */ o(((e, t) => {
 					n = this.lastX + e, r = this.lastY + t;
 				}
 				let i = me(this, n, r);
-				if (this.props.onDrag(e, i) === !1 || this.mounted === !1) {
-					try {
-						this.handleDragStop(new MouseEvent("mouseup"));
-					} catch {
-						let e = document.createEvent("MouseEvents");
-						e.initMouseEvent("mouseup", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), this.handleDragStop(e);
-					}
-					return;
+				if (this.props.onDrag(e, i) === !1 || this.mounted === !1) try {
+					this.handleDragStop(new MouseEvent("mouseup"));
+				} catch {
+					let e = document.createEvent("MouseEvents");
+					e.initMouseEvent("mouseup", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), this.handleDragStop(e);
 				}
-				this.lastX = n, this.lastY = r;
+				else this.lastX = n, this.lastY = r;
 			}, this.handleDragStop = (e) => {
 				if (!this.dragging) return;
 				let t = pe(e, this.touchIdentifier, this);
@@ -17230,10 +17122,10 @@ var Qt = /* @__PURE__ */ o(((e, t) => {
 	t.exports = function() {
 		throw Error("Don't instantiate Resizable directly! Use require('react-resizable').Resizable");
 	}, t.exports.Resizable = rn().default, t.exports.ResizableBox = an().default;
-})), sn = /* @__PURE__ */ o(((e, t) => {
+})), sn = /* @__PURE__ */ o(((e, t, n) => {
 	(function(n, r) {
 		typeof e == "object" && t !== void 0 ? r(e) : typeof define == "function" && define.amd ? define(["exports"], r) : (n = typeof globalThis < "u" ? globalThis : n || self, r(n["fast-equals"] = {}));
-	})(e, (function(e) {
+	})(n, (function(e) {
 		function t(e) {
 			return function(t, n, r, i, a, o, s) {
 				return e(t, n, s);
@@ -18141,24 +18033,12 @@ function Sn(e) {
 			if (!Ge.current) return;
 			e.preventDefault();
 			let n = r(e);
-			if (n) {
-				if (!t(n.clientX, n.clientY)) {
-					qe.current && ot();
-					return;
-				}
-				at(n.clientX, n.clientY, e);
-			}
+			n && (t(n.clientX, n.clientY) ? at(n.clientX, n.clientY, e) : qe.current && ot());
 		}, o = (e) => {
 			if (!Ge.current) return;
 			e.preventDefault();
 			let n = r(e);
-			if (Ge.current = !1, Ke.current = null, n) {
-				if (!t(n.clientX, n.clientY)) {
-					ot();
-					return;
-				}
-				dt(e);
-			}
+			Ge.current = !1, Ke.current = null, n && (t(n.clientX, n.clientY) ? dt(e) : ot());
 		}, s = () => {
 			Ge.current && (Ge.current = !1, Ke.current = null, ot());
 		}, c = { passive: !1 };
@@ -18537,8 +18417,7 @@ function Nn(e) {
 	}
 	return t.displayName = `WidthProvider(${e.displayName || e.name || "Component"})`, t;
 }
-//#endregion
-//#region src/features/dashboard/layout.ts
+// src/features/dashboard/layout.ts
 var Pn = {
 	lg: 1200,
 	md: 996,
@@ -18966,13 +18845,7 @@ function qn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 				},
 				onResizeStop: F,
 				onDragStop: (e, t, n) => {
-					if (n?.i) {
-						if (Vn((w.current[_] || []).filter((e) => e.i !== n.i), n)) {
-							u({ ...w.current }), b(O("position_collision", "Posición bloqueada por colisión"));
-							return;
-						}
-						M(n.i, n, O("position_saved", "Posición guardada"));
-					}
+					n?.i && (Vn((w.current[_] || []).filter((e) => e.i !== n.i), n) ? (u({ ...w.current }), b(O("position_collision", "Posición bloqueada por colisión"))) : M(n.i, n, O("position_saved", "Posición guardada")));
 				},
 				useCSSTransforms: !0,
 				children: e.filter((e) => d[e.id] !== !1 && (t.has(e.id) || !!e.content)).map((e) => {
@@ -19997,7 +19870,7 @@ function pa() {
 		workingColorSpace: _i,
 		spaces: {},
 		convert: function(e, t, n) {
-			return this.enabled === !1 || t === n || !t || !n ? e : (this.spaces[t].transfer === "srgb" && (e.r = ma(e.r), e.g = ma(e.g), e.b = ma(e.b)), this.spaces[t].primaries !== this.spaces[n].primaries && (e.applyMatrix3(this.spaces[t].toXYZ), e.applyMatrix3(this.spaces[n].fromXYZ)), this.spaces[n].transfer === "srgb" && (e.r = ha(e.r), e.g = ha(e.g), e.b = ha(e.b)), e);
+			return this.enabled === !1 || t === n || !t || !n || (this.spaces[t].transfer === "srgb" && (e.r = ma(e.r), e.g = ma(e.g), e.b = ma(e.b)), this.spaces[t].primaries !== this.spaces[n].primaries && (e.applyMatrix3(this.spaces[t].toXYZ), e.applyMatrix3(this.spaces[n].fromXYZ)), this.spaces[n].transfer === "srgb" && (e.r = ha(e.r), e.g = ha(e.g), e.b = ha(e.b))), e;
 		},
 		workingToColorSpace: function(e, t) {
 			return this.convert(e, this.workingColorSpace, t);
@@ -20191,11 +20064,7 @@ var xa = 0, Sa = /*@__PURE__*/ new Z(), Ca = class e extends Ni {
 				continue;
 			}
 			let r = this[t];
-			if (r === void 0) {
-				q(`Texture.setValues(): property '${t}' does not exist.`);
-				continue;
-			}
-			r && n && r.isVector2 && n.isVector2 || r && n && r.isVector3 && n.isVector3 || r && n && r.isMatrix3 && n.isMatrix3 ? r.copy(n) : this[t] = n;
+			r === void 0 ? q(`Texture.setValues(): property '${t}' does not exist.`) : r && n && r.isVector2 && n.isVector2 || r && n && r.isVector3 && n.isVector3 || r && n && r.isMatrix3 && n.isMatrix3 ? r.copy(n) : this[t] = n;
 		}
 	}
 	toJSON(e) {
@@ -20872,19 +20741,19 @@ var Ba = class {
 		this.mask = 1;
 	}
 	set(e) {
-		this.mask = (1 << e | 0) >>> 0;
+		this.mask = 1 << e >>> 0;
 	}
 	enable(e) {
-		this.mask |= 1 << e | 0;
+		this.mask |= 1 << e;
 	}
 	enableAll() {
 		this.mask = -1;
 	}
 	toggle(e) {
-		this.mask ^= 1 << e | 0;
+		this.mask ^= 1 << e;
 	}
 	disable(e) {
-		this.mask &= ~(1 << e | 0);
+		this.mask &= ~(1 << e);
 	}
 	disableAll() {
 		this.mask = 0;
@@ -20893,7 +20762,7 @@ var Ba = class {
 		return (this.mask & e.mask) !== 0;
 	}
 	isEnabled(e) {
-		return !!(this.mask & (1 << e | 0));
+		return !!(this.mask & 1 << e);
 	}
 }, Va = 0, Ha = /*@__PURE__*/ new Z(), Ua = /*@__PURE__*/ new oa(), Wa = /*@__PURE__*/ new ka(), Ga = /*@__PURE__*/ new Z(), Ka = /*@__PURE__*/ new Z(), qa = /*@__PURE__*/ new Z(), Ja = /*@__PURE__*/ new oa(), Ya = /*@__PURE__*/ new Z(1, 0, 0), Xa = /*@__PURE__*/ new Z(0, 1, 0), Za = /*@__PURE__*/ new Z(0, 0, 1), Qa = { type: "added" }, $a = { type: "removed" }, eo = {
 	type: "childadded",
@@ -21833,7 +21702,7 @@ var po = class extends no {
 		return this.min.min(e.min), this.max.max(e.max), this;
 	}
 	applyMatrix4(e) {
-		return this.isEmpty() ? this : (ko[0].set(this.min.x, this.min.y, this.min.z).applyMatrix4(e), ko[1].set(this.min.x, this.min.y, this.max.z).applyMatrix4(e), ko[2].set(this.min.x, this.max.y, this.min.z).applyMatrix4(e), ko[3].set(this.min.x, this.max.y, this.max.z).applyMatrix4(e), ko[4].set(this.max.x, this.min.y, this.min.z).applyMatrix4(e), ko[5].set(this.max.x, this.min.y, this.max.z).applyMatrix4(e), ko[6].set(this.max.x, this.max.y, this.min.z).applyMatrix4(e), ko[7].set(this.max.x, this.max.y, this.max.z).applyMatrix4(e), this.setFromPoints(ko), this);
+		return this.isEmpty() || (ko[0].set(this.min.x, this.min.y, this.min.z).applyMatrix4(e), ko[1].set(this.min.x, this.min.y, this.max.z).applyMatrix4(e), ko[2].set(this.min.x, this.max.y, this.min.z).applyMatrix4(e), ko[3].set(this.min.x, this.max.y, this.max.z).applyMatrix4(e), ko[4].set(this.max.x, this.min.y, this.min.z).applyMatrix4(e), ko[5].set(this.max.x, this.min.y, this.max.z).applyMatrix4(e), ko[6].set(this.max.x, this.max.y, this.min.z).applyMatrix4(e), ko[7].set(this.max.x, this.max.y, this.max.z).applyMatrix4(e), this.setFromPoints(ko)), this;
 	}
 	translate(e) {
 		return this.min.add(e), this.max.add(e), this;
@@ -22175,26 +22044,22 @@ var Uo = /*@__PURE__*/ new Z(), Wo = /*@__PURE__*/ new X(), Go = 0, Ko = class e
 	computeBoundingBox() {
 		this.boundingBox === null && (this.boundingBox = new Oo());
 		let e = this.attributes.position, t = this.morphAttributes.position;
-		if (e && e.isGLBufferAttribute) {
-			J("BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.", this), this.boundingBox.set(new Z(-Infinity, -Infinity, -Infinity), new Z(Infinity, Infinity, Infinity));
-			return;
+		if (e && e.isGLBufferAttribute) J("BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.", this), this.boundingBox.set(new Z(-Infinity, -Infinity, -Infinity), new Z(Infinity, Infinity, Infinity));
+		else {
+			if (e !== void 0) {
+				if (this.boundingBox.setFromBufferAttribute(e), t) for (let e = 0, n = t.length; e < n; e++) {
+					let n = t[e];
+					is.setFromBufferAttribute(n), this.morphTargetsRelative ? (os.addVectors(this.boundingBox.min, is.min), this.boundingBox.expandByPoint(os), os.addVectors(this.boundingBox.max, is.max), this.boundingBox.expandByPoint(os)) : (this.boundingBox.expandByPoint(is.min), this.boundingBox.expandByPoint(is.max));
+				}
+			} else this.boundingBox.makeEmpty();
+			(isNaN(this.boundingBox.min.x) || isNaN(this.boundingBox.min.y) || isNaN(this.boundingBox.min.z)) && J("BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The \"position\" attribute is likely to have NaN values.", this);
 		}
-		if (e !== void 0) {
-			if (this.boundingBox.setFromBufferAttribute(e), t) for (let e = 0, n = t.length; e < n; e++) {
-				let n = t[e];
-				is.setFromBufferAttribute(n), this.morphTargetsRelative ? (os.addVectors(this.boundingBox.min, is.min), this.boundingBox.expandByPoint(os), os.addVectors(this.boundingBox.max, is.max), this.boundingBox.expandByPoint(os)) : (this.boundingBox.expandByPoint(is.min), this.boundingBox.expandByPoint(is.max));
-			}
-		} else this.boundingBox.makeEmpty();
-		(isNaN(this.boundingBox.min.x) || isNaN(this.boundingBox.min.y) || isNaN(this.boundingBox.min.z)) && J("BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The \"position\" attribute is likely to have NaN values.", this);
 	}
 	computeBoundingSphere() {
 		this.boundingSphere === null && (this.boundingSphere = new $o());
 		let e = this.attributes.position, t = this.morphAttributes.position;
-		if (e && e.isGLBufferAttribute) {
-			J("BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.", this), this.boundingSphere.set(new Z(), Infinity);
-			return;
-		}
-		if (e) {
+		if (e && e.isGLBufferAttribute) J("BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.", this), this.boundingSphere.set(new Z(), Infinity);
+		else if (e) {
 			let n = this.boundingSphere.center;
 			if (is.setFromBufferAttribute(e), t) for (let e = 0, n = t.length; e < n; e++) {
 				let n = t[e];
@@ -22624,11 +22489,7 @@ var Uo = /*@__PURE__*/ new Z(), Wo = /*@__PURE__*/ new X(), Go = 0, Ko = class e
 				continue;
 			}
 			let r = this[t];
-			if (r === void 0) {
-				q(`Material: '${t}' is not a property of THREE.${this.type}.`);
-				continue;
-			}
-			r && r.isColor ? r.set(n) : r && r.isVector2 && n && n.isVector2 || r && r.isEuler && n && n.isEuler || r && r.isVector3 && n && n.isVector3 ? r.copy(n) : this[t] = n;
+			r === void 0 ? q(`Material: '${t}' is not a property of THREE.${this.type}.`) : r && r.isColor ? r.set(n) : r && r.isVector2 && n && n.isVector2 || r && r.isEuler && n && n.isEuler || r && r.isVector3 && n && n.isVector3 ? r.copy(n) : this[t] = n;
 		}
 	}
 	toJSON(e) {
@@ -22899,7 +22760,7 @@ var Ns = /*@__PURE__*/ new Z(), Ps = /*@__PURE__*/ new Z(), Fs = /*@__PURE__*/ n
 	}
 	raycast(e, t) {
 		let n = this.geometry, r = this.material, i = this.matrixWorld;
-		r !== void 0 && (n.boundingSphere === null && n.computeBoundingSphere(), Vs.copy(n.boundingSphere), Vs.applyMatrix4(i), Bs.copy(e.ray).recast(e.near), !(Vs.containsPoint(Bs.origin) === !1 && (Bs.intersectSphere(Vs, Hs) === null || Bs.origin.distanceToSquared(Hs) > (e.far - e.near) ** 2)) && (zs.copy(i).invert(), Bs.copy(e.ray).applyMatrix4(zs), (n.boundingBox === null || Bs.intersectsBox(n.boundingBox) !== !1) && this._computeIntersections(e, t, Bs)));
+		r !== void 0 && (n.boundingSphere === null && n.computeBoundingSphere(), Vs.copy(n.boundingSphere), Vs.applyMatrix4(i), Bs.copy(e.ray).recast(e.near), Vs.containsPoint(Bs.origin) === !1 && (Bs.intersectSphere(Vs, Hs) === null || Bs.origin.distanceToSquared(Hs) > (e.far - e.near) ** 2) || (zs.copy(i).invert(), Bs.copy(e.ray).applyMatrix4(zs), (n.boundingBox === null || Bs.intersectsBox(n.boundingBox) !== !1) && this._computeIntersections(e, t, Bs)));
 	}
 	_computeIntersections(e, t, n) {
 		let r, i = this.geometry, a = this.material, o = i.index, s = i.attributes.position, c = i.attributes.uv, l = i.attributes.uv1, u = i.attributes.normal, d = i.groups, f = i.drawRange;
@@ -23895,11 +23756,8 @@ function ll(e, t, n, r, i, a, o) {
 	let s = e;
 	for (; e.prev !== e.next;) {
 		let c = e.prev, l = e.next;
-		if (a ? dl(e, r, i, a) : ul(e)) {
-			t.push(c.i, e.i, l.i), Il(e), e = l.next, s = l.next;
-			continue;
-		}
-		if (e = l, e === s) {
+		if (a ? dl(e, r, i, a) : ul(e)) t.push(c.i, e.i, l.i), Il(e), e = l.next, s = l.next;
+		else if (e = l, e === s) {
 			o ? o === 1 ? (e = fl(cl(e), t), ll(e, t, n, r, i, a, 2)) : o === 2 && pl(e, t, n, r, i, a) : ll(cl(e), t, n, r, i, a, 1);
 			break;
 		}
@@ -24177,11 +24035,7 @@ var Ul = class e extends ss {
 				let t = e[0];
 				for (let n = 1; n <= e.length; n++) {
 					let r = n % e.length, i = e[r], a = i.x - t.x, o = i.y - t.y, s = a * a + o * o, c = Math.max(Math.abs(i.x), Math.abs(i.y), Math.abs(t.x), Math.abs(t.y));
-					if (s <= 10000000000000001e-36 * c * c) {
-						e.splice(r, 1), n--;
-						continue;
-					}
-					t = i;
+					s <= 10000000000000001e-36 * c * c ? (e.splice(r, 1), n--) : t = i;
 				}
 			}
 			T(C), w.forEach(T);
@@ -25726,8 +25580,7 @@ function fd(e) {
 	throw Error(`THREE.TextureUtils: Unknown texture type ${e}.`);
 }
 typeof __THREE_DEVTOOLS__ < "u" && __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent("register", { detail: { revision: "186" } })), typeof window < "u" && (window.__THREE__ ? q("WARNING: Multiple instances of Three.js being imported.") : window.__THREE__ = "186");
-//#endregion
-//#region node_modules/three/build/three.module.js
+// node_modules/three/build/three.module.js
 function pd() {
 	let e = null, t = !1, n = null, r = null;
 	function i(t, a) {
@@ -27205,7 +27058,7 @@ function Yd(e, t, n, r) {
 		c && (t.remove(c), a.delete(s)), r.releaseStatesOfGeometry(s), s.isInstancedBufferGeometry === !0 && delete s._maxInstanceCount, n.memory.geometries--;
 	}
 	function s(e, t) {
-		return i[t.id] === !0 ? t : (t.addEventListener("dispose", o), i[t.id] = !0, n.memory.geometries++, t);
+		return i[t.id] === !0 || (t.addEventListener("dispose", o), i[t.id] = !0, n.memory.geometries++), t;
 	}
 	function c(n) {
 		let r = n.attributes;
@@ -29276,11 +29129,8 @@ function _m(e, t) {
 		214: e.ONE_MINUS_CONSTANT_ALPHA
 	};
 	function z(t, n, r, i, a, o, s, c, l, u) {
-		if (t === 0) {
-			g === !0 && (oe(e.BLEND), g = !1);
-			return;
-		}
-		if (g === !1 && (ae(e.BLEND), g = !0), t !== 5) {
+		if (t === 0) g === !0 && (oe(e.BLEND), g = !1);
+		else if (g === !1 && (ae(e.BLEND), g = !0), t !== 5) {
 			if (t !== _ || u !== E) {
 				if ((v !== 100 || x !== 100) && (e.blendEquation(e.FUNC_ADD), v = 100, x = 100), u) switch (t) {
 					case 1:
@@ -29314,9 +29164,7 @@ function _m(e, t) {
 				}
 				y = null, b = null, S = null, C = null, w.set(0, 0, 0), T = 0, _ = t, E = u;
 			}
-			return;
-		}
-		a ||= n, o ||= r, s ||= i, (n !== v || a !== x) && (e.blendEquationSeparate(ue[n], ue[a]), v = n, x = a), (r !== y || i !== b || o !== S || s !== C) && (e.blendFuncSeparate(de[r], de[i], de[o], de[s]), y = r, b = i, S = o, C = s), (c.equals(w) === !1 || l !== T) && (e.blendColor(c.r, c.g, c.b, l), w.copy(c), T = l), _ = t, E = !1;
+		} else a ||= n, o ||= r, s ||= i, (n !== v || a !== x) && (e.blendEquationSeparate(ue[n], ue[a]), v = n, x = a), (r !== y || i !== b || o !== S || s !== C) && (e.blendFuncSeparate(de[r], de[i], de[o], de[s]), y = r, b = i, S = o, C = s), (c.equals(w) === !1 || l !== T) && (e.blendColor(c.r, c.g, c.b, l), w.copy(c), T = l), _ = t, E = !1;
 	}
 	function B(t, n) {
 		t.side === 2 ? oe(e.CULL_FACE) : ae(e.CULL_FACE);
@@ -29618,27 +29466,15 @@ function vm(e, t, n, r, i, a, o) {
 	}
 	function F(t, i) {
 		let a = r.get(t);
-		if (t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version) {
-			oe(a, t, i);
-			return;
-		}
-		t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null), n.bindTexture(e.TEXTURE_2D_ARRAY, a.__webglTexture, e.TEXTURE0 + i);
+		t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version ? oe(a, t, i) : (t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null), n.bindTexture(e.TEXTURE_2D_ARRAY, a.__webglTexture, e.TEXTURE0 + i));
 	}
 	function I(t, i) {
 		let a = r.get(t);
-		if (t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version) {
-			oe(a, t, i);
-			return;
-		}
-		n.bindTexture(e.TEXTURE_3D, a.__webglTexture, e.TEXTURE0 + i);
+		t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version ? oe(a, t, i) : n.bindTexture(e.TEXTURE_3D, a.__webglTexture, e.TEXTURE0 + i);
 	}
 	function L(t, i) {
 		let a = r.get(t);
-		if (t.isCubeDepthTexture !== !0 && t.version > 0 && a.__version !== t.version) {
-			se(a, t, i);
-			return;
-		}
-		n.bindTexture(e.TEXTURE_CUBE_MAP, a.__webglTexture, e.TEXTURE0 + i);
+		t.isCubeDepthTexture !== !0 && t.version > 0 && a.__version !== t.version ? se(a, t, i) : n.bindTexture(e.TEXTURE_CUBE_MAP, a.__webglTexture, e.TEXTURE0 + i);
 	}
 	let ee = {
 		[Jn]: e.REPEAT,
@@ -29885,7 +29721,7 @@ function vm(e, t, n, r, i, a, o) {
 		let c = i.isWebGLCubeRenderTarget === !0;
 		if (n.bindFramebuffer(e.FRAMEBUFFER, t), !(i.depthTexture && i.depthTexture.isDepthTexture)) throw Error("THREE.WebGLTextures: renderTarget.depthTexture must be an instance of THREE.DepthTexture.");
 		let l = r.get(i.depthTexture);
-		if (l.__renderTarget = i, (!l.__webglTexture || i.depthTexture.image.width !== i.width || i.depthTexture.image.height !== i.height) && (i.depthTexture.image.width = i.width, i.depthTexture.image.height = i.height, i.depthTexture.needsUpdate = !0), c) {
+		if (l.__renderTarget = i, l.__webglTexture && i.depthTexture.image.width === i.width && i.depthTexture.image.height === i.height || (i.depthTexture.image.width = i.width, i.depthTexture.image.height = i.height, i.depthTexture.needsUpdate = !0), c) {
 			if (l.__webglInit === void 0 && (l.__webglInit = !0, i.depthTexture.addEventListener("dispose", C)), l.__webglTexture === void 0) {
 				l.__webglTexture = e.createTexture(), n.bindTexture(e.TEXTURE_CUBE_MAP, l.__webglTexture), R(e.TEXTURE_CUBE_MAP, i.depthTexture);
 				let t = a.convert(i.depthTexture.format), r = a.convert(i.depthTexture.type), o;
@@ -31148,27 +30984,22 @@ var jm = class {
 		}, this.getSize = function(e) {
 			return e.set(R, re);
 		}, this.setSize = function(e, n, r = !0) {
-			if (Le.isPresenting) {
-				q("WebGLRenderer: Can't change size while VR device is presenting.");
-				return;
-			}
-			R = e, re = n, t.width = Math.floor(e * ie), t.height = Math.floor(n * ie), r === !0 && (t.style.width = e + "px", t.style.height = n + "px"), w !== null && w.setSize(t.width, t.height), this.setViewport(0, 0, e, n);
+			Le.isPresenting ? q("WebGLRenderer: Can't change size while VR device is presenting.") : (R = e, re = n, t.width = Math.floor(e * ie), t.height = Math.floor(n * ie), r === !0 && (t.style.width = e + "px", t.style.height = n + "px"), w !== null && w.setSize(t.width, t.height), this.setViewport(0, 0, e, n));
 		}, this.getDrawingBufferSize = function(e) {
 			return e.set(R * ie, re * ie).floor();
 		}, this.setDrawingBufferSize = function(e, n, r) {
 			R = e, re = n, ie = r, t.width = Math.floor(e * r), t.height = Math.floor(n * r), this.setViewport(0, 0, e, n);
 		}, this.setEffects = function(e) {
-			if (m === 1009) {
-				J("WebGLRenderer: setEffects() requires outputBufferType set to HalfFloatType or FloatType.");
-				return;
-			}
-			if (e) {
-				for (let t = 0; t < e.length; t++) if (e[t].isOutputPass === !0) {
-					q("WebGLRenderer: OutputPass is not needed in setEffects(). Tone mapping and color space conversion are applied automatically.");
-					break;
+			if (m === 1009) J("WebGLRenderer: setEffects() requires outputBufferType set to HalfFloatType or FloatType.");
+			else {
+				if (e) {
+					for (let t = 0; t < e.length; t++) if (e[t].isOutputPass === !0) {
+						q("WebGLRenderer: OutputPass is not needed in setEffects(). Tone mapping and color space conversion are applied automatically.");
+						break;
+					}
 				}
+				w.setEffects(e || []);
 			}
-			w.setEffects(e || []);
 		}, this.getCurrentViewport = function(e) {
 			return e.copy(I);
 		}, this.getViewport = function(e) {
@@ -31301,14 +31132,10 @@ var jm = class {
 			let r = this.compile(e, t, n);
 			return new Promise((t) => {
 				function n() {
-					if (r.forEach(function(e) {
+					r.forEach(function(e) {
 						let t = G.get(e).currentProgram;
 						(t === void 0 || t.isReady()) && r.delete(e);
-					}), r.size === 0) {
-						t(e);
-						return;
-					}
-					setTimeout(n, 10);
+					}), r.size === 0 ? t(e) : setTimeout(n, 10);
 				}
 				U.get("KHR_parallel_shader_compile") === null ? setTimeout(n, 10) : n();
 			});
@@ -31707,8 +31534,7 @@ function Nm(e) {
 		emissiveIntensity: e
 	});
 }
-//#endregion
-//#region src/features/dashboard/components/SecurityEmblem3D.tsx
+// src/features/dashboard/components/SecurityEmblem3D.tsx
 var Pm = {
 	disarmed: 3532705,
 	armed_home: 16753464,
@@ -32021,8 +31847,7 @@ function Fm(e) {
 		"data-variant": e.variant || "core"
 	});
 }
-//#endregion
-//#region src/features/dashboard/components/SecurityShield.tsx
+// src/features/dashboard/components/SecurityShield.tsx
 function Im({ state: e, label: t, variant: n = "core", pulse: r = "", pulseKey: i = "" }) {
 	let a = (0, j.useId)().replace(/:/g, ""), o = e.startsWith("armed_");
 	return /* @__PURE__ */ (0, L.jsxs)("svg", {
@@ -32214,11 +32039,9 @@ function Lm(e) {
 		fallback: /* @__PURE__ */ (0, L.jsx)(Im, { ...e })
 	});
 }
-//#endregion
-//#region src/features/dashboard/components/ConsoleGlass.css?inline
+// src/features/dashboard/components/ConsoleGlass.css?inline
 var Rm = ":host .entry.entry .security-console.security-console{--console-accent:#69d5b0;--console-glass:linear-gradient(155deg, #ffffff24, #ffffff0b 65%), #18202cb8;--console-edge:#fff3;--console-shadow:inset 0 1px 0 #ffffff26, 0 6px 20px #00000026;color:#f4f6fa;text-shadow:none!important;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif!important}:host .entry.entry .security-console.security-console[data-alarm-state=pending],:host .entry.entry .security-console.security-console[data-alarm-state=arming]{--console-accent:#ffd47c}:host .entry.entry .security-console.security-console[data-alarm-state=triggered]{--console-accent:#ff8e98}:host .entry.entry .security-console.security-console .console-hud-loc{align-items:center!important;gap:10px!important;font-size:17px!important;font-weight:600!important;display:flex!important}:host .entry.entry .security-console.security-console .console-hud-loc svg{opacity:.8;flex-shrink:0}:host .entry.entry .security-console.security-console .liquid-btn,:host .entry.entry .security-console.security-console .console-hud-right button,:host .entry.entry .security-console.security-console .argus-connection-pill{background:var(--console-glass)!important;border:1px solid var(--console-edge)!important;box-shadow:var(--console-shadow)!important;-webkit-backdrop-filter:blur(16px)saturate(125%)!important;text-shadow:none!important;transition:background-color .22s,border-color .22s,color .22s,box-shadow .22s,transform .16s cubic-bezier(.2,.8,.2,1)!important}:host .entry.entry .security-console.security-console .liquid-btn{color:#eef2f8!important;padding:12px 8px!important}:host .entry.entry .security-console.security-console .liquid-btn span:last-child{letter-spacing:0!important;text-shadow:none!important;font-size:13px!important;font-weight:600!important}:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon{box-shadow:none!important;background:#ffffff12!important;border:0!important}:host .entry.entry .security-console.security-console .liquid-btn.active{color:var(--console-accent)!important;border-color:var(--console-accent)!important;background:linear-gradient(155deg, #ffffff1f, transparent), color-mix(in srgb, var(--console-accent) 14%, #18202c)!important;box-shadow:inset 0 0 0 1px var(--console-accent), var(--console-shadow)!important}@media (hover:hover){:host .entry.entry .security-console.security-console button:not(:disabled):hover{border-color:#ffffff6b!important;transform:translateY(-1px)!important}}:host .entry.entry .security-console.security-console button:not(:disabled):active{transform:scale(.98)!important}:host .entry.entry .security-console.security-console .console-system-badge{color:var(--console-accent)!important;border:1px solid color-mix(in srgb, var(--console-accent) 45%, transparent)!important;letter-spacing:.01em!important;text-shadow:none!important;background:#18202cd9!important;font-size:13px!important;font-weight:600!important;transition:color .22s,border-color .22s!important;animation:none!important}:host .entry.entry .security-console.security-console .console-shield-art{animation:.24s cubic-bezier(.2,.8,.2,1) both console-state-enter}@keyframes console-state-enter{0%{opacity:.45;transform:translateY(3px)scale(.98)}to{opacity:1;transform:none}}:host .entry.entry .security-console.security-console .console-sensor{text-shadow:none!important;background:#18202ccc!important;border-color:#ffffff1f!important;flex-shrink:0!important;transition:border-color .2s,background-color .2s!important;box-shadow:inset 0 1px #ffffff0b!important}:host .entry.entry .security-console.security-console .console-sensor.open{background:#4b1f2acc!important;border-color:#ff8e98a6!important}:host .entry.entry .security-console.security-console .console-sensor.unavailable{border-style:dashed!important}:host .entry.entry .security-console.security-console .console-sensor-icon{filter:none!important;animation:none!important}:host .entry.entry .security-console.security-console .console-sensor-name{font-size:13px!important;font-weight:500!important}:host .entry.entry .security-console.security-console .console-sensor-state{text-shadow:none!important;font-weight:600!important}:host .entry.entry .security-console.security-console .console-battery-badge,:host .entry.entry .security-console.security-console .console-delay-badge{-webkit-backdrop-filter:none!important;text-shadow:none!important;box-shadow:none!important}:host .entry.entry .security-console.security-console .argus-sta-wrap{box-shadow:none!important;border-color:#ff8e9880!important}:host .entry.entry .security-console.security-console .argus-sta-wrap *{text-shadow:none!important}:host .entry.entry .security-console.security-console .console-sensor:focus-visible{outline-offset:2px!important;outline:3px solid #7dd3fc!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console{--console-glass:#000;--console-edge:#fff;--console-accent:#fff;--console-shadow:none;color:#fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-system-badge,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap{box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill{-webkit-backdrop-filter:none!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active{color:#000!important;box-shadow:none!important;background:#fff!important;border-color:#fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-name,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-state{color:#fff!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console *,:host .entry.entry .security-console.security-console :before,:host .entry.entry .security-console.security-console :after{transition:none!important;animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console *{transition:none!important;animation:none!important}:host .entry.entry .security-console.security-console .argus-opening-icon{fill:none;stroke:currentColor;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px;overflow:visible}:host .entry.entry .security-console.security-console .argus-opening-frame{fill:none}:host .entry.entry .security-console.security-console .argus-door-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transform-origin:13px 26px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-door-leaf circle{fill:currentColor;stroke:none}:host .entry.entry .security-console.security-console .argus-opening-icon--door.is-open .argus-door-leaf{transform:skewY(-12deg)scaleX(.4)}:host .entry.entry .security-console.security-console .argus-garage-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-opening-icon--garage.is-open .argus-garage-leaf{transform:translateY(-19px)}:host .entry.entry .security-console.security-console .argus-opening-icon.is-bypassed{opacity:.6}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .argus-door-leaf,:host .entry.entry .security-console.security-console .argus-garage-leaf{transition:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-door-leaf,:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-garage-leaf{transition:none!important}:host .entry.entry .security-console.security-console .argus-window-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transform-origin:9px 24px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-opening-icon--window.is-open .argus-window-leaf{transform:skewY(-12deg)scaleX(.4)}:host .entry.entry .security-console.security-console .argus-motion-waves{opacity:0;transition:opacity .22s}:host .entry.entry .security-console.security-console .argus-opening-icon--motion.is-open .argus-motion-waves{opacity:1;animation:.6s ease-out console-motion-detected}@keyframes console-motion-detected{0%{opacity:.25;transform:translate(-2px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .argus-window-leaf,:host .entry.entry .security-console.security-console .argus-motion-waves{transition:none!important;animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-window-leaf,:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-motion-waves{transition:none!important;animation:none!important}:host .entry.entry .security-console.security-console .liquid-btn span{color:inherit!important;filter:none!important}:host .entry.entry .security-console.security-console .console-shield{color:var(--console-accent);transition:color .32s!important}:host .entry.entry .security-console.security-console .console-shield-symbol{transform-origin:120px 124px;animation:.42s cubic-bezier(.2,.8,.2,1) both shield-symbol-arrive}@keyframes shield-symbol-arrive{0%{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}:host .entry.entry .security-console.security-console .console-shield-check{stroke-dasharray:70;stroke-dashoffset:0;animation:.45s ease-out shield-check-draw}@keyframes shield-check-draw{0%{stroke-dashoffset:70px}to{stroke-dashoffset:0}}:host(.argus-contrast-high) .entry.entry .security-console.security-console{--console-accent:#fff!important;background:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc{color:#fff!important;text-shadow:none!important;background:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active span{color:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap{border-radius:32px!important;overflow:hidden!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .console-shield-symbol,:host .entry.entry .security-console.security-console .console-shield-check{animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-symbol,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-check{animation:none!important}:host .entry.entry .security-console.security-console .btn-home{--console-accent:#ffad55}:host .entry.entry .security-console.security-console .btn-away{--console-accent:#ff7b85}:host .entry.entry .security-console.security-console .btn-night{--console-accent:#72b6ff}:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon{color:var(--console-accent)!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn{--console-accent:#fff}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active .mode-btn-icon{color:#000!important}:host .entry.entry .security-console.security-console .console-hud-loc{overflow-wrap:anywhere!important;background:0 0!important;border-radius:12px!important;flex:0 360px!important;width:auto!important;max-width:360px!important;padding:0!important;font-size:15px!important}:host .entry.entry .security-console.security-console .console-hud{justify-content:space-between!important}:host .entry.entry .security-console.security-console .argus-connection-pill{letter-spacing:0!important;text-transform:none!important;border-radius:12px!important;flex-shrink:0!important;height:44px!important;min-height:44px!important;padding:0 12px!important;font-size:12px!important;font-weight:600!important}:host .entry.entry .security-console.security-console .argus-connection-label{letter-spacing:0!important;text-transform:none!important;font-size:12px!important}:host .entry.entry .security-console.security-console .argus-connection-dot{box-shadow:none!important;background:#34d399!important}:host .entry.entry .security-console.security-console .argus-connection-pill[data-online=false] .argus-connection-dot{background:#ff7b85!important}:host .entry.entry .security-console.security-console .console-system-badge--armed_home{color:#ffad55!important;border-color:#ffad55!important}:host .entry.entry .security-console.security-console .console-system-badge--armed_away{color:#ff7b85!important;border-color:#ff7b85!important}:host .entry.entry .security-console.security-console .console-system-badge--armed_night{color:#72b6ff!important;border-color:#72b6ff!important}@container argus-console (width<=520px){:host .entry.entry .security-console.security-console .console-hud-loc{flex-basis:100%!important;max-width:100%!important}}:host .entry.entry .security-console.security-console .console-hud-loc{background:var(--console-glass)!important;border:1px solid var(--console-edge)!important;box-shadow:var(--console-shadow)!important;box-sizing:border-box!important;border-radius:12px!important;align-self:stretch!important;min-height:44px!important;padding:10px 12px!important;line-height:1.35!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc{box-shadow:none!important;background:#000!important;border:2px solid #fff!important}@container argus-console (width<=520px){:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;gap:8px!important;display:grid!important}:host .entry.entry .security-console.security-console .console-hud-loc{width:100%!important}:host .entry.entry .security-console.security-console .argus-connection-pill{justify-content:center!important}:host .entry.entry .security-console.security-console .console-hud-right{grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;display:grid!important}:host .entry.entry .security-console.security-console .console-hud-right button{white-space:normal!important;width:100%!important;height:auto!important;line-height:1.3!important}}@media (orientation:landscape) and (height<=600px) and (width>=600px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template:\"header header header\"max-content\"controls emblem sensors\"minmax(0,1fr)/minmax(150px,1fr) minmax(100px,.65fr) minmax(210px,1.3fr)!important;grid-auto-rows:auto!important;align-content:stretch!important;gap:12px!important;height:100dvh!important;min-height:0!important;padding:64px 16px 12px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-hud-loc{flex-basis:180px!important;max-width:260px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon svg{width:120px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .liquid-btn{min-height:64px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors{align-self:stretch!important;gap:6px!important;height:auto!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-sensor{gap:6px!important;min-height:40px!important;padding:8px!important}}:host .entry.entry .security-console.security-console[data-alarm-state=disarmed]{--console-accent:#45d49a}:host .entry.entry .security-console.security-console[data-alarm-state=armed_home]{--console-accent:#ffad55}:host .entry.entry .security-console.security-console[data-alarm-state=armed_away]{--console-accent:#ff6674}:host .entry.entry .security-console.security-console[data-alarm-state=armed_night]{--console-accent:#69aaff}:host .entry.entry .security-console.security-console .console-shield{perspective:700px;transform-style:preserve-3d;filter:drop-shadow(0 10px 12px color-mix(in srgb,var(--console-accent) 28%,transparent))}:host .entry.entry .security-console.security-console .console-shield-ring{transform-origin:120px 124px;stroke-dasharray:190 120;animation:24s linear infinite argus-core-rotate}:host .entry.entry .security-console.security-console .console-shield-core{transform-origin:120px 124px;animation:4s ease-in-out infinite argus-core-breathe}:host .entry.entry .security-console.security-console .console-shield-symbol{animation:.7s cubic-bezier(.2,.8,.2,1) both argus-core-arrive}:host .entry.entry .security-console.security-console .console-shield--crystal{animation:6s ease-in-out infinite argus-crystal-float}:host .entry.entry .security-console.security-console .console-shield--argus{animation:7s ease-in-out infinite argus-emblem-float}@keyframes argus-core-rotate{to{transform:rotate(360deg)}}@keyframes argus-core-breathe{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}@keyframes argus-core-arrive{0%{opacity:.15;transform:translateZ(-24px)scale(.72)rotateX(-24deg)}70%{opacity:1;transform:translateZ(8px)scale(1.08)rotateX(5deg)}to{opacity:1;transform:translateZ(0)scale(1)rotateX(0)}}@keyframes argus-crystal-float{0%,to{transform:rotateY(-5deg)translateY(0)}50%{transform:rotateY(5deg)translateY(-4px)}}@keyframes argus-emblem-float{0%,to{transform:rotateX(2deg)translateY(0)}50%{transform:rotateX(-3deg)translateY(-3px)}}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-shield{filter:none!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .console-shield-ring,:host .entry.entry .security-console.security-console .console-shield-core,:host .entry.entry .security-console.security-console .console-shield-symbol,:host .entry.entry .security-console.security-console .console-shield--crystal,:host .entry.entry .security-console.security-console .console-shield--argus{animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-ring,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-core,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-symbol,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield--crystal,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield--argus{animation:none!important}:host .entry.entry .security-console.security-console .console-shield-pulse--sensor{animation:.46s cubic-bezier(.25,.75,.25,1) both argus-haptic-sensor}:host .entry.entry .security-console.security-console .console-shield-pulse--sos{animation:.9s cubic-bezier(.25,.75,.25,1) both argus-haptic-sos}:host .entry.entry .security-console.security-console .console-shield-alert-rings circle{transform-origin:120px 124px;opacity:0}:host .entry.entry .security-console.security-console .console-shield-pulse--sensor .console-shield-alert-rings circle{animation:.65s ease-out both argus-alert-wave}:host .entry.entry .security-console.security-console .console-shield-pulse--sensor .console-shield-alert-rings circle:nth-child(2){animation-delay:.13s}:host .entry.entry .security-console.security-console .console-shield-pulse--sos .console-shield-alert-rings circle{animation:.85s ease-out both argus-alert-wave}:host .entry.entry .security-console.security-console .console-shield-pulse--sos .console-shield-alert-rings circle:nth-child(2){animation-delay:.26s}@keyframes argus-haptic-sensor{0%,to{transform:translate(0,0)rotateY(0)}18%{transform:translate(-3px,1px)rotateY(-2deg)}36%{transform:translate(3px,-1px)rotateY(2deg)}54%{transform:translate(-2px)rotateY(-1deg)}72%{transform:translate(1px)}}@keyframes argus-haptic-sos{0%,to{transform:translate(0,0)rotateY(0)scale(1)}12%{transform:translate(-4px,1px)rotateY(-3deg)scale(1.015)}24%{transform:translate(4px,-1px)rotateY(3deg)scale(1.015)}36%{transform:translate(-3px)rotateY(-2deg)}48%{transform:translate(3px)rotateY(2deg)}60%{transform:translate(-2px)}72%{transform:translate(2px)}}@keyframes argus-alert-wave{0%{opacity:.8;transform:scale(.72)}to{opacity:0;transform:scale(1.42)}}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-shield-pulse--sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-shield-pulse--sos{filter:none!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .console-shield-pulse--sensor,:host .entry.entry .security-console.security-console .console-shield-pulse--sos,:host .entry.entry .security-console.security-console .console-shield-alert-rings *{animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-pulse--sensor,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-pulse--sos,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-alert-rings *{animation:none!important}:host .entry.entry .security-console.security-console{isolation:isolate!important;position:relative!important}:host .entry.entry .security-console.security-console .entry-icon{z-index:auto!important;will-change:auto!important;box-sizing:border-box!important;min-height:260px!important;padding-top:210px!important;animation:none!important;position:static!important;transform:none!important}:host .entry.entry .security-console.security-console .console-emblem-3d{z-index:1;pointer-events:none;touch-action:pan-y;width:100%;height:100%;position:absolute;inset:0}:host .entry.entry .security-console.security-console .console-emblem-3d canvas{width:100%;height:100%;display:block}:host .entry.entry .security-console.security-console .console-hud,:host .entry.entry .security-console.security-console .liquid-stack,:host .entry.entry .security-console.security-console .console-sensors,:host .entry.entry .security-console.security-console .console-system-badge,:host .entry.entry .security-console.security-console .argus-shield-status{z-index:2;position:relative}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-emblem-3d{background:0 0}:host .entry.entry>canvas.console-emblem-canvas{z-index:1;pointer-events:none;width:100%!important;height:100%!important;display:block!important;position:absolute!important;inset:0!important}", zm = ":host .entry.entry .entry-content.security-console.security-console{box-sizing:border-box!important;grid-template:\"header header header\"\"controls emblem sensors\"minmax(260px,auto)/minmax(240px,1fr) minmax(180px,.7fr) minmax(280px,1fr)!important;align-content:center!important;align-items:center!important;gap:28px 32px!important;width:100%!important;max-width:1440px!important;height:auto!important;min-height:0!important;margin:auto!important;padding:28px!important;display:grid!important}:host .entry.entry .security-console.security-console .console-hud{flex-wrap:wrap!important;grid-area:header!important;align-items:center!important;gap:12px!important;height:auto!important;min-height:44px!important;display:flex!important;position:static!important}:host .entry.entry .security-console.security-console .console-hud-loc{width:auto!important;min-width:0!important;max-width:none!important;box-shadow:none!important;letter-spacing:.01em!important;white-space:normal!important;background:0 0!important;border:none!important;flex:220px!important;margin:0!important;padding:0!important;font-size:15px!important}:host .entry.entry .security-console.security-console .argus-connection-pill{height:36px!important;min-height:36px!important;box-shadow:none!important;margin:0!important;padding:0 12px!important;font-size:11px!important;position:static!important;transform:none!important}:host .entry.entry .security-console.security-console .console-hud-right{flex-wrap:wrap!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;width:auto!important;margin:0!important;display:flex!important}:host .entry.entry .security-console.security-console .console-hud-right button{height:44px!important;min-height:44px!important;color:inherit!important;box-shadow:none!important;background:#ffffff12!important;border:1px solid #ffffff2e!important;border-radius:12px!important;margin:0!important;padding:0 12px!important;font-size:12px!important}:host .entry.entry .security-console.security-console .liquid-stack{grid-area:controls!important;align-self:center!important;gap:10px!important;width:100%!important;max-width:none!important}:host .entry.entry .security-console.security-console .liquid-btn{backdrop-filter:blur(12px)!important;background:#ffffff14!important;border-radius:16px!important;min-height:84px!important;box-shadow:inset 0 1px #ffffff26,0 4px 12px #0000001f!important}:host .entry.entry .security-console.security-console .liquid-btn.active{background:#fff3!important;border-color:currentColor!important}:host .entry.entry .security-console.security-console .argus-sta-wrap{min-width:0!important;max-width:100%!important}:host .entry.entry .security-console.security-console .entry-icon{flex-direction:column!important;grid-area:emblem!important;justify-content:center!important;align-items:center!important;gap:16px!important;width:100%!important;margin:0!important;animation:none!important;display:flex!important}:host .entry.entry .security-console.security-console .entry-icon svg{filter:drop-shadow(0 8px 18px #00000038)!important;width:clamp(160px,16vw,220px)!important;max-width:100%!important}:host .entry.entry .security-console.security-console .console-system-badge{white-space:normal!important;text-align:center!important;letter-spacing:.05em!important;box-shadow:none!important;height:auto!important;padding:8px 12px!important;font-size:12px!important}:host .entry.entry .security-console.security-console .console-sensors{scrollbar-width:thin!important;flex-direction:column!important;grid-area:sensors!important;align-items:stretch!important;gap:8px!important;width:100%!important;max-width:none!important;max-height:400px!important;margin:0!important;display:flex!important;overflow-y:auto!important}:host .entry.entry .security-console.security-console .console-sensor{box-sizing:border-box!important;background:#ffffff0d!important;border-radius:14px!important;grid-template-columns:24px minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;width:100%!important;min-width:0!important;height:auto!important;min-height:48px!important;padding:10px 12px!important;display:grid!important;box-shadow:inset 0 1px #ffffff1f!important}:host .entry.entry .security-console.security-console .console-sensor-main{flex:initial!important;width:auto!important;min-width:0!important}:host .entry.entry .security-console.security-console .console-sensor-name{letter-spacing:.01em!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:12px!important;font-weight:600!important;display:block!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .console-sensor-status-wrap{flex-wrap:wrap!important;justify-content:flex-end!important;gap:5px!important;max-width:130px!important;display:flex!important}:host .entry.entry .security-console.security-console .console-sensor-state{letter-spacing:.02em!important;font-size:11px!important}:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{min-height:100dvh!important;padding:72px 32px 24px!important}@container argus-console (width<=900px){:host .entry.entry .entry-content.security-console.security-console{grid-template:\"header header\"\"controls emblem\"\"sensors sensors\"/minmax(0,1fr) minmax(0,1fr)!important;gap:24px!important;padding:24px!important}:host .entry.entry .security-console.security-console .console-sensors{max-height:none!important}}@container argus-console (width<=520px){:host .entry.entry .entry-content.security-console.security-console{grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important;gap:20px!important;padding:20px 16px!important}:host .entry.entry .security-console.security-console .console-hud{flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:10px!important;width:100%!important}:host .entry.entry .security-console.security-console .console-hud-loc{text-align:center!important;box-sizing:border-box!important;flex:none!important;justify-content:center!important;width:100%!important;max-width:100%!important}:host .entry.entry .security-console.security-console .argus-connection-pill{justify-content:center!important;align-self:center!important}:host .entry.entry .security-console.security-console .console-hud-right{grid-template-columns:repeat(2,minmax(0,1fr))!important;justify-content:center!important;justify-items:stretch!important;width:100%!important;display:grid!important}:host .entry.entry .security-console.security-console .console-hud-right button{text-align:center!important;justify-content:center!important;width:100%!important;min-width:0!important}:host .entry.entry .security-console.security-console .console-hud-right button:last-child{grid-column:1/-1!important;justify-self:center!important;width:50%!important}:host .entry.entry .security-console.security-console .entry-icon svg{width:160px!important}:host .entry.entry .security-console.security-console .console-sensor{grid-template-columns:20px minmax(0,1fr)!important}:host .entry.entry .security-console.security-console .console-sensor-status-wrap{grid-column:2!important;justify-content:flex-start!important;max-width:none!important}:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{padding-top:72px!important}}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button{color:#fff!important;backdrop-filter:none!important;background:#000!important;border:2px solid #fff!important}:host .entry.entry .security-console.security-console button:focus-visible{outline-offset:3px!important;outline:3px solid #7dd3fc!important}:host .entry.entry .security-console.security-console>.liquid-stack,:host .entry.entry .security-console.security-console>.entry-icon,:host .entry.entry .security-console.security-console>.console-sensors{position:static!important;inset:auto!important;transform:none!important}:host .entry.entry .security-console.security-console .entry-icon svg [filter]{filter:none!important}@container argus-console (width<=900px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-auto-rows:max-content!important;height:auto!important;min-height:100dvh!important}:host .entry.entry .security-console.security-console{grid-template-rows:max-content max-content max-content!important}:host .entry.entry .security-console.security-console .console-sensors{align-self:start!important;height:auto!important;min-height:max-content!important}}@container argus-console (width<=520px){:host .entry.entry .security-console.security-console{grid-template-rows:max-content max-content max-content max-content!important}}", Bm = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.security-console .entry-fs{-webkit-backdrop-filter:blur(12px)!important;color:#fff!important;cursor:pointer!important;background:#ffffff14!important;border:1px solid #fff3!important;border-radius:12px!important;flex-shrink:0!important;justify-content:center!important;align-items:center!important;width:38px!important;min-width:38px!important;height:38px!important;padding:0!important;font-size:16px!important;transition:all .2s cubic-bezier(.16,1,.3,1)!important;display:inline-flex!important;box-shadow:0 4px 12px #00000040!important}.security-console .entry-fs:hover{background:#ffffff2e!important;border-color:#ffffff61!important;transform:translateY(-1px)scale(1.04)!important;box-shadow:0 6px 16px #00000059!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;width:fit-content!important;max-width:340px!important;max-height:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;flex-direction:column!important;place-self:center!important;align-items:flex-start!important;gap:6px!important;margin:0 auto!important;padding:0!important;display:flex!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;gap:5px!important;max-height:320px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 2px #00000080!important;box-sizing:border-box!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff24 0%,#ffffff08 100%)!important;border:1px solid #fff3!important;border-radius:999px!important;justify-content:flex-start!important;align-items:center!important;gap:8px!important;width:fit-content!important;max-width:100%!important;height:34px!important;min-height:34px!important;padding:5px 14px!important;transition:background .25s,box-shadow .25s,border-color .25s,transform .15s!important;display:inline-flex!important;box-shadow:inset 0 1px #ffffff4d,inset 0 -1px #0000001f,0 2px 8px #00000038!important}.console-sensor:hover{transform:translateY(-1px)scale(1.01)!important;box-shadow:inset 0 1px #ffffff73,0 5px 14px #0000004d!important}.console-sensor.open{background:linear-gradient(135deg,#ef444452 0%,#b91c1c21 100%)!important;border-color:#ef444499!important;box-shadow:inset 0 1px #ffffff61,0 0 12px #ef444447,0 2px 8px #00000038!important}.console-sensor.unavailable{background:linear-gradient(135deg,#94a3b81f 0%,#64748b0a 100%)!important;border-style:dashed!important;border-color:#94a3b847!important}.console-sensor-icon{filter:drop-shadow(0 1px 3px #0006)!important;flex-shrink:0!important;justify-content:center!important;align-items:center!important;font-size:14px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 4px);width:18px;height:18px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-main{flex:0 auto!important;align-items:center!important;min-width:0!important;display:flex!important;overflow:hidden!important}.console-sensor-name{letter-spacing:.02em!important;white-space:nowrap!important;text-overflow:ellipsis!important;color:#fff!important;min-width:0!important;font-size:10.5px!important;font-weight:800!important;line-height:1.2!important;overflow:hidden!important}.console-sensor-status-wrap{flex-shrink:0!important;align-items:center!important;gap:5px!important;margin-left:0!important;display:inline-flex!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:3px!important;font-size:10px!important;font-weight:800!important;display:inline-flex!important}.entry.ios-fullscreen .console-sensors{flex-direction:column!important;gap:6px!important;width:100%!important;max-width:480px!important;max-height:520px!important;display:flex!important;overflow-y:auto!important}.entry.ios-fullscreen .console-sensor{min-width:0!important;height:36px!important;min-height:36px!important;padding:5px 14px!important}.entry.ios-fullscreen .console-sensor-name{white-space:nowrap!important;text-overflow:ellipsis!important;line-height:1.2!important;overflow:hidden!important}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console .console-sensors,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro{align-items:center!important;max-height:none!important;overflow:visible!important}.entry:not(.ios-fullscreen) .security-console .console-sensor{width:fit-content!important;min-width:0!important;max-width:100%!important}.entry:not(.ios-fullscreen) .security-console .console-sensor-name{writing-mode:horizontal-tb!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:1fr auto 1fr!important;justify-content:center!important;align-items:center!important;gap:16px 28px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0 auto!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;place-self:center!important;width:100%!important;max-width:320px!important;margin:0 auto!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;justify-content:center!important;place-self:center!important;align-items:center!important;margin:0 auto!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;place-self:center!important;width:fit-content!important;max-width:340px!important;margin:0 auto!important}}@container argus-console (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:1fr auto 1fr!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0 auto!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;place-self:center!important;width:100%!important;max-width:320px!important;margin:0 auto!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;justify-content:center!important;place-self:center!important;align-items:center!important;margin:0 auto!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;place-self:center!important;width:fit-content!important;max-width:340px!important;margin:0 auto!important}}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:1fr auto 1fr!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0 auto!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important;max-width:360px!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;justify-content:center!important;place-self:center!important;align-items:center!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:fit-content!important;max-width:380px!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;place-self:center!important;align-items:flex-start!important;margin:0 auto!important}}.security-console .console-sensor{justify-content:flex-start!important;align-items:center!important;width:fit-content!important;min-width:0!important;max-width:100%!important;display:inline-flex!important}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}.entry.ios-fullscreen{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;height:100dvh!important;min-height:0!important;overflow:hidden auto!important}.entry.ios-fullscreen .security-console{box-sizing:border-box!important;width:100%!important;min-width:0!important;padding-top:max(64px, env(safe-area-inset-top))!important;padding-bottom:max(20px, env(safe-area-inset-bottom))!important}@media (width<=480px),(height<=480px){.entry.ios-fullscreen .console-hud{flex-wrap:wrap!important;height:auto!important}.entry.ios-fullscreen .console-hud-right{flex-wrap:wrap!important;justify-content:center!important}.entry.ios-fullscreen .liquid-stack{flex-wrap:wrap!important}.entry.ios-fullscreen .console-sensors{max-height:none!important;overflow:visible!important}}.entry.ios-fullscreen .liquid-btn{min-width:44px!important;min-height:44px!important}";
-//#endregion
-//#region src/features/dashboard/components/SensorChip.tsx
+// src/features/dashboard/components/SensorChip.tsx
 function Vm(e, t) {
 	return e.startsWith("lock.") ? "lock" : t === "window" ? "window" : t === "motion" || t === "occupancy" || t === "presence" ? "motion" : t === "door" ? "door" : t === "garage_door" || t === "garage" ? "garage" : t === "lock" || t === "opening" || !t ? "lock" : "generic";
 }
@@ -32511,8 +32334,7 @@ function Km({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 		]
 	});
 }
-//#endregion
-//#region src/features/dashboard/components/SecurityConsole.tsx
+// src/features/dashboard/components/SecurityConsole.tsx
 function qm({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r, entryIndex: i }) {
 	let [a, o] = (0, j.useState)(0), s = (0, j.useRef)({});
 	(0, j.useEffect)(() => {
@@ -32836,8 +32658,7 @@ function qm({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		]
 	})] });
 }
-//#endregion
-//#region src/features/safety/slide-action.ts
+// src/features/safety/slide-action.ts
 var Jm = "argus-slide-action-styles", Ym = {
 	es: {
 		slide_disarm: "Desliza para desarmar",
@@ -32879,7 +32700,7 @@ function Zm(e) {
 	if (!t) try {
 		t = localStorage.getItem("argus_lang");
 	} catch {}
-	if ((!t || t === "auto") && (t = e._ui?.manual_lang || e._ui?.language || e._hass?.language || "en"), t = String(t || "en").trim(), Ym[t]) return t;
+	if (t && t !== "auto" || (t = e._ui?.manual_lang || e._ui?.language || e._hass?.language || "en"), t = String(t || "en").trim(), Ym[t]) return t;
 	let n = t.split(/[-_]/)[0].toLowerCase();
 	return Ym[n] ? n : n.startsWith("es") ? "es" : "en";
 }
@@ -32926,7 +32747,7 @@ function ih(e, t, n, r, i, a, o, s) {
 	n.setAttribute("role", "button"), n.setAttribute("tabindex", "0"), n.setAttribute("aria-label", a.textContent || t);
 	function _() {
 		let e = Date.now();
-		e - g < 450 || (g = e, !o.classList.contains("open") && s());
+		e - g < 450 || (g = e, o.classList.contains("open") || s());
 	}
 	n.addEventListener("keydown", (e) => {
 		e.target === n && (e.key === "Enter" || e.key === " ") && (e.preventDefault(), _());
@@ -33065,8 +32886,7 @@ function sh(e) {
 		};
 	}
 }
-//#endregion
-//#region src/features/dashboard/components/SecurityConsoleRoot.tsx
+// src/features/dashboard/components/SecurityConsoleRoot.tsx
 function ch(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
@@ -33140,8 +32960,7 @@ function uh(e) {
 		ch(this);
 	};
 }
-//#endregion
-//#region src/features/dashboard/index.tsx
+// src/features/dashboard/index.tsx
 typeof window < "u" && (window.mountSecurityConsole = ch);
 function dh(e) {
 	let t = (t) => e._t?.(t) || t;
@@ -33317,8 +33136,7 @@ function hh(e) {
 		this._argusReactSetEditing?.(!this._widgetEditing);
 	};
 }
-//#endregion
-//#region src/features/media/client.ts
+// src/features/media/client.ts
 function gh(e) {
 	let t = e._hass?.auth?.accessToken;
 	return t ? { Authorization: `Bearer ${t}` } : {};
@@ -33358,8 +33176,7 @@ function _h(e) {
 		}
 	});
 }
-//#endregion
-//#region src/features/security/client.ts
+// src/features/security/client.ts
 var vh = (e, t) => e.getElementById(t), yh = (e, t, n) => e._t?.(t) ?? n;
 function bh(e) {
 	let t = e?.prototype;
@@ -33397,8 +33214,7 @@ function bh(e) {
 		t ? (t.textContent = e, t.className = "status err") : window.alert(e);
 	});
 }
-//#endregion
-//#region src/features/premium/index.ts
+// src/features/premium/index.ts
 var xh = "argus-hdr-promotion-styles";
 function Sh(e) {
 	Ch(e);
@@ -33418,8 +33234,7 @@ function wh(e) {
 	let n = document.createElement("style");
 	n.id = xh, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
 }
-//#endregion
-//#region src/features/motion/index.ts
+// src/features/motion/index.ts
 var Th = "argus-motion-system-v2049", Eh = "__argusMotionV2049", Dh = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", Oh = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
 function kh(e) {
 	if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return "essential";
@@ -33532,8 +33347,7 @@ function Bh(e) {
 		}
 	};
 }
-//#endregion
-//#region src/features/render/stable.ts
+// src/features/render/stable.ts
 var Vh = "__argusStableRenderV2050";
 function Hh(e) {
 	let t = e.shadowRoot;
@@ -33704,9 +33518,7 @@ function Gh(e) {
 					return r?.state !== i?.state || JSON.stringify(r?.attributes || {}) !== JSON.stringify(i?.attributes || {});
 				}), o = [...n].some((n) => t.states[n]?.state !== e.states[n]?.state || t.states[n]?.attributes?.battery_level !== e.states[n]?.attributes?.battery_level || t.states[n]?.attributes?.battery_percentage !== e.states[n]?.attributes?.battery_percentage), s = this._temperatureSource === "auto" ? null : this._temperatureSource, c = s && t.states[s]?.state !== e.states[s]?.state, l = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(e.states).find((e) => e.entity_id?.startsWith("weather."))?.entity_id, u = l && (t.states[l]?.state !== e.states[l]?.state || t.states[l]?.attributes?.temperature !== e.states[l]?.attributes?.temperature), d = t.connected !== e.connected, f = a || o || c || u || i || d;
 				this._hass = e, this._updateTheme?.(), f ? (this._renderEntries?.(i || d), this._renderActivityLog?.()) : Hh(this);
-				return;
-			}
-			return a.call(this, e);
+			} else return a.call(this, e);
 		}
 	});
 	let o = t.connectedCallback;
@@ -33715,8 +33527,7 @@ function Gh(e) {
 		return this._startClock?.(), e;
 	};
 }
-//#endregion
-//#region src/features/render/alarm.ts
+// src/features/render/alarm.ts
 var Kh = "argus-v2050-alarm-visuals", qh = {
 	armed_home: /EN CASA|HOME|EM CASA|CASA|在家|ДОМА/i,
 	armed_away: /AUSENTE|AWAY|ASSENTE|外出|УШЁЛ/i,
@@ -33781,8 +33592,7 @@ function Qh(e) {
 		return Zh(this), t;
 	};
 }
-//#endregion
-//#region src/features/widgets/responsive.ts
+// src/features/widgets/responsive.ts
 var $h = "argus-v2049-responsive-widgets", eg = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
 function tg(e) {
 	let t = e.shadowRoot;
@@ -33825,8 +33635,7 @@ function ig(e) {
 		return rg(this), t;
 	};
 }
-//#endregion
-//#region src/features/widgets/layouts.ts
+// src/features/widgets/layouts.ts
 var ag = "argus-v2050-widget-layouts";
 function og(e) {
 	let t = e.shadowRoot;
@@ -33869,8 +33678,7 @@ function lg(e) {
 		return cg(this), t;
 	};
 }
-//#endregion
-//#region src/features/more-info/hook.ts
+// src/features/more-info/hook.ts
 var ug = "argus-more-info-hook-installed", dg = "argus-more-info-dialog-styles";
 function fg(e, t) {
 	if (!e || !e.startsWith("alarm_control_panel.")) return !1;
@@ -33942,12 +33750,10 @@ function hg(e) {
 		});
 	} catch {}
 }
-//#endregion
-//#region src/app/index.ts
+// src/app/index.ts
 function gg(e) {
 	e ||= customElements.get("argus-panel-v2018");
 	let t = e;
 	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, bh(t), _h(t), Sh(t), Bh(t), Gh(t), Qh(t), sh(t), ig(t), lg(t), hg(t), hh(t), uh(t), u(t));
 }
-//#endregion
 export { gg as applyArgusFrontend };

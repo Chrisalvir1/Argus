@@ -1,11 +1,11 @@
 [project]
 name = "argus-home-hub"
 dynamic = ["version"]
-requires-python = ">=3.12,<3.15"
+requires-python = ">=3.14,<3.16"
 dependencies = []
 
 [tool.argus.runtime]
-python = "3.12"
-node = "24-lts"
+python = "3.14"
+node = "26.13-lts"
 typescript = "7.0.2"
 ecmascript = "ES2025"
