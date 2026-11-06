@@ -8,3 +8,7 @@
 - Migración: conservación de campos antiguos TTS, zonas desactivadas, modos heredados y etiquetas de área comprobadas por pruebas aisladas.
 
 Pendiente antes de publicación: revisión final de CI y artefactos, comprobación completa de actualización en laboratorio, cierre de integración Git y publicación. Estas pruebas no acreditan dispositivos físicos ni todas las automatizaciones de terceros.
+
+## Almacenamiento real de Home Assistant
+
+Prueba adicional en directorio temporal con HomeAssistant 2026.11.0 y Store real: importación desde argus.ui, conservación exacta de modos, automatizaciones almacenadas, destinos, voz, nombre y dashboard; zonas desactivadas e idempotencia de segunda carga aprobadas. ConfigEntries se sustituyó por un registro de prueba de una instancia. No se iniciaron plataformas ni se activaron salidas. No equivale a probar todas las automatizaciones externas ni un arranque completo de la instalación del usuario.
