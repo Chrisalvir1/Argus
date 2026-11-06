@@ -1,3 +1,14 @@
+## 2026-11-05 — Versión local 2.9.160: estados completos de sensor
+
+- El diagnóstico contextual muestra estado interpretado según clase de entidad, conexión, batería y, para contactos que siguen abiertos, la hora de inicio (`last_changed`). No extrapolar «abierto/cerrado» a sensores de movimiento ni a entidades informativas.
+- Una entidad como `sensor.sun_next_dawn` se marca «No es sensor de seguridad»; un timestamp no es una apertura ni un cierre. Solo exponer batería o porcentaje cuando HA lo informe.
+- Backend añadió `availability`, `battery_low` y `last_changed` al resultado de diagnóstico. Bundle invalidado en bootstrap para la vista local 8123.
+- Mantener configuración de zonas: se observa que la zona de prueba contiene una entidad informativa y no contactos/detectores; no agregar, quitar ni inventar entidades.
+
+## 2026-11-05 — Versión local 2.9.159
+
+Usuario autoriza versionar corrección contextual para visualizar cambios. Actualizados manifest, const y URL del bundle para invalidar caché. Sin commit/tag/publicación. Pendientes en CONTEXTUAL_UX_CORRECTION.md; no declarar validado el recorrido WebSocket real.
+
 # Memoria de decisiones UX de Argus
 
 ## Fase 7 — Implementación e integración completadas (2.9.150)
@@ -220,3 +231,42 @@ Esta entrada prevalece sobre notas históricas que den por resuelta la fluidez g
 - Se versionan localmente las correcciones ya implementadas de coste de resize WebGL, etiquetas del PIN de armado y estados activos del bridge contextual. Bundle de producción local, `manifest.json`, `const.py` y cache-buster quedan alineados en 2.9.152.
 - Safari nativo completó las acciones de scroll, fullscreen, sidebar de HA y salida/entrada de perfil contra el bundle 2.9.151. Los cuatro escenarios siguen pendientes de verificación visual sostenida; no afirmar fluidez total. Ver evidencia y limitaciones en `docs/SAFARI_UX_2.9.151.md` y `docs/safari-native-ux-2.9.151-evidence.txt`.
 - La nueva versión identifica este checkpoint local; no es una publicación ni certifica mediciones físicas. Mantener diseño, motor de seguridad y versión responsive congelados.
+
+### A/B de Safari y puerto canónico (2026-11-05, 2.9.152)
+
+- El único puerto activo y autorizado para el proyecto local es `http://127.0.0.1:8123/argus`. No levantar ni dirigir al usuario a `18123`, `18127` ni a previews alternativos. Las menciones de esos puertos en reportes previos son evidencia histórica, no configuración vigente.
+- Se confirmó el listener de Home Assistant/Argus en `8123`; no había listener en `18127`. Se detuvo el preview Vite de Argus en `5179`; tampoco quedó escuchando. El probe Safari fue actualizado para limitarse al origen `8123`.
+- La comparación nativa A/B de blur en `docs/SAFARI_AB_2.9.152.md` no fue causalmente concluyente: el buffer adaptativo tuvo resoluciones internas diferentes y las muestras fueron ruidosas. No aplicar cambios permanentes especulativos ni afirmar fluidez global.
+- Las muestras usaron scroll sintético con Inspector, no gesto físico. Perfil fijo, fullscreen/sidebar medidos por separado y tiempos de montaje/bienvenida no quedaron medidos en esta ronda. No hubo cambios permanentes al diseño, Three.js o lógica de seguridad.
+
+### Corrección localizada de parpadeo al desplazar (2026-11-05, 2.9.154)
+
+- Las tarjetas `.entry` combinaban `backdrop-filter`, una máscara radial WebKit heredada y contenido superpuesto. La máscara era redundante con `overflow:hidden` y `border-radius`, y podía añadir una superficie de composición en WebKit: se retiró sin cambiar el vidrio ni el radio. La relación causal con el flicker requiere confirmación visual en Safari.
+- El `IntersectionObserver` del núcleo suspendía inmediatamente al tocar el límite del viewport. Ahora conserva la órbita dentro de 160 px de margen, evitando la secuencia detener/reanudar al atravesar el borde durante scroll rápido; todavía suspende cuando el panel queda claramente lejos.
+- Se versionó en `2.9.154`; TypeScript, build y 80 pruebas frontend pasaron. El bundle descargado de `8123` coincide byte a byte con el local y el bootstrap sirve el cache-buster `2.9.154`.
+- La verificación humana de scroll rápido y flicker en Safari nativo sigue pendiente; no declarar el síntoma visual resuelto hasta comprobarlo con gesto real.
+
+### Ajuste Safari tras persistencia del flicker (2026-11-05, 2.9.155)
+
+- El usuario reportó que el parpadeo continuaba, especialmente al volver al inicio y llegar al final del scroll; la modificación de máscara y margen de IntersectionObserver de 2.9.154 no lo resolvió.
+- 2.9.157: causa potencial reproducible en código para un flash del núcleo durante scroll: el muestreo de `requestAnimationFrame` alimentaba al controlador adaptativo con retrasos del compositor; al clasificar la caída como carga, podía reducir/restaurar la resolución y reasignar el buffer WebGL. Se pausa solo el muestreo de calidad durante wheel/touch/scroll y se descartan muestras contaminadas; la órbita continúa renderizando. Build y 80 pruebas pasan; SHA-256 del bundle local y del servido en `8123` coincide (`fee207e7…e57939b5`). Verificación visual sostenida en Safari nativo sigue pendiente; no declarar eliminado el parpadeo sin esa comprobación.
+- Se identificó en `.entry` una superficie grande con `backdrop-filter`, un overlay `mix-blend-mode:soft-light` y un `transform:translateY(-2px)` en hover. En Safari, esta combinación puede forzar repintado/recomposición de la tarjeta mientras se desplaza.
+- En navegadores WebKit, se conserva el vidrio, se mantiene una versión más tenue del gradiente de luz sin modo de mezcla y se quita el movimiento de hover de la tarjeta, manteniendo la transición de sombra.
+- Build Vite, TypeScript y `git diff --check` aprobados. No se afirma que el parpadeo visual haya desaparecido: la pestaña del proyecto está en Safari, pero la automatización disponible no puede controlar esa ventana/tab; hace falta la comprobación visual del usuario en `http://127.0.0.1:8123/argus`.
+- Bootstrap local actualizado a `2.9.155`; mantener el puerto 8123 como única dirección de trabajo. Sin commit, tag, release ni despliegue.
+
+### Corrección del fondo fijo al hacer scroll (2026-11-05, 2.9.158)
+
+- El usuario confirmó que seguía el parpadeo, especialmente al llegar al inicio/final del scroll. El fondo del host de HA usaba `background-attachment: fixed`; se movió la misma imagen a la capa de viewport ya existente `#argus-canvas-bg` en modo panel, manteniendo encuadre, órbita, núcleo, modo compacto y fondo propio de fullscreen. No se tocó lógica de seguridad ni geometría Three.js.
+- TypeScript, build Vite y 80 pruebas frontend aprobadas. El bootstrap y bundle de `http://127.0.0.1:8123` coinciden con el árbol local por SHA-256 (`9d447bde…d34056` y `f806e82e…e0955`).
+- **No declarar resuelto visualmente:** Safari nativo no pudo observarse con la vista Argus desbloqueada en esta sesión. Hace falta comprobar con el perfil del usuario, sin compartir su PIN. Seguir usando exclusivamente el puerto 8123.
+
+### Migración local a Home Assistant Core 2026.11 (2026-11-05)
+
+- La versión estable está instalada localmente: Core `2026.11.0`, frontend `20261028.4`, Python `3.14.10`; Node `26.13.0`. El proyecto declara Python `>=3.14,<3.16`; `zeroconf==0.152.0` queda fijado en `local/requirements.txt` para que el laboratorio no resuelva metadatos de versiones mezcladas.
+- Argus permanece en `2.9.158`. Se reconstruyeron el bundle React y `argus.zip` con las dependencias actuales; el ZIP pasó verificación estructural y conserva el bundle, manifest y diagnósticos de integración. Sin commit, tag, release, subida ni despliegue.
+- Se tomó antes de actualizar Core un respaldo privado de código, historial Git y estado de Home Assistant. Contiene configuración sensible; mantenerlo fuera del repositorio público.
+- Se comparó `origin/main` (Argus `2.6.8`, merge base `5ce4114`) sin reemplazar las mejoras locales ni copiar un bundle oficial más antiguo. Se adoptó únicamente el endpoint upstream de diagnósticos agregados que no expone PIN ni IDs de entidades.
+- Validado en esta máquina: 80 pruebas frontend, TypeScript, build, 4 smoke checks de Core/diagnósticos, check_config y HTTP 200 en `http://127.0.0.1:8123/argus`; el log confirma que inicia la integración Argus `2.9.158`.
+- La suite backend amplia NO está verde: última ejecución, 222 pruebas, 9 fallos, 5 errores y 13 skips (195 pasaron). Los errores son mocks async que devuelven `None` y un fixture de alarma sin `_require_alarm_actor_permission`; los fallos cubren contratos de texto/evento antiguos y fixtures walk-test con expectativas previas. No se atribuyen a HA 2026.11 sin evidencia; no esconder ni presentar como aprobada. Nueve contratos de versión/runtime dirigidos sí pasan. Detalle en `docs/LOCAL_HA_2026.11_MIGRATION.md`.
+- El único servidor del proyecto activo para el usuario debe ser `127.0.0.1:8123`. No levantar laboratorio alternativo ni previews en otros puertos.
