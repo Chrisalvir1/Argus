@@ -7443,7 +7443,7 @@ class ArgusPanel extends HTMLElement {
     const legacySensors = [...new Set(modeConfigs.flatMap((config: any) => Array.isArray(config?.sensors) ? config.sensors : []))];
     const modeEntries = Object.entries(this._ui?.modes?.__by_entity__?.[activeEntityId] || this._ui?.modes || {}).filter(([key]) => ['disarmed', 'home', 'away', 'night'].includes(key));
     const sensorIds = [...new Set([...legacySensors, ...(draft?.entity_ids || []), ...(this._zoneEntities || []).map((entity: any) => entity.entity_id)])];
-    const zoneEntities = sensorIds.map(id => (this._zoneEntities || []).find((entity: any) => entity.entity_id === id) || {
+    const zoneEntities = sensorIds.filter(id => isModeSensor(id) || draft?.entity_ids?.includes(id)).map(id => (this._zoneEntities || []).find((entity: any) => entity.entity_id === id) || {
       entity_id: id, name: this._hass?.states?.[id]?.attributes?.friendly_name || id,
       state: this._hass?.states?.[id]?.state || 'unavailable',
       device_class: this._hass?.states?.[id]?.attributes?.device_class,
@@ -7588,15 +7588,14 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderVoiceSettings(container: HTMLElement) {
-    const details = document.createElement('details');
+    const details = document.createElement('section');
     details.className = 'mode-section-card argus-mode-voice-card';
-    details.open = true;
     details.style.cssText = 'border-radius:18px;padding:16px;box-sizing:border-box';
-    details.innerHTML = `<summary style="cursor:pointer;font-weight:800">🔊 Voz de Argus · Configuración general</summary><div class="argus-voice-body small" style="padding-top:12px">Configura la voz una sola vez para todos los modos.</div>`;
+    details.innerHTML = `<h3>Voz de Argus · Configuración general</h3><div class="argus-voice-body small" style="padding-top:12px">Configura la voz una sola vez para todos los modos.</div>`;
     const voiceSlot = container.querySelector('#mode-voice-slot');
     (voiceSlot || container).append(details);
-    details.addEventListener('toggle', async () => {
-      if (!details.open || (details as any).__voiceLoaded) return;
+    const loadVoice = async () => {
+      if ((details as any).__voiceLoaded) return;
       const body = details.querySelector('.argus-voice-body') as HTMLElement;
       body.textContent = 'Cargando…';
       try {
@@ -7824,7 +7823,8 @@ class ArgusPanel extends HTMLElement {
       } catch (err) {
         body.textContent = `No se pudo cargar la voz: ${err.message || err}`;
       }
-    });
+    };
+    void loadVoice();
   }
 
   _voiceZoneState(rawState: unknown) {
@@ -9732,7 +9732,7 @@ class ArgusPanel extends HTMLElement {
   /* ── Selector modal ──────────────────────────────────────────────── */
   _selectAll() {
     const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
-    const items = (this._available || []).filter(x => {
+    const items = [...new Map((this._available || []).map(x => [x.entity_id, x])).values()].filter(x => {
       if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'alarm_device' || this._selectorTarget === 'panic') return isAlarmOutput(x.entity_id, (this._dashboard?.entries || []).map(entry => entry.entity_id));
       return isModeSensor(x.entity_id);
@@ -9826,24 +9826,33 @@ class ArgusPanel extends HTMLElement {
 
     if (rebuildList) {
       const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
-      const items = (this._available || []).filter(x => {
+      const items = [...new Map((this._available || []).map(x => [x.entity_id, x])).values()].filter(x => {
         if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
         if (this._selectorTarget === 'siren' || this._selectorTarget === 'alarm_device' || this._selectorTarget === 'panic') return isAlarmOutput(x.entity_id, (this._dashboard?.entries || []).map(entry => entry.entity_id));
         return isModeSensor(x.entity_id);
       }).filter(x => !q || [x.entity_id, x.name, x.area, x.entity_id.split('.')[1]].filter(Boolean).join(' ').toLowerCase().includes(q));
 
-      list.innerHTML = items.map(x => {
+      const groups = new Map<string, any[]>();
+      items.forEach(x => {
+        const key = String(x.name || x.entity_id).trim();
+        groups.set(key, [...(groups.get(key) || []), x]);
+      });
+      const renderItem = (x: any) => {
         const stateObj = this._hass?.states?.[x.entity_id];
         const facts = this._deviceFacts(x.entity_id, stateObj, true);
         return `<label class="pick-row">
           <input type="checkbox" data-entity="${this._escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
           <div>
-            <div class="pick-row-name">${this._escapeHtml(x.name || x.entity_id)}</div>
+            <div class="pick-row-name">${this._escapeHtml(x.name || x.entity_id)} · ${this._escapeHtml(x.entity_id.startsWith('binary_sensor.') ? 'Detector de seguridad' : x.domain || x.entity_id.split('.')[0])}</div>
             <div class="pick-row-meta">${this._escapeHtml(x.entity_id)}${x.area ? ' · '+this._escapeHtml(x.area) : ''}</div>
             <div class="device-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
           </div>
         </label>`;
-      }).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
+      };
+      list.innerHTML = [...groups.entries()].map(([name, entries]) => entries.length === 1
+        ? renderItem(entries[0])
+        : `<details class="mode-section-card" style="padding:12px"><summary>${this._escapeHtml(name)} · ${entries.length} funciones disponibles</summary>${entries.map(renderItem).join('')}</details>`
+      ).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
     }
 
     this._renderSelectedBox();

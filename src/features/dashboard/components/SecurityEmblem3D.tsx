@@ -419,7 +419,11 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       // compact scale used by landscape layouts.
       const portraitFullscreen = Boolean(surface.closest('.ios-fullscreen')) && window.matchMedia('(max-width: 760px) and (orientation: portrait)').matches;
       const emblemPixels = portraitFullscreen ? Math.min(440, emblemDiameter * .86) : Math.min(260, emblemDiameter * .50);
-      const emblemScale = viewHeight * emblemPixels / (height * 3.2);
+      // Detached crystals extend to 1.58 + .95 scene units from the center.
+      // Fit that full orbit (plus breathing clearance), not the closed ring's
+      // 3.2-unit diameter, inside the portrait fullscreen layout slot.
+      const fittedDiameter = portraitFullscreen ? 5.4 : 3.2;
+      const emblemScale = viewHeight * emblemPixels / (height * fittedDiameter);
       root.scale.setScalar(emblemScale * (reduced ? 1 : 1 + Math.sin(t*1.6)*.009 - arriving*.07));
       cornerGuards.forEach((guard, index) => {
         guard.visible = patrolling && (reduced || deploymentAge >= 1.05);

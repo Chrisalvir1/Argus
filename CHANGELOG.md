@@ -1,3 +1,7 @@
+# 3.0.6
+
+Ajustes responsive, configuración directa TTS y organización de selectores. Véase docs/RELEASE_NOTES_3.0.6.md.
+
 ## [3.0.5] - 2026-11-06
 
 - Medir el espacio visible de la consola vertical para adaptar únicamente el núcleo, manteniendo los tamaños de modos, SOS y controles.

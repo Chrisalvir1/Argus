@@ -54,8 +54,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
       const width = root.clientWidth - number(css.paddingLeft) - number(css.paddingRight);
       // When controls alone exhaust the screen retain a small emblem and allow
       // scrolling instead of clipping security actions or shrinking their text.
-      const space = Math.max(100, room);
-      const diameter = Math.max(0, Math.min(width, space));
+      const availableHeight = viewport?.height || window.innerHeight;
+      // Bound the orbit independently of spare vertical space on tall phones.
+      // Its square row reserves clearance above and below the crystals.
+      const diameter = Math.max(0, Math.min(width - 24, availableHeight * .40, 360, Math.max(180, room - 24)));
+      const space = diameter + 24;
       root.style.setProperty('--console-core-space', `${space}px`);
       root.style.setProperty('--console-core-diameter', `${diameter}px`);
     };
