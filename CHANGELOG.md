@@ -1,4 +1,4 @@
-# 3.0.6
+## [3.0.6] - 2026-11-06
 
 Ajustes responsive, configuración directa TTS y organización de selectores. Véase docs/RELEASE_NOTES_3.0.6.md.
 
