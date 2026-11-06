@@ -415,10 +415,11 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       root.rotation.y += ((idleTilt ? pointer.x*.25 + Math.sin(t*.45)*.035 : 0)-root.rotation.y)*blendAt(.22);
       root.position.set(anchor.x + shake, anchor.y + shakeY, 0);
       const arriving = Math.max(0, 1-(t-transitionAt)/.8);
-      // Keep the 3D assembly proportional to the compact center track. The
-      // previous .78 factor made the crystals spill across their viewport and
-      // visually dominate the panoramic console.
-      const emblemScale = viewHeight * Math.min(260, emblemDiameter * .50) / (height * 3.2);
+      // Size portrait geometry inside the measured emblem viewport; retain the
+      // compact scale used by landscape layouts.
+      const portraitFullscreen = Boolean(surface.closest('.ios-fullscreen')) && window.matchMedia('(max-width: 760px) and (orientation: portrait)').matches;
+      const emblemPixels = portraitFullscreen ? Math.min(440, emblemDiameter * .86) : Math.min(260, emblemDiameter * .50);
+      const emblemScale = viewHeight * emblemPixels / (height * 3.2);
       root.scale.setScalar(emblemScale * (reduced ? 1 : 1 + Math.sin(t*1.6)*.009 - arriving*.07));
       cornerGuards.forEach((guard, index) => {
         guard.visible = patrolling && (reduced || deploymentAge >= 1.05);

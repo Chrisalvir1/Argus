@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.0.4
+### Argus v3.0.5
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -26,6 +26,16 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Novedades de v3.0.5
+
+- En pantalla completa vertical, el núcleo usa el espacio visible que queda después de medir cabecera, modos y panel de control; los controles mantienen sus tamaños y el núcleo se reduce si el contenido crece.
+- Corregir la cascada CSS que impedía aplicar el tamaño medido y detectar orientación desde el viewport.
+- Evitar que el nombre de la casa, el estado en línea y el botón de salida se encimen en móviles estrechos; en esos anchos la cabecera usa dos filas.
+- Mejorar el fallback SVG para zonas: etiquetas mayores, nombre completo accesible y selección por toque o teclado.
+- Mantener el fondo del contexto transparente para quitar el rectángulo azul ajeno al panel.
+
+La verificación automatizada cubre TypeScript, build y 69 pruebas frontend. La revisión visual en iPhone y Echo Show aún debe confirmarse al actualizar.
 
 ## Novedades de v3.0.4
 

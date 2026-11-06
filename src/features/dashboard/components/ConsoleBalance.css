@@ -1101,3 +1101,71 @@
   :host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded="true"] .entry-icon { height: clamp(220px, 30dvh, 330px) !important; }
   :host .entry.entry.ios-fullscreen .console-emblem-unavailable { width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; }
 }
+/* Content-sized HUD: reserve the exit cell before measuring long home names. */
+:host .entry.entry .security-console.security-console .console-hud {
+  grid-template-columns: minmax(0, max-content) max-content max-content !important;
+  justify-content: start !important;
+  gap: 8px !important;
+}
+:host .entry.entry .security-console.security-console .console-hud-loc {
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+:host .entry.entry .security-console.security-console .entry-exit-fs {
+  position: static !important;
+  inset: auto !important;
+}
+:host .entry.entry .security-console.security-console .security-context {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Final responsive layout: these selectors match the fullscreen container rules. */
+:host .entry.entry .security-console.security-console .console-home-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+:host .entry.entry .security-console.security-console .console-hud-loc > svg { flex-shrink: 0; }
+@media (max-width: 760px) and (orientation: portrait) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon {
+    height: var(--console-core-space, 35dvh) !important;
+    min-height: 0 !important;
+    flex: 0 0 var(--console-core-space, 35dvh) !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded="true"] .entry-icon {
+    height: var(--console-core-space, 28dvh) !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport {
+    width: var(--console-core-diameter, 80vw) !important;
+    height: var(--console-core-diameter, 80vw) !important;
+    max-width: 100% !important;
+    aspect-ratio: 1 !important;
+    flex: none !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console :is(.console-hud,.console-modes-vertical,.security-context) { flex-shrink: 0 !important; }
+}
+@media (max-width: 420px) {
+  :host .entry.entry .security-console.security-console .console-hud {
+    grid-template-areas: 'home home tools' 'online online tools' !important;
+    grid-template-columns: minmax(0,1fr) auto auto !important;
+    align-items: start !important;
+  }
+  :host .entry.entry .security-console.security-console .argus-connection-pill { justify-self: start !important; }
+  :host .entry.entry .security-console.security-console .console-hud-loc { white-space: normal !important; }
+  :host .entry.entry .security-console.security-console .console-home-text { white-space: normal; overflow-wrap: anywhere; }
+}

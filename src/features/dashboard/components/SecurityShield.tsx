@@ -3,7 +3,7 @@ import { SecurityEmblem3D, type EmblemProps } from './SecurityEmblem3D';
 import { MODE_PALETTE } from './mode-palette';
 
 /** Lightweight SVG retains motion when the 3D renderer is unavailable. */
-function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: EmblemProps) {
+function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled, onSelectZone }: EmblemProps) {
   const [reducedMotion, setReducedMotion] = useState(true);
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -31,8 +31,12 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: Em
       const tangent = angle * 180 / Math.PI + 90;
       const rotation = Math.cos(tangent * Math.PI / 180) < 0 ? tangent + 180 : tangent;
       const name = zone.area?.trim() || 'Sin área';
-      return <g key={zone.id} transform={`translate(${80 + 55 * Math.cos(angle)}, ${80 + 55 * Math.sin(angle)}) rotate(${rotation})`}
-        fill="#080e14" textAnchor="middle" fontSize="5">
+      return <g key={zone.id} role="button" tabIndex={0} aria-label={`Zona ${zone.number}: ${name}`}
+        onClick={() => onSelectZone?.(zone.id)}
+        onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onSelectZone?.(zone.id); } }}
+        style={{cursor: 'pointer', pointerEvents: 'auto'}} transform={`translate(${80 + 55 * Math.cos(angle)}, ${80 + 55 * Math.sin(angle)}) rotate(${rotation})`}
+        fill="#080e14" textAnchor="middle" fontSize="6">
+        <title>{`Zona ${zone.number}: ${name}`}</title>
         <text y="-1" fontWeight="bold">ZONA {zone.number}</text>
         <text y="5">{name.length > 10 ? name.slice(0, 9) + '…' : name}</text>
       </g>;

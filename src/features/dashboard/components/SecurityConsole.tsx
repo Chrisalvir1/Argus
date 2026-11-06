@@ -27,6 +27,53 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const bridge = useArgusPanelBridge(panel);
   const [tick, setTick] = useState(0);
   const lastArmedMode = useRef<Record<string, string>>({});
+  const consoleRoot = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = consoleRoot.current;
+    if (!root || !isFullscreen) return;
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      if (!window.matchMedia('(max-width: 760px) and (orientation: portrait)').matches) {
+        root.style.removeProperty('--console-core-space');
+        root.style.removeProperty('--console-core-diameter');
+        return;
+      }
+      const css = getComputedStyle(root);
+      const number = (value: string) => Number.parseFloat(value) || 0;
+      const parts = ['.console-hud', '.console-modes-vertical', '.security-context']
+        .map(selector => root.querySelector<HTMLElement>(selector)).filter(Boolean) as HTMLElement[];
+      const occupied = parts.reduce((sum, part) => {
+        const style = getComputedStyle(part);
+        return sum + part.getBoundingClientRect().height + number(style.marginTop) + number(style.marginBottom);
+      }, 0);
+      const viewport = window.visualViewport;
+      const bottom = (viewport?.offsetTop || 0) + (viewport?.height || window.innerHeight);
+      const height = Math.max(0, bottom - root.getBoundingClientRect().top - 12);
+      const room = height - occupied - number(css.paddingTop) - number(css.paddingBottom) - number(css.rowGap) * parts.length;
+      const width = root.clientWidth - number(css.paddingLeft) - number(css.paddingRight);
+      // When controls alone exhaust the screen retain a small emblem and allow
+      // scrolling instead of clipping security actions or shrinking their text.
+      const space = Math.max(100, room);
+      const diameter = Math.max(0, Math.min(width, space));
+      root.style.setProperty('--console-core-space', `${space}px`);
+      root.style.setProperty('--console-core-diameter', `${diameter}px`);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    const observer = new ResizeObserver(schedule);
+    observer.observe(root);
+    root.querySelectorAll('.console-hud,.console-modes-vertical,.security-context').forEach(el => observer.observe(el));
+    window.addEventListener('resize', schedule);
+    window.visualViewport?.addEventListener('resize', schedule);
+    schedule();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', schedule);
+      window.visualViewport?.removeEventListener('resize', schedule);
+    };
+  }, [isFullscreen, tick, entryIndex]);
+
 
   useEffect(() => {
     // Listen for updates from the panel
@@ -258,9 +305,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </button>
         )}
         
-        <div className="entry-content security-console" data-context-expanded={isWaiting || verificationOpen || selectedZone ? "true" : "false"} data-alarm-state={isWaiting ? 'pending' : state} style={modeAccentStyles}>
+        <div ref={consoleRoot} className="entry-content security-console" data-context-expanded={isWaiting || verificationOpen || selectedZone ? "true" : "false"} data-alarm-state={isWaiting ? 'pending' : state} style={modeAccentStyles}>
           <div className="console-hud">
-            <span className="console-hud-loc"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>{fullHudLoc}</span>
+            <span className="console-hud-loc" title={fullHudLoc}><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg><span className="console-home-text">{fullHudLoc}</span></span>
             <div role="status" aria-live="polite" className="argus-connection-pill" data-online={isOnline ? 'true' : 'false'}>
               <i className="argus-connection-dot"></i>
               <span className="argus-connection-label">{isOnline ? 'Argus en línea' : 'Argus desconectado'}</span>

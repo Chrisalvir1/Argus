@@ -239,8 +239,8 @@ function d(e) {
 		I.textContent = "Solo funciona en pantalla completa. Con alto contraste conserva la visualización normal. Sin un control de brillo de la pantalla, solo se atenúa el panel.", a.appendChild(I);
 		let ee = document.createElement("button");
 		ee.type = "button", ee.textContent = "Cancelar", ee.onclick = () => r.remove(), a.appendChild(ee);
-		let L = document.createElement("button");
-		L.type = "submit", L.textContent = "Guardar", a.appendChild(L), a.onsubmit = (e) => {
+		let te = document.createElement("button");
+		te.type = "submit", te.textContent = "Guardar", a.appendChild(te), a.onsubmit = (e) => {
 			e.preventDefault(), C(), h = !1, n = {
 				enabled: s.checked,
 				deviceSensor: w.checked,
@@ -490,7 +490,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		console.error(e);
 	};
-	function L(e) {
+	function te(e) {
 		var t = T.T, n = {};
 		n.types = t === null ? null : t.types, T.T = n;
 		try {
@@ -502,14 +502,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 			t !== null && n.types !== null && (t.types = n.types), T.T = t;
 		}
 	}
-	function te(e) {
+	function L(e) {
 		var t = T.T;
 		if (t !== null) {
 			var n = t.types;
 			n === null ? t.types = [e] : n.indexOf(e) === -1 && n.push(e);
-		} else L(te.bind(null, e));
+		} else te(L.bind(null, e));
 	}
-	var R = {
+	var ne = {
 		map: F,
 		forEach: function(e, t, n) {
 			F(e, function() {
@@ -532,12 +532,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 			return e;
 		}
 	};
-	e.Activity = f, e.Children = R, e.Component = y, e.Fragment = r, e.Profiler = a, e.PureComponent = x, e.StrictMode = i, e.Suspense = l, e.ViewTransition = p, e.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = T, e.__COMPILER_RUNTIME = {
+	e.Activity = f, e.Children = ne, e.Component = y, e.Fragment = r, e.Profiler = a, e.PureComponent = x, e.StrictMode = i, e.Suspense = l, e.ViewTransition = p, e.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = T, e.__COMPILER_RUNTIME = {
 		__proto__: null,
 		c: function(e) {
 			return T.H.useMemoCache(e);
 		}
-	}, e.addTransitionType = te, e.cache = function(e) {
+	}, e.addTransitionType = L, e.cache = function(e) {
 		return function() {
 			return e.apply(null, arguments);
 		};
@@ -599,7 +599,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			type: e,
 			compare: t === void 0 ? null : t
 		};
-	}, e.startTransition = L, e.unstable_useCacheRefresh = function() {
+	}, e.startTransition = te, e.unstable_useCacheRefresh = function() {
 		return T.H.useCacheRefresh();
 	}, e.use = function(e) {
 		return T.H.use(e);
@@ -1149,23 +1149,23 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	var D = Object.assign, O = Symbol.for("react.element"), k = Symbol.for("react.transitional.element"), A = Symbol.for("react.portal"), j = Symbol.for("react.fragment"), M = Symbol.for("react.strict_mode"), N = Symbol.for("react.profiler"), P = Symbol.for("react.consumer"), F = Symbol.for("react.context"), I = Symbol.for("react.forward_ref"), ee = Symbol.for("react.suspense"), L = Symbol.for("react.suspense_list"), te = Symbol.for("react.memo"), R = Symbol.for("react.lazy"), z = Symbol.for("react.activity"), ne = Symbol.for("react.legacy_hidden"), B = Symbol.for("react.memo_cache_sentinel"), V = Symbol.for("react.view_transition"), H = Symbol.for("react.recoverable"), re = Symbol.iterator;
-	function ie(e) {
-		return typeof e != "object" || !e ? null : (e = re && e[re] || e["@@iterator"], typeof e == "function" ? e : null);
+	var D = Object.assign, O = Symbol.for("react.element"), k = Symbol.for("react.transitional.element"), A = Symbol.for("react.portal"), j = Symbol.for("react.fragment"), M = Symbol.for("react.strict_mode"), N = Symbol.for("react.profiler"), P = Symbol.for("react.consumer"), F = Symbol.for("react.context"), I = Symbol.for("react.forward_ref"), ee = Symbol.for("react.suspense"), te = Symbol.for("react.suspense_list"), L = Symbol.for("react.memo"), ne = Symbol.for("react.lazy"), R = Symbol.for("react.activity"), z = Symbol.for("react.legacy_hidden"), re = Symbol.for("react.memo_cache_sentinel"), B = Symbol.for("react.view_transition"), V = Symbol.for("react.recoverable"), ie = Symbol.iterator;
+	function ae(e) {
+		return typeof e != "object" || !e ? null : (e = ie && e[ie] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
-	var ae = Symbol.for("react.client.reference");
-	function oe(e) {
+	var oe = Symbol.for("react.client.reference");
+	function se(e) {
 		if (e == null) return null;
-		if (typeof e == "function") return e.$$typeof === ae ? null : e.displayName || e.name || null;
+		if (typeof e == "function") return e.$$typeof === oe ? null : e.displayName || e.name || null;
 		if (typeof e == "string") return e;
 		switch (e) {
 			case j: return "Fragment";
 			case N: return "Profiler";
 			case M: return "StrictMode";
 			case ee: return "Suspense";
-			case L: return "SuspenseList";
-			case z: return "Activity";
-			case V: return "ViewTransition";
+			case te: return "SuspenseList";
+			case R: return "Activity";
+			case B: return "ViewTransition";
 		}
 		if (typeof e == "object") switch (e.$$typeof) {
 			case A: return "Portal";
@@ -1174,31 +1174,31 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case I:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
-			case te: return t = e.displayName || null, t === null ? oe(e.type) || "Memo" : t;
-			case R:
+			case L: return t = e.displayName || null, t === null ? se(e.type) || "Memo" : t;
+			case ne:
 				t = e._payload, e = e._init;
 				try {
-					return oe(e(t));
+					return se(e(t));
 				} catch {}
 		}
 		return null;
 	}
-	var U = Array.isArray, W = n.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, se = r.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ce = {
+	var H = Array.isArray, U = n.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ce = r.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = {
 		pending: !1,
 		data: null,
 		method: null,
 		action: null
-	}, le = [], ue = -1;
-	function de(e) {
+	}, ue = [], de = -1;
+	function W(e) {
 		return { current: e };
 	}
 	function G(e) {
-		0 > ue || (e.current = le[ue], le[ue] = null, ue--);
+		0 > de || (e.current = ue[de], ue[de] = null, de--);
 	}
 	function K(e, t) {
-		ue++, le[ue] = e.current, e.current = t;
+		de++, ue[de] = e.current, e.current = t;
 	}
-	var fe = de(null), q = de(null), pe = de(null), J = de(null);
+	var fe = W(null), q = W(null), pe = W(null), J = W(null);
 	function me(e, t) {
 		switch (K(pe, t), K(q, e), K(fe, null), t.nodeType) {
 			case 9:
@@ -1228,7 +1228,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		t !== n && (K(q, e), K(fe, n));
 	}
 	function he(e) {
-		q.current === e && (G(fe), G(q)), J.current === e && (G(J), sh._currentValue = ce);
+		q.current === e && (G(fe), G(q)), J.current === e && (G(J), sh._currentValue = le);
 	}
 	var ge, _e;
 	function ve(e) {
@@ -1536,15 +1536,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return e &= -e, 2 < e ? 8 < e ? e & 134217727 ? 32 : 268435456 : 8 : 2;
 	}
 	function st() {
-		var e = se.p;
+		var e = ce.p;
 		return e === 0 ? (e = window.event, e === void 0 ? 32 : Ch(e.type)) : e;
 	}
 	function ct(e, t) {
-		var n = se.p;
+		var n = ce.p;
 		try {
-			return se.p = e, t();
+			return ce.p = e, t();
 		} finally {
-			se.p = n;
+			ce.p = n;
 		}
 	}
 	var lt = Math.random().toString(36).slice(2), ut = "__reactFiber$" + lt, dt = "__reactProps$" + lt, ft = "__reactContainer$" + lt, pt = "__reactEvents$" + lt, mt = "__reactListeners$" + lt, ht = "__reactHandles$" + lt, gt = "__reactResources$" + lt, _t = "__reactMarker$" + lt, vt = "__reactLoad$" + lt;
@@ -1758,7 +1758,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (t == null) {
 			if (r != null) {
 				if (n != null) throw Error(i(92));
-				if (U(r)) {
+				if (H(r)) {
 					if (1 < r.length) throw Error(i(93));
 					r = r[0];
 				}
@@ -2504,16 +2504,16 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (r = e, typeof r == "function") Si(r) && (s = 1);
 		else if (typeof r == "string") s = qm(e, n, fe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (r) {
-			case z: return e = xi(31, n, t, a), e.elementType = z, e.lanes = o, e;
+			case R: return e = xi(31, n, t, a), e.elementType = R, e.lanes = o, e;
 			case j: return Ei(n.children, a, o, t);
 			case M:
 				s = 8, a |= 24;
 				break;
 			case N: return e = xi(12, n, t, a | 2), e.elementType = N, e.lanes = o, e;
 			case ee: return e = xi(13, n, t, a), e.elementType = ee, e.lanes = o, e;
-			case L: return e = xi(19, n, t, a), e.elementType = L, e.lanes = o, e;
-			case ne:
-			case V: return e = a | 32, e = xi(30, n, t, e), e.elementType = V, e.lanes = o, e.stateNode = {
+			case te: return e = xi(19, n, t, a), e.elementType = te, e.lanes = o, e;
+			case z:
+			case B: return e = a | 32, e = xi(30, n, t, e), e.elementType = B, e.lanes = o, e.stateNode = {
 				autoName: null,
 				paired: null,
 				clones: null,
@@ -2530,10 +2530,10 @@ var _ = /* @__PURE__ */ o(((e) => {
 					case I:
 						s = 11;
 						break a;
-					case te:
+					case L:
 						s = 14;
 						break a;
-					case R:
+					case ne:
 						s = 16, r = null;
 						break a;
 				}
@@ -2677,7 +2677,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function ia(e) {
 		Yi === null ? Yi = [e] : Yi.push(e);
 	}
-	var aa = de(null), oa = null, sa = null;
+	var aa = W(null), oa = null, sa = null;
 	function ca(e, t, n) {
 		K(aa, t._currentValue), t._currentValue = n;
 	}
@@ -2863,8 +2863,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 			for (r.status = "rejected", r.reason = e, e = 0; e < n.length; e++) (0, n[e])(void 0);
 		}), r;
 	}
-	var Pa = W.S;
-	W.S = function(e, t) {
+	var Pa = U.S;
+	U.S = function(e, t) {
 		if (pd = Oe(), typeof t == "object" && t && typeof t.then == "function" && ja(e, t), Ta !== null) for (var n = vf; n !== null;) wa(n, Ta), n = n.next;
 		if (n = e.types, n !== null) {
 			for (var r = vf; r !== null;) wa(r, n), r = r.next;
@@ -2878,7 +2878,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		Pa !== null && Pa(e, t);
 	};
-	var Fa = de(null);
+	var Fa = W(null);
 	function Ia() {
 		var e = Fa.current;
 		return e === null ? Ju.pooledCache : e;
@@ -2982,7 +2982,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		function l(e, t, n, r) {
 			var i = n.type;
-			return i === j ? (e = d(e, t, n.props.children, r, n.key), Xa(e, n), e) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === R && Ua(i) === t.type) ? (t = a(t, n.props), Xa(t, n), t.return = e, t) : (t = Ti(n.type, n.key, n.props, null, e.mode, r), Xa(t, n), t.return = e, t);
+			return i === j ? (e = d(e, t, n.props.children, r, n.key), Xa(e, n), e) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === ne && Ua(i) === t.type) ? (t = a(t, n.props), Xa(t, n), t.return = e, t) : (t = Ti(n.type, n.key, n.props, null, e.mode, r), Xa(t, n), t.return = e, t);
 		}
 		function u(e, t, n, r) {
 			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = ki(n, e.mode, r), t.return = e, t) : (t = a(t, n.children || []), t.return = e, t);
@@ -2996,9 +2996,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 				switch (t.$$typeof) {
 					case k: return n = Ti(t.type, t.key, t.props, null, e.mode, n), Xa(n, t), n.return = e, n;
 					case A: return t = ki(t, e.mode, n), t.return = e, t;
-					case R: return t = Ua(t), f(e, t, n);
+					case ne: return t = Ua(t), f(e, t, n);
 				}
-				if (U(t) || ie(t)) return t = Ei(t, e.mode, n, null), t.return = e, t;
+				if (H(t) || ae(t)) return t = Ei(t, e.mode, n, null), t.return = e, t;
 				if (typeof t.then == "function") return f(e, Ya(t), n);
 				if (t.$$typeof === F) return f(e, ga(e, t), n);
 				Za(e, t);
@@ -3012,9 +3012,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 				switch (n.$$typeof) {
 					case k: return n.key === i ? l(e, t, n, r) : null;
 					case A: return n.key === i ? u(e, t, n, r) : null;
-					case R: return n = Ua(n), p(e, t, n, r);
+					case ne: return n = Ua(n), p(e, t, n, r);
 				}
-				if (U(n) || ie(n)) return i === null ? d(e, t, n, r, null) : null;
+				if (H(n) || ae(n)) return i === null ? d(e, t, n, r, null) : null;
 				if (typeof n.then == "function") return p(e, t, Ya(n), r);
 				if (n.$$typeof === F) return p(e, t, ga(e, n), r);
 				Za(e, n);
@@ -3027,9 +3027,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 				switch (r.$$typeof) {
 					case k: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
 					case A: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
-					case R: return r = Ua(r), m(e, t, n, r, i);
+					case ne: return r = Ua(r), m(e, t, n, r, i);
 				}
-				if (U(r) || ie(r)) return e = e.get(n) || null, d(t, e, r, i, null);
+				if (H(r) || ae(r)) return e = e.get(n) || null, d(t, e, r, i, null);
 				if (typeof r.then == "function") return m(e, t, n, Ya(r), i);
 				if (r.$$typeof === F) return m(e, t, n, ga(t, r), i);
 				Za(t, r);
@@ -3089,7 +3089,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 											n(e, r.sibling), c = a(r, o.props.children), Xa(c, o), c.return = e, e = c;
 											break a;
 										}
-									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === R && Ua(l) === r.type) {
+									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === ne && Ua(l) === r.type) {
 										n(e, r.sibling), c = a(r, o.props), Xa(c, o), c.return = e, e = c;
 										break a;
 									}
@@ -3117,11 +3117,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 							c = ki(o, e.mode, c), c.return = e, e = c;
 						}
 						return s(e);
-					case R: return o = Ua(o), _(e, r, o, c);
+					case ne: return o = Ua(o), _(e, r, o, c);
 				}
-				if (U(o)) return h(e, r, o, c);
-				if (ie(o)) {
-					if (l = ie(o), typeof l != "function") throw Error(i(150));
+				if (H(o)) return h(e, r, o, c);
+				if (ae(o)) {
+					if (l = ae(o), typeof l != "function") throw Error(i(150));
 					return o = l.call(o), g(e, r, o, c);
 				}
 				if (typeof o.then == "function") return _(e, r, Ya(o), c);
@@ -3293,7 +3293,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var n = e.callbacks;
 		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) fo(n[e], t);
 	}
-	var mo = de(null), ho = de(0);
+	var mo = W(null), ho = W(0);
 	function go(e, t) {
 		e = nd, K(ho, e), K(mo, t), nd = e | t.baseLanes;
 	}
@@ -3303,7 +3303,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function vo() {
 		nd = ho.current, G(mo), G(ho);
 	}
-	var yo = de(null), bo = null;
+	var yo = W(null), bo = null;
 	function xo(e) {
 		var t = e.alternate;
 		K(Eo, Eo.current & 1), K(yo, e), bo === null && (t === null || mo.current !== null || t.memoizedState !== null) && (bo = e);
@@ -3320,7 +3320,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function To(e) {
 		G(yo), bo === e && (bo = null), G(Eo);
 	}
-	var Eo = de(0);
+	var Eo = W(0);
 	function Do(e, t) {
 		K(yo, yo.current), K(Eo, t);
 	}
@@ -3357,10 +3357,10 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return !0;
 	}
 	function Uo(e, t, n, r, i, a) {
-		return Ao = a, jo = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, W.H = e === null || e.memoizedState === null ? oc : sc, Io = !1, a = n(r, i), Io = !1, Fo && (a = Go(t, n, r, i)), Wo(e), a;
+		return Ao = a, jo = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, U.H = e === null || e.memoizedState === null ? oc : sc, Io = !1, a = n(r, i), Io = !1, Fo && (a = Go(t, n, r, i)), Wo(e), a;
 	}
 	function Wo(e) {
-		W.H = ac;
+		U.H = ac;
 		var t = Mo !== null && Mo.next !== null;
 		if (Ao = 0, No = Mo = jo = null, Po = !1, Ro = 0, zo = null, t) throw Error(i(300));
 		e === null || wc || (e = e.dependencies, e !== null && pa(e) && (wc = !0));
@@ -3374,12 +3374,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 				var o = e.updateQueue;
 				o.lastEffect = null, o.events = null, o.stores = null, o.memoCache != null && (o.memoCache.index = 0);
 			}
-			W.H = cc, o = t(n, r);
+			U.H = cc, o = t(n, r);
 		} while (Fo);
 		return o;
 	}
 	function Ko() {
-		var e = W.H, t = e.useState()[0];
+		var e = U.H, t = e.useState()[0];
 		return t = typeof t.then == "function" ? $o(t) : t, e = e.useState()[0], (Mo === null ? null : Mo.memoizedState) !== e && (jo.flags |= 1024), t;
 	}
 	function qo() {
@@ -3438,12 +3438,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function $o(e) {
 		var t = Ro;
-		return Ro += 1, zo === null && (zo = []), e = Q(zo, e, t), t = jo, (No === null ? t.memoizedState : No.next) === null && (t = t.alternate, W.H = t === null || t.memoizedState === null ? oc : sc), e;
+		return Ro += 1, zo === null && (zo = []), e = Q(zo, e, t), t = jo, (No === null ? t.memoizedState : No.next) === null && (t = t.alternate, U.H = t === null || t.memoizedState === null ? oc : sc), e;
 	}
 	function es(e) {
 		if (typeof e == "object" && e) {
 			if (typeof e.then == "function") return $o(e);
-			if (e.$$typeof === H) return;
+			if (e.$$typeof === V) return;
 			if (e.$$typeof === F) return ha(e);
 		}
 		throw Error(i(438, String(e)));
@@ -3462,7 +3462,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = Qo(), jo.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = B;
+		}, n === null && (n = Qo(), jo.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = re;
 		return t.index++, n;
 	}
 	function ns(e, t) {
@@ -3625,21 +3625,21 @@ var _ = /* @__PURE__ */ o(((e) => {
 					o.listeners.push(e);
 				}
 			};
-			W.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, hs(t, o)) : (o.next = n.next, t.pending = n.next = o);
+			U.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, hs(t, o)) : (o.next = n.next, t.pending = n.next = o);
 		}
 	}
 	function hs(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
-			var a = W.T, o = {};
-			o.types = a === null ? null : a.types, W.T = o;
+			var a = U.T, o = {};
+			o.types = a === null ? null : a.types, U.T = o;
 			try {
-				var s = n(i, r), c = W.S;
+				var s = n(i, r), c = U.S;
 				c !== null && c(o, s), gs(e, t, s);
 			} catch (n) {
 				vs(e, t, n);
 			} finally {
-				a !== null && o.types !== null && (a.types = o.types), W.T = a;
+				a !== null && o.types !== null && (a.types = o.types), U.T = a;
 			}
 		} else try {
 			a = n(i, r), gs(e, t, a);
@@ -3853,12 +3853,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return Ar(n, t) ? n : mo.current === null ? !(Ao & 106) || Ao & 1073741824 && !(Xu & 261930) ? (wc = !0, e.memoizedState = n) : (e = Ad(), jo.lanes |= e, id |= e, t) : (e = Vs(e, n, r), Ar(e, t) || (wc = !0), e);
 	}
 	function Us(e, t, n, r, i) {
-		var a = se.p;
-		se.p = a !== 0 && 8 > a ? a : 8;
-		var o = W.T, s = {};
-		s.types = o === null ? null : o.types, W.T = s, tc(e, !1, t, n);
+		var a = ce.p;
+		ce.p = a !== 0 && 8 > a ? a : 8;
+		var o = U.T, s = {};
+		s.types = o === null ? null : o.types, U.T = s, tc(e, !1, t, n);
 		try {
-			var c = i(), l = W.S;
+			var c = i(), l = U.S;
 			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? ec(e, t, Na(c, r), kd(e)) : ec(e, t, r, kd(e));
 		} catch (n) {
 			ec(e, t, {
@@ -3867,14 +3867,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 				reason: n
 			}, kd());
 		} finally {
-			se.p = a, o !== null && s.types !== null && (o.types = s.types), W.T = o;
+			ce.p = a, o !== null && s.types !== null && (o.types = s.types), U.T = o;
 		}
 	}
 	function Ws() {}
 	function Gs(e, t, n, r) {
 		if (e.tag !== 5) throw Error(i(476));
 		var a = Ks(e).queue;
-		Us(e, a, t, ce, n === null ? Ws : function() {
+		Us(e, a, t, le, n === null ? Ws : function() {
 			return qs(e), n(r);
 		});
 	}
@@ -3882,15 +3882,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
-			memoizedState: ce,
-			baseState: ce,
+			memoizedState: le,
+			baseState: le,
 			baseQueue: null,
 			queue: {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
 				lastRenderedReducer: ns,
-				lastRenderedState: ce
+				lastRenderedState: le
 			},
 			next: null
 		};
@@ -4743,7 +4743,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 								t.tag = 11, t = Ec(null, t, e, r, n);
 								break a;
 							}
-							if (a === te) {
+							if (a === L) {
 								t.tag = 14, t = Dc(null, t, e, r, n);
 								break a;
 							}
@@ -4752,7 +4752,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 								break a;
 							}
 						}
-						throw t = oe(e) || e, Error(i(306, t, ""));
+						throw t = se(e) || e, Error(i(306, t, ""));
 					}
 				}
 				return t;
@@ -6372,7 +6372,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 	}, Ku = typeof WeakMap == "function" ? WeakMap : Map, qu = 0, Ju = null, Yu = null, Xu = 0, Zu = 0, Qu = null, $u = !1, ed = !1, td = !1, nd = 0, rd = 0, id = 0, ad = 0, od = 0, sd = 0, cd = 0, ld = null, ud = null, dd = !1, fd = 0, pd = 0, md = Infinity, hd = null, gd = null, _d = 0, vd = null, yd = null, bd = 0, xd = 0, Sd = null, Cd = null, wd = null, Td = null, Ed = null, Dd = 0, Od = null;
 	function kd() {
-		return qu & 2 && Xu !== 0 ? Xu & -Xu : W.T === null ? st() : Mf();
+		return qu & 2 && Xu !== 0 ? Xu & -Xu : U.T === null ? st() : Mf();
 	}
 	function Ad() {
 		if (sd === 0) {
@@ -6521,19 +6521,19 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return n !== -1 && (e.timeoutHandle = -1, _p(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), bd = 0, Rd(), Ju = e, Yu = n = Ci(e.current, null), Xu = t, Zu = 0, Qu = null, $u = !1, ed = Ye(e, t), td = !1, cd = sd = od = ad = id = rd = 0, ud = ld = null, dd = !1, nd = Xe(e, t), pi(), n;
 	}
 	function Bd(e, t) {
-		jo = null, W.H = ac, t === za || t === Va ? (t = Ga(), Zu = 3) : t === Ba ? (t = Ga(), Zu = 4) : Zu = t === Cc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Qu = t, Yu === null && (rd = 1, _c(e, ji(t, e.current)));
+		jo = null, U.H = ac, t === za || t === Va ? (t = Ga(), Zu = 3) : t === Ba ? (t = Ga(), Zu = 4) : Zu = t === Cc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Qu = t, Yu === null && (rd = 1, _c(e, ji(t, e.current)));
 	}
 	function Vd() {
 		var e = yo.current;
 		return e === null ? !0 : (Xu & 4194048) === Xu ? bo === null : (Xu & 62914560) === Xu || Xu & 536870912 ? e === bo : !1;
 	}
 	function Hd() {
-		var e = W.H;
-		return W.H = ac, e === null ? ac : e;
+		var e = U.H;
+		return U.H = ac, e === null ? ac : e;
 	}
 	function Ud() {
-		var e = W.A;
-		return W.A = Gu, e;
+		var e = U.A;
+		return U.A = Gu, e;
 	}
 	function Wd() {
 		rd = 4, $u || (Xu & 4194048) !== Xu && yo.current !== null || (ed = !0), !(id & 134217727) && !(ad & 134217727) || Ju === null || Id(Ju, Xu, sd, !1);
@@ -6572,7 +6572,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Bd(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, sa = oa = null, qu = r, W.H = i, W.A = a, Yu === null && (Ju = null, Xu = 0, pi()), o;
+		return t && e.shellSuspendCounter++, sa = oa = null, qu = r, U.H = i, U.A = a, Yu === null && (Ju = null, Xu = 0, pi()), o;
 	}
 	function Kd() {
 		for (; Yu !== null;) Yd(Yu);
@@ -6645,7 +6645,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Bd(e, t);
 			}
 		while (1);
-		return sa = oa = null, W.H = r, W.A = a, qu = n, Yu === null ? (Ju = null, Xu = 0, pi(), rd) : 0;
+		return sa = oa = null, U.H = r, U.A = a, qu = n, Yu === null ? (Ju = null, Xu = 0, pi(), rd) : 0;
 	}
 	function Jd() {
 		for (; Yu !== null && !Ee();) Yd(Yu);
@@ -6739,11 +6739,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (xd = s, s |= fi, tt(e, n, s, r, i, a), Td = null, (n & 335544064) === n ? (Ed = Ea(e), r = 10262) : (Ed = null, r = 10256), (t.subtreeFlags & r) !== 0 || (t.flags & r) !== 0 ? (e.callbackNode = null, e.callbackPriority = 0, _f(Me, function() {
 			return lf(), null;
 		})) : (e.callbackNode = null, e.callbackPriority = 0), jl = !1, r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-			r = W.T, W.T = null, i = se.p, se.p = 2, a = qu, qu |= 4;
+			r = U.T, U.T = null, i = ce.p, ce.p = 2, a = qu, qu |= 4;
 			try {
 				ou(e, t, n);
 			} finally {
-				qu = a, se.p = i, W.T = r;
+				qu = a, ce.p = i, U.T = r;
 			}
 		}
 		_d = 1, jl ? wd = Mp(o, e.containerInfo, Ed, rf, af, $, of, lf, nf, null, null) : (rf(), af(), of());
@@ -6762,9 +6762,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 			_d = 0;
 			var e = vd, t = yd, n = bd, r = !!(t.flags & 13878);
 			if (t.subtreeFlags & 13878 || r) {
-				r = W.T, W.T = null;
-				var i = se.p;
-				se.p = 2;
+				r = U.T, U.T = null;
+				var i = ce.p;
+				ce.p = 2;
 				var a = qu;
 				qu |= 4;
 				try {
@@ -6799,7 +6799,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 					}
 					gh = !!sp, cp = sp = null;
 				} finally {
-					qu = a, se.p = i, W.T = r;
+					qu = a, ce.p = i, U.T = r;
 				}
 			}
 			e.current = t, _d = 2;
@@ -6810,15 +6810,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 			_d = 0;
 			var e = vd, t = yd, n = !!(t.flags & 8772);
 			if (t.subtreeFlags & 8772 || n) {
-				n = W.T, W.T = null;
-				var r = se.p;
-				se.p = 2;
+				n = U.T, U.T = null;
+				var r = ce.p;
+				ce.p = 2;
 				var i = qu;
 				qu |= 4;
 				try {
 					cu(e, t.alternate, t);
 				} finally {
-					qu = i, se.p = r, W.T = n;
+					qu = i, ce.p = r, U.T = n;
 				}
 			}
 			_d = 3;
@@ -6834,14 +6834,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Re.onCommitFiberRoot(Le, n, void 0, (n.current.flags & 128) == 128);
 			} catch {}
 			if (i !== null) {
-				n = W.T, a = se.p, se.p = 2, W.T = null;
+				n = U.T, a = ce.p, ce.p = 2, U.T = null;
 				try {
 					for (var o = t.onRecoverableError, s = 0; s < i.length; s++) {
 						var c = i[s];
 						o(c.value, { componentStack: c.stack });
 					}
 				} finally {
-					W.T = n, se.p = a;
+					U.T = n, ce.p = a;
 				}
 			}
 			if (i = Td, o = Ed, Ed = null, i !== null && (Td = null, o === null && (o = []), e !== null)) for (c = 0; c < i.length; c++) n = (0, i[c])(o), n !== void 0 && e.finished.finally(n);
@@ -6858,9 +6858,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (_d !== 5) return !1;
 		var e = vd, t = xd;
 		xd = 0;
-		var n = ot(bd), r = W.T, a = se.p;
+		var n = ot(bd), r = U.T, a = ce.p;
 		try {
-			se.p = 32 > n ? 32 : n, W.T = null, n = Sd, Sd = null;
+			ce.p = 32 > n ? 32 : n, U.T = null, n = Sd, Sd = null;
 			var o = vd, s = bd;
 			if (_d = 0, yd = vd = null, bd = 0, qu & 6) throw Error(i(331));
 			var c = qu;
@@ -6869,7 +6869,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			} catch {}
 			return !0;
 		} finally {
-			se.p = a, W.T = r, sf(e, t);
+			ce.p = a, U.T = r, sf(e, t);
 		}
 	}
 	function uf(e, t, n) {
@@ -8541,8 +8541,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		return e.nodeType === 9 ? e : e.ownerDocument;
 	}
-	var xm = se.d;
-	se.d = {
+	var xm = ce.d;
+	ce.d = {
 		f: Sm,
 		r: Cm,
 		D: Em,
@@ -8960,8 +8960,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 		$$typeof: F,
 		Provider: null,
 		Consumer: null,
-		_currentValue: ce,
-		_currentValue2: ce,
+		_currentValue: le,
+		_currentValue2: le,
 		_threadCount: 0
 	};
 	function ch(e, t, n, r, i, a, o, s, c) {
@@ -9005,23 +9005,23 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	var gh = !0;
 	function _h(e, t, n, r) {
-		var i = W.T;
-		W.T = null;
-		var a = se.p;
+		var i = U.T;
+		U.T = null;
+		var a = ce.p;
 		try {
-			se.p = 2, yh(e, t, n, r);
+			ce.p = 2, yh(e, t, n, r);
 		} finally {
-			se.p = a, W.T = i;
+			ce.p = a, U.T = i;
 		}
 	}
 	function vh(e, t, n, r) {
-		var i = W.T;
-		W.T = null;
-		var a = se.p;
+		var i = U.T;
+		U.T = null;
+		var a = ce.p;
 		try {
-			se.p = 8, yh(e, t, n, r);
+			ce.p = 8, yh(e, t, n, r);
 		} finally {
-			se.p = a, W.T = i;
+			ce.p = a, U.T = i;
 		}
 	}
 	function yh(e, t, n, r) {
@@ -9366,7 +9366,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	};
 	var Kh = n.version;
 	if (Kh !== "19.3.0") throw Error(i(527, Kh, "19.3.0"));
-	se.findDOMNode = function(e) {
+	ce.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(i(188)) : (e = Object.keys(e).join(","), Error(i(268, e)));
 		return e = u(t), e = e === null ? null : d(e), e = e === null ? null : e.stateNode, e;
@@ -9375,7 +9375,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		bundleType: 0,
 		version: "19.3.0",
 		rendererPackageName: "react-dom",
-		currentDispatcherRef: W,
+		currentDispatcherRef: U,
 		reconcilerVersion: "19.3.0"
 	};
 	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
@@ -9472,7 +9472,7 @@ function ee(e) {
 	}
 	return t;
 }
-function L(e) {
+function te(e) {
 	let t = new DOMParser().parseFromString(`<div data-profile-content="">${e}</div>`, "text/html").body.firstElementChild;
 	if (!t) return null;
 	let n = (e, t) => {
@@ -9507,12 +9507,12 @@ function L(e) {
 	};
 	return Array.from(t.childNodes).map(n);
 }
-function te(e) {
+function L(e) {
 	let t = e.getElementById(M);
 	t || (t = document.createElement("style"), t.id = M, e.appendChild(t)), t.textContent = N;
 }
-function R({ html: e, phase: t, onClose: n, onClosed: r, top: i, right: a }) {
-	let o = typeof window < "u" && window.matchMedia("(max-width: 600px), (max-width: 900px) and (orientation: portrait)").matches, s = D.useRef(null), c = D.useMemo(() => L(e), [e]);
+function ne({ html: e, phase: t, onClose: n, onClosed: r, top: i, right: a }) {
+	let o = typeof window < "u" && window.matchMedia("(max-width: 600px), (max-width: 900px) and (orientation: portrait)").matches, s = D.useRef(null), c = D.useMemo(() => te(e), [e]);
 	D.useEffect(() => {
 		t === "opening" && (s.current?.querySelector("select:not(:disabled),input:not(:disabled),button:not(:disabled),a[href]"))?.focus({ preventScroll: !0 });
 	}, [t]), D.useLayoutEffect(() => {
@@ -9580,13 +9580,13 @@ function R({ html: e, phase: t, onClose: n, onClosed: r, top: i, right: a }) {
 		})
 	});
 }
-function z(e) {
+function R(e) {
 	j.get(e)?.dispose(), j.delete(e);
 }
-function ne(e) {
+function z(e) {
 	let t = e.parentElement?.parentElement, n = e.getRootNode();
 	if (!t || !(n instanceof ShadowRoot)) throw Error("Profile dialog requires a connected shadow-root host");
-	z(t), te(n);
+	R(t), L(n);
 	let r = e.innerHTML, i = document.createElement("div");
 	i.className = "argus-profile-dialog-root", e.remove(), n.appendChild(i);
 	let a = (0, O.createRoot)(i), o = "closed", s, c = !1, l = null, u = 0, d = t.querySelector(".hero-profile-pill"), f = () => {
@@ -9598,7 +9598,7 @@ function ne(e) {
 	}, p = (e) => {
 		if (c) return;
 		o = e;
-		let { top: t, right: n } = f(), s = /* @__PURE__ */ (0, A.jsx)(R, {
+		let { top: t, right: n } = f(), s = /* @__PURE__ */ (0, A.jsx)(ne, {
 			html: r,
 			phase: o,
 			top: t,
@@ -9648,7 +9648,7 @@ function ne(e) {
 }
 //#endregion
 //#region src/legacy/argus-panel.ts
-var B = [
+var re = [
 	{
 		code: "auto",
 		flag: "🏠",
@@ -9664,7 +9664,7 @@ var B = [
 		flag: "🇬🇧",
 		label: "English"
 	}
-], V = {
+], B = {
 	es: {
 		accept: "Aceptar",
 		access_control_title: "👥 Control de Acceso y Usuarios",
@@ -10587,11 +10587,11 @@ var B = [
 		sensor_delay_default: "🌐 Inherit mode global delay",
 		sensor_delay_seconds: "Delay seconds"
 	}
-}, H = document.createElement("template");
-H.innerHTML = "\n<style>\n:host {\n  display: block;\n  background: #080d1a;\n  color: #fff;\n  min-height: 100vh;\n  font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n}\n:host:not(:defined) {\n  display: none !important;\n}\n\n#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }\n#widget-grid[data-layout-owner=\"react-v3-staging\"] { display: block !important; grid-template-columns: none !important; gap: 0 !important; }\n#widget-grid[data-layout-owner=\"react-v3-staging\"] > section.panel:not(#w-instances) { display: none !important; }\n\n@keyframes heroSpringSlideIn {\n  0% { transform: translateX(-50px); opacity: 0; }\n  100% { transform: translateX(0); opacity: 1; }\n}\n\n  /* Modern Premium Liquid Glass & iOS Wobble Styles */\n  :host {\n    font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));\n    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));\n    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),\n                    0 15px 30px -10px rgba(0, 122, 255, 0.12),\n                    inset 0 1px 0 rgba(255, 255, 255, 0.15);\n    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);\n    --ios-track: rgba(0, 0, 0, 0.25);\n    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);\n    --primary-color: #38bdf8;\n    --personalize-border: rgba(255, 255, 255, 0.06);\n    --personalize-divider: rgba(255, 255, 255, 0.08);\n    --bg-inputs-bg: rgba(0, 0, 0, 0.15);\n    --bg-inputs-border: rgba(255, 255, 255, 0.05);\n    --input-bg-darker: rgba(0, 0, 0, 0.25);\n    --input-border-darker: rgba(255, 255, 255, 0.12);\n    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));\n    --log-item-bg: rgba(255, 255, 255, 0.02);\n    --log-item-border: rgba(255, 255, 255, 0.05);\n    --user-card-bg: rgba(255, 255, 255, 0.02);\n    --user-card-border: rgba(255, 255, 255, 0.06);\n    --primary-text-color: #fff !important;\n    --secondary-text-color: rgba(255, 255, 255, 0.7);\n    --input-bg: rgba(255, 255, 255, 0.04);\n    --input-border: rgba(255, 255, 255, 0.12);\n  }\n\n  /* High Contrast / OLED Dark Mode Accessibility */\n  :host([argus-contrast=\"high\"]),\n  :host(.argus-contrast-high) {\n    --glass-bg: rgba(11, 16, 26, 0.95);\n    --glass-border: rgba(255, 255, 255, 0.22);\n    --v2066-glass: rgba(11, 16, 26, 0.95);\n    --v2066-border: rgba(255, 255, 255, 0.22);\n    --v2066-text: #ffffff;\n    --v2066-muted: #cbd5e1;\n    --primary-text-color: #ffffff !important;\n    --secondary-text-color: #cbd5e1 !important;\n    --hud-bg: rgba(11, 16, 26, 0.98);\n    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));\n    --personalize-bg: rgba(11, 16, 26, 0.92);\n    --personalize-border: rgba(255, 255, 255, 0.2);\n    --user-card-bg: rgba(14, 20, 33, 0.95);\n    --user-card-border: rgba(255, 255, 255, 0.2);\n  }\n  :host([argus-contrast=\"high\"]) #profile-dropdown,\n  :host(.argus-contrast-high) #profile-dropdown {\n    background: rgba(10, 14, 23, 0.98) !important;\n    border: 1px solid rgba(255, 255, 255, 0.25) !important;\n    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;\n  }\n  :host([argus-contrast=\"high\"]) .liquid-glass,\n  :host(.argus-contrast-high) .liquid-glass {\n    background: rgba(11, 16, 26, 0.95) !important;\n    border-color: rgba(255, 255, 255, 0.22) !important;\n  }\n  :host([argus-contrast=\"high\"]) .glass,\n  :host(.argus-contrast-high) .glass,\n  :host([argus-contrast=\"high\"]) .mode-section-card,\n  :host(.argus-contrast-high) .mode-section-card,\n  :host([argus-contrast=\"high\"]) .access-section,\n  :host(.argus-contrast-high) .access-section,\n  :host([argus-contrast=\"high\"]) .user-card,\n  :host(.argus-contrast-high) .user-card,\n  :host([argus-contrast=\"high\"]) .log-item,\n  :host(.argus-contrast-high) .log-item,\n  :host([argus-contrast=\"high\"]) .security-context,\n  :host(.argus-contrast-high) .security-context,\n  :host([argus-contrast=\"high\"]) .context-zone-picker,\n  :host(.argus-contrast-high) .context-zone-picker,\n  :host([argus-contrast=\"high\"]) .context-sensor-row,\n  :host(.argus-contrast-high) .context-sensor-row,\n  :host([argus-contrast=\"high\"]) .context-sensor-card,\n  :host(.argus-contrast-high) .context-sensor-card,\n  :host([argus-contrast=\"high\"]) .subsection,\n  :host(.argus-contrast-high) .subsection,\n  :host([argus-contrast=\"high\"]) .mode-sensor-none,\n  :host(.argus-contrast-high) .mode-sensor-none {\n    background-color: #0b101a !important;\n    background-image: none !important;\n    border-color: #8793a5 !important;\n    color: #ffffff !important;\n    box-shadow: none !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n  }\n  :host([argus-contrast=\"high\"]) .glass.panel,\n  :host(.argus-contrast-high) .glass.panel,\n  :host([argus-contrast=\"high\"]) .entry:not(:has(.security-console)),\n  :host(.argus-contrast-high) .entry:not(:has(.security-console)),\n  :host([argus-contrast=\"high\"]) .entry-content:not(.security-console):not(:has(.security-console)),\n  :host(.argus-contrast-high) .entry-content:not(.security-console):not(:has(.security-console)),\n  :host([argus-contrast=\"high\"]) .glass.panel:not(:has(.security-console)),\n  :host(.argus-contrast-high) .glass.panel:not(:has(.security-console)) {\n    color: #ffffff !important;\n    background-color: #080c13 !important;\n    background-image: none !important;\n    border-color: #8793a5 !important;\n    box-shadow: none !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n  }\n  :host([argus-contrast=\"high\"]) .glass :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .glass :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .mode-section-card :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .mode-section-card :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .access-section :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .access-section :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .security-context :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .security-context :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .context-sensor-row :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .context-sensor-row :is(h1,h2,h3,h4,p,label,span,strong,small) {\n    color: #ffffff !important;\n    opacity: 1 !important;\n    text-shadow: none !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(input,select,textarea,button,.ghost,.primary,.glass-control),\n  :host(.argus-contrast-high) :is(input,select,textarea,button,.ghost,.primary,.glass-control) {\n    color: #ffffff !important;\n    border-color: #aab4c2 !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(input,select,textarea,.glass-control),\n  :host(.argus-contrast-high) :is(input,select,textarea,.glass-control) {\n    background-color: #080c13 !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(button,.ghost):not(.primary):not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):not(.active):not(.tab.active):not(.zone-choice.is-selected):not([aria-pressed=\"true\"]),\n  :host(.argus-contrast-high) :is(button,.ghost):not(.primary):not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):not(.active):not(.tab.active):not(.zone-choice.is-selected):not([aria-pressed=\"true\"]) {\n    background-color: #1a2230 !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(button,input,select,textarea,[tabindex]):focus-visible,\n  :host(.argus-contrast-high) :is(button,input,select,textarea,[tabindex]):focus-visible {\n    outline: 3px solid #7dd3fc !important;\n    outline-offset: 2px !important;\n  }\n  :host([argus-contrast=\"high\"]) .log-item--armed .log-icon,\n  :host(.argus-contrast-high) .log-item--armed .log-icon { border-color: #fbbf24 !important; }\n  :host([argus-contrast=\"high\"]) .log-item--disarmed .log-icon,\n  :host(.argus-contrast-high) .log-item--disarmed .log-icon { border-color: #4ade80 !important; }\n  :host([argus-contrast=\"high\"]) .log-item--triggered .log-icon,\n  :host(.argus-contrast-high) .log-item--triggered .log-icon { border-color: #fb7185 !important; }\n\n  :host {\n    --hud-text-color: #fff;\n    --hud-bg: rgba(255,255,255,0.06);\n  }\n\n  /* Garantiza legibilidad sobre cualquier fondo */\n  :host([data-bg-mode=\"default\"]) .hero-top-bar,\n  :host([data-bg-mode=\"default\"]) .entry-hud,\n  :host([data-bg-mode=\"default\"]) .mode-btn,\n  :host([data-bg-mode=\"default\"]) .sensor-pill {\n    text-shadow: 0 1px 4px rgba(0,0,0,0.7);\n  }\n\n  :host([data-bg-mode=\"default\"]) .mode-btn {\n    background: rgba(255,255,255,0.10) !important;\n    border: 1px solid rgba(255,255,255,0.18) !important;\n    color: rgba(255,255,255,0.95) !important;\n    backdrop-filter: blur(12px);\n  }\n\n  :host([data-bg-mode=\"default\"]) .subsection-title,\n  :host([data-bg-mode=\"default\"]) .user-role-label {\n    color: rgba(255,255,255,0.60) !important;\n  }\n\n  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */\n  :host(.fullscreen-active) {\n    position: fixed !important;\n    inset: 0 !important;\n    top: 0 !important;\n    left: 0 !important;\n    right: 0 !important;\n    bottom: 0 !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    height: 100vh !important;\n    height: 100dvh !important;\n    z-index: 99999999 !important;\n    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;\n    overflow-y: auto !important;\n    overflow-x: hidden !important;\n    -webkit-overflow-scrolling: touch !important;\n    margin: 0 !important;\n    padding: 0 !important;\n  }\n  /* WebKit repaints background-attachment:fixed while rubber-band scrolling.\n     Keep the wallpaper on its own viewport-fixed layer instead of the HA host. */\n  :host(.fullscreen-active) #argus-canvas-bg {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .hero,\n  :host(.fullscreen-active) #argus-dashboard-root-v3,\n  :host(.fullscreen-active) .argus-dashboard,\n  :host(.fullscreen-active) .panel-head,\n  :host(.fullscreen-active) section:not(#w-instances),\n  :host(.fullscreen-active) .argus-widget:not(#w-instances),\n  :host(.fullscreen-active) .personalize-section {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .wrap,\n  :host(.fullscreen-active) .grid,\n  :host(.fullscreen-active) #widget-grid,\n  :host(.fullscreen-active) #w-instances,\n  :host(.fullscreen-active) #entries,\n  :host(.fullscreen-active) #entries > div {\n    display: flex !important;\n    flex-direction: column !important;\n    position: static !important;\n    width: 100% !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    max-width: none !important;\n    min-height: 100% !important;\n    min-height: 100vh !important;\n    min-height: 100dvh !important;\n    height: 100% !important;\n    max-height: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    border: none !important;\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    background: transparent !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n    transform: none !important;\n    filter: none !important;\n    overflow: visible !important;\n  }\n\n\n\n  .liquid-glass {\n    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));\n    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    border: 1px solid rgba(255,255,255,0.22);\n    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;\n  }\n  .wrap {\n    display: none !important;\n    position: relative;\n    z-index: 1;\n    opacity: 0;\n    visibility: hidden;\n    pointer-events: none;\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 24px;\n    gap: 24px;\n    transition: opacity 0.35s ease, filter 0.35s ease;\n  }\n  .wrap.wrap-ready {\n    display: grid !important;\n    opacity: 1 !important;\n    visibility: visible !important;\n    pointer-events: auto !important;\n  }\n  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; visibility: visible; pointer-events: none; }\n  @keyframes dialElasticIn {\n    0% { transform: scale(0.8) translateY(20px); opacity: 0; }\n    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }\n    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }\n    100% { transform: scale(1) translateY(0); opacity: 1; }\n  }\n  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }\n  @keyframes dialElasticOut {\n    0% { transform:scale(1); opacity:1 }\n    55% { transform:scale(1.035); opacity:.9 }\n    100% { transform:scale(.88); opacity:0 }\n  }\n  .pm.pin-closing .modal { animation:dialElasticOut .22s cubic-bezier(.4,0,.8,.4) forwards; }\n  @keyframes pinReject { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }\n  .pm .modal.pin-rejected { animation:pinReject .24s ease-in-out; }\n\n  .collapsible {\n    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;\n    overflow: hidden;\n    max-height: 600px;\n    opacity: 1;\n  }\n  .collapsible.collapsed {\n    max-height: 0 !important;\n    opacity: 0 !important;\n    margin-top: 0 !important;\n    margin-bottom: 0 !important;\n    padding-top: 0 !important;\n    padding-bottom: 0 !important;\n    border: none !important;\n    pointer-events: none;\n  }\n\n  /* Scrollbar aesthetics */\n  ::-webkit-scrollbar {\n    width: 6px;\n    height: 6px;\n  }\n  ::-webkit-scrollbar-track {\n    background: transparent;\n  }\n  ::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.12);\n    border-radius: 999px;\n  }\n  ::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.25);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.08);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb:hover {\n    background: rgba(0, 0, 0, 0.18);\n  }\n\n  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }\n\n  /* SOS Slider redesign */\n  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }\n  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }\n  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }\n  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }\n  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }\n  .ios-confirm-backdrop.open * { pointer-events: auto; }\n  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }\n  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }\n  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }\n  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }\n  .ios-slider-shell { padding: 4px 0 16px; }\n  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }\n  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }\n  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }\n  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }\n  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }\n  .ios-confirm-cancel:active { transform: scale(0.96); }\n\n  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}\n  :host([compact]), :host(.argus-compact) {\n    min-height: auto !important;\n    height: auto !important;\n    max-height: none !important;\n    background: transparent !important;\n  }\n  :host([compact]) .wrap, :host(.argus-compact) .wrap {\n    padding: 0 !important;\n    margin: 0 !important;\n    max-width: 100% !important;\n    width: 100% !important;\n    height: auto !important;\n    min-height: fit-content !important;\n    gap: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    container-type: inline-size;\n    container-name: argus-compact-wrap;\n  }\n  :host([compact]) .hero, :host(.argus-compact) .hero {\n    display: none !important;\n  }\n  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {\n    display: none !important;\n  }\n  /* The compact card renders the live security console directly. The React\n     dashboard grid is a secondary editor surface and can retain persisted\n     widget coordinates (thousands of pixels tall) even while hidden. */\n  :host([compact]) #argus-dashboard-root-v3,\n  :host(.argus-compact) #argus-dashboard-root-v3 {\n    display: none !important;\n    height: 0 !important;\n    min-height: 0 !important;\n    max-height: 0 !important;\n    overflow: hidden !important;\n  }\n  :host([compact]) .tabs, :host(.argus-compact) .tabs {\n    display: none !important;\n  }\n  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {\n    display: none !important;\n  }\n  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {\n    display: none !important;\n  }\n  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {\n    display: none !important;\n  }\n  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {\n    display: none !important;\n  }\n  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {\n    padding: 0 !important;\n    margin: 0 !important;\n    display: block !important;\n    height: auto !important;\n  }\n  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) .entry, :host(.argus-compact) .entry {\n    margin-bottom: 0 !important;\n    border-radius: 24px !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,\n  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,\n  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {\n    height: auto !important;\n    width: 100% !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n  }\n  :host([compact]) #entries, :host(.argus-compact) #entries {\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    height: auto !important;\n    width: 100% !important;\n    margin: 0 !important;\n    overflow: visible !important;\n  }\n  /* Embedded Lovelace cards must size to their content, never to the viewport. */\n  :host([compact]) .argus-widget__content,\n  :host(.argus-compact) .argus-widget__content,\n  :host([compact]) #entries,\n  :host(.argus-compact) #entries,\n  :host([compact]) #w-instances,\n  :host(.argus-compact) #w-instances,\n  :host([compact]) .entry,\n  :host(.argus-compact) .entry {\n    height: auto !important;\n    min-height: 0 !important;\n    max-height: none !important;\n    flex: 0 0 auto !important;\n  }\n  *{box-sizing:border-box}\n  @container argus-compact-wrap (max-width: 800px) {\n    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }\n    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }\n    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }\n    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }\n    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }\n    .sensor-chip { max-width: none !important; }\n    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }\n    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }\n  }\n  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}\n  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}\n  .glass,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}\n  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}\n  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}\n  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}\n  .wrap{max-width:1400px;margin:0 auto;padding:24px;gap:24px}\n  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}\n  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}\n  .hero-left{display:flex;align-items:center;gap:22px}\n  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}\n  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}\n  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;width:min(420px, calc(100vw - 24px))!important;min-width:320px!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}\n  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}\n  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}\n  .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}\n  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}\n\n  /* Modern Mode Navigation & iOS/macOS Liquid Bubble Transition */\n  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); z-index: 1; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.25); }\n  .tabs::-webkit-scrollbar { display: none; }\n  .tab { position: relative; flex: 1 1 0px; min-width: 0; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }\n  .tab-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }\n  .tab:hover { color: #fff; }\n  .tab:active:not(:disabled) { transform: scale(0.92); }\n  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }\n\n  .tab-bubble {\n    position: absolute;\n    top: 6px;\n    bottom: 6px;\n    left: 0;\n    height: calc(100% - 12px);\n    border-radius: 14px;\n    z-index: 1;\n    pointer-events: none;\n    will-change: transform, width, background, box-shadow;\n    backdrop-filter: blur(20px) saturate(180%);\n    -webkit-backdrop-filter: blur(20px) saturate(180%);\n    border: 1px solid rgba(255, 255, 255, 0.32);\n    transition:\n      transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),\n      width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),\n      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),\n      box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);\n  }\n  .tab-bubble.bubble-disarmed {\n    background: linear-gradient(135deg, rgba(34, 197, 94, 0.95), rgba(21, 128, 61, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(34, 197, 94, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-home {\n    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(245, 158, 11, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-away {\n    background: linear-gradient(135deg, rgba(168, 85, 247, 0.96), rgba(126, 34, 206, 0.94));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(168, 85, 247, 0.48), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-night {\n    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(59, 130, 246, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-sos {\n    background: linear-gradient(135deg, rgba(220, 38, 38, 0.98), rgba(153, 27, 27, 0.95));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(220, 38, 38, 0.55), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n\n\n  @keyframes bounceIn {\n    0% { transform: scale(0.96); opacity: 0; }\n    50% { transform: scale(1.01); opacity: 1; }\n    100% { transform: scale(1); opacity: 1; }\n  }\n  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }\n\n  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}\n  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}\n  .panel[data-size=\"S\"]{grid-column:span 1;grid-row:span 1}\n  .panel[data-size=\"M\"]{grid-column:span 2;grid-row:span 1}\n  .panel[data-size=\"L\"]{grid-column:span 2;grid-row:span 2}\n  .panel[data-size=\"XL\"]{grid-column:span 4;grid-row:span 2}\n  .dashboard-instances{grid-column:1 / -1}\n  \n  /* Edit Mode Styles */\n  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}\n  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}\n  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}\n  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}\n  \n  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}\n  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}\n  \n  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}\n  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}\n  .widget-sizes{display:flex;gap:6px}\n  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}\n  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}\n  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}\n  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}\n  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}\n  \n  @keyframes jiggle{\n    0%{transform:rotate(-0.5deg)}\n    50%{transform:rotate(0.5deg)}\n    100%{transform:rotate(-0.5deg)}\n  }\n  @media(max-width:900px){\n    .grid{grid-template-columns:minmax(0,1fr)}\n    .panel[data-size=\"S\"],.panel[data-size=\"M\"],.panel[data-size=\"L\"],.panel[data-size=\"XL\"]{grid-column:1 / -1;grid-row:auto}\n    .grid.editing .panel{animation:none !important}\n  }\n  \n  /* Adaptivity styles for size S widgets */\n  .panel[data-size=\"S\"] .tab-label{display:none}\n  .panel[data-size=\"S\"] .tab-icon{font-size:24px !important}\n  .panel[data-size=\"S\"] #p-backup-desc{display:none}\n  .panel[data-size=\"S\"] #github-desc{display:none}\n\n  /* Collapsible Personalization with Bounce expansion */\n  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}\n  .personalize-workspace > div { overflow:hidden; min-height:0; }\n  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}\n  @keyframes bounceExpand{\n    0%{transform:scale(0.96) translateY(-8px);opacity:0}\n    70%{transform:scale(1.01) translateY(2px);opacity:0.9}\n    100%{transform:scale(1) translateY(0);opacity:1}\n  }\n  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}\n  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}\n\n  .stack{display:grid;gap:24px}\n  .panel{padding:28px;position:relative;overflow:hidden}\n  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\n  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.04em;color:var(--primary-color,#38bdf8);opacity:1}\n\n  /* Access settings stay quiet until the user needs to manage them. */\n  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }\n  .access-panel .panel-head { margin-bottom: 12px; }\n  .access-summary { font-size: 12px; opacity: .88; color: #cbd5e1; }\n  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }\n  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:12px; font-weight:700; }\n  .access-actions button.active { background:var(--primary-color,#38bdf8); color:#0f172a; font-weight:800; border-color:transparent; }\n  .access-section { display:block; min-width:0; margin-bottom:24px; }\n  .access-section h3 { font-size:13px; font-weight:800; color: #f1f5f9; margin:0 0 10px; }\n  .access-panel .user-card { padding:10px 12px; border-radius:12px; }\n  .github-star-action {\n    display:inline-flex;align-items:center;justify-content:center;gap:7px;\n    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;\n    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;\n    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));\n    border:1px solid rgba(255,255,255,.16);\n    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);\n    backdrop-filter:blur(18px) saturate(150%);\n    -webkit-backdrop-filter:blur(18px) saturate(150%);\n    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;\n  }\n  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }\n\n  /* Profile Dropdown Buttons & Setting Tiles */\n  .profile-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    width: auto !important;\n    min-height: 34px !important;\n    padding: 6px 14px !important;\n    border-radius: 10px !important;\n    font-size: 12px !important;\n    font-weight: 750 !important;\n    cursor: pointer !important;\n    box-sizing: border-box !important;\n    white-space: nowrap !important;\n    flex-shrink: 0 !important;\n    background: rgba(255, 255, 255, 0.08) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    color: #ffffff !important;\n    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .profile-btn:hover {\n    background: rgba(255, 255, 255, 0.15) !important;\n    border-color: rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-1px) !important;\n  }\n  .profile-btn.primary {\n    background: rgba(52, 211, 153, 0.14) !important;\n    border-color: rgba(52, 211, 153, 0.35) !important;\n    color: #34d399 !important;\n  }\n  .profile-btn.primary:hover {\n    background: rgba(52, 211, 153, 0.24) !important;\n  }\n  .profile-btn.danger {\n    background: rgba(239, 68, 68, 0.14) !important;\n    border-color: rgba(239, 68, 68, 0.35) !important;\n    color: #f87171 !important;\n  }\n  .profile-btn.danger:hover {\n    background: rgba(239, 68, 68, 0.24) !important;\n  }\n  .profile-card-tile {\n    display: flex !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 12px !important;\n    padding: 10px 14px !important;\n    background: rgba(255, 255, 255, 0.035) !important;\n    border: 1px solid rgba(255, 255, 255, 0.08) !important;\n    border-radius: 14px !important;\n    box-sizing: border-box !important;\n    width: 100% !important;\n  }\n\n  /* Activity log responsive header */\n  .activity-panel .panel-head {\n    display: flex !important;\n    flex-wrap: wrap !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 8px 12px !important;\n    margin-bottom: 12px !important;\n    width: 100% !important;\n    box-sizing: border-box !important;\n  }\n  .activity-panel .panel-head h2 {\n    white-space: nowrap !important;\n    font-size: 15px !important;\n    font-weight: 850 !important;\n    margin: 0 !important;\n    flex: 0 1 auto !important;\n  }\n  .activity-panel .panel-actions {\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 6px !important;\n    flex-wrap: wrap !important;\n  }\n  .activity-panel .panel-actions button {\n    min-height: 32px !important;\n    padding: 5px 11px !important;\n    font-size: 11.5px !important;\n    font-weight: 750 !important;\n    border-radius: 9px !important;\n    white-space: nowrap !important;\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 4px !important;\n  }\n\n  /* Support / Community panel & buttons */\n  .github-panel {\n    display: flex !important;\n    flex-direction: column !important;\n    justify-content: center !important;\n    gap: 14px !important;\n    padding: 18px 20px !important;\n    box-sizing: border-box !important;\n  }\n  @media (min-width: 900px) {\n    .github-panel {\n      flex-direction: row !important;\n      align-items: center !important;\n      justify-content: space-between !important;\n    }\n  }\n  .support-actions-grid {\n    display: grid !important;\n    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;\n    gap: 8px !important;\n    width: 100% !important;\n    max-width: 440px !important;\n    box-sizing: border-box !important;\n  }\n  @media (max-width: 420px) {\n    .support-actions-grid {\n      grid-template-columns: 1fr !important;\n      gap: 6px !important;\n    }\n  }\n  .support-link-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    height: 38px !important;\n    min-height: 38px !important;\n    padding: 0 12px !important;\n    border-radius: 12px !important;\n    font-size: 12px !important;\n    font-weight: 800 !important;\n    text-decoration: none !important;\n    white-space: nowrap !important;\n    box-sizing: border-box !important;\n    backdrop-filter: blur(16px) !important;\n    -webkit-backdrop-filter: blur(16px) !important;\n    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .support-link-btn:hover {\n    transform: translateY(-1.5px) !important;\n    box-shadow: 0 8px 22px rgba(0,0,0,0.25) !important;\n  }\n  .support-link-btn.star {\n    background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(234, 179, 8, 0.06)) !important;\n    border: 1px solid rgba(234, 179, 8, 0.35) !important;\n    color: #facc15 !important;\n  }\n  .support-link-btn.star:hover {\n    background: rgba(234, 179, 8, 0.28) !important;\n    border-color: rgba(234, 179, 8, 0.55) !important;\n  }\n  .support-link-btn.paypal {\n    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(56, 189, 248, 0.06)) !important;\n    border: 1px solid rgba(56, 189, 248, 0.35) !important;\n    color: #38bdf8 !important;\n  }\n  .support-link-btn.paypal:hover {\n    background: rgba(56, 189, 248, 0.28) !important;\n    border-color: rgba(56, 189, 248, 0.55) !important;\n  }\n  .support-link-btn.email {\n    background: linear-gradient(135deg, rgba(167, 139, 250, 0.18), rgba(167, 139, 250, 0.06)) !important;\n    border: 1px solid rgba(167, 139, 250, 0.35) !important;\n    color: #c084fc !important;\n  }\n  .support-link-btn.email:hover {\n    background: rgba(167, 139, 250, 0.28) !important;\n    border-color: rgba(167, 139, 250, 0.55) !important;\n  }\n  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }\n\n  /* Personalization inside instances */\n  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }\n  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }\n\n  /* Mode Reorganization Styles — HORIZONTAL */\n  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }\n  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }\n  .mode-section-card {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    border-radius: 20px !important;\n    padding: 18px !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;\n    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;\n  }\n  .mode-section-card:hover {\n    border-color: rgba(255, 255, 255, 0.26) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transform: translateY(-2px) !important;\n  }\n  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }\n  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }\n  .mode-sensor-grid { color: var(--primary-text-color, #fff); }\n  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }\n  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }\n  .argus-voice-zone-list { display:grid; gap:8px; margin-top:10px; }\n  .argus-voice-zone { border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:9px 11px; background:rgba(255,255,255,.035); }\n  .argus-voice-zone ul { list-style:none; margin:6px 0 0; padding:0; display:grid; gap:5px; }\n  .argus-voice-sensor-row { display:grid; grid-template-columns:10px minmax(0,1fr) auto; gap:8px; align-items:center; font-size:13px; }\n  .argus-voice-state-dot,.argus-voice-open-key i,.argus-voice-closed-key i { display:inline-block; width:9px; height:9px; border-radius:50%; background:#94a3b8; }\n  .argus-voice-sensor-row.is-open .argus-voice-state-dot,.argus-voice-open-key i { background:#34d399; box-shadow:0 0 8px rgba(52,211,153,.55); }\n  .argus-voice-sensor-row.is-closed .argus-voice-state-dot,.argus-voice-closed-key i { background:#fb7185; box-shadow:0 0 7px rgba(251,113,133,.4); }\n  .argus-voice-sensor-row.is-unknown .argus-voice-state-dot { background:#94a3b8; }\n  .argus-voice-sensor-state { color:rgba(255,255,255,.74); font-size:12px; white-space:nowrap; }\n  .argus-voice-open-key i,.argus-voice-closed-key i { vertical-align:middle; margin:0 4px 1px 0; }\n  .argus-voice-message-description { margin:4px 0 8px; color:rgba(255,255,255,.72); }\n\n  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }\n  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }\n  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }\n  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }\n  .icon-btn:active { transform: scale(0.9); }\n\n  #mode-status { opacity: 0; transition: opacity .35s; }\n  #mode-status.show { opacity: 1; }\n  #mode-status.ok  { color: #4caf50; }\n  #mode-status.err { color: #f44336; }\n\n  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }\n  .icon-btn.active { color: #fb8c00; opacity: 1; }\n\n  .input-group { display: flex; flex-direction: column; gap: 6px; }\n  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}\n  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}\n  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}\n  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}\n  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}\n  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}\n  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}\n  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}\n  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }\n\n  /* Intelligent Entry Card */\n  .entry {\n    position: relative;\n    overflow: hidden;\n    border-radius: 28px !important;\n    border: 1px solid rgba(255, 255, 255, 0.18) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;\n    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    margin-bottom: 16px;\n    min-height: 220px;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}\n  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}\n  /* Safari was recompositing the full glass card while it was moving under a\n     stationary pointer: the hover transform and soft-light overlay stacked\n     on top of the large backdrop-filter surface. Keep the same glass and\n     highlight, but avoid moving/blending that surface during scroll and the\n     elastic top/bottom overscroll repaint. */\n  @supports (-webkit-backdrop-filter: blur(1px)) {\n    .entry { transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important; }\n    .entry:hover { transform: none !important; }\n    .entry::after {\n      background: linear-gradient(120deg,rgba(255,255,255,.07),transparent 22%,transparent 74%,rgba(255,255,255,.025));\n      mix-blend-mode: normal !important;\n    }\n  }\n  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}\n  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}\n  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}\n  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}\n  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}\n  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}\n  /* The live instance is the console: real controls, real sensors and one\n     clear disarm keypad. Decorative dashboard cards never sit above it. */\n  .security-console {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n  .console-hud {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n\n  /* ── System Status Badge ─────────────────────────────── */\n  .console-system-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 5px 14px;\n    border-radius: 999px;\n    font-size: 10.5px;\n    font-weight: 900;\n    letter-spacing: 0.8px;\n    text-transform: uppercase;\n    white-space: nowrap;\n    backdrop-filter: blur(16px) saturate(160%);\n    -webkit-backdrop-filter: blur(16px) saturate(160%);\n    border: 1.5px solid currentColor;\n    transition: all 0.35s ease;\n  }\n  .console-system-badge--disarmed {\n    color: #6ee7b7;\n    background: rgba(16,185,129,0.18);\n    border-color: rgba(16,185,129,0.60);\n    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_home {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_away {\n    color: #e9d5ff;\n    background: rgba(168,85,247,0.20);\n    border-color: rgba(168,85,247,0.60);\n    box-shadow: 0 0 16px rgba(168,85,247,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_night {\n    color: #bfdbfe;\n    background: rgba(30,136,229,0.20);\n    border-color: rgba(30,136,229,0.60);\n    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--triggered {\n    color: #fff;\n    background: rgba(239,68,68,0.35);\n    border-color: rgba(239,68,68,0.80);\n    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);\n    animation: badgeFlash 0.8s infinite ease-in-out;\n  }\n  @keyframes badgeFlash {\n    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }\n    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }\n  }\n  /* arming state reuses armed_home styling with pulsing */\n  .console-system-badge--arming {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    animation: badgeArming 1.05s ease-in-out infinite;\n  }\n  @keyframes badgeArming {\n    0%,100% { opacity:0.65; } 50% { opacity:1; }\n  }\n  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}\n  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}\n  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}\n  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}\n  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */\n  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}\n  /* The .hud inside the article gets hidden when the content is a security-console */\n  @media(max-width:950px){\n    .grid{grid-template-columns:1fr;grid-template-areas:\"instances\" \"activity\" \"modes\" \"access\" \"automations\" \"backup\" \"github\"}\n  }\n\n  /* Sensor column */\n  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}\n  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}\n  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}\n  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}\n  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}\n  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}\n  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}\n  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}\n  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}\n  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}\n  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}\n  .sensor-chip-battery.low{color:#ffd166;font-weight:900}\n  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}\n  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}\n  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}\n  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}\n\n  /* HUD Overlay */\n  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}\n  .hud-loc{font-size:13px;font-weight:800;letter-spacing:0.04em;color:#ffffff;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);align-self:flex-end}\n  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}\n  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}\n  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}\n  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}\n\n  /* Liquid Glass Buttons */\n  .liquid-stack{display:grid;gap:10px}\n  .liquid-btn {\n    border: 1px solid rgba(255, 255, 255, 0.20) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    color: #ffffff !important;\n    padding: 14px 18px;\n    border-radius: 18px !important;\n    font-size: 13.5px;\n    font-weight: 800;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    text-align: left;\n    cursor: pointer;\n    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n    text-shadow: 0 1px 2px rgba(0,0,0,0.3);\n    letter-spacing: 0.5px;\n  }\n  .liquid-btn:hover {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;\n    border-color: rgba(255, 255, 255, 0.36) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.45) !important;\n    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;\n  }\n  .btn-sos:hover {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;\n    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}\n  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}\n  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}\n  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}\n  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}\n  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }\n  .liquid-btn i{font-size:16px}\n\n  .btn-home {\n    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;\n    border: 1px solid rgba(251, 140, 0, 0.38) !important;\n    color: #ffe0b2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-home.active {\n    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;\n    border: 1px solid rgba(254, 215, 170, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-away {\n    background: linear-gradient(135deg, rgba(168, 85, 247, 0.20) 0%, rgba(168, 85, 247, 0.06) 100%) !important;\n    border: 1px solid rgba(168, 85, 247, 0.38) !important;\n    color: #e9d5ff !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-away.active {\n    background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%) !important;\n    border: 1px solid rgba(233, 213, 255, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(168, 85, 247, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-night {\n    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;\n    border: 1px solid rgba(30, 136, 229, 0.38) !important;\n    color: #bbdefb !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-night.active {\n    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;\n    border: 1px solid rgba(191, 219, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-disarm {\n    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;\n    border: 1px solid rgba(16, 185, 129, 0.35) !important;\n    color: #a7f3d0 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    margin-top: 4px;\n  }\n  .btn-disarm.active {\n    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n    border: 1px solid rgba(167, 243, 208, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.35) !important;\n    color: #fca5a5 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-sos.active, .btn-sos.flashing {\n    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;\n  }\n\n  @keyframes sosFlashingPulse {\n    0%, 100% {\n      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n      border-color: #fca5a5 !important;\n      color: #ffffff !important;\n      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;\n      transform: scale(1.02);\n    }\n    50% {\n      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;\n      border-color: rgba(239, 68, 68, 0.5) !important;\n      color: rgba(255, 255, 255, 0.8) !important;\n      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;\n      transform: scale(0.98);\n    }\n  }\n  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */\n\n  .entry-content {\n    background: transparent !important;\n    box-shadow: none !important;\n    border: none !important;\n  }\n\n  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}\n  .badge.armed_away{background:rgba(168,85,247,.12);color:#d8b4fe}\n  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}\n  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}\n\n  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}\n  .meta{font-size:12px;opacity:.5}\n  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}\n  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}\n  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}\n  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}\n  .temp-alert-status-ok{color:#43a047;font-size:12px}\n  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}\n\n  /* Generic buttons */\n  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1.3 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;hyphens:none;word-break:normal;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}\n  button:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}\n  button:active:not(:disabled){transform:scale(.94) translateY(1px)}\n  button.primary{background:var(--primary-color,#38bdf8);color:#0f172a;font-weight:800;box-shadow:0 4px 12px rgba(56, 189, 248, 0.35)}\n  button.primary:hover{background:#0284c7;color:#ffffff}\n  button.ghost{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.24);color:#ffffff !important}\n  button.ghost:hover{background:rgba(255, 255, 255, 0.16);border-color:rgba(255,255,255,0.36)}\n\n\n  /* FS button */\n  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}\n\n  /* Modal Fixes */\n  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}\n  .modal-back.open{display:flex}\n  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}\n  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}\n  .modal-head h3{margin:0;font-size:20px;font-weight:800}\n  .modal-body{overflow:auto;padding:5px}\n  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}\n  /* PIN modal */\n  .pm .modal{width:min(340px,calc(100vw - 32px));max-width:340px;max-height:calc(100dvh - 32px);min-height:unset;overflow:auto;box-sizing:border-box;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:clamp(14px,4vw,24px);display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2vw,12px)}\n  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}\n  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}\n  .pin-grid{display:grid;grid-template-columns:repeat(3,56px);grid-auto-rows:56px;gap:clamp(7px,2vw,12px);width:max-content;max-width:100%;justify-content:center;margin:6px auto 0}\n  .pin-btn-round{width:56px !important;height:56px !important;min-height:56px !important;max-height:56px !important;aspect-ratio:auto;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}\n  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}\n  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}\n  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}\n  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}\n  .pin-btn-round.action-key.enter-key{color:#34c759 !important}\n  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}\n  /* User card */\n  .user-card {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 16px 18px;\n    border-radius: 18px;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;\n    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .user-card:hover {\n    border-color: rgba(255, 255, 255, 0.25) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-2px);\n  }\n  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}\n  /* REEMPLAZA los colores neón por tokens legibles */\n  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }\n  .user-badge.admin_old {\n    background: rgba(255,255,255,0.12);\n    color: rgba(255,255,255,0.92);\n    border: 1px solid rgba(255,255,255,0.18);\n    font-weight: 700;\n    letter-spacing: 0.04em;\n  }\n  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }\n  .user-badge.user_old {\n    background: rgba(255,255,255,0.08);\n    color: rgba(255,255,255,0.75);\n    border: 1px solid rgba(255,255,255,0.12);\n  }\n  /* Role label debajo del nombre */\n  .user-role-label {\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    color: rgba(255,255,255,0.55);  /* muted, no neón */\n    margin-top: 2px;\n  }\n  /* Notif target chip */\n  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}\n  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}\n  /* Triggered box */\n  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}\n  /* inputs */\n  input[type=\"text\"], input[type=\"password\"], input[type=\"number\"], input[type=\"search\"], select, input[type=\"datetime-local\"], .glass-control {\n    width: 100%;\n    padding: 11px 14px;\n    border-radius: 16px;\n    border: 1px solid rgba(255, 255, 255, 0.16);\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));\n    color: var(--primary-text-color);\n    backdrop-filter: blur(18px) saturate(145%);\n    -webkit-backdrop-filter: blur(18px) saturate(145%);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);\n    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;\n    outline: none;\n    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;\n    display: block;\n    box-sizing: border-box;\n  }\n  input[type=\"text\"]:focus, input[type=\"password\"]:focus, input[type=\"number\"]:focus, input[type=\"search\"]:focus, select:focus, input[type=\"datetime-local\"]:focus, .glass-control:focus {\n    transform: scale(1.018);\n    border-color: rgba(112, 188, 255, 0.78);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match input[type=\"text\"],\n  .x-never-match input[type=\"password\"],\n  .x-never-match input[type=\"number\"],\n  .x-never-match input[type=\"search\"],\n  .x-never-match select,\n  .x-never-match input[type=\"datetime-local\"],\n  .x-never-match .glass-control {\n    background: rgba(255, 255, 255, 0.52);\n    border-color: rgba(0, 0, 0, 0.10);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);\n  }\n  /* search */\n  .search-wrap{display:flex;gap:10px;align-items:center}\n  .search-wrap input{flex:1;min-width:0}\n  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */\n  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}\n  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}\n  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}\n  @media(max-width:600px){.sel-grid{grid-template-columns:1fr;grid-template-rows:minmax(0,1.25fr) minmax(0,.75fr)}}\n  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}\n  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;grid-auto-rows:max-content;gap:8px;align-content:start;padding-right:4px}\n  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}\n  .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}\n  #selector-modal .pick-row{height:auto;min-height:max-content;box-sizing:border-box;align-self:start}\n  #selector-modal .pick-row>div{min-width:0}\n  #selector-modal .pick-row-name{overflow-wrap:anywhere}\n  #selector-modal .pick-row:focus-within{outline:2px solid #76b7ff;outline-offset:-2px}\n  .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}\n  .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}\n  .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}\n  .pick-row-name{font-weight:750;font-size:14px;color:#ffffff;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3}\n  .pick-row-meta{font-size:12px;color:#cbd5e1;opacity:0.92;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}\n  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}\n  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}\n  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}\n  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}\n  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}\n  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}\n  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}\n  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}\n  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}\n  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}\n  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}\n  /* Activity log */\n  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}\n  .activity-log .log-item{animation:none!important;transform:none!important;will-change:auto!important}\n  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}\n  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}\n  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}\n  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}\n  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}\n  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}\n  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}\n  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}\n  .log-body{flex:1;min-width:0}\n  .log-title{font-weight:700;font-size:13px}\n  .log-meta{font-size:11px;opacity:.55;margin-top:2px}\n  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}\n  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}\n  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}\n  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}\n  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}\n  /* Personalization section styles */\n  .personalize-section {\n    margin-top: 18px;\n    padding: 18px;\n    background: var(--personalize-bg, rgba(255,255,255,0.02));\n    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));\n    border-radius: 22px;\n    display: grid;\n    gap: 16px;\n  }\n  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:\"home temp\" \"panel clock\" \"hub emergency\";gap:14px 16px;align-items:start}\n  .personalize-column{display:contents}\n  .personalize-field{min-width:0;align-self:stretch}\n  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}\n  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}\n  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"emergency-label emergency-label\" \"emergency-input emergency-help\";gap:5px 16px;align-items:start;padding-top:2px}\n  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}\n  .sos-configuration {\n    padding: 18px;\n    border-radius: 24px;\n    border: 1px solid rgba(255, 59, 48, 0.25);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);\n    transition: transform 0.3s ease, box-shadow 0.3s ease;\n  }\n  /* SOS uses the full personalization width so outputs never create a tall,\n     narrow list with unused space beside it. */\n  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:\"title action\" \"outputs outputs\" \"help help\";gap:12px 16px;align-items:center}\n  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}\n  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}\n  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}\n  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}\n  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}\n  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}\n  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}\n  .sos-configuration:hover {\n    transform: translateY(-2px);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match .sos-configuration {\n    border-color: rgba(255, 59, 48, 0.3);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);\n  }\n  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}\n  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}\n  .modal-back.open .modal,\n  .lang-modal-back.open .lang-modal-card,\n  .ios-confirm-backdrop.open .ios-confirm-card {\n    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;\n  }\n  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}\n  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n  @media(max-width:700px){\n    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:\"home\" \"temp\" \"panel\" \"hub\" \"clock\" \"emergency\"}\n    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:\"emergency-label\" \"emergency-input\" \"emergency-help\"}\n    .personalize-section{padding:14px}\n    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}\n    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}\n  }\n\n  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);contain:paint}\n  #argus-canvas-bg::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}\n\n.sensor-pill {\n  display:inline-flex; align-items:center; gap:8px;\n  background:var(--argus-pill-bg, rgba(255,255,255,0.04));\n  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));\n  border-radius:14px; padding:10px 14px;\n  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));\n  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);\n  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);\n}\n\n/* Zone editor: keep every control inside Argus' Liquid Glass visual system. */\n#argus-zone-editor{background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.035))!important;border:1px solid rgba(255,255,255,.20)!important;border-radius:26px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 18px 48px rgba(0,0,0,.22)!important;backdrop-filter:blur(26px) saturate(155%)!important;-webkit-backdrop-filter:blur(26px) saturate(155%)!important;padding:clamp(16px,3vw,26px)!important;box-sizing:border-box}\n#argus-zone-editor .zone-editor-title{font-size:18px;font-weight:900;letter-spacing:.02em;color:#46c7ff;margin:0 0 8px}\n#argus-zone-editor .zone-help{font-size:12px;line-height:1.55;opacity:.76;margin:6px 0 14px}\n#argus-zone-editor .zone-item{margin:10px 0;overflow:hidden;border:1px solid rgba(255,255,255,.19);border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 8px 24px rgba(0,0,0,.14);backdrop-filter:blur(20px) saturate(145%);-webkit-backdrop-filter:blur(20px) saturate(145%)}\n#argus-zone-editor .zone-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;padding:14px 17px;background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.045));color:inherit;border:0;cursor:pointer;font:inherit;font-weight:800;min-height:52px}\n#argus-zone-editor .zone-form{padding:16px;display:grid;gap:14px;background:linear-gradient(155deg,rgba(11,18,31,.34),rgba(255,255,255,.035));border-top:1px solid rgba(255,255,255,.13)}\n#argus-zone-editor .zone-field{display:grid;gap:7px;font-size:12px;font-weight:800;letter-spacing:.025em;color:rgba(255,255,255,.88)}\n#argus-zone-editor .zone-field input,#argus-zone-editor .zone-field select,#argus-zone-editor .zone-sensor-search{width:100%;min-height:44px;box-sizing:border-box;padding:10px 14px;border-radius:15px!important;color:var(--primary-text-color,#fff)!important;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055))!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 5px 16px rgba(0,0,0,.12)!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);font:inherit}\n#argus-zone-editor .zone-mode-fieldset{padding:12px 14px;border:1px solid rgba(255,255,255,.2);border-radius:18px;background:rgba(255,255,255,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}\n#argus-zone-editor .zone-mode-fieldset legend{padding:0 7px;font-size:12px;font-weight:800;opacity:.88}\n#argus-zone-editor .zone-mode-options{display:flex;flex-wrap:wrap;gap:9px}\n#argus-zone-editor .zone-mode-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(255,255,255,.075);font-size:12px;font-weight:700}\n#argus-zone-editor .zone-sensor-list{max-height:250px;overflow:auto;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:8px;background:rgba(0,0,0,.16);box-shadow:inset 0 1px 10px rgba(0,0,0,.15)}\n#argus-zone-editor .zone-sensor-row{padding:10px 9px;border-bottom:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px}\n#argus-zone-editor .zone-sensor-row:last-child{border-bottom:0}\n#argus-zone-editor .zone-sensor-settings{display:flex;gap:9px;flex-wrap:wrap;margin:8px 0 3px 24px}\n#argus-zone-editor .zone-sensor-settings label{display:flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.06)}\n#argus-zone-editor .zone-number-lock{display:grid;gap:3px;padding:12px 15px;border:1px solid rgba(255,255,255,.2);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.055));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 6px 18px rgba(0,0,0,.15);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}\n#argus-zone-editor .zone-number-lock span{font-size:10px;font-weight:800;letter-spacing:.1em;opacity:.66}\n#argus-zone-editor .zone-number-lock strong{font-size:15px;letter-spacing:.08em;color:#eaf5ff}\n#argus-zone-editor .zone-number-lock small{font-size:11px;opacity:.62}\n#argus-zone-editor .zone-sensor-heading{display:flex;align-items:center;gap:10px;min-width:0}\n#argus-zone-editor .zone-sensor-heading span{display:grid;gap:3px;min-width:0}\n#argus-zone-editor .zone-sensor-heading strong{font-size:13px;overflow-wrap:anywhere}\n#argus-zone-editor .zone-sensor-heading small{font-size:10px;opacity:.62;overflow-wrap:anywhere}\n#argus-zone-editor .zone-assigned-note{display:inline-flex;margin:5px 0 0 25px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:10px;opacity:.72}\n#argus-zone-editor .zone-sensor-settings{display:grid;gap:11px;margin:12px 0 4px 25px;padding:12px;border:1px solid rgba(255,255,255,.15);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}\n#argus-zone-editor .zone-config-group{display:grid;gap:7px;min-width:0}\n#argus-zone-editor .zone-config-title{font-size:11px;font-weight:850;letter-spacing:.045em;color:rgba(240,247,255,.82)}\n#argus-zone-editor .zone-option-group{display:flex;flex-wrap:wrap;gap:7px}\n#argus-zone-editor .zone-choice,#argus-zone-editor .zone-unit{min-height:36px;padding:7px 11px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.055));color:#edf4ff;font:inherit;font-size:11px;font-weight:750;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.12);cursor:pointer;transition:background .16s,border-color .16s,box-shadow .16s}\n#argus-zone-editor .zone-choice.is-selected,#argus-zone-editor .zone-unit.is-selected{border-color:rgba(89,205,255,.72);background:linear-gradient(145deg,rgba(43,158,218,.35),rgba(31,68,112,.38));box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 0 14px rgba(52,177,238,.18)}\n#argus-zone-editor .zone-delay-field{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:11px;font-weight:700}\n#argus-zone-editor .zone-delay-field input{width:76px;min-height:36px;padding:6px 9px;text-align:center;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(8,15,28,.48);color:#fff;font:inherit;color-scheme:dark}\n#argus-zone-editor .zone-unit-group{display:inline-flex;gap:5px}\n#argus-zone-editor .zone-unit{min-height:32px;padding:5px 9px;font-size:10px}\n#argus-zone-editor .zone-sensor-hint{margin:0;font-size:10px;line-height:1.45;opacity:.62}\n#argus-zone-editor .zone-decision,#argus-zone-editor .zone-status{padding:12px 14px;border:1px solid rgba(255,255,255,.17);border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 20px rgba(0,0,0,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}\n@media(max-width:600px){#argus-zone-editor .zone-form{padding:12px;gap:12px}#argus-zone-editor .zone-sensor-settings{margin-left:0;padding:10px}#argus-zone-editor .zone-choice{font-size:10px;padding-inline:9px}}\n.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }\n.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }\n.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }\n.sensor-pill .pill-dot.unavailable { background:#999; }\n.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }\n.sensor-pill button:hover { opacity:1; }\n\n.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }\n.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }\n.mode-zone-assigned { display:flex; align-items:center; flex-wrap:wrap; gap:6px 12px; min-width:0; padding:12px 16px; border:1px solid rgba(86,198,255,.48); border-radius:16px; background:linear-gradient(125deg,rgba(28,145,207,.25),rgba(44,82,130,.24) 60%,rgba(255,255,255,.07)); color:rgba(255,255,255,.96); font-size:14px; line-height:1.35; font-weight:650; box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 5px 16px rgba(0,0,0,.14); }\n.mode-zone-assigned strong { color:#8bdcff; font-weight:800; white-space:nowrap; }\n.mode-zone-assigned span { min-width:0; overflow-wrap:anywhere; }\n.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }\n\n\n/* ── Language Picker ───────────────────────────────────── */\n.lang-pill {\n  display:inline-flex; align-items:center; gap:6px;\n  padding:7px 14px; border-radius:999px;\n  background:rgba(255,255,255,0.10);\n  border:1px solid rgba(255,255,255,0.18);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff; font-size:13px; font-weight:700;\n  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);\n  box-shadow:0 4px 16px rgba(0,0,0,0.18);\n  white-space:nowrap; flex-shrink:0;\n}\n.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }\n.x-never-match .lang-pill {\n  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;\n}\n\n/* Language modal */\n.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }\n.lang-modal-back.open { display:flex; }\n.lang-modal-card {\n  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;\n  background:rgba(20,22,35,0.92);\n  border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.55);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff;\n  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.x-never-match .lang-modal-card {\n  background:rgba(255,255,255,0.96); color:#1e1e2d;\n  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);\n}\n@keyframes langBounceIn {\n  0%   { transform:scale(0.82) translateY(20px); opacity:0; }\n  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }\n  100% { transform:scale(1)    translateY(0);    opacity:1; }\n}\n.lang-modal-title {\n  font-size:18px; font-weight:900; letter-spacing:-0.01em;\n  margin-bottom:20px; text-align:center;\n}\n.lang-grid {\n  display:grid; grid-template-columns:1fr 1fr; gap:10px;\n}\n.lang-option {\n  display:flex; align-items:center; gap:10px;\n  padding:12px 14px; border-radius:16px;\n  background:rgba(255,255,255,0.10);\n  border:1.5px solid rgba(255,255,255,0.18);\n  /* Buttons do not inherit color reliably through the HA shadow DOM. */\n  color:rgba(255,255,255,0.98) !important;\n  text-shadow:0 1px 2px rgba(0,0,0,0.38);\n  cursor:pointer; transition:all 0.18s ease;\n  font-size:14px; font-weight:750;\n}\n.lang-option span:not(.lang-flag) { color:inherit !important; }\n.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }\n.lang-option.active {\n  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);\n  box-shadow:0 0 18px rgba(3,169,244,0.25);\n}\n.lang-flag { font-size:22px; line-height:1; }\n.lang-close-row { display:flex; justify-content:center; margin-top:18px; }\n.lang-close-btn {\n  padding:9px 28px; border-radius:14px;\n  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);\n  color:#fff; font-size:13px; font-weight:700; cursor:pointer;\n  transition:background 0.18s;\n}\n.lang-close-btn:hover { background:rgba(255,255,255,0.2); }\n\n/* Walk Test Modal & Delay Styles */\n.walk-test-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(6px); }\n.walk-test-modal-back.open { display:flex; }\n.walk-test-modal-card {\n  width:min(520px,94vw); max-height:85vh; border-radius:24px; padding:24px;\n  background:rgba(18,22,34,0.95); border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.6); backdrop-filter:blur(16px);\n  color:#fff; display:flex; flex-direction:column; gap:16px; overflow:hidden;\n  animation: langBounceIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.walk-test-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; }\n.walk-test-title { font-size:17px; font-weight:800; display:flex; align-items:center; gap:8px; }\n.walk-test-timer { font-size:12px; font-weight:700; color:#38bdf8; background:rgba(56,189,248,0.12); padding:3px 10px; border-radius:12px; border:1px solid rgba(56,189,248,0.25); }\n.walk-test-progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }\n.walk-test-progress-fill { height:100%; background:linear-gradient(90deg, #38bdf8, #4ade80); transition:width 0.3s ease; }\n.walk-test-sensor-list { display:grid; gap:8px; max-height:45vh; overflow-y:auto; padding-right:4px; }\n.walk-test-sensor-item {\n  display:flex; align-items:center; justify-content:space-between; padding:10px 14px;\n  border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);\n  transition:all 0.2s ease;\n}\n.walk-test-sensor-item.tested {\n  background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.3);\n}\n.walk-test-sensor-item.just-tested {\n  animation: testPulse 0.8s ease;\n}\n@keyframes testPulse {\n  0% { transform: scale(1); background: rgba(74,222,128,0.4); }\n  50% { transform: scale(1.02); }\n  100% { transform: scale(1); background: rgba(74,222,128,0.12); }\n}\n.pill-delay-btn {\n  background:none; border:none; color:inherit; cursor:pointer; padding:0; margin-left:4px;\n  display:inline-flex; align-items:center;\n}\n.pill-delay-badge {\n  font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:6px;\n  display:inline-flex; align-items:center; gap:2px; transition:transform 0.15s;\n}\n.pill-delay-badge:hover { transform:scale(1.08); }\n.pill-delay-badge.instant { color:#38bdf8; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); }\n.pill-delay-badge.custom { color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); }\n.pill-delay-badge.inherited { color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); }\n\n/* Background File Manager Styles */\n.file-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  border-radius: 12px;\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  position: relative;\n  overflow: hidden;\n  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n}\n.file-card:hover {\n  background: rgba(255, 255, 255, 0.08) !important;\n  border-color: rgba(255, 255, 255, 0.16) !important;\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n}\n.x-never-match .file-card {\n  background: rgba(0, 0, 0, 0.02);\n  border-color: rgba(0, 0, 0, 0.07);\n  color: #1c1c1e;\n}\n.x-never-match .file-card:hover {\n  background: rgba(0, 0, 0, 0.05) !important;\n  border-color: rgba(0, 0, 0, 0.12) !important;\n}\n.file-card-preview {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 8px;\n  overflow: hidden;\n  background: rgba(0, 0, 0, 0.2);\n}\n.file-card-preview img, .file-card-preview video {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n}\n.file-card-name {\n  font-size: 10px;\n  font-weight: 700;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  opacity: 0.85;\n}\n.file-card-meta {\n  font-size: 9px;\n  opacity: 0.55;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.file-card-actions {\n  display: flex;\n  gap: 4px;\n  margin-top: auto;\n}\n.file-card-btn {\n  flex: 1;\n  padding: 4px;\n  font-size: 8px;\n  font-weight: 700;\n  text-transform: uppercase;\n  border: 1px solid rgba(255, 255, 255, 0.12);\n  border-radius: 6px;\n  background: rgba(255, 255, 255, 0.03);\n  color: inherit;\n  cursor: pointer;\n  white-space: nowrap;\n  transition: all 0.15s ease;\n}\n.file-card-btn:hover {\n  background: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n.x-never-match .file-card-btn {\n  border-color: rgba(0, 0, 0, 0.12);\n  background: rgba(0, 0, 0, 0.02);\n}\n.x-never-match .file-card-btn:hover {\n  background: rgba(0, 0, 0, 0.08);\n  border-color: rgba(0, 0, 0, 0.25);\n}\n.file-card-btn-delete {\n  padding: 3px 6px;\n  color: #ff3b30;\n  border: 1px solid rgba(255, 59, 48, 0.15);\n  background: rgba(255, 59, 48, 0.05);\n  border-radius: 6px;\n  cursor: pointer;\n  font-size: 9px;\n  transition: all 0.15s ease;\n}\n.file-card-btn-delete:hover {\n  background: rgba(255, 59, 48, 0.25);\n  border-color: rgba(255, 59, 48, 0.45);\n}\n\n.argus-bootstrap-layer {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).\n     WebKit compositor leak bug — opaque background is visually equivalent. */\n  z-index: 9999;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  color: white;\n  animation: fadeIn 0.4s ease forwards;\n}\n.argus-bootstrap-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 24px;\n  padding: 40px;\n  max-width: 480px;\n  width: 90%;\n  box-shadow: 0 16px 40px rgba(0,0,0,0.5);\n  text-align: center;\n}\n.argus-bootstrap-card h1 {\n  margin: 0 0 16px;\n  font-weight: 300;\n  font-size: 28px;\n  letter-spacing: 0.5px;\n}\n.argus-bootstrap-card p {\n  color: rgba(255,255,255,0.7);\n  font-size: 16px;\n  line-height: 1.5;\n  margin-bottom: 32px;\n}\n@keyframes argusWelcomeCard {\n  from { opacity: 0; transform: translateY(18px) scale(.96); }\n  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }\n  to { opacity: 1; transform: translateY(0) scale(1); }\n}\n@keyframes argusWelcomeLogo {\n  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }\n  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }\n}\n@keyframes argusWelcomeCheck {\n  from { opacity: 0; transform: scale(.55) rotate(-16deg); }\n  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }\n  to { opacity: 1; transform: scale(1) rotate(0); }\n}\n.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }\n.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }\n.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }\n.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }\n.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }\n.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }\n\n/* ─── tvOS Profile Selector ─── */\n.argus-profile-overlay {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);\n  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.\n     High-opacity background achieves same visual effect safely. */\n  display: flex; align-items: center; justify-content: center;\n  z-index: 9999;\n  animation: argus-overlay-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;\n}\n@keyframes argus-overlay-in {\n  from { opacity: 0; }\n  to   { opacity: 1; }\n}\n\n/* Título arriba */\n.argus-profile-header {\n  text-align: center;\n  margin-bottom: 36px;\n  animation: argus-slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;\n}\n@keyframes argus-slide-down {\n  from { opacity: 0; transform: translateY(-12px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.argus-profile-header h2 {\n  margin: 0; font-size: 1.6rem; font-weight: 800;\n  color: #fff; letter-spacing: -0.02em;\n}\n.argus-profile-header p {\n  margin: 6px 0 0; font-size: 0.85rem;\n  color: rgba(255,255,255,0.55);\n}\n\n/* Grid de perfiles */\n.argus-profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n  gap: 36px 24px;\n  max-width: 900px;\n  width: 100%;\n  justify-content: center;\n  animation: argus-grid-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;\n}\n@keyframes argus-grid-in {\n  from { opacity: 0; transform: scale(0.95) translateY(10px); }\n  to   { opacity: 1; transform: scale(1) translateY(0); }\n}\n\n/* Cada perfil */\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(4, 1fr);\n    padding: 16px;\n  }\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(2, 1fr);\n    padding: 16px;\n    gap: 20px 16px;\n  }\n}\n@media (max-width: 380px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: 1fr;\n    padding: 16px;\n  }\n  .argus-profile-item { width: 100%; }\n}\n\n.argus-profile-item {\n  touch-action: manipulation;\n  min-height: 44px;\n  display: flex; flex-direction: column;\n  align-items: center; gap: 10px;\n  cursor: pointer;\n  border-radius: 16px;\n  padding: 14px 8px 10px;\n  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),\n              background 0.2s ease;\n  -webkit-tap-highlight-color: transparent;\n}\n.argus-profile-item:hover {\n  transform: scale(1.08);\n  background: rgba(255,255,255,0.07);\n}\n.argus-profile-item:active {\n  transform: scale(0.96);\n}\n.argus-profile-item:focus-visible {\n  outline: 2px solid rgba(255,255,255,0.6);\n  outline-offset: 4px;\n}\n\n/* Círculo avatar */\n.argus-profile-circle {\n  width: 120px; height: 120px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 3px solid rgba(255,255,255,0.18);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.35);\n  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.5rem; font-weight: 800;\n  color: #fff; overflow: hidden; flex-shrink: 0;\n  background: rgba(255,255,255,0.1);\n  position: relative;\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-circle {\n    width: 76px; height: 76px;\n    font-size: 1.5rem; border-width: 2.5px;\n  }\n}\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-circle {\n    width: 84px; height: 84px;\n    font-size: 1.8rem; border-width: 2.5px;\n  }\n}\n.argus-profile-item:hover .argus-profile-circle {\n  border-color: rgba(255,255,255,0.55);\n  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);\n}\n.argus-profile-circle img {\n  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;\n}\n.argus-profile-circle .lock-badge {\n  position: absolute; bottom: 0; right: 0;\n  width: 28px; height: 28px; border-radius: 50%;\n  background: rgba(0,0,0,0.75); display: flex;\n  align-items: center; justify-content: center;\n  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);\n}\n@media (max-width: 600px) {\n  .argus-profile-circle .lock-badge {\n    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;\n  }\n}\n\n/* Nombre y rol */\n.argus-profile-label {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.argus-profile-label .p-name {\n  font-size: 1rem; font-weight: 700;\n  color: #fff; line-height: 1.2;\n  max-width: 140px; overflow: hidden;\n  text-overflow: ellipsis; white-space: nowrap;\n}\n.argus-profile-label .p-role {\n  font-size: 0.72rem; font-weight: 600;\n  color: rgba(255,255,255,0.6);\n  margin-top: 4px;\n  text-transform: uppercase; letter-spacing: 0.04em;\n}\n@media (max-width: 600px) {\n  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }\n  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }\n}\n\n/* ─── Welcome Screen (Fase 2) ─── */\n.argus-welcome-screen {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist\n     after element.remove(). Use opaque background instead. */\n  display: flex; flex-direction: column;\n  align-items: center; justify-content: center;\n  z-index: 10000;\n  pointer-events: none;\n}\n.argus-welcome-avatar {\n  width: 110px; height: 110px;\n  border-radius: 50%; overflow: hidden;\n  border: 3px solid rgba(255,255,255,0.3);\n  box-shadow: 0 8px 40px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.8rem; font-weight: 800; color: #fff;\n  background: rgba(255,255,255,0.12);\n}\n.argus-welcome-avatar img {\n  width: 100%; height: 100%; object-fit: cover;\n}\n.argus-welcome-text {\n  margin-top: 20px; text-align: center;\n}\n.argus-welcome-text .greeting {\n  font-size: 1.0rem; color: rgba(255,255,255,0.6);\n  font-weight: 500; letter-spacing: 0.02em;\n  margin: 0;\n}\n.argus-welcome-text .wname {\n  font-size: 2.0rem; font-weight: 900;\n  color: #fff; letter-spacing: -0.03em;\n  margin: 6px 0 0;\n  line-height: 1;\n}\n\n/* PIN prompt dentro del selector tvOS */\n.argus-pin-prompt {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.75);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  display: flex; align-items: center; justify-content: center;\n  z-index: 10001;\n  animation: argus-overlay-in 0.25s ease both;\n}\n.argus-pin-card {\n  background: rgba(255,255,255,0.08);\n  border: 1px solid rgba(255,255,255,0.14);\n  border-radius: 20px; padding: 28px 24px;\n  width: min(340px, 90vw);\n  text-align: center; color: #fff;\n}\n.argus-pin-card h3 {\n  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;\n}\n.argus-pin-card .pin-sub {\n  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;\n}\n.argus-pin-input {\n  width: 100%; box-sizing: border-box;\n  text-align: center; font-size: 1.6rem;\n  letter-spacing: 0.4em; padding: 12px;\n  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(255,255,255,0.07); color: #fff;\n  outline: none; margin-bottom: 14px;\n}\n.argus-numpad {\n  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;\n  margin-bottom: 12px;\n}\n.argus-numpad button {\n  padding: 14px; font-size: 1.15rem; font-weight: 700;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.14);\n  background: rgba(255,255,255,0.08); color: #fff;\n  cursor: pointer;\n  transition: background 0.15s, transform 0.1s;\n}\n.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }\n.argus-pin-actions {\n  display: flex; gap: 10px; margin-top: 4px;\n}\n.argus-pin-actions button {\n  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;\n  font-weight: 700; cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.15);\n  background: rgba(255,255,255,0.07); color: #fff;\n  transition: background 0.15s;\n}\n.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }\n\n@keyframes argus-shake {\n  0%, 100% { transform: translateX(0); }\n  20%       { transform: translateX(-8px); }\n  40%       { transform: translateX(8px); }\n  60%       { transform: translateX(-5px); }\n  80%       { transform: translateX(5px); }\n}\n@keyframes argus-overlay-out {\n  from { opacity: 1; }\n  to   { opacity: 0; }\n}\n\n.user-selector-grid {\n\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));\n  gap: 16px;\n  margin-top: 24px;\n}\n.user-card {\n  background: rgba(255,255,255,0.1);\n  border: 1px solid rgba(255,255,255,0.15);\n  border-radius: 16px;\n  padding: 20px 10px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 12px;\n}\n.user-card:hover {\n  background: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n.user-card-own {\n  border-color: rgba(0, 122, 255, 0.55);\n  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);\n}\n.user-card-own:hover {\n  border-color: rgba(0, 122, 255, 0.8);\n}\n.profile-own-badge {\n  font-size: 10px;\n  font-weight: 800;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n  color: #007aff;\n  background: rgba(0, 122, 255, 0.12);\n  border-radius: 999px;\n  padding: 2px 8px;\n  margin-top: -4px;\n}\n.user-role-label {\n  font-size: 11px;\n  opacity: 0.55;\n  font-weight: 600;\n  letter-spacing: 0.02em;\n}\n@keyframes shake {\n  0%, 100% { transform: translateX(0); }\n  20%, 60% { transform: translateX(-6px); }\n  40%, 80% { transform: translateX(6px); }\n}\n.user-avatar {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 20px;\n  font-weight: 600;\n  color: #fff;\n  border: 1px solid rgba(255,255,255,0.3);\n}\n.user-name {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255,255,255,0.9);\n}\n.pin-prompt {\n  display: none;\n  animation: fadeIn 0.3s ease forwards;\n  margin-top: 20px;\n}\n.pin-prompt input {\n  font-size: 24px;\n  letter-spacing: 8px;\n  text-align: center;\n  padding: 10px;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(0,0,0,0.2);\n  color: white;\n  width: 200px;\n  margin-bottom: 20px;\n}\n.btn-claim {\n  background: #ff3b30;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-claim:hover { background: #ff453a; }\n.btn-start {\n  background: #34c759;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-start:hover { background: #30d158; }\n.btn-cancel {\n  background: rgba(255,255,255,0.1);\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  margin-left: 10px;\n}\n\n/* Mobile background and HomeKit polish fixes (moved from runtime hack) */\n.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}\n.entry-icon{contain:layout!important}\n#global-status { display: none !important; }\n#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}\n.argus-instance-duplicate-status{display:none!important}\n.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}\n.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}\n.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}\n#w-activity{max-height:none!important;overflow:visible!important}\n.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;scrollbar-gutter:stable!important;-webkit-overflow-scrolling:touch;touch-action:pan-y}\n@media(max-width:760px){\n  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}\n  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}\n  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}\n  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}\n  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}\n  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}\n  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}\n  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}\n  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}\n  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}\n  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}\n  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}\n  #w-activity{max-height:none!important;overflow:visible!important}\n  .activity-log{max-height:46vh!important;overflow-y:auto!important}\n  .argus-mobile-history-overflow-item{display:list-item!important}\n  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}\n  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}\n  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}\n  .sos-actions button,.panic-actions button,[data-action*=\"sos\"],[data-action*=\"panic\"]{min-height:48px!important;touch-action:manipulation!important}\n  input[type=\"file\"]{max-width:100%!important;width:100%!important;color:#fff!important}\n}\n@media(orientation:landscape) and (max-height:560px) and (max-width:950px){\n  .hero{padding:14px!important;gap:10px!important}\n  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}\n  .hero-clock{width:auto!important;justify-items:start!important}\n  .hero-pills{justify-content:flex-start!important}\n}\n  /* border-radius + overflow already clip the glass card. Avoid a redundant\n     WebKit mask that can add another compositing surface during scroll. */\n  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: none; }\n\n/* Profile Frosted Glass & Jelly Spring Animation */\n@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}\n\n.console-sensor.sensor-arming-blink,\n.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}\n\n/* Keep sensor labels readable and keep the status word intact. */\n.security-console .console-sensor,\n.security-console .console-sensor-card { min-width: 0 !important; }\n.security-console .console-sensor-name {\n  min-width: 0 !important;\n  overflow-wrap: normal !important;\n  word-break: normal !important;\n  hyphens: none !important;\n  white-space: normal !important;\n}\n.security-console .console-sensor-state {\n  flex: 0 0 auto !important;\n  white-space: nowrap !important;\n}\n\n/* Wide spacious SOS selector */\n.emergency-number-card{transition:all 0.3s ease}\n.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}\n.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}\n.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}\n\n/* Initial Cold Boot Dark Curtain (Apple macOS boot aesthetic) */\n#argus-initial-curtain {\n  position: fixed;\n  inset: 0;\n  background: #000000;\n  z-index: 99998;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;\n}\n#argus-initial-curtain.curtain-hidden {\n  opacity: 0;\n  visibility: hidden;\n  pointer-events: none;\n}\n.argus-boot-container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  transform: translate3d(0, 0, 0);\n}\n.argus-boot-logo {\n  width: 96px;\n  height: 96px;\n  border-radius: 24px;\n  object-fit: cover;\n  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 45px rgba(56, 189, 248, 0.12);\n  animation: appleBootLogo 1.6s ease-in-out infinite alternate;\n}\n.argus-apple-progressbar {\n  width: 175px;\n  height: 4.5px;\n  border-radius: 999px;\n  background: rgba(255, 255, 255, 0.12);\n  margin-top: 36px;\n  overflow: hidden;\n  position: relative;\n  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.6);\n}\n.argus-apple-progressbar-fill {\n  height: 100%;\n  background: #ffffff;\n  border-radius: 999px;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 15%;\n  box-shadow: 0 0 8px rgba(255, 255, 255, 0.75);\n  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, box-shadow 0.3s ease;\n  will-change: width;\n}\n.argus-boot-status {\n  margin-top: 22px;\n  font-size: 11.5px;\n  font-weight: 500;\n  color: rgba(255, 255, 255, 0.55);\n  letter-spacing: 0.02em;\n  text-align: center;\n  min-height: 24px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 10px;\n  animation: argusBootFadeIn 0.3s ease;\n}\n.argus-boot-status.status-error {\n  color: #f87171;\n}\n.argus-boot-reload-btn {\n  background: rgba(255, 255, 255, 0.12);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  color: #ffffff;\n  font-size: 11px;\n  font-weight: 600;\n  padding: 3px 12px;\n  border-radius: 12px;\n  cursor: pointer;\n  transition: background 0.2s ease, border-color 0.2s ease;\n}\n.argus-boot-reload-btn:hover {\n  background: rgba(255, 255, 255, 0.22);\n  border-color: rgba(255, 255, 255, 0.4);\n}\n@keyframes appleBootLogo {\n  0% { transform: scale(1); opacity: 0.92; }\n  100% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.22)); }\n}\n@keyframes argusBootFadeIn {\n  from { opacity: 0; transform: translateY(4px); }\n  to { opacity: 1; transform: translateY(0); }\n}\n\n\n/* Profile selector responsive centering. */\n.argus-profile-overlay { box-sizing:border-box; min-height:100dvh; padding:clamp(20px,5vw,64px) clamp(14px,4vw,48px); }\n.argus-profile-overlay > div:first-child { width:min(100%, 920px); max-width:100%; box-sizing:border-box; }\n.argus-profile-grid { width:100%; max-width:100%; grid-template-columns:repeat(auto-fit, minmax(min(180px, 42vw), 220px)); justify-content:center; align-items:start; }\n.argus-profile-grid > .argus-profile-item:only-child { grid-column:1 / -1; justify-self:center; }\n@media (max-width:600px) and (orientation:portrait) {\n  .argus-profile-overlay { align-items:center; justify-content:center; overflow-y:auto; }\n  .argus-profile-grid { grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:clamp(14px,5vw,24px); padding:0; }\n  .argus-profile-grid > .argus-profile-item:only-child { grid-column:1 / -1; justify-self:center; width:min(100%, 220px); }\n}\n@media (max-width:380px) and (orientation:portrait) {\n  .argus-profile-grid { grid-template-columns:1fr; }\n}\n</style>\n\n<!-- Initial Cold Boot Apple macOS Screen -->\n<div id=\"argus-initial-curtain\">\n  <div class=\"argus-boot-container\">\n    <img class=\"argus-boot-logo\" src=\"/api/argus_static/argus_logo.png\" alt=\"Argus\" />\n    <div class=\"argus-apple-progressbar\">\n      <div id=\"argus-boot-fill\" class=\"argus-apple-progressbar-fill\"></div>\n    </div>\n    <div id=\"argus-boot-status\" class=\"argus-boot-status\" style=\"display:none;\"></div>\n  </div>\n</div>\n\n<!-- Bootstrap UI -->\n<div id=\"bootstrap-overlay\" class=\"argus-bootstrap-layer\" style=\"display:none\"></div>\n\n<!-- Language picker modal -->\n<div class=\"lang-modal-back\" id=\"lang-modal\" aria-hidden=\"true\">\n  <div class=\"lang-modal-card\">\n    <div class=\"lang-modal-title\" id=\"lang-modal-title\">🌐 Select Language</div>\n    <div class=\"lang-grid\" id=\"lang-grid\"></div>\n    <div class=\"lang-close-row\">\n      <button class=\"lang-close-btn\" id=\"lang-modal-close\">✕ Close</button>\n    </div>\n  </div>\n</div>\n\n<!-- Walk Test Modal -->\n<div class=\"walk-test-modal-back\" id=\"walk-test-modal\" aria-hidden=\"true\">\n  <div class=\"walk-test-modal-card\">\n    <div class=\"walk-test-header\">\n      <div class=\"walk-test-title\">🚶 <span id=\"walk-test-title-text\">Prueba de Sensores (Walk Test)</span></div>\n      <div class=\"walk-test-timer\" id=\"walk-test-timer\">15:00</div>\n    </div>\n    <p style=\"margin:0;font-size:12px;opacity:0.75;line-height:1.4\" id=\"walk-test-desc-text\">\n      Camina y activa cada sensor. No sonarán sirenas. Se emitirá un aviso sonoro por cada detector probado.\n    </p>\n    <div style=\"display:flex;flex-direction:column;gap:6px\">\n      <div style=\"display:flex;justify-content:space-between;font-size:11.5px;font-weight:700\">\n        <span id=\"walk-test-progress-text\">0 de 0 sensores verificados (0%)</span>\n        <span id=\"walk-test-status-badge\" style=\"color:#38bdf8\">En curso</span>\n      </div>\n      <div class=\"walk-test-progress-bar\">\n        <div class=\"walk-test-progress-fill\" id=\"walk-test-progress-fill\" style=\"width:0%\"></div>\n      </div>\n    </div>\n    <div class=\"walk-test-sensor-list\" id=\"walk-test-sensor-list\"></div>\n    <div style=\"display:flex;justify-content:flex-end;gap:10px;margin-top:4px\">\n      <button class=\"ghost\" id=\"walk-test-close-btn\" style=\"padding:9px 18px;border-radius:12px;font-size:12px;font-weight:700\">Cerrar</button>\n      <button class=\"primary\" id=\"walk-test-stop-btn\" style=\"padding:9px 20px;border-radius:12px;font-size:12px;font-weight:700;background:linear-gradient(135deg,#ef4444,#dc2626)\">Finalizar Prueba</button>\n    </div>\n  </div>\n</div>\n\n<!-- Sensor Delay Modal -->\n<div class=\"walk-test-modal-back\" id=\"sensor-delay-modal\" aria-hidden=\"true\">\n  <div class=\"walk-test-modal-card\" style=\"width:min(420px,92vw)\">\n    <div class=\"walk-test-header\">\n      <div class=\"walk-test-title\">⏱️ <span id=\"sensor-delay-modal-title\">Configurar retardo del sensor</span></div>\n    </div>\n    <div style=\"font-size:13px;font-weight:700;color:#38bdf8\" id=\"sensor-delay-modal-entity\">sensor.example</div>\n    <div style=\"display:flex;flex-direction:column;gap:12px;margin:8px 0\">\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"default\" id=\"delay-opt-default\" checked>\n        <span id=\"txt-delay-opt-default\">🌐 Heredar retardo global del modo</span>\n      </label>\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"instant\" id=\"delay-opt-instant\">\n        <span id=\"txt-delay-opt-instant\">⚡ Instantáneo (0s - Disparo inmediato)</span>\n      </label>\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"custom\" id=\"delay-opt-custom\">\n        <span id=\"txt-delay-opt-custom\">⏱️ Retardo personalizado</span>\n      </label>\n      <div id=\"delay-custom-input-wrap\" style=\"display:none;padding-left:26px;gap:8px;align-items:center\">\n        <input type=\"number\" id=\"sensor-delay-seconds-input\" min=\"1\" max=\"300\" value=\"30\" style=\"width:80px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px\">\n        <span style=\"font-size:12px;opacity:0.75\" id=\"txt-delay-seconds-label\">segundos</span>\n      </div>\n    </div>\n    <div style=\"display:flex;justify-content:flex-end;gap:10px;margin-top:6px\">\n      <button class=\"ghost\" id=\"sensor-delay-cancel-btn\" style=\"padding:8px 16px;border-radius:12px;font-size:12px\">Cancelar</button>\n      <button class=\"primary\" id=\"sensor-delay-save-btn\" style=\"padding:8px 20px;border-radius:12px;font-size:12px;font-weight:700\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- SOS Confirm Modal -->\n<div class=\"ios-confirm-backdrop\" id=\"sos-modal\" style=\"display:none\">\n  <div class=\"ios-confirm-card liquid-glass\" id=\"sos-card\" style=\"position:relative;\">\n    <button id=\"sos-close-x\" style=\"position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;\">✕</button>\n    <div class=\"ios-confirm-title\" id=\"sos-title-txt\">Confirmar pánico</div>\n    <div class=\"ios-confirm-text\" id=\"sos-text-txt\">Desliza para disparar la alarma inmediatamente.</div>\n    <div class=\"ios-slider-shell\">\n      <div class=\"ios-slider-track\">\n        <div class=\"ios-slider-label\" id=\"sos-label\">Desliza para activar SOS</div>\n        <div class=\"ios-slider-thumb\" id=\"sos-thumb\">🚨</div>\n      </div>\n    </div>\n    <button class=\"ios-confirm-cancel\" id=\"btn-cancel-sos\" style=\"margin-top:16px\">Cancelar</button>\n  </div>\n</div>\n\n\n<div id=\"argus-canvas-bg\"></div>\n\n\n<div class=\"wrap\" style=\"display:none !important;\">\n  <!-- HERO -->\n  <div class=\"glass hero liquid-glass\">\n    <div class=\"hero-left\">\n      <img src=\"/api/argus_static/argus_logo.png\" alt=\"Argus Logo\" style=\"width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;\">\n      <div>\n        <h1>Argus Home Hub</h1>\n        <p id=\"p-hero-desc\"></p>\n      </div>\n    </div>\n    <div class=\"hero-context\" aria-live=\"polite\">\n      <div class=\"hero-clock\"><strong id=\"hero-clock-time\">--:--</strong><span id=\"hero-clock-date\"></span></div>\n      <div id=\"hero-profile-container\"></div>\n    </div>\n  </div>\n\n  <!-- TWO-COLUMN LAYOUT -->\n  <div class=\"grid hide-legacy\" id=\"widget-grid\" data-layout-owner=\"react-v3-staging\">\n\n    <!-- Instances -->\n    <section class=\"glass panel liquid-glass dashboard-instances\" id=\"w-instances\" style=\"grid-column: 1 / -1;\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-instances\"></h2>\n          <div style=\"display:flex;align-items:center;gap:12px\">\n            <div id=\"global-status\"></div>\n          </div>\n        </div>\n        <div id=\"entries\"></div>\n      </section>\n\n      <!-- Activity log -->\n      <section class=\"glass panel liquid-glass activity-panel\" id=\"w-activity\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-activity-log\">📋 Historial de Actividad</h2>\n          <div class=\"panel-actions\">\n            <button class=\"ghost\" id=\"btn-refresh-history\" aria-label=\"Actualizar Historial\" title=\"Actualizar\">🔄 Actualizar</button>\n            <button class=\"ghost\" id=\"btn-export-forensic\" aria-label=\"Exportar Historial\" title=\"Exportar\">📄 Exportar</button>\n            <button class=\"ghost\" id=\"btn-clear-log\" aria-label=\"Limpiar Historial\" style=\"background:rgba(255,69,58,0.12);color:#ff453a !important\" title=\"Limpiar\">🗑️ Limpiar</button>\n          </div>\n        </div>\n        <div id=\"activity-log\" class=\"activity-log\" style=\"display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px\"></div>\n      </section>\n\n      <!-- Modes -->\n      <section class=\"glass panel liquid-glass modes-panel\" id=\"w-modes\">\n        <div class=\"panel-head\">\n           <h2 id=\"h-modes\"></h2>\n        </div>\n        <div class=\"tabs\" id=\"mode-tabs\" style=\"margin-bottom:15px\"></div>\n        <div id=\"mode-view\"></div>\n      </section>\n\n      <!-- Users & Master PIN Settings -->\n      <section class=\"glass panel liquid-glass access-panel\" id=\"w-access\">\n        <div class=\"panel-head\">\n          <div>\n            <h2 id=\"h-access-title\">Control de Acceso y Usuarios</h2>\n            <p class=\"access-summary\" id=\"p-access-desc\">PIN desactivado · Sin usuarios adicionales</p>\n          </div>\n        </div>\n\n        <div class=\"access-workspace\" id=\"access-workspace\" style=\"display:contents\">\n          <!-- Users -->\n          <div class=\"access-section\" id=\"access-users-section\">\n            <h3 id=\"h-users\"></h3>\n            <p class=\"small\" id=\"p-admin-only\" style=\"margin-bottom:14px;color:#fb8c00;font-weight:600\"></p>\n            <div id=\"users-list\" style=\"display:grid;gap:12px;margin-bottom:16px\"></div>\n          </div>\n\n          <!-- Notifications -->\n          <div class=\"access-section\" id=\"access-notifications-section\">\n            <h3 id=\"h-notifications\"></h3>\n            <p class=\"small\" id=\"p-notif-desc\" style=\"margin:0 0 12px;opacity:.72\"></p>\n            <div id=\"notif-targets\" style=\"display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px\"></div>\n            <div style=\"display:flex;gap:8px;align-items:center\">\n              <select id=\"notif-select\" class=\"glass-control\" style=\"flex:1;min-width:0\"></select>\n              <button type=\"button\" class=\"ghost\" id=\"btn-add-notif\" style=\"white-space:nowrap\">＋</button>\n            </div>\n            <div class=\"save-row\" style=\"margin-top:12px\">\n              <button class=\"primary\" id=\"btn-save-notif\" style=\"width:100%\"></button>\n            </div>\n            <div id=\"notif-status\" class=\"status\" style=\"margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px\"></div>\n          </div>\n\n        </div>\n      </section>\n\n      <!-- Automations -->\n                <!-- Master PIN -->\n          <div id=\"access-pin-settings\" style=\"position:fixed;inset:0;z-index:999999999;display:none;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)\" aria-hidden=\"true\">\n            <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"h-settings-pin\" style=\"position:relative;width:min(380px,90vw);max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;background:rgba(30,30,45,.96);color:white;border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:28px 24px 22px;box-shadow:0 24px 64px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)\">\n            <h3 id=\"h-settings-pin\" style=\"margin:0;font-size:16px;font-weight:700\">PIN de armado</h3>\n            <div class=\"subsection\" style=\"padding:0;margin:0\">\n              <div id=\"current-pin-display\" style=\"font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block\"></div>\n              <div class=\"field-group collapsible collapsed\" id=\"group-current-pin\" style=\"margin-bottom: 12px\">\n                 <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n                   <label id=\"l-current-pin-lbl\"></label>\n                   <a href=\"#\" id=\"lnk-forgot-pin\" style=\"font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;\"></a>\n                 </div>\n                 <input type=\"password\" id=\"current-pin\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\">\n              </div>\n              <p class=\"small\" id=\"p-pin-remove-hint\" style=\"margin:0 0 10px 0; color:var(--primary-color); font-weight:700\">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>\n              <div style=\"display:grid;gap:10px\">\n                <div class=\"field-group\"><label id=\"l-new-pin\"></label><input type=\"password\" id=\"new-pin-1\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n                <div class=\"field-group\"><label id=\"l-confirm-pin\"></label><input type=\"password\" id=\"new-pin-2\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n              </div>\n              <div class=\"save-row\" style=\"margin-top:15px\">\n                <button class=\"primary\" id=\"btn-save-pin\" style=\"width:100%\"></button>\n              </div>\n              <div id=\"pin-status\" class=\"status\" style=\"margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;\"></div>\n            </div>\n            <button type=\"button\" id=\"btn-close-arming-pin\" class=\"secondary\" style=\"width:100%;min-height:42px\">Cancelar</button>\n            </div>\n          </div>\n\n<section class=\"glass panel liquid-glass automations-panel\" id=\"w-automations\">\n        <h2 id=\"h-automations\"></h2>\n        <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\">\n          <span class=\"small\" id=\"p-linked-rules\" style=\"opacity:0.7\"></span>\n          <button class=\"primary\" id=\"btn-new-auto\" style=\"padding:6px 12px;font-size:11px\"></button>\n        </div>\n        <div id=\"auto-view\"></div>\n      </section>\n\n      <!-- Backup & Restore -->\n      <section class=\"glass panel liquid-glass backup-panel\" id=\"w-backup\">\n        <h2 id=\"h-backup-title\">Respaldo y Restauración</h2>\n        <p class=\"small\" id=\"p-backup-desc\" style=\"margin-bottom:12px;opacity:0.7\">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>\n        <div style=\"display:flex;gap:10px;align-items:center;\">\n          <button class=\"ghost\" id=\"btn-export-config\" style=\"flex:1\">📤 Descargar</button>\n          <div style=\"position:relative; flex:1\">\n            <button class=\"ghost\" style=\"width:100%\" id=\"btn-import-trigger\">📥 Restaurar</button>\n            <input type=\"file\" id=\"import-config-file\" style=\"display:none\" accept=\".json,.argus,application/json\">\n          </div>\n          <button class=\"ghost danger\" id=\"btn-reset-config\" style=\"flex:1\">⚠️ Restablecer</button>\n          <button class=\"primary\" id=\"btn-undo-reset\" style=\"flex:1; display:none;\">↩️ Deshacer</button>\n        </div>\n      </section>\n\n      <!-- GitHub Opt-In -->\n      <section class=\"glass panel liquid-glass github-panel\" id=\"w-github\">\n        <div class=\"github-header\">\n          <h3 id=\"github-title\" style=\"margin:0; font-size:14px; font-weight:700\"></h3>\n          <p id=\"github-desc\" style=\"margin:4px 0 0; font-size:12px; opacity:0.75\"></p>\n        </div>\n        <div class=\"support-actions-grid\">\n          <a id=\"github-action\" class=\"support-link-btn star\" href=\"https://github.com/Chrisalvir1/Argus\" target=\"_blank\" rel=\"noopener noreferrer\">⭐ GitHub</a>\n          <a id=\"paypal-action\" class=\"support-link-btn paypal\" href=\"https://paypal.me/CEstradaAlvir\" target=\"_blank\" rel=\"noopener noreferrer\">☕ PayPal</a>\n          <a id=\"email-action\" class=\"support-link-btn email\" href=\"mailto:chrisalvir01@gmail.com\">✉️ Sugerencias</a>\n        </div>\n      </section>\n\n  </div> <!-- /grid -->\n</div>\n\n<!-- Selector modal (dual-panel) -->\n<div class=\"modal-back\" id=\"selector-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"selector-title\">Seleccionar</h3>\n      <button class=\"ghost\" id=\"selector-close\"></button>\n    </div>\n    <div class=\"modal-body\" style=\"overflow:hidden;display:flex;flex-direction:column;gap:10px\">\n      <div class=\"sel-grid\">\n        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-available\">Disponibles</div>\n          <div class=\"search-wrap\" style=\"margin:0\"><input id=\"selector-search\" type=\"search\" placeholder=\"Buscar...\"></div>\n          <div class=\"sel-actions\">\n            <button class=\"ghost\" id=\"selector-select-all\" style=\"padding:5px 10px;font-size:12px\">☑ Todos</button>\n            <button class=\"ghost\" id=\"selector-deselect-all\" style=\"padding:5px 10px;font-size:12px\">☐ Ninguno</button>\n          </div>\n          <div class=\"sel-panel-inner\" id=\"selector-list\"></div>\n        </div>\n        <!-- RIGHT: panel de seleccionados -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-selected-lbl\">Seleccionados</div>\n          <div class=\"small\" id=\"selector-count\" style=\"margin-bottom:4px\">0 seleccionados</div>\n          <div class=\"sel-panel-inner\" id=\"selector-selected\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <div style=\"display:flex;gap:10px;width:100%;justify-content:flex-end\">\n        <button class=\"ghost\" id=\"selector-clear\"></button>\n        <button class=\"primary\" id=\"selector-accept\"></button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Home name edit modal -->\n<div class=\"modal-back\" id=\"home-name-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"width:min(400px,96vw)\">\n    <div class=\"modal-head\">\n      <h3 id=\"home-name-modal-h3\">🏡 Nombre del Hogar</h3>\n      <button class=\"ghost\" id=\"home-name-modal-close\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:4px 0\">\n      <p class=\"small\" id=\"home-name-modal-desc\" style=\"margin:0;opacity:.7\">This name appears in the instances panel and in full screen.</p>\n      <div class=\"field-group\">\n        <label id=\"l-home-name-modal-label\">Home name</label>\n        <input type=\"text\" id=\"home-name-input\" placeholder=\"Mi Casa\" maxlength=\"60\" autocomplete=\"off\" class=\"glass-control\">\n      </div>\n      <span class=\"status\" id=\"home-name-status\" style=\"text-align:center\"></span>\n    </div>\n    <div class=\"modal-footer\">\n      <button class=\"ghost\" id=\"home-name-cancel\">Cancelar</button>\n      <button class=\"primary\" id=\"home-name-save\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- PIN modal -->\n<div class=\"modal-back pm\" id=\"pin-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"l-introduce-pin\">🔒</h3>\n      <button class=\"ghost\" id=\"pin-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:10px;width:100%\">\n      <p id=\"l-pin-modal-desc\" class=\"small\" style=\"text-align:center;margin:0;opacity:0.75\"></p>\n      <input id=\"pin-input\" class=\"pin-input\" type=\"password\" inputmode=\"numeric\" pattern=\"[0-9]*\" placeholder=\"••••\" autocomplete=\"off\" maxlength=\"12\" readonly>\n      <div class=\"pin-grid\" id=\"pin-pad\">\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"1\">1</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"2\">2</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"3\">3</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"4\">4</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"5\">5</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"6\">6</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"7\">7</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"8\">8</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"9\">9</button>\n        <button class=\"pin-btn-round action-key delete-key\" type=\"button\" id=\"pin-backspace\">Borrar</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"0\">0</button>\n        <button class=\"pin-btn-round action-key enter-key\" type=\"button\" id=\"pin-confirm\">Enter</button>\n      </div>\n      <div id=\"pin-error\" class=\"pin-error\" role=\"status\" aria-live=\"polite\"></div>\n      <div style=\"text-align:center; margin-top: 5px;\">\n        <a href=\"#\" id=\"pin-forgot-link\" style=\"font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;\"></a>\n      </div>\n    </div>\n    <button id=\"pin-cancel\" style=\"display:none\"></button>\n  </div>\n</div>\n\n<!-- History Export modal -->\n<div class=\"modal-back pm\" id=\"history-export-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"max-width: 440px;\">\n    <div class=\"modal-head\">\n      <h3 id=\"h-history-export-title\">📄 Exportar Historial</h3>\n      <button class=\"ghost\" id=\"history-export-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:6px 0\">\n      <p class=\"small\" id=\"p-history-export-desc\" style=\"margin:0;opacity:.75\">Selecciona el rango de fechas para descargar el reporte.</p>\n      <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\">\n        <div class=\"field-group\">\n          <label id=\"l-history-export-from\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Desde</label>\n          <input type=\"date\" id=\"export-history-from\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n        <div class=\"field-group\">\n          <label id=\"l-history-export-to\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Hasta</label>\n          <input type=\"date\" id=\"export-history-to\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;margin-top:6px;\">\n        <button class=\"primary\" id=\"btn-do-download-pdf\" style=\"height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)\">\n          ⬇️ Descargar PDF\n        </button>\n        <button class=\"glass-control\" id=\"btn-do-download-txt\" style=\"height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)\">\n          📑 Descargar reporte (.txt)\n        </button>\n        <button class=\"ghost\" id=\"btn-do-download-json\" style=\"height:36px;font-size:11px;cursor:pointer;opacity:0.75\">\n          💾 Descargar JSON sin procesar\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n";
-var re = class extends HTMLElement {
+}, V = document.createElement("template");
+V.innerHTML = "\n<style>\n:host {\n  display: block;\n  background: #080d1a;\n  color: #fff;\n  min-height: 100vh;\n  font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n}\n:host:not(:defined) {\n  display: none !important;\n}\n\n#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }\n#widget-grid[data-layout-owner=\"react-v3-staging\"] { display: block !important; grid-template-columns: none !important; gap: 0 !important; }\n#widget-grid[data-layout-owner=\"react-v3-staging\"] > section.panel:not(#w-instances) { display: none !important; }\n\n@keyframes heroSpringSlideIn {\n  0% { transform: translateX(-50px); opacity: 0; }\n  100% { transform: translateX(0); opacity: 1; }\n}\n\n  /* Modern Premium Liquid Glass & iOS Wobble Styles */\n  :host {\n    font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));\n    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));\n    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),\n                    0 15px 30px -10px rgba(0, 122, 255, 0.12),\n                    inset 0 1px 0 rgba(255, 255, 255, 0.15);\n    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);\n    --ios-track: rgba(0, 0, 0, 0.25);\n    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);\n    --primary-color: #38bdf8;\n    --personalize-border: rgba(255, 255, 255, 0.06);\n    --personalize-divider: rgba(255, 255, 255, 0.08);\n    --bg-inputs-bg: rgba(0, 0, 0, 0.15);\n    --bg-inputs-border: rgba(255, 255, 255, 0.05);\n    --input-bg-darker: rgba(0, 0, 0, 0.25);\n    --input-border-darker: rgba(255, 255, 255, 0.12);\n    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));\n    --log-item-bg: rgba(255, 255, 255, 0.02);\n    --log-item-border: rgba(255, 255, 255, 0.05);\n    --user-card-bg: rgba(255, 255, 255, 0.02);\n    --user-card-border: rgba(255, 255, 255, 0.06);\n    --primary-text-color: #fff !important;\n    --secondary-text-color: rgba(255, 255, 255, 0.7);\n    --input-bg: rgba(255, 255, 255, 0.04);\n    --input-border: rgba(255, 255, 255, 0.12);\n  }\n\n  /* High Contrast / OLED Dark Mode Accessibility */\n  :host([argus-contrast=\"high\"]),\n  :host(.argus-contrast-high) {\n    --glass-bg: rgba(11, 16, 26, 0.95);\n    --glass-border: rgba(255, 255, 255, 0.22);\n    --v2066-glass: rgba(11, 16, 26, 0.95);\n    --v2066-border: rgba(255, 255, 255, 0.22);\n    --v2066-text: #ffffff;\n    --v2066-muted: #cbd5e1;\n    --primary-text-color: #ffffff !important;\n    --secondary-text-color: #cbd5e1 !important;\n    --hud-bg: rgba(11, 16, 26, 0.98);\n    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));\n    --personalize-bg: rgba(11, 16, 26, 0.92);\n    --personalize-border: rgba(255, 255, 255, 0.2);\n    --user-card-bg: rgba(14, 20, 33, 0.95);\n    --user-card-border: rgba(255, 255, 255, 0.2);\n  }\n  :host([argus-contrast=\"high\"]) #profile-dropdown,\n  :host(.argus-contrast-high) #profile-dropdown {\n    background: rgba(10, 14, 23, 0.98) !important;\n    border: 1px solid rgba(255, 255, 255, 0.25) !important;\n    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;\n  }\n  :host([argus-contrast=\"high\"]) .liquid-glass,\n  :host(.argus-contrast-high) .liquid-glass {\n    background: rgba(11, 16, 26, 0.95) !important;\n    border-color: rgba(255, 255, 255, 0.22) !important;\n  }\n  :host([argus-contrast=\"high\"]) .glass,\n  :host(.argus-contrast-high) .glass,\n  :host([argus-contrast=\"high\"]) .mode-section-card,\n  :host(.argus-contrast-high) .mode-section-card,\n  :host([argus-contrast=\"high\"]) .access-section,\n  :host(.argus-contrast-high) .access-section,\n  :host([argus-contrast=\"high\"]) .user-card,\n  :host(.argus-contrast-high) .user-card,\n  :host([argus-contrast=\"high\"]) .log-item,\n  :host(.argus-contrast-high) .log-item,\n  :host([argus-contrast=\"high\"]) .security-context,\n  :host(.argus-contrast-high) .security-context,\n  :host([argus-contrast=\"high\"]) .context-zone-picker,\n  :host(.argus-contrast-high) .context-zone-picker,\n  :host([argus-contrast=\"high\"]) .context-sensor-row,\n  :host(.argus-contrast-high) .context-sensor-row,\n  :host([argus-contrast=\"high\"]) .context-sensor-card,\n  :host(.argus-contrast-high) .context-sensor-card,\n  :host([argus-contrast=\"high\"]) .subsection,\n  :host(.argus-contrast-high) .subsection,\n  :host([argus-contrast=\"high\"]) .mode-sensor-none,\n  :host(.argus-contrast-high) .mode-sensor-none {\n    background-color: #0b101a !important;\n    background-image: none !important;\n    border-color: #8793a5 !important;\n    color: #ffffff !important;\n    box-shadow: none !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n  }\n  :host([argus-contrast=\"high\"]) .glass.panel,\n  :host(.argus-contrast-high) .glass.panel,\n  :host([argus-contrast=\"high\"]) .entry:not(:has(.security-console)),\n  :host(.argus-contrast-high) .entry:not(:has(.security-console)),\n  :host([argus-contrast=\"high\"]) .entry-content:not(.security-console):not(:has(.security-console)),\n  :host(.argus-contrast-high) .entry-content:not(.security-console):not(:has(.security-console)),\n  :host([argus-contrast=\"high\"]) .glass.panel:not(:has(.security-console)),\n  :host(.argus-contrast-high) .glass.panel:not(:has(.security-console)) {\n    color: #ffffff !important;\n    background-color: #080c13 !important;\n    background-image: none !important;\n    border-color: #8793a5 !important;\n    box-shadow: none !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n  }\n  :host([argus-contrast=\"high\"]) .glass :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .glass :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .mode-section-card :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .mode-section-card :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .access-section :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .access-section :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .security-context :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .security-context :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host([argus-contrast=\"high\"]) .context-sensor-row :is(h1,h2,h3,h4,p,label,span,strong,small),\n  :host(.argus-contrast-high) .context-sensor-row :is(h1,h2,h3,h4,p,label,span,strong,small) {\n    color: #ffffff !important;\n    opacity: 1 !important;\n    text-shadow: none !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(input,select,textarea,button,.ghost,.primary,.glass-control),\n  :host(.argus-contrast-high) :is(input,select,textarea,button,.ghost,.primary,.glass-control) {\n    color: #ffffff !important;\n    border-color: #aab4c2 !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(input,select,textarea,.glass-control),\n  :host(.argus-contrast-high) :is(input,select,textarea,.glass-control) {\n    background-color: #080c13 !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(button,.ghost):not(.primary):not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):not(.active):not(.tab.active):not(.zone-choice.is-selected):not([aria-pressed=\"true\"]),\n  :host(.argus-contrast-high) :is(button,.ghost):not(.primary):not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):not(.active):not(.tab.active):not(.zone-choice.is-selected):not([aria-pressed=\"true\"]) {\n    background-color: #1a2230 !important;\n  }\n  :host([argus-contrast=\"high\"]) :is(button,input,select,textarea,[tabindex]):focus-visible,\n  :host(.argus-contrast-high) :is(button,input,select,textarea,[tabindex]):focus-visible {\n    outline: 3px solid #7dd3fc !important;\n    outline-offset: 2px !important;\n  }\n  :host([argus-contrast=\"high\"]) .log-item--armed .log-icon,\n  :host(.argus-contrast-high) .log-item--armed .log-icon { border-color: #fbbf24 !important; }\n  :host([argus-contrast=\"high\"]) .log-item--disarmed .log-icon,\n  :host(.argus-contrast-high) .log-item--disarmed .log-icon { border-color: #4ade80 !important; }\n  :host([argus-contrast=\"high\"]) .log-item--triggered .log-icon,\n  :host(.argus-contrast-high) .log-item--triggered .log-icon { border-color: #fb7185 !important; }\n\n  :host {\n    --hud-text-color: #fff;\n    --hud-bg: rgba(255,255,255,0.06);\n  }\n\n  /* Garantiza legibilidad sobre cualquier fondo */\n  :host([data-bg-mode=\"default\"]) .hero-top-bar,\n  :host([data-bg-mode=\"default\"]) .entry-hud,\n  :host([data-bg-mode=\"default\"]) .mode-btn,\n  :host([data-bg-mode=\"default\"]) .sensor-pill {\n    text-shadow: 0 1px 4px rgba(0,0,0,0.7);\n  }\n\n  :host([data-bg-mode=\"default\"]) .mode-btn {\n    background: rgba(255,255,255,0.10) !important;\n    border: 1px solid rgba(255,255,255,0.18) !important;\n    color: rgba(255,255,255,0.95) !important;\n    backdrop-filter: blur(12px);\n  }\n\n  :host([data-bg-mode=\"default\"]) .subsection-title,\n  :host([data-bg-mode=\"default\"]) .user-role-label {\n    color: rgba(255,255,255,0.60) !important;\n  }\n\n  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */\n  :host(.fullscreen-active) {\n    position: fixed !important;\n    inset: 0 !important;\n    top: 0 !important;\n    left: 0 !important;\n    right: 0 !important;\n    bottom: 0 !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    height: 100vh !important;\n    height: 100dvh !important;\n    z-index: 99999999 !important;\n    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;\n    overflow-y: auto !important;\n    overflow-x: hidden !important;\n    -webkit-overflow-scrolling: touch !important;\n    margin: 0 !important;\n    padding: 0 !important;\n  }\n  /* WebKit repaints background-attachment:fixed while rubber-band scrolling.\n     Keep the wallpaper on its own viewport-fixed layer instead of the HA host. */\n  :host(.fullscreen-active) #argus-canvas-bg {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .hero,\n  :host(.fullscreen-active) #argus-dashboard-root-v3,\n  :host(.fullscreen-active) .argus-dashboard,\n  :host(.fullscreen-active) .panel-head,\n  :host(.fullscreen-active) section:not(#w-instances),\n  :host(.fullscreen-active) .argus-widget:not(#w-instances),\n  :host(.fullscreen-active) .personalize-section {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .wrap,\n  :host(.fullscreen-active) .grid,\n  :host(.fullscreen-active) #widget-grid,\n  :host(.fullscreen-active) #w-instances,\n  :host(.fullscreen-active) #entries,\n  :host(.fullscreen-active) #entries > div {\n    display: flex !important;\n    flex-direction: column !important;\n    position: static !important;\n    width: 100% !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    max-width: none !important;\n    min-height: 100% !important;\n    min-height: 100vh !important;\n    min-height: 100dvh !important;\n    height: 100% !important;\n    max-height: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    border: none !important;\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    background: transparent !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n    transform: none !important;\n    filter: none !important;\n    overflow: visible !important;\n  }\n\n\n\n  .liquid-glass {\n    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));\n    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    border: 1px solid rgba(255,255,255,0.22);\n    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;\n  }\n  .wrap {\n    display: none !important;\n    position: relative;\n    z-index: 1;\n    opacity: 0;\n    visibility: hidden;\n    pointer-events: none;\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 24px;\n    gap: 24px;\n    transition: opacity 0.35s ease, filter 0.35s ease;\n  }\n  .wrap.wrap-ready {\n    display: grid !important;\n    opacity: 1 !important;\n    visibility: visible !important;\n    pointer-events: auto !important;\n  }\n  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; visibility: visible; pointer-events: none; }\n  @keyframes dialElasticIn {\n    0% { transform: scale(0.8) translateY(20px); opacity: 0; }\n    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }\n    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }\n    100% { transform: scale(1) translateY(0); opacity: 1; }\n  }\n  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }\n  @keyframes dialElasticOut {\n    0% { transform:scale(1); opacity:1 }\n    55% { transform:scale(1.035); opacity:.9 }\n    100% { transform:scale(.88); opacity:0 }\n  }\n  .pm.pin-closing .modal { animation:dialElasticOut .22s cubic-bezier(.4,0,.8,.4) forwards; }\n  @keyframes pinReject { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }\n  .pm .modal.pin-rejected { animation:pinReject .24s ease-in-out; }\n\n  .collapsible {\n    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;\n    overflow: hidden;\n    max-height: 600px;\n    opacity: 1;\n  }\n  .collapsible.collapsed {\n    max-height: 0 !important;\n    opacity: 0 !important;\n    margin-top: 0 !important;\n    margin-bottom: 0 !important;\n    padding-top: 0 !important;\n    padding-bottom: 0 !important;\n    border: none !important;\n    pointer-events: none;\n  }\n\n  /* Scrollbar aesthetics */\n  ::-webkit-scrollbar {\n    width: 6px;\n    height: 6px;\n  }\n  ::-webkit-scrollbar-track {\n    background: transparent;\n  }\n  ::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.12);\n    border-radius: 999px;\n  }\n  ::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.25);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.08);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb:hover {\n    background: rgba(0, 0, 0, 0.18);\n  }\n\n  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }\n\n  /* SOS Slider redesign */\n  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }\n  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }\n  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }\n  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }\n  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }\n  .ios-confirm-backdrop.open * { pointer-events: auto; }\n  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }\n  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }\n  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }\n  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }\n  .ios-slider-shell { padding: 4px 0 16px; }\n  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }\n  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }\n  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }\n  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }\n  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }\n  .ios-confirm-cancel:active { transform: scale(0.96); }\n\n  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}\n  :host([compact]), :host(.argus-compact) {\n    min-height: auto !important;\n    height: auto !important;\n    max-height: none !important;\n    background: transparent !important;\n  }\n  :host([compact]) .wrap, :host(.argus-compact) .wrap {\n    padding: 0 !important;\n    margin: 0 !important;\n    max-width: 100% !important;\n    width: 100% !important;\n    height: auto !important;\n    min-height: fit-content !important;\n    gap: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    container-type: inline-size;\n    container-name: argus-compact-wrap;\n  }\n  :host([compact]) .hero, :host(.argus-compact) .hero {\n    display: none !important;\n  }\n  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {\n    display: none !important;\n  }\n  /* The compact card renders the live security console directly. The React\n     dashboard grid is a secondary editor surface and can retain persisted\n     widget coordinates (thousands of pixels tall) even while hidden. */\n  :host([compact]) #argus-dashboard-root-v3,\n  :host(.argus-compact) #argus-dashboard-root-v3 {\n    display: none !important;\n    height: 0 !important;\n    min-height: 0 !important;\n    max-height: 0 !important;\n    overflow: hidden !important;\n  }\n  :host([compact]) .tabs, :host(.argus-compact) .tabs {\n    display: none !important;\n  }\n  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {\n    display: none !important;\n  }\n  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {\n    display: none !important;\n  }\n  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {\n    display: none !important;\n  }\n  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {\n    display: none !important;\n  }\n  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {\n    padding: 0 !important;\n    margin: 0 !important;\n    display: block !important;\n    height: auto !important;\n  }\n  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) .entry, :host(.argus-compact) .entry {\n    margin-bottom: 0 !important;\n    border-radius: 24px !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,\n  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,\n  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {\n    height: auto !important;\n    width: 100% !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n  }\n  :host([compact]) #entries, :host(.argus-compact) #entries {\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    height: auto !important;\n    width: 100% !important;\n    margin: 0 !important;\n    overflow: visible !important;\n  }\n  /* Embedded Lovelace cards must size to their content, never to the viewport. */\n  :host([compact]) .argus-widget__content,\n  :host(.argus-compact) .argus-widget__content,\n  :host([compact]) #entries,\n  :host(.argus-compact) #entries,\n  :host([compact]) #w-instances,\n  :host(.argus-compact) #w-instances,\n  :host([compact]) .entry,\n  :host(.argus-compact) .entry {\n    height: auto !important;\n    min-height: 0 !important;\n    max-height: none !important;\n    flex: 0 0 auto !important;\n  }\n  *{box-sizing:border-box}\n  @container argus-compact-wrap (max-width: 800px) {\n    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }\n    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }\n    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }\n    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }\n    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }\n    .sensor-chip { max-width: none !important; }\n    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }\n    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }\n  }\n  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}\n  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}\n  .glass,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}\n  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}\n  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}\n  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}\n  .wrap{max-width:1400px;margin:0 auto;padding:24px;gap:24px}\n  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}\n  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}\n  .hero-left{display:flex;align-items:center;gap:22px}\n  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}\n  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}\n  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;width:min(420px, calc(100vw - 24px))!important;min-width:320px!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}\n  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}\n  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}\n  .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}\n  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}\n\n  /* Modern Mode Navigation & iOS/macOS Liquid Bubble Transition */\n  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); z-index: 1; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.25); }\n  .tabs::-webkit-scrollbar { display: none; }\n  .tab { position: relative; flex: 1 1 0px; min-width: 0; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }\n  .tab-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }\n  .tab:hover { color: #fff; }\n  .tab:active:not(:disabled) { transform: scale(0.92); }\n  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }\n\n  .tab-bubble {\n    position: absolute;\n    top: 6px;\n    bottom: 6px;\n    left: 0;\n    height: calc(100% - 12px);\n    border-radius: 14px;\n    z-index: 1;\n    pointer-events: none;\n    will-change: transform, width, background, box-shadow;\n    backdrop-filter: blur(20px) saturate(180%);\n    -webkit-backdrop-filter: blur(20px) saturate(180%);\n    border: 1px solid rgba(255, 255, 255, 0.32);\n    transition:\n      transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),\n      width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),\n      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),\n      box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);\n  }\n  .tab-bubble.bubble-disarmed {\n    background: linear-gradient(135deg, rgba(34, 197, 94, 0.95), rgba(21, 128, 61, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(34, 197, 94, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-home {\n    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(245, 158, 11, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-away {\n    background: linear-gradient(135deg, rgba(168, 85, 247, 0.96), rgba(126, 34, 206, 0.94));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(168, 85, 247, 0.48), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-night {\n    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(59, 130, 246, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-sos {\n    background: linear-gradient(135deg, rgba(220, 38, 38, 0.98), rgba(153, 27, 27, 0.95));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(220, 38, 38, 0.55), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n\n\n  @keyframes bounceIn {\n    0% { transform: scale(0.96); opacity: 0; }\n    50% { transform: scale(1.01); opacity: 1; }\n    100% { transform: scale(1); opacity: 1; }\n  }\n  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }\n\n  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}\n  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}\n  .panel[data-size=\"S\"]{grid-column:span 1;grid-row:span 1}\n  .panel[data-size=\"M\"]{grid-column:span 2;grid-row:span 1}\n  .panel[data-size=\"L\"]{grid-column:span 2;grid-row:span 2}\n  .panel[data-size=\"XL\"]{grid-column:span 4;grid-row:span 2}\n  .dashboard-instances{grid-column:1 / -1}\n  \n  /* Edit Mode Styles */\n  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}\n  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}\n  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}\n  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}\n  \n  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}\n  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}\n  \n  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}\n  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}\n  .widget-sizes{display:flex;gap:6px}\n  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}\n  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}\n  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}\n  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}\n  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}\n  \n  @keyframes jiggle{\n    0%{transform:rotate(-0.5deg)}\n    50%{transform:rotate(0.5deg)}\n    100%{transform:rotate(-0.5deg)}\n  }\n  @media(max-width:900px){\n    .grid{grid-template-columns:minmax(0,1fr)}\n    .panel[data-size=\"S\"],.panel[data-size=\"M\"],.panel[data-size=\"L\"],.panel[data-size=\"XL\"]{grid-column:1 / -1;grid-row:auto}\n    .grid.editing .panel{animation:none !important}\n  }\n  \n  /* Adaptivity styles for size S widgets */\n  .panel[data-size=\"S\"] .tab-label{display:none}\n  .panel[data-size=\"S\"] .tab-icon{font-size:24px !important}\n  .panel[data-size=\"S\"] #p-backup-desc{display:none}\n  .panel[data-size=\"S\"] #github-desc{display:none}\n\n  /* Collapsible Personalization with Bounce expansion */\n  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}\n  .personalize-workspace > div { overflow:hidden; min-height:0; }\n  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}\n  @keyframes bounceExpand{\n    0%{transform:scale(0.96) translateY(-8px);opacity:0}\n    70%{transform:scale(1.01) translateY(2px);opacity:0.9}\n    100%{transform:scale(1) translateY(0);opacity:1}\n  }\n  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}\n  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}\n\n  .stack{display:grid;gap:24px}\n  .panel{padding:28px;position:relative;overflow:hidden}\n  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\n  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.04em;color:var(--primary-color,#38bdf8);opacity:1}\n\n  /* Access settings stay quiet until the user needs to manage them. */\n  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }\n  .access-panel .panel-head { margin-bottom: 12px; }\n  .access-summary { font-size: 12px; opacity: .88; color: #cbd5e1; }\n  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }\n  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:12px; font-weight:700; }\n  .access-actions button.active { background:var(--primary-color,#38bdf8); color:#0f172a; font-weight:800; border-color:transparent; }\n  .access-section { display:block; min-width:0; margin-bottom:24px; }\n  .access-section h3 { font-size:13px; font-weight:800; color: #f1f5f9; margin:0 0 10px; }\n  .access-panel .user-card { padding:10px 12px; border-radius:12px; }\n  .github-star-action {\n    display:inline-flex;align-items:center;justify-content:center;gap:7px;\n    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;\n    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;\n    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));\n    border:1px solid rgba(255,255,255,.16);\n    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);\n    backdrop-filter:blur(18px) saturate(150%);\n    -webkit-backdrop-filter:blur(18px) saturate(150%);\n    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;\n  }\n  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }\n\n  /* Profile Dropdown Buttons & Setting Tiles */\n  .profile-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    width: auto !important;\n    min-height: 34px !important;\n    padding: 6px 14px !important;\n    border-radius: 10px !important;\n    font-size: 12px !important;\n    font-weight: 750 !important;\n    cursor: pointer !important;\n    box-sizing: border-box !important;\n    white-space: nowrap !important;\n    flex-shrink: 0 !important;\n    background: rgba(255, 255, 255, 0.08) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    color: #ffffff !important;\n    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .profile-btn:hover {\n    background: rgba(255, 255, 255, 0.15) !important;\n    border-color: rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-1px) !important;\n  }\n  .profile-btn.primary {\n    background: rgba(52, 211, 153, 0.14) !important;\n    border-color: rgba(52, 211, 153, 0.35) !important;\n    color: #34d399 !important;\n  }\n  .profile-btn.primary:hover {\n    background: rgba(52, 211, 153, 0.24) !important;\n  }\n  .profile-btn.danger {\n    background: rgba(239, 68, 68, 0.14) !important;\n    border-color: rgba(239, 68, 68, 0.35) !important;\n    color: #f87171 !important;\n  }\n  .profile-btn.danger:hover {\n    background: rgba(239, 68, 68, 0.24) !important;\n  }\n  .profile-card-tile {\n    display: flex !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 12px !important;\n    padding: 10px 14px !important;\n    background: rgba(255, 255, 255, 0.035) !important;\n    border: 1px solid rgba(255, 255, 255, 0.08) !important;\n    border-radius: 14px !important;\n    box-sizing: border-box !important;\n    width: 100% !important;\n  }\n\n  /* Activity log responsive header */\n  .activity-panel .panel-head {\n    display: flex !important;\n    flex-wrap: wrap !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 8px 12px !important;\n    margin-bottom: 12px !important;\n    width: 100% !important;\n    box-sizing: border-box !important;\n  }\n  .activity-panel .panel-head h2 {\n    white-space: nowrap !important;\n    font-size: 15px !important;\n    font-weight: 850 !important;\n    margin: 0 !important;\n    flex: 0 1 auto !important;\n  }\n  .activity-panel .panel-actions {\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 6px !important;\n    flex-wrap: wrap !important;\n  }\n  .activity-panel .panel-actions button {\n    min-height: 32px !important;\n    padding: 5px 11px !important;\n    font-size: 11.5px !important;\n    font-weight: 750 !important;\n    border-radius: 9px !important;\n    white-space: nowrap !important;\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 4px !important;\n  }\n\n  /* Support / Community panel & buttons */\n  .github-panel {\n    display: flex !important;\n    flex-direction: column !important;\n    justify-content: center !important;\n    gap: 14px !important;\n    padding: 18px 20px !important;\n    box-sizing: border-box !important;\n  }\n  @media (min-width: 900px) {\n    .github-panel {\n      flex-direction: row !important;\n      align-items: center !important;\n      justify-content: space-between !important;\n    }\n  }\n  .support-actions-grid {\n    display: grid !important;\n    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;\n    gap: 8px !important;\n    width: 100% !important;\n    max-width: 440px !important;\n    box-sizing: border-box !important;\n  }\n  @media (max-width: 420px) {\n    .support-actions-grid {\n      grid-template-columns: 1fr !important;\n      gap: 6px !important;\n    }\n  }\n  .support-link-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    height: 38px !important;\n    min-height: 38px !important;\n    padding: 0 12px !important;\n    border-radius: 12px !important;\n    font-size: 12px !important;\n    font-weight: 800 !important;\n    text-decoration: none !important;\n    white-space: nowrap !important;\n    box-sizing: border-box !important;\n    backdrop-filter: blur(16px) !important;\n    -webkit-backdrop-filter: blur(16px) !important;\n    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .support-link-btn:hover {\n    transform: translateY(-1.5px) !important;\n    box-shadow: 0 8px 22px rgba(0,0,0,0.25) !important;\n  }\n  .support-link-btn.star {\n    background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(234, 179, 8, 0.06)) !important;\n    border: 1px solid rgba(234, 179, 8, 0.35) !important;\n    color: #facc15 !important;\n  }\n  .support-link-btn.star:hover {\n    background: rgba(234, 179, 8, 0.28) !important;\n    border-color: rgba(234, 179, 8, 0.55) !important;\n  }\n  .support-link-btn.paypal {\n    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(56, 189, 248, 0.06)) !important;\n    border: 1px solid rgba(56, 189, 248, 0.35) !important;\n    color: #38bdf8 !important;\n  }\n  .support-link-btn.paypal:hover {\n    background: rgba(56, 189, 248, 0.28) !important;\n    border-color: rgba(56, 189, 248, 0.55) !important;\n  }\n  .support-link-btn.email {\n    background: linear-gradient(135deg, rgba(167, 139, 250, 0.18), rgba(167, 139, 250, 0.06)) !important;\n    border: 1px solid rgba(167, 139, 250, 0.35) !important;\n    color: #c084fc !important;\n  }\n  .support-link-btn.email:hover {\n    background: rgba(167, 139, 250, 0.28) !important;\n    border-color: rgba(167, 139, 250, 0.55) !important;\n  }\n  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }\n\n  /* Personalization inside instances */\n  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }\n  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }\n\n  /* Mode Reorganization Styles — HORIZONTAL */\n  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }\n  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }\n  .mode-section-card {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    border-radius: 20px !important;\n    padding: 18px !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;\n    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;\n  }\n  .mode-section-card:hover {\n    border-color: rgba(255, 255, 255, 0.26) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transform: translateY(-2px) !important;\n  }\n  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }\n  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }\n  .mode-sensor-grid { color: var(--primary-text-color, #fff); }\n  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }\n  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }\n  .argus-voice-zone-list { display:grid; gap:8px; margin-top:10px; }\n  .argus-voice-zone { border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:9px 11px; background:rgba(255,255,255,.035); }\n  .argus-voice-zone ul { list-style:none; margin:6px 0 0; padding:0; display:grid; gap:5px; }\n  .argus-voice-sensor-row { display:grid; grid-template-columns:10px minmax(0,1fr) auto; gap:8px; align-items:center; font-size:13px; }\n  .argus-voice-state-dot,.argus-voice-open-key i,.argus-voice-closed-key i { display:inline-block; width:9px; height:9px; border-radius:50%; background:#94a3b8; }\n  .argus-voice-sensor-row.is-open .argus-voice-state-dot,.argus-voice-open-key i { background:#34d399; box-shadow:0 0 8px rgba(52,211,153,.55); }\n  .argus-voice-sensor-row.is-closed .argus-voice-state-dot,.argus-voice-closed-key i { background:#fb7185; box-shadow:0 0 7px rgba(251,113,133,.4); }\n  .argus-voice-sensor-row.is-unknown .argus-voice-state-dot { background:#94a3b8; }\n  .argus-voice-sensor-state { color:rgba(255,255,255,.74); font-size:12px; white-space:nowrap; }\n  .argus-voice-open-key i,.argus-voice-closed-key i { vertical-align:middle; margin:0 4px 1px 0; }\n  .argus-voice-message-description { margin:4px 0 8px; color:rgba(255,255,255,.72); }\n\n  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }\n  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }\n  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }\n  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }\n  .icon-btn:active { transform: scale(0.9); }\n\n  #mode-status { opacity: 0; transition: opacity .35s; }\n  #mode-status.show { opacity: 1; }\n  #mode-status.ok  { color: #4caf50; }\n  #mode-status.err { color: #f44336; }\n\n  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }\n  .icon-btn.active { color: #fb8c00; opacity: 1; }\n\n  .input-group { display: flex; flex-direction: column; gap: 6px; }\n  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}\n  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}\n  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}\n  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}\n  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}\n  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}\n  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}\n  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}\n  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }\n\n  /* Intelligent Entry Card */\n  .entry {\n    position: relative;\n    overflow: hidden;\n    border-radius: 28px !important;\n    border: 1px solid rgba(255, 255, 255, 0.18) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;\n    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    margin-bottom: 16px;\n    min-height: 220px;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}\n  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}\n  /* Safari was recompositing the full glass card while it was moving under a\n     stationary pointer: the hover transform and soft-light overlay stacked\n     on top of the large backdrop-filter surface. Keep the same glass and\n     highlight, but avoid moving/blending that surface during scroll and the\n     elastic top/bottom overscroll repaint. */\n  @supports (-webkit-backdrop-filter: blur(1px)) {\n    .entry { transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important; }\n    .entry:hover { transform: none !important; }\n    .entry::after {\n      background: linear-gradient(120deg,rgba(255,255,255,.07),transparent 22%,transparent 74%,rgba(255,255,255,.025));\n      mix-blend-mode: normal !important;\n    }\n  }\n  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}\n  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}\n  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}\n  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}\n  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}\n  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}\n  /* The live instance is the console: real controls, real sensors and one\n     clear disarm keypad. Decorative dashboard cards never sit above it. */\n  .security-console {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n  .console-hud {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n\n  /* ── System Status Badge ─────────────────────────────── */\n  .console-system-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 5px 14px;\n    border-radius: 999px;\n    font-size: 10.5px;\n    font-weight: 900;\n    letter-spacing: 0.8px;\n    text-transform: uppercase;\n    white-space: nowrap;\n    backdrop-filter: blur(16px) saturate(160%);\n    -webkit-backdrop-filter: blur(16px) saturate(160%);\n    border: 1.5px solid currentColor;\n    transition: all 0.35s ease;\n  }\n  .console-system-badge--disarmed {\n    color: #6ee7b7;\n    background: rgba(16,185,129,0.18);\n    border-color: rgba(16,185,129,0.60);\n    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_home {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_away {\n    color: #e9d5ff;\n    background: rgba(168,85,247,0.20);\n    border-color: rgba(168,85,247,0.60);\n    box-shadow: 0 0 16px rgba(168,85,247,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_night {\n    color: #bfdbfe;\n    background: rgba(30,136,229,0.20);\n    border-color: rgba(30,136,229,0.60);\n    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--triggered {\n    color: #fff;\n    background: rgba(239,68,68,0.35);\n    border-color: rgba(239,68,68,0.80);\n    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);\n    animation: badgeFlash 0.8s infinite ease-in-out;\n  }\n  @keyframes badgeFlash {\n    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }\n    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }\n  }\n  /* arming state reuses armed_home styling with pulsing */\n  .console-system-badge--arming {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    animation: badgeArming 1.05s ease-in-out infinite;\n  }\n  @keyframes badgeArming {\n    0%,100% { opacity:0.65; } 50% { opacity:1; }\n  }\n  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}\n  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}\n  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}\n  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}\n  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */\n  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}\n  /* The .hud inside the article gets hidden when the content is a security-console */\n  @media(max-width:950px){\n    .grid{grid-template-columns:1fr;grid-template-areas:\"instances\" \"activity\" \"modes\" \"access\" \"automations\" \"backup\" \"github\"}\n  }\n\n  /* Sensor column */\n  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}\n  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}\n  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}\n  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}\n  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}\n  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}\n  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}\n  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}\n  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}\n  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}\n  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}\n  .sensor-chip-battery.low{color:#ffd166;font-weight:900}\n  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}\n  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}\n  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}\n  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}\n\n  /* HUD Overlay */\n  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}\n  .hud-loc{font-size:13px;font-weight:800;letter-spacing:0.04em;color:#ffffff;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);align-self:flex-end}\n  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}\n  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}\n  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}\n  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}\n\n  /* Liquid Glass Buttons */\n  .liquid-stack{display:grid;gap:10px}\n  .liquid-btn {\n    border: 1px solid rgba(255, 255, 255, 0.20) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    color: #ffffff !important;\n    padding: 14px 18px;\n    border-radius: 18px !important;\n    font-size: 13.5px;\n    font-weight: 800;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    text-align: left;\n    cursor: pointer;\n    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n    text-shadow: 0 1px 2px rgba(0,0,0,0.3);\n    letter-spacing: 0.5px;\n  }\n  .liquid-btn:hover {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;\n    border-color: rgba(255, 255, 255, 0.36) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.45) !important;\n    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;\n  }\n  .btn-sos:hover {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;\n    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}\n  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}\n  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}\n  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}\n  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}\n  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }\n  .liquid-btn i{font-size:16px}\n\n  .btn-home {\n    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;\n    border: 1px solid rgba(251, 140, 0, 0.38) !important;\n    color: #ffe0b2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-home.active {\n    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;\n    border: 1px solid rgba(254, 215, 170, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-away {\n    background: linear-gradient(135deg, rgba(168, 85, 247, 0.20) 0%, rgba(168, 85, 247, 0.06) 100%) !important;\n    border: 1px solid rgba(168, 85, 247, 0.38) !important;\n    color: #e9d5ff !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-away.active {\n    background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%) !important;\n    border: 1px solid rgba(233, 213, 255, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(168, 85, 247, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-night {\n    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;\n    border: 1px solid rgba(30, 136, 229, 0.38) !important;\n    color: #bbdefb !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-night.active {\n    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;\n    border: 1px solid rgba(191, 219, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-disarm {\n    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;\n    border: 1px solid rgba(16, 185, 129, 0.35) !important;\n    color: #a7f3d0 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    margin-top: 4px;\n  }\n  .btn-disarm.active {\n    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n    border: 1px solid rgba(167, 243, 208, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.35) !important;\n    color: #fca5a5 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-sos.active, .btn-sos.flashing {\n    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;\n  }\n\n  @keyframes sosFlashingPulse {\n    0%, 100% {\n      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n      border-color: #fca5a5 !important;\n      color: #ffffff !important;\n      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;\n      transform: scale(1.02);\n    }\n    50% {\n      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;\n      border-color: rgba(239, 68, 68, 0.5) !important;\n      color: rgba(255, 255, 255, 0.8) !important;\n      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;\n      transform: scale(0.98);\n    }\n  }\n  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */\n\n  .entry-content {\n    background: transparent !important;\n    box-shadow: none !important;\n    border: none !important;\n  }\n\n  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}\n  .badge.armed_away{background:rgba(168,85,247,.12);color:#d8b4fe}\n  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}\n  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}\n\n  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}\n  .meta{font-size:12px;opacity:.5}\n  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}\n  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}\n  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}\n  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}\n  .temp-alert-status-ok{color:#43a047;font-size:12px}\n  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}\n\n  /* Generic buttons */\n  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1.3 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;hyphens:none;word-break:normal;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}\n  button:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}\n  button:active:not(:disabled){transform:scale(.94) translateY(1px)}\n  button.primary{background:var(--primary-color,#38bdf8);color:#0f172a;font-weight:800;box-shadow:0 4px 12px rgba(56, 189, 248, 0.35)}\n  button.primary:hover{background:#0284c7;color:#ffffff}\n  button.ghost{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.24);color:#ffffff !important}\n  button.ghost:hover{background:rgba(255, 255, 255, 0.16);border-color:rgba(255,255,255,0.36)}\n\n\n  /* FS button */\n  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}\n\n  /* Modal Fixes */\n  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}\n  .modal-back.open{display:flex}\n  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}\n  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}\n  .modal-head h3{margin:0;font-size:20px;font-weight:800}\n  .modal-body{overflow:auto;padding:5px}\n  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}\n  /* PIN modal */\n  .pm .modal{width:min(340px,calc(100vw - 32px));max-width:340px;max-height:calc(100dvh - 32px);min-height:unset;overflow:auto;box-sizing:border-box;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:clamp(14px,4vw,24px);display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2vw,12px)}\n  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}\n  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}\n  .pin-grid{display:grid;grid-template-columns:repeat(3,56px);grid-auto-rows:56px;gap:clamp(7px,2vw,12px);width:max-content;max-width:100%;justify-content:center;margin:6px auto 0}\n  .pin-btn-round{width:56px !important;height:56px !important;min-height:56px !important;max-height:56px !important;aspect-ratio:auto;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}\n  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}\n  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}\n  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}\n  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}\n  .pin-btn-round.action-key.enter-key{color:#34c759 !important}\n  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}\n  /* User card */\n  .user-card {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 16px 18px;\n    border-radius: 18px;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;\n    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .user-card:hover {\n    border-color: rgba(255, 255, 255, 0.25) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-2px);\n  }\n  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}\n  /* REEMPLAZA los colores neón por tokens legibles */\n  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }\n  .user-badge.admin_old {\n    background: rgba(255,255,255,0.12);\n    color: rgba(255,255,255,0.92);\n    border: 1px solid rgba(255,255,255,0.18);\n    font-weight: 700;\n    letter-spacing: 0.04em;\n  }\n  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }\n  .user-badge.user_old {\n    background: rgba(255,255,255,0.08);\n    color: rgba(255,255,255,0.75);\n    border: 1px solid rgba(255,255,255,0.12);\n  }\n  /* Role label debajo del nombre */\n  .user-role-label {\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    color: rgba(255,255,255,0.55);  /* muted, no neón */\n    margin-top: 2px;\n  }\n  /* Notif target chip */\n  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}\n  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}\n  /* Triggered box */\n  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}\n  /* inputs */\n  input[type=\"text\"], input[type=\"password\"], input[type=\"number\"], input[type=\"search\"], select, input[type=\"datetime-local\"], .glass-control {\n    width: 100%;\n    padding: 11px 14px;\n    border-radius: 16px;\n    border: 1px solid rgba(255, 255, 255, 0.16);\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));\n    color: var(--primary-text-color);\n    backdrop-filter: blur(18px) saturate(145%);\n    -webkit-backdrop-filter: blur(18px) saturate(145%);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);\n    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;\n    outline: none;\n    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;\n    display: block;\n    box-sizing: border-box;\n  }\n  input[type=\"text\"]:focus, input[type=\"password\"]:focus, input[type=\"number\"]:focus, input[type=\"search\"]:focus, select:focus, input[type=\"datetime-local\"]:focus, .glass-control:focus {\n    transform: scale(1.018);\n    border-color: rgba(112, 188, 255, 0.78);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match input[type=\"text\"],\n  .x-never-match input[type=\"password\"],\n  .x-never-match input[type=\"number\"],\n  .x-never-match input[type=\"search\"],\n  .x-never-match select,\n  .x-never-match input[type=\"datetime-local\"],\n  .x-never-match .glass-control {\n    background: rgba(255, 255, 255, 0.52);\n    border-color: rgba(0, 0, 0, 0.10);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);\n  }\n  /* search */\n  .search-wrap{display:flex;gap:10px;align-items:center}\n  .search-wrap input{flex:1;min-width:0}\n  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */\n  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}\n  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}\n  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}\n  @media(max-width:600px){.sel-grid{grid-template-columns:1fr;grid-template-rows:minmax(0,1.25fr) minmax(0,.75fr)}}\n  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}\n  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;grid-auto-rows:max-content;gap:8px;align-content:start;padding-right:4px}\n  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}\n  .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}\n  #selector-modal .pick-row{height:auto;min-height:max-content;box-sizing:border-box;align-self:start}\n  #selector-modal .pick-row>div{min-width:0}\n  #selector-modal .pick-row-name{overflow-wrap:anywhere}\n  #selector-modal .pick-row:focus-within{outline:2px solid #76b7ff;outline-offset:-2px}\n  .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}\n  .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}\n  .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}\n  .pick-row-name{font-weight:750;font-size:14px;color:#ffffff;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3}\n  .pick-row-meta{font-size:12px;color:#cbd5e1;opacity:0.92;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}\n  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}\n  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}\n  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}\n  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}\n  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}\n  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}\n  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}\n  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}\n  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}\n  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}\n  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}\n  /* Activity log */\n  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}\n  .activity-log .log-item{animation:none!important;transform:none!important;will-change:auto!important}\n  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}\n  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}\n  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}\n  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}\n  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}\n  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}\n  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}\n  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}\n  .log-body{flex:1;min-width:0}\n  .log-title{font-weight:700;font-size:13px}\n  .log-meta{font-size:11px;opacity:.55;margin-top:2px}\n  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}\n  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}\n  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}\n  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}\n  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}\n  /* Personalization section styles */\n  .personalize-section {\n    margin-top: 18px;\n    padding: 18px;\n    background: var(--personalize-bg, rgba(255,255,255,0.02));\n    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));\n    border-radius: 22px;\n    display: grid;\n    gap: 16px;\n  }\n  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:\"home temp\" \"panel clock\" \"hub emergency\";gap:14px 16px;align-items:start}\n  .personalize-column{display:contents}\n  .personalize-field{min-width:0;align-self:stretch}\n  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}\n  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}\n  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"emergency-label emergency-label\" \"emergency-input emergency-help\";gap:5px 16px;align-items:start;padding-top:2px}\n  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}\n  .sos-configuration {\n    padding: 18px;\n    border-radius: 24px;\n    border: 1px solid rgba(255, 59, 48, 0.25);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);\n    transition: transform 0.3s ease, box-shadow 0.3s ease;\n  }\n  /* SOS uses the full personalization width so outputs never create a tall,\n     narrow list with unused space beside it. */\n  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:\"title action\" \"outputs outputs\" \"help help\";gap:12px 16px;align-items:center}\n  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}\n  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}\n  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}\n  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}\n  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}\n  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}\n  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}\n  .sos-configuration:hover {\n    transform: translateY(-2px);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match .sos-configuration {\n    border-color: rgba(255, 59, 48, 0.3);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);\n  }\n  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}\n  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}\n  .modal-back.open .modal,\n  .lang-modal-back.open .lang-modal-card,\n  .ios-confirm-backdrop.open .ios-confirm-card {\n    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;\n  }\n  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}\n  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n  @media(max-width:700px){\n    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:\"home\" \"temp\" \"panel\" \"hub\" \"clock\" \"emergency\"}\n    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:\"emergency-label\" \"emergency-input\" \"emergency-help\"}\n    .personalize-section{padding:14px}\n    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}\n    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}\n  }\n\n  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);contain:paint}\n  #argus-canvas-bg::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}\n\n.sensor-pill {\n  display:inline-flex; align-items:center; gap:8px;\n  background:var(--argus-pill-bg, rgba(255,255,255,0.04));\n  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));\n  border-radius:14px; padding:10px 14px;\n  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));\n  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);\n  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);\n}\n\n/* Zone editor: keep every control inside Argus' Liquid Glass visual system. */\n#argus-zone-editor{background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.035))!important;border:1px solid rgba(255,255,255,.20)!important;border-radius:26px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 18px 48px rgba(0,0,0,.22)!important;backdrop-filter:blur(26px) saturate(155%)!important;-webkit-backdrop-filter:blur(26px) saturate(155%)!important;padding:clamp(16px,3vw,26px)!important;box-sizing:border-box}\n#argus-zone-editor .zone-editor-title{font-size:18px;font-weight:900;letter-spacing:.02em;color:#46c7ff;margin:0 0 8px}\n#argus-zone-editor .zone-help{font-size:12px;line-height:1.55;opacity:.76;margin:6px 0 14px}\n#argus-zone-editor .zone-item{margin:10px 0;overflow:hidden;border:1px solid rgba(255,255,255,.19);border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 8px 24px rgba(0,0,0,.14);backdrop-filter:blur(20px) saturate(145%);-webkit-backdrop-filter:blur(20px) saturate(145%)}\n#argus-zone-editor .zone-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;padding:14px 17px;background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.045));color:inherit;border:0;cursor:pointer;font:inherit;font-weight:800;min-height:52px}\n#argus-zone-editor .zone-form{padding:16px;display:grid;gap:14px;background:linear-gradient(155deg,rgba(11,18,31,.34),rgba(255,255,255,.035));border-top:1px solid rgba(255,255,255,.13)}\n#argus-zone-editor .zone-field{display:grid;gap:7px;font-size:12px;font-weight:800;letter-spacing:.025em;color:rgba(255,255,255,.88)}\n#argus-zone-editor .zone-field input,#argus-zone-editor .zone-field select,#argus-zone-editor .zone-sensor-search{width:100%;min-height:44px;box-sizing:border-box;padding:10px 14px;border-radius:15px!important;color:var(--primary-text-color,#fff)!important;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055))!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 5px 16px rgba(0,0,0,.12)!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);font:inherit}\n#argus-zone-editor .zone-mode-fieldset{padding:12px 14px;border:1px solid rgba(255,255,255,.2);border-radius:18px;background:rgba(255,255,255,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}\n#argus-zone-editor .zone-mode-fieldset legend{padding:0 7px;font-size:12px;font-weight:800;opacity:.88}\n#argus-zone-editor .zone-mode-options{display:flex;flex-wrap:wrap;gap:9px}\n#argus-zone-editor .zone-mode-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(255,255,255,.075);font-size:12px;font-weight:700}\n#argus-zone-editor .zone-sensor-list{max-height:250px;overflow:auto;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:8px;background:rgba(0,0,0,.16);box-shadow:inset 0 1px 10px rgba(0,0,0,.15)}\n#argus-zone-editor .zone-sensor-row{padding:10px 9px;border-bottom:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px}\n#argus-zone-editor .zone-sensor-row:last-child{border-bottom:0}\n#argus-zone-editor .zone-sensor-settings{display:flex;gap:9px;flex-wrap:wrap;margin:8px 0 3px 24px}\n#argus-zone-editor .zone-sensor-settings label{display:flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.06)}\n#argus-zone-editor .zone-number-lock{display:grid;gap:3px;padding:12px 15px;border:1px solid rgba(255,255,255,.2);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.055));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 6px 18px rgba(0,0,0,.15);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}\n#argus-zone-editor .zone-number-lock span{font-size:10px;font-weight:800;letter-spacing:.1em;opacity:.66}\n#argus-zone-editor .zone-number-lock strong{font-size:15px;letter-spacing:.08em;color:#eaf5ff}\n#argus-zone-editor .zone-number-lock small{font-size:11px;opacity:.62}\n#argus-zone-editor .zone-sensor-heading{display:flex;align-items:center;gap:10px;min-width:0}\n#argus-zone-editor .zone-sensor-heading span{display:grid;gap:3px;min-width:0}\n#argus-zone-editor .zone-sensor-heading strong{font-size:13px;overflow-wrap:anywhere}\n#argus-zone-editor .zone-sensor-heading small{font-size:10px;opacity:.62;overflow-wrap:anywhere}\n#argus-zone-editor .zone-assigned-note{display:inline-flex;margin:5px 0 0 25px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:10px;opacity:.72}\n#argus-zone-editor .zone-sensor-settings{display:grid;gap:11px;margin:12px 0 4px 25px;padding:12px;border:1px solid rgba(255,255,255,.15);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}\n#argus-zone-editor .zone-config-group{display:grid;gap:7px;min-width:0}\n#argus-zone-editor .zone-config-title{font-size:11px;font-weight:850;letter-spacing:.045em;color:rgba(240,247,255,.82)}\n#argus-zone-editor .zone-option-group{display:flex;flex-wrap:wrap;gap:7px}\n#argus-zone-editor .zone-choice,#argus-zone-editor .zone-unit{min-height:36px;padding:7px 11px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.055));color:#edf4ff;font:inherit;font-size:11px;font-weight:750;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.12);cursor:pointer;transition:background .16s,border-color .16s,box-shadow .16s}\n#argus-zone-editor .zone-choice.is-selected,#argus-zone-editor .zone-unit.is-selected{border-color:rgba(89,205,255,.72);background:linear-gradient(145deg,rgba(43,158,218,.35),rgba(31,68,112,.38));box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 0 14px rgba(52,177,238,.18)}\n#argus-zone-editor .zone-delay-field{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:11px;font-weight:700}\n#argus-zone-editor .zone-delay-field input{width:76px;min-height:36px;padding:6px 9px;text-align:center;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(8,15,28,.48);color:#fff;font:inherit;color-scheme:dark}\n#argus-zone-editor .zone-unit-group{display:inline-flex;gap:5px}\n#argus-zone-editor .zone-unit{min-height:32px;padding:5px 9px;font-size:10px}\n#argus-zone-editor .zone-sensor-hint{margin:0;font-size:10px;line-height:1.45;opacity:.62}\n#argus-zone-editor .zone-decision,#argus-zone-editor .zone-status{padding:12px 14px;border:1px solid rgba(255,255,255,.17);border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 20px rgba(0,0,0,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}\n@media(max-width:600px){#argus-zone-editor .zone-form{padding:12px;gap:12px}#argus-zone-editor .zone-sensor-settings{margin-left:0;padding:10px}#argus-zone-editor .zone-choice{font-size:10px;padding-inline:9px}}\n.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }\n.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }\n.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }\n.sensor-pill .pill-dot.unavailable { background:#999; }\n.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }\n.sensor-pill button:hover { opacity:1; }\n\n.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }\n.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }\n.mode-zone-assigned { display:flex; align-items:center; flex-wrap:wrap; gap:6px 12px; min-width:0; padding:12px 16px; border:1px solid rgba(86,198,255,.48); border-radius:16px; background:linear-gradient(125deg,rgba(28,145,207,.25),rgba(44,82,130,.24) 60%,rgba(255,255,255,.07)); color:rgba(255,255,255,.96); font-size:14px; line-height:1.35; font-weight:650; box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 5px 16px rgba(0,0,0,.14); }\n.mode-zone-assigned strong { color:#8bdcff; font-weight:800; white-space:nowrap; }\n.mode-zone-assigned span { min-width:0; overflow-wrap:anywhere; }\n.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }\n\n\n/* ── Language Picker ───────────────────────────────────── */\n.lang-pill {\n  display:inline-flex; align-items:center; gap:6px;\n  padding:7px 14px; border-radius:999px;\n  background:rgba(255,255,255,0.10);\n  border:1px solid rgba(255,255,255,0.18);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff; font-size:13px; font-weight:700;\n  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);\n  box-shadow:0 4px 16px rgba(0,0,0,0.18);\n  white-space:nowrap; flex-shrink:0;\n}\n.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }\n.x-never-match .lang-pill {\n  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;\n}\n\n/* Language modal */\n.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }\n.lang-modal-back.open { display:flex; }\n.lang-modal-card {\n  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;\n  background:rgba(20,22,35,0.92);\n  border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.55);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff;\n  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.x-never-match .lang-modal-card {\n  background:rgba(255,255,255,0.96); color:#1e1e2d;\n  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);\n}\n@keyframes langBounceIn {\n  0%   { transform:scale(0.82) translateY(20px); opacity:0; }\n  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }\n  100% { transform:scale(1)    translateY(0);    opacity:1; }\n}\n.lang-modal-title {\n  font-size:18px; font-weight:900; letter-spacing:-0.01em;\n  margin-bottom:20px; text-align:center;\n}\n.lang-grid {\n  display:grid; grid-template-columns:1fr 1fr; gap:10px;\n}\n.lang-option {\n  display:flex; align-items:center; gap:10px;\n  padding:12px 14px; border-radius:16px;\n  background:rgba(255,255,255,0.10);\n  border:1.5px solid rgba(255,255,255,0.18);\n  /* Buttons do not inherit color reliably through the HA shadow DOM. */\n  color:rgba(255,255,255,0.98) !important;\n  text-shadow:0 1px 2px rgba(0,0,0,0.38);\n  cursor:pointer; transition:all 0.18s ease;\n  font-size:14px; font-weight:750;\n}\n.lang-option span:not(.lang-flag) { color:inherit !important; }\n.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }\n.lang-option.active {\n  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);\n  box-shadow:0 0 18px rgba(3,169,244,0.25);\n}\n.lang-flag { font-size:22px; line-height:1; }\n.lang-close-row { display:flex; justify-content:center; margin-top:18px; }\n.lang-close-btn {\n  padding:9px 28px; border-radius:14px;\n  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);\n  color:#fff; font-size:13px; font-weight:700; cursor:pointer;\n  transition:background 0.18s;\n}\n.lang-close-btn:hover { background:rgba(255,255,255,0.2); }\n\n/* Walk Test Modal & Delay Styles */\n.walk-test-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(6px); }\n.walk-test-modal-back.open { display:flex; }\n.walk-test-modal-card {\n  width:min(520px,94vw); max-height:85vh; border-radius:24px; padding:24px;\n  background:rgba(18,22,34,0.95); border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.6); backdrop-filter:blur(16px);\n  color:#fff; display:flex; flex-direction:column; gap:16px; overflow:hidden;\n  animation: langBounceIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.walk-test-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; }\n.walk-test-title { font-size:17px; font-weight:800; display:flex; align-items:center; gap:8px; }\n.walk-test-timer { font-size:12px; font-weight:700; color:#38bdf8; background:rgba(56,189,248,0.12); padding:3px 10px; border-radius:12px; border:1px solid rgba(56,189,248,0.25); }\n.walk-test-progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }\n.walk-test-progress-fill { height:100%; background:linear-gradient(90deg, #38bdf8, #4ade80); transition:width 0.3s ease; }\n.walk-test-sensor-list { display:grid; gap:8px; max-height:45vh; overflow-y:auto; padding-right:4px; }\n.walk-test-sensor-item {\n  display:flex; align-items:center; justify-content:space-between; padding:10px 14px;\n  border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);\n  transition:all 0.2s ease;\n}\n.walk-test-sensor-item.tested {\n  background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.3);\n}\n.walk-test-sensor-item.just-tested {\n  animation: testPulse 0.8s ease;\n}\n@keyframes testPulse {\n  0% { transform: scale(1); background: rgba(74,222,128,0.4); }\n  50% { transform: scale(1.02); }\n  100% { transform: scale(1); background: rgba(74,222,128,0.12); }\n}\n.pill-delay-btn {\n  background:none; border:none; color:inherit; cursor:pointer; padding:0; margin-left:4px;\n  display:inline-flex; align-items:center;\n}\n.pill-delay-badge {\n  font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:6px;\n  display:inline-flex; align-items:center; gap:2px; transition:transform 0.15s;\n}\n.pill-delay-badge:hover { transform:scale(1.08); }\n.pill-delay-badge.instant { color:#38bdf8; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); }\n.pill-delay-badge.custom { color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); }\n.pill-delay-badge.inherited { color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); }\n\n/* Background File Manager Styles */\n.file-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  border-radius: 12px;\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  position: relative;\n  overflow: hidden;\n  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n}\n.file-card:hover {\n  background: rgba(255, 255, 255, 0.08) !important;\n  border-color: rgba(255, 255, 255, 0.16) !important;\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n}\n.x-never-match .file-card {\n  background: rgba(0, 0, 0, 0.02);\n  border-color: rgba(0, 0, 0, 0.07);\n  color: #1c1c1e;\n}\n.x-never-match .file-card:hover {\n  background: rgba(0, 0, 0, 0.05) !important;\n  border-color: rgba(0, 0, 0, 0.12) !important;\n}\n.file-card-preview {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 8px;\n  overflow: hidden;\n  background: rgba(0, 0, 0, 0.2);\n}\n.file-card-preview img, .file-card-preview video {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n}\n.file-card-name {\n  font-size: 10px;\n  font-weight: 700;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  opacity: 0.85;\n}\n.file-card-meta {\n  font-size: 9px;\n  opacity: 0.55;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.file-card-actions {\n  display: flex;\n  gap: 4px;\n  margin-top: auto;\n}\n.file-card-btn {\n  flex: 1;\n  padding: 4px;\n  font-size: 8px;\n  font-weight: 700;\n  text-transform: uppercase;\n  border: 1px solid rgba(255, 255, 255, 0.12);\n  border-radius: 6px;\n  background: rgba(255, 255, 255, 0.03);\n  color: inherit;\n  cursor: pointer;\n  white-space: nowrap;\n  transition: all 0.15s ease;\n}\n.file-card-btn:hover {\n  background: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n.x-never-match .file-card-btn {\n  border-color: rgba(0, 0, 0, 0.12);\n  background: rgba(0, 0, 0, 0.02);\n}\n.x-never-match .file-card-btn:hover {\n  background: rgba(0, 0, 0, 0.08);\n  border-color: rgba(0, 0, 0, 0.25);\n}\n.file-card-btn-delete {\n  padding: 3px 6px;\n  color: #ff3b30;\n  border: 1px solid rgba(255, 59, 48, 0.15);\n  background: rgba(255, 59, 48, 0.05);\n  border-radius: 6px;\n  cursor: pointer;\n  font-size: 9px;\n  transition: all 0.15s ease;\n}\n.file-card-btn-delete:hover {\n  background: rgba(255, 59, 48, 0.25);\n  border-color: rgba(255, 59, 48, 0.45);\n}\n\n.argus-bootstrap-layer {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).\n     WebKit compositor leak bug — opaque background is visually equivalent. */\n  z-index: 9999;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  color: white;\n  animation: fadeIn 0.4s ease forwards;\n}\n.argus-bootstrap-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 24px;\n  padding: 40px;\n  max-width: 480px;\n  width: 90%;\n  box-shadow: 0 16px 40px rgba(0,0,0,0.5);\n  text-align: center;\n}\n.argus-bootstrap-card h1 {\n  margin: 0 0 16px;\n  font-weight: 300;\n  font-size: 28px;\n  letter-spacing: 0.5px;\n}\n.argus-bootstrap-card p {\n  color: rgba(255,255,255,0.7);\n  font-size: 16px;\n  line-height: 1.5;\n  margin-bottom: 32px;\n}\n@keyframes argusWelcomeCard {\n  from { opacity: 0; transform: translateY(18px) scale(.96); }\n  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }\n  to { opacity: 1; transform: translateY(0) scale(1); }\n}\n@keyframes argusWelcomeLogo {\n  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }\n  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }\n}\n@keyframes argusWelcomeCheck {\n  from { opacity: 0; transform: scale(.55) rotate(-16deg); }\n  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }\n  to { opacity: 1; transform: scale(1) rotate(0); }\n}\n.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }\n.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }\n.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }\n.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }\n.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }\n.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }\n\n/* ─── tvOS Profile Selector ─── */\n.argus-profile-overlay {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);\n  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.\n     High-opacity background achieves same visual effect safely. */\n  display: flex; align-items: center; justify-content: center;\n  z-index: 9999;\n  animation: argus-overlay-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;\n}\n@keyframes argus-overlay-in {\n  from { opacity: 0; }\n  to   { opacity: 1; }\n}\n\n/* Título arriba */\n.argus-profile-header {\n  text-align: center;\n  margin-bottom: 36px;\n  animation: argus-slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;\n}\n@keyframes argus-slide-down {\n  from { opacity: 0; transform: translateY(-12px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.argus-profile-header h2 {\n  margin: 0; font-size: 1.6rem; font-weight: 800;\n  color: #fff; letter-spacing: -0.02em;\n}\n.argus-profile-header p {\n  margin: 6px 0 0; font-size: 0.85rem;\n  color: rgba(255,255,255,0.55);\n}\n\n/* Grid de perfiles */\n.argus-profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n  gap: 36px 24px;\n  max-width: 900px;\n  width: 100%;\n  justify-content: center;\n  animation: argus-grid-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;\n}\n@keyframes argus-grid-in {\n  from { opacity: 0; transform: scale(0.95) translateY(10px); }\n  to   { opacity: 1; transform: scale(1) translateY(0); }\n}\n\n/* Cada perfil */\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(4, 1fr);\n    padding: 16px;\n  }\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(2, 1fr);\n    padding: 16px;\n    gap: 20px 16px;\n  }\n}\n@media (max-width: 380px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: 1fr;\n    padding: 16px;\n  }\n  .argus-profile-item { width: 100%; }\n}\n\n.argus-profile-item {\n  touch-action: manipulation;\n  min-height: 44px;\n  display: flex; flex-direction: column;\n  align-items: center; gap: 10px;\n  cursor: pointer;\n  border-radius: 16px;\n  padding: 14px 8px 10px;\n  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),\n              background 0.2s ease;\n  -webkit-tap-highlight-color: transparent;\n}\n.argus-profile-item:hover {\n  transform: scale(1.08);\n  background: rgba(255,255,255,0.07);\n}\n.argus-profile-item:active {\n  transform: scale(0.96);\n}\n.argus-profile-item:focus-visible {\n  outline: 2px solid rgba(255,255,255,0.6);\n  outline-offset: 4px;\n}\n\n/* Círculo avatar */\n.argus-profile-circle {\n  width: 120px; height: 120px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 3px solid rgba(255,255,255,0.18);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.35);\n  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.5rem; font-weight: 800;\n  color: #fff; overflow: hidden; flex-shrink: 0;\n  background: rgba(255,255,255,0.1);\n  position: relative;\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-circle {\n    width: 76px; height: 76px;\n    font-size: 1.5rem; border-width: 2.5px;\n  }\n}\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-circle {\n    width: 84px; height: 84px;\n    font-size: 1.8rem; border-width: 2.5px;\n  }\n}\n.argus-profile-item:hover .argus-profile-circle {\n  border-color: rgba(255,255,255,0.55);\n  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);\n}\n.argus-profile-circle img {\n  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;\n}\n.argus-profile-circle .lock-badge {\n  position: absolute; bottom: 0; right: 0;\n  width: 28px; height: 28px; border-radius: 50%;\n  background: rgba(0,0,0,0.75); display: flex;\n  align-items: center; justify-content: center;\n  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);\n}\n@media (max-width: 600px) {\n  .argus-profile-circle .lock-badge {\n    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;\n  }\n}\n\n/* Nombre y rol */\n.argus-profile-label {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.argus-profile-label .p-name {\n  font-size: 1rem; font-weight: 700;\n  color: #fff; line-height: 1.2;\n  max-width: 140px; overflow: hidden;\n  text-overflow: ellipsis; white-space: nowrap;\n}\n.argus-profile-label .p-role {\n  font-size: 0.72rem; font-weight: 600;\n  color: rgba(255,255,255,0.6);\n  margin-top: 4px;\n  text-transform: uppercase; letter-spacing: 0.04em;\n}\n@media (max-width: 600px) {\n  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }\n  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }\n}\n\n/* ─── Welcome Screen (Fase 2) ─── */\n.argus-welcome-screen {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist\n     after element.remove(). Use opaque background instead. */\n  display: flex; flex-direction: column;\n  align-items: center; justify-content: center;\n  z-index: 10000;\n  pointer-events: none;\n}\n.argus-welcome-avatar {\n  width: 110px; height: 110px;\n  border-radius: 50%; overflow: hidden;\n  border: 3px solid rgba(255,255,255,0.3);\n  box-shadow: 0 8px 40px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.8rem; font-weight: 800; color: #fff;\n  background: rgba(255,255,255,0.12);\n}\n.argus-welcome-avatar img {\n  width: 100%; height: 100%; object-fit: cover;\n}\n.argus-welcome-text {\n  margin-top: 20px; text-align: center;\n}\n.argus-welcome-text .greeting {\n  font-size: 1.0rem; color: rgba(255,255,255,0.6);\n  font-weight: 500; letter-spacing: 0.02em;\n  margin: 0;\n}\n.argus-welcome-text .wname {\n  font-size: 2.0rem; font-weight: 900;\n  color: #fff; letter-spacing: -0.03em;\n  margin: 6px 0 0;\n  line-height: 1;\n}\n\n/* PIN prompt dentro del selector tvOS */\n.argus-pin-prompt {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.75);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  display: flex; align-items: center; justify-content: center;\n  z-index: 10001;\n  animation: argus-overlay-in 0.25s ease both;\n}\n.argus-pin-card {\n  background: rgba(255,255,255,0.08);\n  border: 1px solid rgba(255,255,255,0.14);\n  border-radius: 20px; padding: 28px 24px;\n  width: min(340px, 90vw);\n  text-align: center; color: #fff;\n}\n.argus-pin-card h3 {\n  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;\n}\n.argus-pin-card .pin-sub {\n  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;\n}\n.argus-pin-input {\n  width: 100%; box-sizing: border-box;\n  text-align: center; font-size: 1.6rem;\n  letter-spacing: 0.4em; padding: 12px;\n  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(255,255,255,0.07); color: #fff;\n  outline: none; margin-bottom: 14px;\n}\n.argus-numpad {\n  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;\n  margin-bottom: 12px;\n}\n.argus-numpad button {\n  padding: 14px; font-size: 1.15rem; font-weight: 700;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.14);\n  background: rgba(255,255,255,0.08); color: #fff;\n  cursor: pointer;\n  transition: background 0.15s, transform 0.1s;\n}\n.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }\n.argus-pin-actions {\n  display: flex; gap: 10px; margin-top: 4px;\n}\n.argus-pin-actions button {\n  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;\n  font-weight: 700; cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.15);\n  background: rgba(255,255,255,0.07); color: #fff;\n  transition: background 0.15s;\n}\n.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }\n\n@keyframes argus-shake {\n  0%, 100% { transform: translateX(0); }\n  20%       { transform: translateX(-8px); }\n  40%       { transform: translateX(8px); }\n  60%       { transform: translateX(-5px); }\n  80%       { transform: translateX(5px); }\n}\n@keyframes argus-overlay-out {\n  from { opacity: 1; }\n  to   { opacity: 0; }\n}\n\n.user-selector-grid {\n\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));\n  gap: 16px;\n  margin-top: 24px;\n}\n.user-card {\n  background: rgba(255,255,255,0.1);\n  border: 1px solid rgba(255,255,255,0.15);\n  border-radius: 16px;\n  padding: 20px 10px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 12px;\n}\n.user-card:hover {\n  background: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n.user-card-own {\n  border-color: rgba(0, 122, 255, 0.55);\n  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);\n}\n.user-card-own:hover {\n  border-color: rgba(0, 122, 255, 0.8);\n}\n.profile-own-badge {\n  font-size: 10px;\n  font-weight: 800;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n  color: #007aff;\n  background: rgba(0, 122, 255, 0.12);\n  border-radius: 999px;\n  padding: 2px 8px;\n  margin-top: -4px;\n}\n.user-role-label {\n  font-size: 11px;\n  opacity: 0.55;\n  font-weight: 600;\n  letter-spacing: 0.02em;\n}\n@keyframes shake {\n  0%, 100% { transform: translateX(0); }\n  20%, 60% { transform: translateX(-6px); }\n  40%, 80% { transform: translateX(6px); }\n}\n.user-avatar {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 20px;\n  font-weight: 600;\n  color: #fff;\n  border: 1px solid rgba(255,255,255,0.3);\n}\n.user-name {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255,255,255,0.9);\n}\n.pin-prompt {\n  display: none;\n  animation: fadeIn 0.3s ease forwards;\n  margin-top: 20px;\n}\n.pin-prompt input {\n  font-size: 24px;\n  letter-spacing: 8px;\n  text-align: center;\n  padding: 10px;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(0,0,0,0.2);\n  color: white;\n  width: 200px;\n  margin-bottom: 20px;\n}\n.btn-claim {\n  background: #ff3b30;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-claim:hover { background: #ff453a; }\n.btn-start {\n  background: #34c759;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-start:hover { background: #30d158; }\n.btn-cancel {\n  background: rgba(255,255,255,0.1);\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  margin-left: 10px;\n}\n\n/* Mobile background and HomeKit polish fixes (moved from runtime hack) */\n.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}\n.entry-icon{contain:layout!important}\n#global-status { display: none !important; }\n#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}\n.argus-instance-duplicate-status{display:none!important}\n.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}\n.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}\n.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}\n#w-activity{max-height:none!important;overflow:visible!important}\n.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;scrollbar-gutter:stable!important;-webkit-overflow-scrolling:touch;touch-action:pan-y}\n@media(max-width:760px){\n  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}\n  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}\n  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}\n  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}\n  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}\n  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}\n  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}\n  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}\n  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}\n  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}\n  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}\n  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}\n  #w-activity{max-height:none!important;overflow:visible!important}\n  .activity-log{max-height:46vh!important;overflow-y:auto!important}\n  .argus-mobile-history-overflow-item{display:list-item!important}\n  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}\n  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}\n  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}\n  .sos-actions button,.panic-actions button,[data-action*=\"sos\"],[data-action*=\"panic\"]{min-height:48px!important;touch-action:manipulation!important}\n  input[type=\"file\"]{max-width:100%!important;width:100%!important;color:#fff!important}\n}\n@media(orientation:landscape) and (max-height:560px) and (max-width:950px){\n  .hero{padding:14px!important;gap:10px!important}\n  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}\n  .hero-clock{width:auto!important;justify-items:start!important}\n  .hero-pills{justify-content:flex-start!important}\n}\n  /* border-radius + overflow already clip the glass card. Avoid a redundant\n     WebKit mask that can add another compositing surface during scroll. */\n  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: none; }\n\n/* Profile Frosted Glass & Jelly Spring Animation */\n@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}\n\n.console-sensor.sensor-arming-blink,\n.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}\n\n/* Keep sensor labels readable and keep the status word intact. */\n.security-console .console-sensor,\n.security-console .console-sensor-card { min-width: 0 !important; }\n.security-console .console-sensor-name {\n  min-width: 0 !important;\n  overflow-wrap: normal !important;\n  word-break: normal !important;\n  hyphens: none !important;\n  white-space: normal !important;\n}\n.security-console .console-sensor-state {\n  flex: 0 0 auto !important;\n  white-space: nowrap !important;\n}\n\n/* Wide spacious SOS selector */\n.emergency-number-card{transition:all 0.3s ease}\n.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}\n.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}\n.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}\n\n/* Initial Cold Boot Dark Curtain (Apple macOS boot aesthetic) */\n#argus-initial-curtain {\n  position: fixed;\n  inset: 0;\n  background: #000000;\n  z-index: 99998;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;\n}\n#argus-initial-curtain.curtain-hidden {\n  opacity: 0;\n  visibility: hidden;\n  pointer-events: none;\n}\n.argus-boot-container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  transform: translate3d(0, 0, 0);\n}\n.argus-boot-logo {\n  width: 96px;\n  height: 96px;\n  border-radius: 24px;\n  object-fit: cover;\n  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 45px rgba(56, 189, 248, 0.12);\n  animation: appleBootLogo 1.6s ease-in-out infinite alternate;\n}\n.argus-apple-progressbar {\n  width: 175px;\n  height: 4.5px;\n  border-radius: 999px;\n  background: rgba(255, 255, 255, 0.12);\n  margin-top: 36px;\n  overflow: hidden;\n  position: relative;\n  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.6);\n}\n.argus-apple-progressbar-fill {\n  height: 100%;\n  background: #ffffff;\n  border-radius: 999px;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 15%;\n  box-shadow: 0 0 8px rgba(255, 255, 255, 0.75);\n  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, box-shadow 0.3s ease;\n  will-change: width;\n}\n.argus-boot-status {\n  margin-top: 22px;\n  font-size: 11.5px;\n  font-weight: 500;\n  color: rgba(255, 255, 255, 0.55);\n  letter-spacing: 0.02em;\n  text-align: center;\n  min-height: 24px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 10px;\n  animation: argusBootFadeIn 0.3s ease;\n}\n.argus-boot-status.status-error {\n  color: #f87171;\n}\n.argus-boot-reload-btn {\n  background: rgba(255, 255, 255, 0.12);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  color: #ffffff;\n  font-size: 11px;\n  font-weight: 600;\n  padding: 3px 12px;\n  border-radius: 12px;\n  cursor: pointer;\n  transition: background 0.2s ease, border-color 0.2s ease;\n}\n.argus-boot-reload-btn:hover {\n  background: rgba(255, 255, 255, 0.22);\n  border-color: rgba(255, 255, 255, 0.4);\n}\n@keyframes appleBootLogo {\n  0% { transform: scale(1); opacity: 0.92; }\n  100% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.22)); }\n}\n@keyframes argusBootFadeIn {\n  from { opacity: 0; transform: translateY(4px); }\n  to { opacity: 1; transform: translateY(0); }\n}\n\n\n/* Profile selector responsive centering. */\n.argus-profile-overlay { box-sizing:border-box; min-height:100dvh; padding:clamp(20px,5vw,64px) clamp(14px,4vw,48px); }\n.argus-profile-overlay > div:first-child { width:min(100%, 920px); max-width:100%; box-sizing:border-box; }\n.argus-profile-grid { width:100%; max-width:100%; grid-template-columns:repeat(auto-fit, minmax(min(180px, 42vw), 220px)); justify-content:center; align-items:start; }\n.argus-profile-grid > .argus-profile-item:only-child { grid-column:1 / -1; justify-self:center; }\n@media (max-width:600px) and (orientation:portrait) {\n  .argus-profile-overlay { align-items:center; justify-content:center; overflow-y:auto; }\n  .argus-profile-grid { grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:clamp(14px,5vw,24px); padding:0; }\n  .argus-profile-grid > .argus-profile-item:only-child { grid-column:1 / -1; justify-self:center; width:min(100%, 220px); }\n}\n@media (max-width:380px) and (orientation:portrait) {\n  .argus-profile-grid { grid-template-columns:1fr; }\n}\n</style>\n\n<!-- Initial Cold Boot Apple macOS Screen -->\n<div id=\"argus-initial-curtain\">\n  <div class=\"argus-boot-container\">\n    <img class=\"argus-boot-logo\" src=\"/api/argus_static/argus_logo.png\" alt=\"Argus\" />\n    <div class=\"argus-apple-progressbar\">\n      <div id=\"argus-boot-fill\" class=\"argus-apple-progressbar-fill\"></div>\n    </div>\n    <div id=\"argus-boot-status\" class=\"argus-boot-status\" style=\"display:none;\"></div>\n  </div>\n</div>\n\n<!-- Bootstrap UI -->\n<div id=\"bootstrap-overlay\" class=\"argus-bootstrap-layer\" style=\"display:none\"></div>\n\n<!-- Language picker modal -->\n<div class=\"lang-modal-back\" id=\"lang-modal\" aria-hidden=\"true\">\n  <div class=\"lang-modal-card\">\n    <div class=\"lang-modal-title\" id=\"lang-modal-title\">🌐 Select Language</div>\n    <div class=\"lang-grid\" id=\"lang-grid\"></div>\n    <div class=\"lang-close-row\">\n      <button class=\"lang-close-btn\" id=\"lang-modal-close\">✕ Close</button>\n    </div>\n  </div>\n</div>\n\n<!-- Walk Test Modal -->\n<div class=\"walk-test-modal-back\" id=\"walk-test-modal\" aria-hidden=\"true\">\n  <div class=\"walk-test-modal-card\">\n    <div class=\"walk-test-header\">\n      <div class=\"walk-test-title\">🚶 <span id=\"walk-test-title-text\">Prueba de Sensores (Walk Test)</span></div>\n      <div class=\"walk-test-timer\" id=\"walk-test-timer\">15:00</div>\n    </div>\n    <p style=\"margin:0;font-size:12px;opacity:0.75;line-height:1.4\" id=\"walk-test-desc-text\">\n      Camina y activa cada sensor. No sonarán sirenas. Se emitirá un aviso sonoro por cada detector probado.\n    </p>\n    <div style=\"display:flex;flex-direction:column;gap:6px\">\n      <div style=\"display:flex;justify-content:space-between;font-size:11.5px;font-weight:700\">\n        <span id=\"walk-test-progress-text\">0 de 0 sensores verificados (0%)</span>\n        <span id=\"walk-test-status-badge\" style=\"color:#38bdf8\">En curso</span>\n      </div>\n      <div class=\"walk-test-progress-bar\">\n        <div class=\"walk-test-progress-fill\" id=\"walk-test-progress-fill\" style=\"width:0%\"></div>\n      </div>\n    </div>\n    <div class=\"walk-test-sensor-list\" id=\"walk-test-sensor-list\"></div>\n    <div style=\"display:flex;justify-content:flex-end;gap:10px;margin-top:4px\">\n      <button class=\"ghost\" id=\"walk-test-close-btn\" style=\"padding:9px 18px;border-radius:12px;font-size:12px;font-weight:700\">Cerrar</button>\n      <button class=\"primary\" id=\"walk-test-stop-btn\" style=\"padding:9px 20px;border-radius:12px;font-size:12px;font-weight:700;background:linear-gradient(135deg,#ef4444,#dc2626)\">Finalizar Prueba</button>\n    </div>\n  </div>\n</div>\n\n<!-- Sensor Delay Modal -->\n<div class=\"walk-test-modal-back\" id=\"sensor-delay-modal\" aria-hidden=\"true\">\n  <div class=\"walk-test-modal-card\" style=\"width:min(420px,92vw)\">\n    <div class=\"walk-test-header\">\n      <div class=\"walk-test-title\">⏱️ <span id=\"sensor-delay-modal-title\">Configurar retardo del sensor</span></div>\n    </div>\n    <div style=\"font-size:13px;font-weight:700;color:#38bdf8\" id=\"sensor-delay-modal-entity\">sensor.example</div>\n    <div style=\"display:flex;flex-direction:column;gap:12px;margin:8px 0\">\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"default\" id=\"delay-opt-default\" checked>\n        <span id=\"txt-delay-opt-default\">🌐 Heredar retardo global del modo</span>\n      </label>\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"instant\" id=\"delay-opt-instant\">\n        <span id=\"txt-delay-opt-instant\">⚡ Instantáneo (0s - Disparo inmediato)</span>\n      </label>\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"custom\" id=\"delay-opt-custom\">\n        <span id=\"txt-delay-opt-custom\">⏱️ Retardo personalizado</span>\n      </label>\n      <div id=\"delay-custom-input-wrap\" style=\"display:none;padding-left:26px;gap:8px;align-items:center\">\n        <input type=\"number\" id=\"sensor-delay-seconds-input\" min=\"1\" max=\"300\" value=\"30\" style=\"width:80px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px\">\n        <span style=\"font-size:12px;opacity:0.75\" id=\"txt-delay-seconds-label\">segundos</span>\n      </div>\n    </div>\n    <div style=\"display:flex;justify-content:flex-end;gap:10px;margin-top:6px\">\n      <button class=\"ghost\" id=\"sensor-delay-cancel-btn\" style=\"padding:8px 16px;border-radius:12px;font-size:12px\">Cancelar</button>\n      <button class=\"primary\" id=\"sensor-delay-save-btn\" style=\"padding:8px 20px;border-radius:12px;font-size:12px;font-weight:700\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- SOS Confirm Modal -->\n<div class=\"ios-confirm-backdrop\" id=\"sos-modal\" style=\"display:none\">\n  <div class=\"ios-confirm-card liquid-glass\" id=\"sos-card\" style=\"position:relative;\">\n    <button id=\"sos-close-x\" style=\"position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;\">✕</button>\n    <div class=\"ios-confirm-title\" id=\"sos-title-txt\">Confirmar pánico</div>\n    <div class=\"ios-confirm-text\" id=\"sos-text-txt\">Desliza para disparar la alarma inmediatamente.</div>\n    <div class=\"ios-slider-shell\">\n      <div class=\"ios-slider-track\">\n        <div class=\"ios-slider-label\" id=\"sos-label\">Desliza para activar SOS</div>\n        <div class=\"ios-slider-thumb\" id=\"sos-thumb\">🚨</div>\n      </div>\n    </div>\n    <button class=\"ios-confirm-cancel\" id=\"btn-cancel-sos\" style=\"margin-top:16px\">Cancelar</button>\n  </div>\n</div>\n\n\n<div id=\"argus-canvas-bg\"></div>\n\n\n<div class=\"wrap\" style=\"display:none !important;\">\n  <!-- HERO -->\n  <div class=\"glass hero liquid-glass\">\n    <div class=\"hero-left\">\n      <img src=\"/api/argus_static/argus_logo.png\" alt=\"Argus Logo\" style=\"width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;\">\n      <div>\n        <h1>Argus Home Hub</h1>\n        <p id=\"p-hero-desc\"></p>\n      </div>\n    </div>\n    <div class=\"hero-context\" aria-live=\"polite\">\n      <div class=\"hero-clock\"><strong id=\"hero-clock-time\">--:--</strong><span id=\"hero-clock-date\"></span></div>\n      <div id=\"hero-profile-container\"></div>\n    </div>\n  </div>\n\n  <!-- TWO-COLUMN LAYOUT -->\n  <div class=\"grid hide-legacy\" id=\"widget-grid\" data-layout-owner=\"react-v3-staging\">\n\n    <!-- Instances -->\n    <section class=\"glass panel liquid-glass dashboard-instances\" id=\"w-instances\" style=\"grid-column: 1 / -1;\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-instances\"></h2>\n          <div style=\"display:flex;align-items:center;gap:12px\">\n            <div id=\"global-status\"></div>\n          </div>\n        </div>\n        <div id=\"entries\"></div>\n      </section>\n\n      <!-- Activity log -->\n      <section class=\"glass panel liquid-glass activity-panel\" id=\"w-activity\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-activity-log\">📋 Historial de Actividad</h2>\n          <div class=\"panel-actions\">\n            <button class=\"ghost\" id=\"btn-refresh-history\" aria-label=\"Actualizar Historial\" title=\"Actualizar\">🔄 Actualizar</button>\n            <button class=\"ghost\" id=\"btn-export-forensic\" aria-label=\"Exportar Historial\" title=\"Exportar\">📄 Exportar</button>\n            <button class=\"ghost\" id=\"btn-clear-log\" aria-label=\"Limpiar Historial\" style=\"background:rgba(255,69,58,0.12);color:#ff453a !important\" title=\"Limpiar\">🗑️ Limpiar</button>\n          </div>\n        </div>\n        <div id=\"activity-log\" class=\"activity-log\" style=\"display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px\"></div>\n      </section>\n\n      <!-- Modes -->\n      <section class=\"glass panel liquid-glass modes-panel\" id=\"w-modes\">\n        <div class=\"panel-head\">\n           <h2 id=\"h-modes\"></h2>\n        </div>\n        <div class=\"tabs\" id=\"mode-tabs\" style=\"margin-bottom:15px\"></div>\n        <div id=\"mode-view\"></div>\n      </section>\n\n      <!-- Users & Master PIN Settings -->\n      <section class=\"glass panel liquid-glass access-panel\" id=\"w-access\">\n        <div class=\"panel-head\">\n          <div>\n            <h2 id=\"h-access-title\">Control de Acceso y Usuarios</h2>\n            <p class=\"access-summary\" id=\"p-access-desc\">PIN desactivado · Sin usuarios adicionales</p>\n          </div>\n        </div>\n\n        <div class=\"access-workspace\" id=\"access-workspace\" style=\"display:contents\">\n          <!-- Users -->\n          <div class=\"access-section\" id=\"access-users-section\">\n            <h3 id=\"h-users\"></h3>\n            <p class=\"small\" id=\"p-admin-only\" style=\"margin-bottom:14px;color:#fb8c00;font-weight:600\"></p>\n            <div id=\"users-list\" style=\"display:grid;gap:12px;margin-bottom:16px\"></div>\n          </div>\n\n          <!-- Notifications -->\n          <div class=\"access-section\" id=\"access-notifications-section\">\n            <h3 id=\"h-notifications\"></h3>\n            <p class=\"small\" id=\"p-notif-desc\" style=\"margin:0 0 12px;opacity:.72\"></p>\n            <div id=\"notif-targets\" style=\"display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px\"></div>\n            <div style=\"display:flex;gap:8px;align-items:center\">\n              <select id=\"notif-select\" class=\"glass-control\" style=\"flex:1;min-width:0\"></select>\n              <button type=\"button\" class=\"ghost\" id=\"btn-add-notif\" style=\"white-space:nowrap\">＋</button>\n            </div>\n            <div class=\"save-row\" style=\"margin-top:12px\">\n              <button class=\"primary\" id=\"btn-save-notif\" style=\"width:100%\"></button>\n            </div>\n            <div id=\"notif-status\" class=\"status\" style=\"margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px\"></div>\n          </div>\n\n        </div>\n      </section>\n\n      <!-- Automations -->\n                <!-- Master PIN -->\n          <div id=\"access-pin-settings\" style=\"position:fixed;inset:0;z-index:999999999;display:none;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)\" aria-hidden=\"true\">\n            <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"h-settings-pin\" style=\"position:relative;width:min(380px,90vw);max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;background:rgba(30,30,45,.96);color:white;border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:28px 24px 22px;box-shadow:0 24px 64px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)\">\n            <h3 id=\"h-settings-pin\" style=\"margin:0;font-size:16px;font-weight:700\">PIN de armado</h3>\n            <div class=\"subsection\" style=\"padding:0;margin:0\">\n              <div id=\"current-pin-display\" style=\"font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block\"></div>\n              <div class=\"field-group collapsible collapsed\" id=\"group-current-pin\" style=\"margin-bottom: 12px\">\n                 <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n                   <label id=\"l-current-pin-lbl\"></label>\n                   <a href=\"#\" id=\"lnk-forgot-pin\" style=\"font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;\"></a>\n                 </div>\n                 <input type=\"password\" id=\"current-pin\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\">\n              </div>\n              <p class=\"small\" id=\"p-pin-remove-hint\" style=\"margin:0 0 10px 0; color:var(--primary-color); font-weight:700\">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>\n              <div style=\"display:grid;gap:10px\">\n                <div class=\"field-group\"><label id=\"l-new-pin\"></label><input type=\"password\" id=\"new-pin-1\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n                <div class=\"field-group\"><label id=\"l-confirm-pin\"></label><input type=\"password\" id=\"new-pin-2\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n              </div>\n              <div class=\"save-row\" style=\"margin-top:15px\">\n                <button class=\"primary\" id=\"btn-save-pin\" style=\"width:100%\"></button>\n              </div>\n              <div id=\"pin-status\" class=\"status\" style=\"margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;\"></div>\n            </div>\n            <button type=\"button\" id=\"btn-close-arming-pin\" class=\"secondary\" style=\"width:100%;min-height:42px\">Cancelar</button>\n            </div>\n          </div>\n\n<section class=\"glass panel liquid-glass automations-panel\" id=\"w-automations\">\n        <h2 id=\"h-automations\"></h2>\n        <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\">\n          <span class=\"small\" id=\"p-linked-rules\" style=\"opacity:0.7\"></span>\n          <button class=\"primary\" id=\"btn-new-auto\" style=\"padding:6px 12px;font-size:11px\"></button>\n        </div>\n        <div id=\"auto-view\"></div>\n      </section>\n\n      <!-- Backup & Restore -->\n      <section class=\"glass panel liquid-glass backup-panel\" id=\"w-backup\">\n        <h2 id=\"h-backup-title\">Respaldo y Restauración</h2>\n        <p class=\"small\" id=\"p-backup-desc\" style=\"margin-bottom:12px;opacity:0.7\">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>\n        <div style=\"display:flex;gap:10px;align-items:center;\">\n          <button class=\"ghost\" id=\"btn-export-config\" style=\"flex:1\">📤 Descargar</button>\n          <div style=\"position:relative; flex:1\">\n            <button class=\"ghost\" style=\"width:100%\" id=\"btn-import-trigger\">📥 Restaurar</button>\n            <input type=\"file\" id=\"import-config-file\" style=\"display:none\" accept=\".json,.argus,application/json\">\n          </div>\n          <button class=\"ghost danger\" id=\"btn-reset-config\" style=\"flex:1\">⚠️ Restablecer</button>\n          <button class=\"primary\" id=\"btn-undo-reset\" style=\"flex:1; display:none;\">↩️ Deshacer</button>\n        </div>\n      </section>\n\n      <!-- GitHub Opt-In -->\n      <section class=\"glass panel liquid-glass github-panel\" id=\"w-github\">\n        <div class=\"github-header\">\n          <h3 id=\"github-title\" style=\"margin:0; font-size:14px; font-weight:700\"></h3>\n          <p id=\"github-desc\" style=\"margin:4px 0 0; font-size:12px; opacity:0.75\"></p>\n        </div>\n        <div class=\"support-actions-grid\">\n          <a id=\"github-action\" class=\"support-link-btn star\" href=\"https://github.com/Chrisalvir1/Argus\" target=\"_blank\" rel=\"noopener noreferrer\">⭐ GitHub</a>\n          <a id=\"paypal-action\" class=\"support-link-btn paypal\" href=\"https://paypal.me/CEstradaAlvir\" target=\"_blank\" rel=\"noopener noreferrer\">☕ PayPal</a>\n          <a id=\"email-action\" class=\"support-link-btn email\" href=\"mailto:chrisalvir01@gmail.com\">✉️ Sugerencias</a>\n        </div>\n      </section>\n\n  </div> <!-- /grid -->\n</div>\n\n<!-- Selector modal (dual-panel) -->\n<div class=\"modal-back\" id=\"selector-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"selector-title\">Seleccionar</h3>\n      <button class=\"ghost\" id=\"selector-close\"></button>\n    </div>\n    <div class=\"modal-body\" style=\"overflow:hidden;display:flex;flex-direction:column;gap:10px\">\n      <div class=\"sel-grid\">\n        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-available\">Disponibles</div>\n          <div class=\"search-wrap\" style=\"margin:0\"><input id=\"selector-search\" type=\"search\" placeholder=\"Buscar...\"></div>\n          <div class=\"sel-actions\">\n            <button class=\"ghost\" id=\"selector-select-all\" style=\"padding:5px 10px;font-size:12px\">☑ Todos</button>\n            <button class=\"ghost\" id=\"selector-deselect-all\" style=\"padding:5px 10px;font-size:12px\">☐ Ninguno</button>\n          </div>\n          <div class=\"sel-panel-inner\" id=\"selector-list\"></div>\n        </div>\n        <!-- RIGHT: panel de seleccionados -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-selected-lbl\">Seleccionados</div>\n          <div class=\"small\" id=\"selector-count\" style=\"margin-bottom:4px\">0 seleccionados</div>\n          <div class=\"sel-panel-inner\" id=\"selector-selected\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <div style=\"display:flex;gap:10px;width:100%;justify-content:flex-end\">\n        <button class=\"ghost\" id=\"selector-clear\"></button>\n        <button class=\"primary\" id=\"selector-accept\"></button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Home name edit modal -->\n<div class=\"modal-back\" id=\"home-name-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"width:min(400px,96vw)\">\n    <div class=\"modal-head\">\n      <h3 id=\"home-name-modal-h3\">🏡 Nombre del Hogar</h3>\n      <button class=\"ghost\" id=\"home-name-modal-close\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:4px 0\">\n      <p class=\"small\" id=\"home-name-modal-desc\" style=\"margin:0;opacity:.7\">This name appears in the instances panel and in full screen.</p>\n      <div class=\"field-group\">\n        <label id=\"l-home-name-modal-label\">Home name</label>\n        <input type=\"text\" id=\"home-name-input\" placeholder=\"Mi Casa\" maxlength=\"60\" autocomplete=\"off\" class=\"glass-control\">\n      </div>\n      <span class=\"status\" id=\"home-name-status\" style=\"text-align:center\"></span>\n    </div>\n    <div class=\"modal-footer\">\n      <button class=\"ghost\" id=\"home-name-cancel\">Cancelar</button>\n      <button class=\"primary\" id=\"home-name-save\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- PIN modal -->\n<div class=\"modal-back pm\" id=\"pin-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"l-introduce-pin\">🔒</h3>\n      <button class=\"ghost\" id=\"pin-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:10px;width:100%\">\n      <p id=\"l-pin-modal-desc\" class=\"small\" style=\"text-align:center;margin:0;opacity:0.75\"></p>\n      <input id=\"pin-input\" class=\"pin-input\" type=\"password\" inputmode=\"numeric\" pattern=\"[0-9]*\" placeholder=\"••••\" autocomplete=\"off\" maxlength=\"12\" readonly>\n      <div class=\"pin-grid\" id=\"pin-pad\">\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"1\">1</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"2\">2</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"3\">3</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"4\">4</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"5\">5</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"6\">6</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"7\">7</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"8\">8</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"9\">9</button>\n        <button class=\"pin-btn-round action-key delete-key\" type=\"button\" id=\"pin-backspace\">Borrar</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"0\">0</button>\n        <button class=\"pin-btn-round action-key enter-key\" type=\"button\" id=\"pin-confirm\">Enter</button>\n      </div>\n      <div id=\"pin-error\" class=\"pin-error\" role=\"status\" aria-live=\"polite\"></div>\n      <div style=\"text-align:center; margin-top: 5px;\">\n        <a href=\"#\" id=\"pin-forgot-link\" style=\"font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;\"></a>\n      </div>\n    </div>\n    <button id=\"pin-cancel\" style=\"display:none\"></button>\n  </div>\n</div>\n\n<!-- History Export modal -->\n<div class=\"modal-back pm\" id=\"history-export-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"max-width: 440px;\">\n    <div class=\"modal-head\">\n      <h3 id=\"h-history-export-title\">📄 Exportar Historial</h3>\n      <button class=\"ghost\" id=\"history-export-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:6px 0\">\n      <p class=\"small\" id=\"p-history-export-desc\" style=\"margin:0;opacity:.75\">Selecciona el rango de fechas para descargar el reporte.</p>\n      <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\">\n        <div class=\"field-group\">\n          <label id=\"l-history-export-from\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Desde</label>\n          <input type=\"date\" id=\"export-history-from\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n        <div class=\"field-group\">\n          <label id=\"l-history-export-to\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Hasta</label>\n          <input type=\"date\" id=\"export-history-to\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;margin-top:6px;\">\n        <button class=\"primary\" id=\"btn-do-download-pdf\" style=\"height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)\">\n          ⬇️ Descargar PDF\n        </button>\n        <button class=\"glass-control\" id=\"btn-do-download-txt\" style=\"height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)\">\n          📑 Descargar reporte (.txt)\n        </button>\n        <button class=\"ghost\" id=\"btn-do-download-json\" style=\"height:36px;font-size:11px;cursor:pointer;opacity:0.75\">\n          💾 Descargar JSON sin procesar\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n";
+var ie = class extends HTMLElement {
 	constructor() {
-		super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosCallPromptEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(H.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeView = "mode", this._modeEntryId = null, this._zonesEnabled = !1, this._zonesLoaded = !1, this._zonesLoading = !1, this._zoneList = [], this._zoneEntities = [], this._zoneOpenId = null, this._zoneDraft = null, this._zoneDecision = null, this._modeDraftBaselines = /* @__PURE__ */ new Map(), this._modeDecisionPending = !1, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._optimisticAlarmStates = /* @__PURE__ */ new Map(), this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._pinCloseTimer = null, this._homeName = "", this._backgroundMode = "none", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._historyPDFLogoPromise = null, this._lastActivityRenderSignature = null, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
+		super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosCallPromptEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(V.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeView = "mode", this._modeEntryId = null, this._zonesEnabled = !1, this._zonesLoaded = !1, this._zonesLoading = !1, this._zoneList = [], this._zoneEntities = [], this._zoneOpenId = null, this._zoneDraft = null, this._zoneDecision = null, this._modeDraftBaselines = /* @__PURE__ */ new Map(), this._modeDecisionPending = !1, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._optimisticAlarmStates = /* @__PURE__ */ new Map(), this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._pinCloseTimer = null, this._homeName = "", this._backgroundMode = "none", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._historyPDFLogoPromise = null, this._lastActivityRenderSignature = null, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
 	}
 	_getTimeZone() {
 		return this._hass?.config?.time_zone || void 0;
@@ -10754,7 +10754,7 @@ var re = class extends HTMLElement {
 		};
 	}
 	_t(e) {
-		return V[this._getCurrentLangCode()]?.[e] || V.en[e] || e;
+		return B[this._getCurrentLangCode()]?.[e] || B.en[e] || e;
 	}
 	_format(e, t = {}) {
 		return this._t(e).replace(/\{(\w+)\}/g, (e, n) => String(t[n] ?? `{${n}}`));
@@ -10778,9 +10778,9 @@ var re = class extends HTMLElement {
 			let t = this._ui?.manual_lang || this._ui?.language;
 			t && t !== "auto" && (e = t);
 		}
-		if (e ||= this._hass?.language || "es", e = String(e || "es").trim(), V[e]) return e;
+		if (e ||= this._hass?.language || "es", e = String(e || "es").trim(), B[e]) return e;
 		let t = e.split(/[-_]/)[0].toLowerCase();
-		return V[t] ? t : t.startsWith("es") ? "es" : "en";
+		return B[t] ? t : t.startsWith("es") ? "es" : "en";
 	}
 	_getLocale() {
 		let e = this._manualLang && this._manualLang !== "auto" ? this._manualLang : null, t = (() => {
@@ -10800,7 +10800,7 @@ var re = class extends HTMLElement {
 		let e = this.shadowRoot.getElementById("lang-modal");
 		if (!e) return;
 		let t = this.shadowRoot.getElementById("lang-grid"), n = this._manualLang || "auto";
-		t && (t.innerHTML = B.map((e) => `
+		t && (t.innerHTML = re.map((e) => `
         <button class="lang-option${e.code === n ? " active" : ""}" data-lang="${e.code}">
           <span class="lang-flag">${e.flag}</span>
           <span>${e.code === "auto" ? this._t("use_ha_language") : e.label}</span>
@@ -10954,7 +10954,7 @@ var re = class extends HTMLElement {
 				...t ? { entry_id: t } : {}
 			}).catch(console.error);
 		} else {
-			if (!V[e]) return;
+			if (!B[e]) return;
 			this._manualLang = e;
 			try {
 				localStorage.setItem("argus_lang", e);
@@ -10979,7 +10979,7 @@ var re = class extends HTMLElement {
 		let e = (e) => this._t(e), t = (e) => this.shadowRoot.getElementById(e), n = (e, n) => {
 			let r = t(e);
 			r && (r.textContent = n);
-		}, r = this._manualLang || "auto", i = B.find((e) => e.code === r) || B[1], a = t("lang-pill-flag"), o = t("lang-pill-label");
+		}, r = this._manualLang || "auto", i = re.find((e) => e.code === r) || re[1], a = t("lang-pill-flag"), o = t("lang-pill-label");
 		a && (a.textContent = i.flag), o && (o.textContent = r === "auto" ? this._t("use_ha_language") : i.label), n("p-hero-desc", e("hero_desc")), n("h-instances", e("instances")), n("h-modes", e("modes")), n("h-automations", e("automations")), n("p-linked-rules", e("linked_rules")), n("h-settings", e("settings")), n("h-activity-log", e("activity_log")), n("btn-refresh-history", e("history_refresh")), n("t-change-pin", e("change_pin")), n("l-current-pin-lbl", e("current_pin")), n("lnk-forgot-pin", e("forgot_pin")), n("pin-forgot-link", e("forgot_pin")), n("btn-save-pin", e("update_pin")), n("btn-close-arming-pin", e("modal_cancel")), n("l-new-pin", e("new_pin")), n("l-confirm-pin", e("confirm_pin")), n("h-notifications", e("notifications_title")), n("p-notif-desc", e("notif_desc")), n("h-users", e("users_title")), n("p-admin-only", e("admin_only")), n("t-add-user", e("add_user")), n("l-username", e("username")), n("l-user-pin", e("user_pin")), n("s-is-admin", e("is_admin")), n("l-user-exp-type", e("user_exp_type")), n("l-user-exp-date", e("user_exp_date"));
 		let s = t("opt-exp-indefinite");
 		s && (s.textContent = e("exp_indefinite"));
@@ -11649,7 +11649,7 @@ var re = class extends HTMLElement {
 		this._currentUserTheme = r, r.background_mode !== "default" && r.background_file ? (this._backgroundMode = r.background_mode, this._panelBgFile = r.background_file, this._backgroundImages = [r.background_file]) : r.background_mode !== "default" && r.background_mode ? (this._backgroundMode = r.background_mode, this._panelBgFile = "", this._backgroundImages = []) : (this._backgroundMode = n.background_mode || "none", this._panelBgFile = "", this._backgroundImages = n.background_images || []), n.weather_source && (this._weatherSource = n.weather_source), n.temperature_source && (this._temperatureSource = n.temperature_source);
 		try {
 			let e = localStorage.getItem("argus_lang");
-			this._manualLang = e && e !== "auto" ? e : n.language && n.language !== "auto" && B.some((e) => e.code === n.language) ? n.language : null;
+			this._manualLang = e && e !== "auto" ? e : n.language && n.language !== "auto" && re.some((e) => e.code === n.language) ? n.language : null;
 		} catch {}
 		if (this._updateCanvasBackground(), n.configuration_missing) {
 			this._loadState = "configuration_missing", this._renderMissingConfigurationScreen();
@@ -14771,7 +14771,7 @@ var re = class extends HTMLElement {
 	_updateHeroProfileDisplay() {
 		let e = this.shadowRoot.getElementById("hero-profile-container");
 		if (!e) return;
-		z(e);
+		R(e);
 		let t = this._currentProfile;
 		if (!t) {
 			e.style.display = "none", e.innerHTML = "";
@@ -14817,7 +14817,7 @@ var re = class extends HTMLElement {
         <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
           <label style="font-size: 11.5px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 6px;">${this._t("lang_selector_lbl") || "⚙️ Idioma / Language"}</label>
           <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 12px; font-size: 12.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
-            ${B.map((e) => `<option value="${e.code}" ${e.code === i ? "selected" : ""}>${e.flag} ${e.code === "auto" ? this._t("use_ha_language") || "Automático (HA)" : e.label}</option>`).join("")}
+            ${re.map((e) => `<option value="${e.code}" ${e.code === i ? "selected" : ""}>${e.flag} ${e.code === "auto" ? this._t("use_ha_language") || "Automático (HA)" : e.label}</option>`).join("")}
           </select>
         </div>
 
@@ -14941,7 +14941,7 @@ var re = class extends HTMLElement {
       </div>
       </div>
     `;
-		let d = e.querySelector(".hero-profile-pill"), f = e.querySelector("#profile-dropdown"), p = f ? ne(f) : null, m = p?.element;
+		let d = e.querySelector(".hero-profile-pill"), f = e.querySelector("#profile-dropdown"), p = f ? z(f) : null, m = p?.element;
 		if (d && m) {
 			d.addEventListener("click", (e) => {
 				e.stopPropagation(), p.toggle();
@@ -15735,20 +15735,20 @@ var re = class extends HTMLElement {
 		t && (t.hidden = !t.hidden, this._saveWidgetLayout(), this._renderWidgetLayout());
 	}
 };
-customElements.get("argus-panel-v2018") || customElements.define("argus-panel-v2018", re);
+customElements.get("argus-panel-v2018") || customElements.define("argus-panel-v2018", ie);
 try {
-	customElements.get("argus-panel") || customElements.define("argus-panel", re);
+	customElements.get("argus-panel") || customElements.define("argus-panel", ie);
 } catch {}
 //#endregion
 //#region src/legacy/argus-card.ts
-var ie = "2.2.93";
-console.info(`%c🛡️ ARGUS ALARM CARD %c v${ie} `, "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;", "color:#0a1628;background:#38bdf8;font-weight:700;padding:4px 8px;border-radius:0 4px 4px 0;");
-function ae(e) {
+var ae = "2.2.93";
+console.info(`%c🛡️ ARGUS ALARM CARD %c v${ae} `, "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;", "color:#0a1628;background:#38bdf8;font-weight:700;padding:4px 8px;border-radius:0 4px 4px 0;");
+function oe(e) {
 	if (!e?.states) return null;
 	let t = Object.values(e.states);
 	return (t.find((e) => e.entity_id?.startsWith("alarm_control_panel.") && (e.attributes?.argus_version || e.attributes?.argus_entry_id || e.entity_id.includes("argus"))) || t.find((e) => e.entity_id?.startsWith("alarm_control_panel.")))?.entity_id || null;
 }
-var oe = {
+var se = {
 	es: {
 		title: "Seguridad",
 		home: "EN CASA",
@@ -15892,13 +15892,13 @@ var oe = {
 		bad: "Невірний PIN",
 		unknown: "Розташування недоступне"
 	}
-}, U = (e) => String(e ?? "").replace(/[&<>'"]/g, (e) => ({
+}, H = (e) => String(e ?? "").replace(/[&<>'"]/g, (e) => ({
 	"&": "&amp;",
 	"<": "&lt;",
 	">": "&gt;",
 	"'": "&#39;",
 	"\"": "&quot;"
-})[e]), W = class extends HTMLElement {
+})[e]), U = class extends HTMLElement {
 	setConfig(e) {
 		this._config = e;
 	}
@@ -15952,11 +15952,11 @@ var oe = {
 		}));
 	}
 };
-customElements.get("argus-panel-card-editor") || customElements.define("argus-panel-card-editor", W);
-var se = class extends HTMLElement {
+customElements.get("argus-panel-card-editor") || customElements.define("argus-panel-card-editor", U);
+var ce = class extends HTMLElement {
 	static getStubConfig(e) {
 		return {
-			entity: ae(e) || "alarm_control_panel.argus",
+			entity: oe(e) || "alarm_control_panel.argus",
 			mode: "compact",
 			title: "Argus Security"
 		};
@@ -15981,7 +15981,7 @@ var se = class extends HTMLElement {
 	}
 	set hass(e) {
 		if (this._hass = e, !this._config.entity || this._config.entity === "alarm_control_panel.argus") {
-			let t = ae(e);
+			let t = oe(e);
 			t && (this._config.entity = t);
 		}
 		if (this._config.mode === "basic") this._renderBasicCard();
@@ -16009,7 +16009,7 @@ var se = class extends HTMLElement {
 	_renderBasicCard() {
 		if (!this._panelHost || !this._hass) return;
 		this._panelMounted = !1;
-		let e = oe[String(this._hass?.language || "en").split("-")[0]] || oe.en, t = this._hass.states[this._config.entity]?.state || "unavailable", n = Object.values(this._hass?.states || {}), r = this._config.weather_entity ? this._hass.states[this._config.weather_entity] : n.find((e) => e.entity_id?.startsWith("weather.") && !["unknown", "unavailable"].includes(e.state)), i = Number(r?.attributes?.temperature), a = {
+		let e = se[String(this._hass?.language || "en").split("-")[0]] || se.en, t = this._hass.states[this._config.entity]?.state || "unavailable", n = Object.values(this._hass?.states || {}), r = this._config.weather_entity ? this._hass.states[this._config.weather_entity] : n.find((e) => e.entity_id?.startsWith("weather.") && !["unknown", "unavailable"].includes(e.state)), i = Number(r?.attributes?.temperature), a = {
 			state: String(r?.state || "unavailable").toLowerCase(),
 			temp: Number.isFinite(i) ? Math.round(i) : "—",
 			unit: Number.isFinite(i) ? String(r?.attributes?.temperature_unit || "") : "",
@@ -16039,7 +16039,7 @@ var se = class extends HTMLElement {
       <div class="basic-card">
         <div class="basic-scene"></div>
         <div class="basic-vignette"></div>
-        <div class="basic-hud"><span>${U(c)}</span><span class="basic-weather">${U(u)} · ${U(a.temp)}${U(a.unit)}</span></div>
+        <div class="basic-hud"><span>${H(c)}</span><span class="basic-weather">${H(u)} · ${H(a.temp)}${H(a.unit)}</span></div>
         <div class="basic-layout">
           <div class="basic-modes">
             <button class="basic-mode ${t === "armed_home" ? "active" : ""}" data-service="alarm_arm_home">🏠 ${e.home}</button>
@@ -16049,7 +16049,7 @@ var se = class extends HTMLElement {
           </div>
           <div class="basic-shield">${t === "triggered" ? "🚨" : "🛡️"}</div>
         </div>
-        <div class="basic-title">${U(l)} · v${ie}</div>
+        <div class="basic-title">${H(l)} · v${ae}</div>
       </div>
     `, this._panelHost.querySelectorAll("[data-service]").forEach((e) => {
 			e.onclick = async () => {
@@ -16087,15 +16087,15 @@ var se = class extends HTMLElement {
 		};
 	}
 };
-customElements.get("argus-panel-card") || customElements.define("argus-panel-card", se), customElements.get("argus-card") || customElements.define("argus-card", class extends se {}), window.customCards = window.customCards || [];
-var ce = new Set(window.customCards.map((e) => e.type));
-ce.has("argus-panel-card") || window.customCards.push({
+customElements.get("argus-panel-card") || customElements.define("argus-panel-card", ce), customElements.get("argus-card") || customElements.define("argus-card", class extends ce {}), window.customCards = window.customCards || [];
+var le = new Set(window.customCards.map((e) => e.type));
+le.has("argus-panel-card") || window.customCards.push({
 	type: "argus-panel-card",
 	name: "Argus Security Panel",
 	description: "Panel de seguridad Argus — consola Liquid Glass de Instancias Activas, dashboard e historial.",
 	preview: !0,
 	documentationURL: "https://github.com/Chrisalvir1/Argus"
-}), ce.has("argus-card") || window.customCards.push({
+}), le.has("argus-card") || window.customCards.push({
 	type: "argus-card",
 	name: "Argus Alarm Card",
 	description: "Tarjeta de seguridad Argus — consola interactiva de Instancia Activa con Liquid Glass y pantalla completa.",
@@ -16104,7 +16104,7 @@ ce.has("argus-panel-card") || window.customCards.push({
 });
 //#endregion
 //#region node_modules/react-grid-layout/css/styles.css?inline
-var le = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{opacity:0;width:20px;height:20px;position:absolute}.react-grid-item:hover>.react-resizable-handle{opacity:1}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", ue = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", de = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:20px;padding:0 18px;font-size:12px}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{cursor:grab;-webkit-user-select:none;user-select:none;align-items:center;gap:10px;min-height:50px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-dashboard--editing .argus-widget__edit-header:active{cursor:grabbing}.argus-widget__grip{opacity:.72;touch-action:none;font-size:22px;line-height:1}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:190px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu button{min-height:42px;padding:7px}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior-y:auto!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}:host{--argus-widget-ease:cubic-bezier(.22,.72,.22,1)}.argus-dashboard-grid .react-grid-item{transition:transform .26s var(--argus-widget-ease),width .22s var(--argus-widget-ease),height .22s var(--argus-widget-ease)}.argus-dashboard-grid:has(.react-draggable-dragging) .react-grid-item:not(.react-draggable-dragging),.argus-dashboard-grid:has(.resizing) .react-grid-item:not(.resizing),.argus-dashboard-grid .react-grid-item.react-draggable-dragging,.argus-dashboard-grid .react-grid-item.resizing{transition:none!important}.argus-dashboard-grid .react-grid-item.react-draggable-dragging,.argus-dashboard-grid .react-grid-item.resizing{z-index:100;will-change:transform,width,height;contain:layout style;transition:none!important}.argus-dashboard-grid .react-grid-item.react-draggable-dragging .argus-widget,.argus-dashboard-grid .react-grid-item.resizing .argus-widget{box-shadow:0 10px 24px #0003;-webkit-backdrop-filter:none!important}.argus-dashboard-grid .react-resizable-handle{z-index:4;touch-action:none;background:#121b2aeb;border:1px solid #ffffff40;border-radius:12px;width:30px;height:30px;bottom:auto;right:auto;display:none!important}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard-grid .react-resizable-handle:after{border-color:#9bc7ff;width:8px;height:8px;inset:10px auto auto 10px}.argus-dashboard-grid .react-resizable-handle-s{cursor:s-resize;background:0 0;border:0;width:64px;height:24px;bottom:-6px;left:calc(50% - 32px)}.argus-dashboard-grid .react-resizable-handle-s:after{background:#ffffffb8;border:0;border-radius:99px;width:24px;height:4px;top:9px;left:calc(50% - 12px)}.argus-dashboard-grid .react-resizable-handle-e{cursor:e-resize;background:0 0;border:0;width:24px;height:64px;top:calc(50% - 32px);right:-6px}.argus-dashboard-grid .react-resizable-handle-e:after{background:#ffffffb8;border:0;border-radius:99px;width:4px;height:24px;top:calc(50% - 12px);left:9px}.argus-dashboard-grid .react-resizable-handle-se{cursor:se-resize;background:0 0;border:0;border-radius:0 0 22px;width:44px;height:44px;bottom:0;right:0}.argus-dashboard-grid .react-resizable-handle-se:after{filter:drop-shadow(0 1px 3px #0000008c);border:4px solid #fff;border-top:0;border-left:0;border-radius:0 0 13px;width:17px;height:17px;inset:auto 7px 7px auto}.argus-widget{box-sizing:border-box;container:argus-widget/size}.argus-widget__content{box-sizing:border-box;flex-direction:column;min-width:0;min-height:0;display:flex;overflow:hidden}.argus-widget__content>.panel{flex:auto;min-width:0;min-height:0}.argus-dashboard--editing .argus-widget__content>.panel{cursor:default!important;animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]{animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{overscroll-behavior-y:auto!important;flex-direction:column!important;min-width:0!important;height:100%!important;min-height:0!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;animation:none!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]>.argus-widget__content>.panel{overscroll-behavior-y:auto!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head{flex-wrap:wrap;flex:none;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{flex-wrap:wrap;gap:6px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{overscroll-behavior-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable;flex:120px;min-height:0;height:auto!important;max-height:none!important;overflow:hidden auto!important}@media (width<=760px) and (orientation:portrait){#argus-dashboard-root-v3 .argus-widget{-webkit-backdrop-filter:none!important;box-shadow:none!important;filter:none!important;isolation:isolate!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#263445,#182535)!important;border-color:#bed2e833!important}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget__content>.panel.glass.liquid-glass{box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;background:0 0!important;border:0!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3:not(.editing) .argus-dashboard-grid .react-grid-item{transition:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]{transition:none!important;transform:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{filter:none!important;will-change:auto!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{scrollbar-gutter:auto!important;scroll-behavior:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log::-webkit-scrollbar{width:0;height:0;display:none}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{filter:none!important;box-shadow:none!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#5c6b7c,#374658)!important;animation:none!important;transform:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{flex-wrap:wrap;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:stretch;gap:8px;min-width:0;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>button,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div{overflow-wrap:anywhere;text-align:center;width:100%;min-width:0;min-height:44px;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div>button{min-height:44px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access{overscroll-behavior-y:auto;min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #w-modes{min-width:0;min-height:0;flex-direction:column!important;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{flex:none;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0;margin-bottom:10px!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{white-space:normal;min-width:0;min-height:46px;padding:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto;flex:auto;min-width:0;min-height:0;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(10px,1.7cqi,20px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{flex-wrap:wrap;gap:8px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid>*{flex:120px;min-width:0}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto!important}@container argus-widget (height<=300px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #h-activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #h-automations{font-size:clamp(14px,1.5cqi,18px)}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .github-desc{display:none}}@media (prefers-reduced-motion:no-preference){.argus-dashboard-grid .react-grid-item:not(.react-draggable-dragging):not(.resizing){transition-timing-function:var(--argus-widget-ease)}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{will-change:auto!important;animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs .tab-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}@media (width<=700px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:2px!important;min-height:44px!important;margin-bottom:8px!important;padding:4px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:10px!important;gap:1px!important;min-width:0!important;min-height:36px!important;padding:4px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:14px!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;font-size:clamp(8px,2.05vw,10px)!important;line-height:1.05!important}}#argus-dashboard-root-v3 .argus-widget__content,#argus-dashboard-root-v3 .argus-widget__content>.panel{min-width:0!important;max-width:100%!important}#argus-dashboard-root-v3 .argus-widget__content>.panel :where(h1,h2,h3,h4,p,small,label,button,a,input,select,textarea){box-sizing:border-box;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:clamp(1px,.65cqi,8px)!important;width:100%!important;min-width:0!important;min-height:48px!important;padding:4px!important;display:grid!important;overflow:visible!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:12px!important;gap:2px!important;min-width:0!important;min-height:42px!important;padding:clamp(2px,.7cqi,8px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:clamp(13px,1.55cqi,20px)!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;text-overflow:ellipsis!important;min-width:0!important;max-width:100%!important;font-size:clamp(9px,.95cqi,12px)!important;line-height:1.05!important;display:block!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:clamp(8px,1.2cqi,16px)!important;width:100%!important;min-width:0!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{overflow-wrap:anywhere;min-width:0!important;max-width:100%!important;padding:clamp(10px,1.6cqi,18px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-section-card{align-self:stretch!important;height:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items{grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items.is-scrollable{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:190px;overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-sirens-card{grid-column:1/-1}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot{min-width:0!important;max-width:100%!important;margin-top:clamp(8px,1.2cqi,16px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot>.argus-mode-voice-card{box-sizing:border-box;width:100%;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-mode-voice-card[open]>.argus-voice-body{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:min(45cqh,420px);overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-sensor-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card>*{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-preview{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:0 0 14px;padding:12px 14px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list{margin:8px 0;padding-left:22px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list>li{margin:6px 0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list ul{color:#ffffffd1;margin:4px 0;padding-left:20px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-message-card{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:10px 0;padding:12px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-label{color:#8fd8ff;margin-top:8px;font-size:.85em;font-weight:700}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-preview{white-space:normal;overflow-wrap:anywhere;background:#080f1b6b;border-radius:12px;margin:5px 0 10px;padding:9px 11px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-toggle{align-items:center;gap:8px;display:flex}@container argus-widget (width<=760px){#argus-dashboard-root-v3 .argus-widget__content>.panel .panel-head{flex-wrap:wrap;align-items:flex-start;gap:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head h2{overflow-wrap:anywhere;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr));width:100%;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions button{justify-content:center;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));align-items:stretch;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace .access-section{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{flex-direction:column!important;justify-content:center!important;align-items:stretch!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr))!important;max-width:100%!important}}@container argus-widget (width<=420px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{gap:1px!important;min-height:42px!important;padding:2px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:9px!important;min-height:36px!important;padding:2px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:13px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{font-size:9px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{border-radius:16px!important;padding:10px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:minmax(0,1fr)!important}}.argus-dashboard__restore-entry{color:#fff;font:inherit;cursor:pointer;-webkit-backdrop-filter:blur(16px);background:#ffffff17;border:1px solid #fff3;border-radius:14px;margin:8px 16px 12px auto;padding:9px 14px;font-weight:700;display:block}.argus-dashboard__restore-entry:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}:host(:is([argus-contrast=high],.argus-contrast-high)){--glass-bg:#080c13;--glass-border:#94a3b8;--v2066-glass:#080c13;--v2066-border:#94a3b8;--v2066-text:#fff;--v2066-muted:#e2e8f0;--primary-text-color:#fff;--secondary-text-color:#e2e8f0}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.argus-widget__menu,.argus-widget__edit-header,.security-context,.security-context .context-tools,.security-context section,.security-context article,.context-zone-picker,.context-sensor-row,.context-sensor-card,.context-verification-dialog,.modal,#profile-dropdown,.mode-section-card,.user-card,.log-item,.glass-subpanel){color:#fff!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.security-context,.modal,#profile-dropdown) :is(h1,h2,h3,h4,p,label,small,.hint,.muted,.small,.setting-help,.context-sensor-name){color:#fff!important;text-shadow:none!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(input,select,textarea){-webkit-text-fill-color:#fff;color:#fff!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) ::placeholder{opacity:1;color:#cbd5e1!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline-offset:3px!important;outline:3px solid #7dd3fc!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,summary):not(:disabled){border-color:#94a3b8}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{color:#fff!important;box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 #activity-log :is(.log-body,.log-title,.log-meta,.log-badge){color:#fff!important;opacity:1!important}", G = class extends D.Component {
+var ue = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{opacity:0;width:20px;height:20px;position:absolute}.react-grid-item:hover>.react-resizable-handle{opacity:1}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", de = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", W = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:20px;padding:0 18px;font-size:12px}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{cursor:grab;-webkit-user-select:none;user-select:none;align-items:center;gap:10px;min-height:50px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-dashboard--editing .argus-widget__edit-header:active{cursor:grabbing}.argus-widget__grip{opacity:.72;touch-action:none;font-size:22px;line-height:1}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:190px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu button{min-height:42px;padding:7px}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior-y:auto!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}:host{--argus-widget-ease:cubic-bezier(.22,.72,.22,1)}.argus-dashboard-grid .react-grid-item{transition:transform .26s var(--argus-widget-ease),width .22s var(--argus-widget-ease),height .22s var(--argus-widget-ease)}.argus-dashboard-grid:has(.react-draggable-dragging) .react-grid-item:not(.react-draggable-dragging),.argus-dashboard-grid:has(.resizing) .react-grid-item:not(.resizing),.argus-dashboard-grid .react-grid-item.react-draggable-dragging,.argus-dashboard-grid .react-grid-item.resizing{transition:none!important}.argus-dashboard-grid .react-grid-item.react-draggable-dragging,.argus-dashboard-grid .react-grid-item.resizing{z-index:100;will-change:transform,width,height;contain:layout style;transition:none!important}.argus-dashboard-grid .react-grid-item.react-draggable-dragging .argus-widget,.argus-dashboard-grid .react-grid-item.resizing .argus-widget{box-shadow:0 10px 24px #0003;-webkit-backdrop-filter:none!important}.argus-dashboard-grid .react-resizable-handle{z-index:4;touch-action:none;background:#121b2aeb;border:1px solid #ffffff40;border-radius:12px;width:30px;height:30px;bottom:auto;right:auto;display:none!important}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard-grid .react-resizable-handle:after{border-color:#9bc7ff;width:8px;height:8px;inset:10px auto auto 10px}.argus-dashboard-grid .react-resizable-handle-s{cursor:s-resize;background:0 0;border:0;width:64px;height:24px;bottom:-6px;left:calc(50% - 32px)}.argus-dashboard-grid .react-resizable-handle-s:after{background:#ffffffb8;border:0;border-radius:99px;width:24px;height:4px;top:9px;left:calc(50% - 12px)}.argus-dashboard-grid .react-resizable-handle-e{cursor:e-resize;background:0 0;border:0;width:24px;height:64px;top:calc(50% - 32px);right:-6px}.argus-dashboard-grid .react-resizable-handle-e:after{background:#ffffffb8;border:0;border-radius:99px;width:4px;height:24px;top:calc(50% - 12px);left:9px}.argus-dashboard-grid .react-resizable-handle-se{cursor:se-resize;background:0 0;border:0;border-radius:0 0 22px;width:44px;height:44px;bottom:0;right:0}.argus-dashboard-grid .react-resizable-handle-se:after{filter:drop-shadow(0 1px 3px #0000008c);border:4px solid #fff;border-top:0;border-left:0;border-radius:0 0 13px;width:17px;height:17px;inset:auto 7px 7px auto}.argus-widget{box-sizing:border-box;container:argus-widget/size}.argus-widget__content{box-sizing:border-box;flex-direction:column;min-width:0;min-height:0;display:flex;overflow:hidden}.argus-widget__content>.panel{flex:auto;min-width:0;min-height:0}.argus-dashboard--editing .argus-widget__content>.panel{cursor:default!important;animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]{animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{overscroll-behavior-y:auto!important;flex-direction:column!important;min-width:0!important;height:100%!important;min-height:0!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;animation:none!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]>.argus-widget__content>.panel{overscroll-behavior-y:auto!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head{flex-wrap:wrap;flex:none;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{flex-wrap:wrap;gap:6px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{overscroll-behavior-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable;flex:120px;min-height:0;height:auto!important;max-height:none!important;overflow:hidden auto!important}@media (width<=760px) and (orientation:portrait){#argus-dashboard-root-v3 .argus-widget{-webkit-backdrop-filter:none!important;box-shadow:none!important;filter:none!important;isolation:isolate!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#263445,#182535)!important;border-color:#bed2e833!important}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget__content>.panel.glass.liquid-glass{box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;background:0 0!important;border:0!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3:not(.editing) .argus-dashboard-grid .react-grid-item{transition:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]{transition:none!important;transform:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{filter:none!important;will-change:auto!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{scrollbar-gutter:auto!important;scroll-behavior:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log::-webkit-scrollbar{width:0;height:0;display:none}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{filter:none!important;box-shadow:none!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#5c6b7c,#374658)!important;animation:none!important;transform:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{flex-wrap:wrap;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:stretch;gap:8px;min-width:0;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>button,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div{overflow-wrap:anywhere;text-align:center;width:100%;min-width:0;min-height:44px;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div>button{min-height:44px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access{overscroll-behavior-y:auto;min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #w-modes{min-width:0;min-height:0;flex-direction:column!important;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{flex:none;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0;margin-bottom:10px!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{white-space:normal;min-width:0;min-height:46px;padding:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto;flex:auto;min-width:0;min-height:0;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(10px,1.7cqi,20px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{flex-wrap:wrap;gap:8px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid>*{flex:120px;min-width:0}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto!important}@container argus-widget (height<=300px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #h-activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #h-automations{font-size:clamp(14px,1.5cqi,18px)}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .github-desc{display:none}}@media (prefers-reduced-motion:no-preference){.argus-dashboard-grid .react-grid-item:not(.react-draggable-dragging):not(.resizing){transition-timing-function:var(--argus-widget-ease)}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{will-change:auto!important;animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs .tab-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}@media (width<=700px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:2px!important;min-height:44px!important;margin-bottom:8px!important;padding:4px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:10px!important;gap:1px!important;min-width:0!important;min-height:36px!important;padding:4px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:14px!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;font-size:clamp(8px,2.05vw,10px)!important;line-height:1.05!important}}#argus-dashboard-root-v3 .argus-widget__content,#argus-dashboard-root-v3 .argus-widget__content>.panel{min-width:0!important;max-width:100%!important}#argus-dashboard-root-v3 .argus-widget__content>.panel :where(h1,h2,h3,h4,p,small,label,button,a,input,select,textarea){box-sizing:border-box;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:clamp(1px,.65cqi,8px)!important;width:100%!important;min-width:0!important;min-height:48px!important;padding:4px!important;display:grid!important;overflow:visible!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:12px!important;gap:2px!important;min-width:0!important;min-height:42px!important;padding:clamp(2px,.7cqi,8px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:clamp(13px,1.55cqi,20px)!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;text-overflow:ellipsis!important;min-width:0!important;max-width:100%!important;font-size:clamp(9px,.95cqi,12px)!important;line-height:1.05!important;display:block!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:clamp(8px,1.2cqi,16px)!important;width:100%!important;min-width:0!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{overflow-wrap:anywhere;min-width:0!important;max-width:100%!important;padding:clamp(10px,1.6cqi,18px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-section-card{align-self:stretch!important;height:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items{grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items.is-scrollable{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:190px;overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-sirens-card{grid-column:1/-1}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot{min-width:0!important;max-width:100%!important;margin-top:clamp(8px,1.2cqi,16px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot>.argus-mode-voice-card{box-sizing:border-box;width:100%;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-mode-voice-card[open]>.argus-voice-body{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:min(45cqh,420px);overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-sensor-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card>*{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-preview{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:0 0 14px;padding:12px 14px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list{margin:8px 0;padding-left:22px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list>li{margin:6px 0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list ul{color:#ffffffd1;margin:4px 0;padding-left:20px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-message-card{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:10px 0;padding:12px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-label{color:#8fd8ff;margin-top:8px;font-size:.85em;font-weight:700}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-preview{white-space:normal;overflow-wrap:anywhere;background:#080f1b6b;border-radius:12px;margin:5px 0 10px;padding:9px 11px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-toggle{align-items:center;gap:8px;display:flex}@container argus-widget (width<=760px){#argus-dashboard-root-v3 .argus-widget__content>.panel .panel-head{flex-wrap:wrap;align-items:flex-start;gap:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head h2{overflow-wrap:anywhere;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr));width:100%;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions button{justify-content:center;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));align-items:stretch;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace .access-section{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{flex-direction:column!important;justify-content:center!important;align-items:stretch!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr))!important;max-width:100%!important}}@container argus-widget (width<=420px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{gap:1px!important;min-height:42px!important;padding:2px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:9px!important;min-height:36px!important;padding:2px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:13px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{font-size:9px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{border-radius:16px!important;padding:10px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:minmax(0,1fr)!important}}.argus-dashboard__restore-entry{color:#fff;font:inherit;cursor:pointer;-webkit-backdrop-filter:blur(16px);background:#ffffff17;border:1px solid #fff3;border-radius:14px;margin:8px 16px 12px auto;padding:9px 14px;font-weight:700;display:block}.argus-dashboard__restore-entry:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}:host(:is([argus-contrast=high],.argus-contrast-high)){--glass-bg:#080c13;--glass-border:#94a3b8;--v2066-glass:#080c13;--v2066-border:#94a3b8;--v2066-text:#fff;--v2066-muted:#e2e8f0;--primary-text-color:#fff;--secondary-text-color:#e2e8f0}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.argus-widget__menu,.argus-widget__edit-header,.security-context,.security-context .context-tools,.security-context section,.security-context article,.context-zone-picker,.context-sensor-row,.context-sensor-card,.context-verification-dialog,.modal,#profile-dropdown,.mode-section-card,.user-card,.log-item,.glass-subpanel){color:#fff!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.security-context,.modal,#profile-dropdown) :is(h1,h2,h3,h4,p,label,small,.hint,.muted,.small,.setting-help,.context-sensor-name){color:#fff!important;text-shadow:none!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(input,select,textarea){-webkit-text-fill-color:#fff;color:#fff!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) ::placeholder{opacity:1;color:#cbd5e1!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline-offset:3px!important;outline:3px solid #7dd3fc!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,summary):not(:disabled){border-color:#94a3b8}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{color:#fff!important;box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 #activity-log :is(.log-body,.log-title,.log-meta,.log-badge){color:#fff!important;opacity:1!important}", G = class extends D.Component {
 	state = {
 		hasError: !1,
 		error: null
@@ -17349,7 +17349,7 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 		let t = e.clientWidth, n = e.ownerDocument.defaultView.getComputedStyle(e);
 		return t -= x(n.paddingLeft), t -= x(n.paddingRight), t;
 	}
-	function L(e, t, n) {
+	function te(e, t, n) {
 		let r = t === t.ownerDocument.body ? {
 			left: 0,
 			top: 0
@@ -17359,45 +17359,45 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 			y: (e.clientY + t.scrollTop - r.top) / n
 		};
 	}
-	function te(e, t) {
-		let n = z(e, t, "px");
+	function L(e, t) {
+		let n = R(e, t, "px");
 		return { [E("transform", O)]: n };
 	}
-	function R(e, t) {
-		return z(e, t, "");
+	function ne(e, t) {
+		return R(e, t, "");
 	}
-	function z({ x: e, y: t }, n, r) {
+	function R({ x: e, y: t }, n, r) {
 		let i = `translate(${e}${r},${t}${r})`;
 		return n && (i = `translate(${`${typeof n.x == "string" ? n.x : n.x + r}`}, ${`${typeof n.y == "string" ? n.y : n.y + r}`})` + i), i;
 	}
-	function ne(e, t) {
+	function z(e, t) {
 		return e.targetTouches && _(e.targetTouches, (e) => t === e.identifier) || e.changedTouches && _(e.changedTouches, (e) => t === e.identifier);
 	}
-	function B(e) {
+	function re(e) {
 		if (e.targetTouches && e.targetTouches[0]) return e.targetTouches[0].identifier;
 		if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].identifier;
 	}
-	function V() {
+	function B() {
 		return typeof __webpack_nonce__ < "u" ? __webpack_nonce__ : void 0;
 	}
-	function H(e, t) {
+	function V(e, t) {
 		if (!e) return;
 		let n = e.getElementById("react-draggable-style-el");
 		if (!n) {
 			n = e.createElement("style"), n.type = "text/css", n.id = "react-draggable-style-el";
-			let r = t ?? V();
+			let r = t ?? B();
 			r && n.setAttribute("nonce", r), n.innerHTML = ".react-draggable-transparent-selection *::-moz-selection {all: inherit;}\n", n.innerHTML += ".react-draggable-transparent-selection *::selection {all: inherit;}\n", e.getElementsByTagName("head")[0].appendChild(n);
 		}
-		e.body && ae(e.body, "react-draggable-transparent-selection");
-	}
-	function re(e) {
-		window.requestAnimationFrame ? window.requestAnimationFrame(() => {
-			ie(e);
-		}) : ie(e);
+		e.body && oe(e.body, "react-draggable-transparent-selection");
 	}
 	function ie(e) {
+		window.requestAnimationFrame ? window.requestAnimationFrame(() => {
+			ae(e);
+		}) : ae(e);
+	}
+	function ae(e) {
 		if (e) try {
-			e.body && oe(e.body, "react-draggable-transparent-selection");
+			e.body && se(e.body, "react-draggable-transparent-selection");
 			let t = e.selection;
 			if (t) t.empty();
 			else {
@@ -17406,13 +17406,13 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 			}
 		} catch {}
 	}
-	function ae(e, t) {
+	function oe(e, t) {
 		e.classList ? e.classList.add(t) : e.className.match(RegExp(`(?:^|\\s)${t}(?!\\S)`)) || (e.className += ` ${t}`);
 	}
-	function oe(e, t) {
+	function se(e, t) {
 		e.classList ? e.classList.remove(t) : e.className = e.className.replace(RegExp(`(?:^|\\s)${t}(?!\\S)`, "g"), "");
 	}
-	function U(e, t, n) {
+	function H(e, t, n) {
 		if (!e.props.bounds) return [t, n];
 		let { bounds: r } = e.props;
 		r = typeof r == "string" ? r : G(r);
@@ -17432,22 +17432,22 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 		}
 		return b(r.right) && (t = Math.min(t, r.right)), b(r.bottom) && (n = Math.min(n, r.bottom)), b(r.left) && (t = Math.max(t, r.left)), b(r.top) && (n = Math.max(n, r.top)), [t, n];
 	}
-	function W(e, t, n) {
+	function U(e, t, n) {
 		return [Math.round(t / e[0]) * e[0], Math.round(n / e[1]) * e[1]];
 	}
-	function se(e) {
+	function ce(e) {
 		return e.props.axis === "both" || e.props.axis === "x";
 	}
-	function ce(e) {
+	function le(e) {
 		return e.props.axis === "both" || e.props.axis === "y";
 	}
-	function le(e, t, n) {
-		let r = typeof t == "number" ? ne(e, t) : null;
+	function ue(e, t, n) {
+		let r = typeof t == "number" ? z(e, t) : null;
 		if (typeof t == "number" && !r) return null;
 		let i = K(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
-		return L(r || e, a, n.props.scale);
+		return te(r || e, a, n.props.scale);
 	}
-	function ue(e, t, n) {
+	function de(e, t, n) {
 		let r = !b(e.lastX), i = K(e);
 		return r ? {
 			node: i,
@@ -17467,7 +17467,7 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 			y: n
 		};
 	}
-	function de(e, t) {
+	function W(e, t) {
 		let n = e.props.scale;
 		return {
 			node: t.node,
@@ -17512,22 +17512,22 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 				let { ownerDocument: n } = t;
 				if (this.props.disabled || !(e.target instanceof n.defaultView.Node) || this.props.handle && !j(e.target, this.props.handle, t) || this.props.cancel && j(e.target, this.props.cancel, t)) return;
 				e.type === "touchstart" && !this.props.allowMobileScroll && e.preventDefault();
-				let r = B(e);
+				let r = re(e);
 				this.touchIdentifier = r;
-				let i = le(e, r, this);
+				let i = ue(e, r, this);
 				if (i == null) return;
-				let { x: a, y: o } = i, s = ue(this, a, o);
-				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && H(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, M(n, me.move, this.handleDrag), M(n, me.stop, this.handleDragStop));
+				let { x: a, y: o } = i, s = de(this, a, o);
+				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && V(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, M(n, me.move, this.handleDrag), M(n, me.stop, this.handleDragStop));
 			}, this.handleDrag = (e) => {
-				let t = le(e, this.touchIdentifier, this);
+				let t = ue(e, this.touchIdentifier, this);
 				if (t == null) return;
 				let { x: n, y: r } = t;
 				if (Array.isArray(this.props.grid)) {
 					let e = n - this.lastX, t = r - this.lastY;
-					if ([e, t] = W(this.props.grid, e, t), !e && !t) return;
+					if ([e, t] = U(this.props.grid, e, t), !e && !t) return;
 					n = this.lastX + e, r = this.lastY + t;
 				}
-				let i = ue(this, n, r);
+				let i = de(this, n, r);
 				if (this.props.onDrag(e, i) === !1 || this.mounted === !1) {
 					try {
 						this.handleDragStop(new MouseEvent("mouseup"));
@@ -17540,17 +17540,17 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 				this.lastX = n, this.lastY = r;
 			}, this.handleDragStop = (e) => {
 				if (!this.dragging) return;
-				let t = le(e, this.touchIdentifier, this);
+				let t = ue(e, this.touchIdentifier, this);
 				if (t == null) return;
 				let { x: n, y: r } = t;
 				if (Array.isArray(this.props.grid)) {
 					let e = n - this.lastX || 0, t = r - this.lastY || 0;
-					[e, t] = W(this.props.grid, e, t), n = this.lastX + e, r = this.lastY + t;
+					[e, t] = U(this.props.grid, e, t), n = this.lastX + e, r = this.lastY + t;
 				}
-				let i = ue(this, n, r);
+				let i = de(this, n, r);
 				if (this.props.onStop(e, i) === !1 || this.mounted === !1) return !1;
 				let a = this.findDOMNode();
-				a && this.props.enableUserSelectHack && re(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (N(a.ownerDocument, me.move, this.handleDrag), N(a.ownerDocument, me.stop, this.handleDragStop));
+				a && this.props.enableUserSelectHack && ie(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (N(a.ownerDocument, me.move, this.handleDrag), N(a.ownerDocument, me.stop, this.handleDragStop));
 			}, this.onMouseDown = (e) => (me = J.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (me = J.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (me = J.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (me = J.touch, this.handleDragStop(e));
 		}
 		componentDidMount() {
@@ -17563,7 +17563,7 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 			let e = this.findDOMNode();
 			if (e) {
 				let { ownerDocument: t } = e;
-				N(t, J.mouse.move, this.handleDrag), N(t, J.touch.move, this.handleDrag), N(t, J.mouse.stop, this.handleDragStop), N(t, J.touch.stop, this.handleDragStop), N(e, J.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && re(t);
+				N(t, J.mouse.move, this.handleDrag), N(t, J.touch.move, this.handleDrag), N(t, J.mouse.stop, this.handleDragStop), N(t, J.touch.stop, this.handleDragStop), N(e, J.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && ie(t);
 			}
 		}
 		findDOMNode() {
@@ -17615,14 +17615,14 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 	var X = class extends p.Component {
 		constructor(e) {
 			super(e), this.onDragStart = (e, t) => {
-				if (this.props.onStart(e, de(this, t)) === !1) return !1;
+				if (this.props.onStart(e, W(this, t)) === !1) return !1;
 				this.setState({
 					dragging: !0,
 					dragged: !0
 				});
 			}, this.onDrag = (e, t) => {
 				if (!this.state.dragging) return !1;
-				let n = de(this, t), r = {
+				let n = W(this, t), r = {
 					x: n.x,
 					y: n.y,
 					slackX: 0,
@@ -17631,13 +17631,13 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 				if (this.props.bounds) {
 					let { x: e, y: t } = r;
 					r.x += this.state.slackX, r.y += this.state.slackY;
-					let [i, a] = U(this, r.x, r.y);
+					let [i, a] = H(this, r.x, r.y);
 					r.x = i, r.y = a, r.slackX = this.state.slackX + (e - r.x), r.slackY = this.state.slackY + (t - r.y), n.x = r.x, n.y = r.y, n.deltaX = r.x - this.state.x, n.deltaY = r.y - this.state.y;
 				}
 				if (this.props.onDrag(e, n) === !1) return !1;
 				this.setState(r);
 			}, this.onDragStop = (e, t) => {
-				if (!this.state.dragging || this.props.onStop(e, de(this, t)) === !1) return !1;
+				if (!this.state.dragging || this.props.onStop(e, W(this, t)) === !1) return !1;
 				let n = {
 					dragging: !1,
 					slackX: 0,
@@ -17679,10 +17679,10 @@ var pn = /* @__PURE__ */ o(((e, t) => {
 		}
 		render() {
 			let { axis: e, bounds: t, children: n, defaultPosition: r, defaultClassName: i, defaultClassNameDragging: a, defaultClassNameDragged: o, position: s, positionOffset: c, scale: l, ...u } = this.props, d = {}, f = null, m = !s || this.state.dragging, h = s || r, _ = {
-				x: se(this) && m ? this.state.x : h.x,
-				y: ce(this) && m ? this.state.y : h.y
+				x: ce(this) && m ? this.state.x : h.x,
+				y: le(this) && m ? this.state.y : h.y
 			};
-			this.state.isElementSVG ? f = R(_, c) : d = te(_, c);
+			this.state.isElementSVG ? f = ne(_, c) : d = L(_, c);
 			let v = p.Children.only(n), y = (0, g.clsx)(v.props.className || "", i, {
 				[a]: this.state.dragging,
 				[o]: this.state.dragged
@@ -18396,17 +18396,17 @@ function Dn(e) {
 	};
 }
 function On(e) {
-	let { children: t, cols: n, containerWidth: r, margin: i, containerPadding: a, rowHeight: o, maxRows: s, isDraggable: c, isResizable: l, isBounded: u, allowMobileScroll: d, static: f, useCSSTransforms: p = !0, usePercentages: m = !1, transformScale: h = 1, positionStrategy: g, dragThreshold: _ = 0, droppingPosition: v, className: y = "", style: b, handle: x = "", cancel: S = "", x: C, y: w, w: T, h: E, minW: O = 1, maxW: k = Infinity, minH: j = 1, maxH: M = Infinity, i: N, resizeHandles: P, resizeHandle: F, constraints: I = je, layoutItem: ee, layout: L = [], onDragStart: te, onDrag: R, onDragStop: z, onResizeStart: ne, onResize: B, onResizeStop: V } = e, [H, re] = (0, D.useState)(!1), [ie, ae] = (0, D.useState)(!1), oe = (0, D.useRef)(null), U = (0, D.useRef)({
+	let { children: t, cols: n, containerWidth: r, margin: i, containerPadding: a, rowHeight: o, maxRows: s, isDraggable: c, isResizable: l, isBounded: u, allowMobileScroll: d, static: f, useCSSTransforms: p = !0, usePercentages: m = !1, transformScale: h = 1, positionStrategy: g, dragThreshold: _ = 0, droppingPosition: v, className: y = "", style: b, handle: x = "", cancel: S = "", x: C, y: w, w: T, h: E, minW: O = 1, maxW: k = Infinity, minH: j = 1, maxH: M = Infinity, i: N, resizeHandles: P, resizeHandle: F, constraints: I = je, layoutItem: ee, layout: te = [], onDragStart: L, onDrag: ne, onDragStop: R, onResizeStart: z, onResize: re, onResizeStop: B } = e, [V, ie] = (0, D.useState)(!1), [ae, oe] = (0, D.useState)(!1), se = (0, D.useRef)(null), H = (0, D.useRef)({
 		left: 0,
 		top: 0
-	}), W = (0, D.useRef)({
+	}), U = (0, D.useRef)({
 		top: 0,
 		left: 0,
 		width: 0,
 		height: 0
-	}), se = (0, D.useRef)(void 0), ce = (0, D.useRef)(L);
-	ce.current = L;
-	let le = (0, D.useRef)(null), ue = (0, D.useRef)(null), de = (0, D.useRef)(!1), G = (0, D.useRef)({
+	}), ce = (0, D.useRef)(void 0), le = (0, D.useRef)(te);
+	le.current = te;
+	let ue = (0, D.useRef)(null), de = (0, D.useRef)(null), W = (0, D.useRef)(!1), G = (0, D.useRef)({
 		x: 0,
 		y: 0
 	}), pe = (0, D.useRef)(!1), X = (0, D.useRef)(null), he = (0, D.useMemo)(() => ({
@@ -18440,7 +18440,7 @@ function On(e) {
 	]), _e = (0, D.useCallback)((e) => ({
 		...ge,
 		containerHeight: e ?? ge.containerHeight,
-		layout: ce.current
+		layout: le.current
 	}), [ge]), ve = (0, D.useMemo)(() => ee ?? {
 		i: N,
 		x: C,
@@ -18477,7 +18477,7 @@ function On(e) {
 		m,
 		r
 	]), be = (0, D.useCallback)((e, { node: t }) => {
-		if (!te) return;
+		if (!L) return;
 		let { offsetParent: n } = t;
 		if (!n) return;
 		let r = n.getBoundingClientRect(), i = t.getBoundingClientRect(), a = i.left / h, o = r.left / h, s = i.top / h, c = r.top / h, l;
@@ -18488,23 +18488,23 @@ function On(e) {
 			left: a - o + n.scrollLeft,
 			top: s - c + n.scrollTop
 		};
-		if (U.current = l, X.current ||= Dn(t instanceof HTMLElement ? t : null), _ > 0) {
+		if (H.current = l, X.current ||= Dn(t instanceof HTMLElement ? t : null), _ > 0) {
 			let t = e;
 			G.current = {
 				x: t.clientX,
 				y: t.clientY
-			}, de.current = !0, pe.current = !1, re(!0);
+			}, W.current = !0, pe.current = !1, ie(!0);
 			return;
 		}
-		re(!0);
+		ie(!0);
 		let u = J(he, l.top, l.left), { x: d, y: f } = Me(I, ve, u.x, u.y, _e());
-		te(N, d, f, {
+		L(N, d, f, {
 			e,
 			node: t,
 			newPosition: l
 		});
 	}, [
-		te,
+		L,
 		h,
 		he,
 		g,
@@ -18514,22 +18514,22 @@ function On(e) {
 		_e,
 		N
 	]), xe = (0, D.useCallback)((e, { node: t, deltaX: n, deltaY: a }) => {
-		if (!R || !H) return;
+		if (!ne || !V) return;
 		let s = e;
-		if (de.current && !pe.current) {
+		if (W.current && !pe.current) {
 			let n = s.clientX - G.current.x, r = s.clientY - G.current.y;
 			if (Math.hypot(n, r) < _) return;
-			if (pe.current = !0, de.current = !1, te) {
-				let n = J(he, U.current.top, U.current.left), { x: r, y: i } = Me(I, ve, n.x, n.y, _e());
-				te(N, r, i, {
+			if (pe.current = !0, W.current = !1, L) {
+				let n = J(he, H.current.top, H.current.left), { x: r, y: i } = Me(I, ve, n.x, n.y, _e());
+				L(N, r, i, {
 					e,
 					node: t,
-					newPosition: U.current
+					newPosition: H.current
 				});
 			}
 		}
 		X.current?.feed(s.clientX, s.clientY);
-		let c = U.current.top + a, l = U.current.left + n;
+		let c = H.current.top + a, l = H.current.left + n;
 		if (u) {
 			let { offsetParent: e } = t;
 			if (e) {
@@ -18543,17 +18543,17 @@ function On(e) {
 			top: c,
 			left: l
 		};
-		U.current = d;
+		H.current = d;
 		let f = J(he, c, l), { x: p, y: m } = Me(I, ve, f.x, f.y, _e());
-		R(N, p, m, {
+		ne(N, p, m, {
 			e,
 			node: t,
 			newPosition: d
 		});
 	}, [
-		R,
-		te,
-		H,
+		ne,
+		L,
+		V,
 		_,
 		u,
 		E,
@@ -18567,52 +18567,52 @@ function On(e) {
 		ve,
 		_e
 	]), Se = (0, D.useCallback)((e, { node: t }) => {
-		if (!z || !H) return;
+		if (!R || !V) return;
 		X.current?.stop(), X.current = null;
-		let n = de.current;
-		if (de.current = !1, pe.current = !1, G.current = {
+		let n = W.current;
+		if (W.current = !1, pe.current = !1, G.current = {
 			x: 0,
 			y: 0
 		}, n) {
-			re(!1), U.current = {
+			ie(!1), H.current = {
 				left: 0,
 				top: 0
 			};
 			return;
 		}
-		let { left: r, top: i } = U.current, a = {
+		let { left: r, top: i } = H.current, a = {
 			top: i,
 			left: r
 		};
-		re(!1), U.current = {
+		ie(!1), H.current = {
 			left: 0,
 			top: 0
 		};
 		let o = J(he, i, r), { x: s, y: c } = Me(I, ve, o.x, o.y, _e());
-		z(N, s, c, {
+		R(N, s, c, {
 			e,
 			node: t,
 			newPosition: a
 		});
 	}, [
-		z,
-		H,
+		R,
+		V,
 		he,
 		I,
 		ve,
 		_e,
 		N
 	]);
-	le.current = be, ue.current = xe;
+	ue.current = be, de.current = xe;
 	let Ce = (0, D.useCallback)((e, { node: t, size: n, handle: i }, a, o) => {
-		let s = o === "onResizeStart" ? ne : o === "onResize" ? B : V;
+		let s = o === "onResizeStart" ? z : o === "onResize" ? re : B;
 		if (!s) return;
 		let c;
 		c = t ? Ke(i, a, n, r) : {
 			...n,
 			top: a.top,
 			left: a.left
-		}, W.current = c;
+		}, U.current = c;
 		let l = t?.offsetParent?.clientHeight ?? 0, u = me(he, c.width, c.height), { w: d, h: f } = Ne(I, ve, u.w, u.h, i, _e(l));
 		s(N, d, f, {
 			e: e.nativeEvent ?? e,
@@ -18621,9 +18621,9 @@ function On(e) {
 			handle: i
 		});
 	}, [
-		ne,
+		z,
+		re,
 		B,
-		V,
 		r,
 		he,
 		N,
@@ -18631,7 +18631,7 @@ function On(e) {
 		ve,
 		_e
 	]), we = (0, D.useCallback)((e, t) => {
-		ae(!0);
+		oe(!0);
 		let n = q(he, C, w, T, E), r = {
 			...t,
 			handle: t.handle
@@ -18658,7 +18658,7 @@ function On(e) {
 		T,
 		E
 	]), Ee = (0, D.useCallback)((e, t) => {
-		ae(!1), W.current = {
+		oe(!1), U.current = {
 			top: 0,
 			left: 0,
 			width: 0,
@@ -18679,13 +18679,13 @@ function On(e) {
 	]);
 	(0, D.useEffect)(() => {
 		if (!v) return;
-		let e = oe.current;
+		let e = se.current;
 		if (!e) return;
-		let t = se.current || {
+		let t = ce.current || {
 			left: 0,
 			top: 0
-		}, n = H && (v.left !== t.left || v.top !== t.top);
-		if (!H) {
+		}, n = V && (v.left !== t.left || v.top !== t.top);
+		if (!V) {
 			let t = {
 				node: e,
 				deltaX: v.left,
@@ -18695,32 +18695,32 @@ function On(e) {
 				x: v.left,
 				y: v.top
 			};
-			le.current?.(v.e, t);
+			ue.current?.(v.e, t);
 		} else if (n) {
 			let t = {
 				node: e,
-				deltaX: v.left - U.current.left,
-				deltaY: v.top - U.current.top,
-				lastX: U.current.left,
-				lastY: U.current.top,
+				deltaX: v.left - H.current.left,
+				deltaY: v.top - H.current.top,
+				lastX: H.current.left,
+				lastY: H.current.top,
 				x: v.left,
 				y: v.top
 			};
-			ue.current?.(v.e, t);
+			de.current?.(v.e, t);
 		}
-		se.current = v;
+		ce.current = v;
 	}, [
 		v,
-		H,
+		V,
 		N
 	]);
-	let De = q(he, C, w, T, E, H ? U.current : null, ie ? W.current : null), Oe = D.Children.only(t), ke = K(he), Ae = [fe(O, ke, i[0]), fe(j, o, i[1])], Le = [fe(k, ke, i[0]), fe(M, o, i[1])], Re = Oe.props, ze = Re.className, Be = Re.style, Ve = D.cloneElement(Oe, {
-		ref: oe,
+	let De = q(he, C, w, T, E, V ? H.current : null, ae ? U.current : null), Oe = D.Children.only(t), ke = K(he), Ae = [fe(O, ke, i[0]), fe(j, o, i[1])], Le = [fe(k, ke, i[0]), fe(M, o, i[1])], Re = Oe.props, ze = Re.className, Be = Re.style, Ve = D.cloneElement(Oe, {
+		ref: se,
 		className: xt("react-grid-item", ze, y, {
 			static: f,
-			resizing: ie,
+			resizing: ae,
 			"react-draggable": c,
-			"react-draggable-dragging": H,
+			"react-draggable-dragging": V,
 			dropping: !!v,
 			cssTransforms: p
 		}),
@@ -18753,7 +18753,7 @@ function On(e) {
 		cancel: ".react-resizable-handle" + (S ? "," + S : ""),
 		scale: h,
 		allowMobileScroll: d,
-		nodeRef: oe,
+		nodeRef: se,
 		children: Ve
 	}), Ve;
 }
@@ -18840,12 +18840,12 @@ function In(e) {
 	}), [a]), k = (0, D.useMemo)(() => ({
 		...et,
 		...o
-	}), [o]), { cols: j, rowHeight: M, maxRows: N, margin: P, containerPadding: F } = T, { enabled: I, bounded: ee, handle: L, cancel: te, threshold: R, allowMobileScroll: z } = E, { enabled: ne, handles: B, handleComponent: V } = O, { enabled: H, defaultItem: re, onDragOver: ie, touchEnabled: ae = !0, touchDragSource: oe = "[data-rgl-draggable]" } = k, U = c ?? ut("vertical"), W = U.type, se = U.allowOverlap, ce = U.preventCollision ?? !1, le = (0, D.useMemo)(() => d ?? {
+	}), [o]), { cols: j, rowHeight: M, maxRows: N, margin: P, containerPadding: F } = T, { enabled: I, bounded: ee, handle: te, cancel: L, threshold: ne, allowMobileScroll: R } = E, { enabled: z, handles: re, handleComponent: B } = O, { enabled: V, defaultItem: ie, onDragOver: ae, touchEnabled: oe = !0, touchDragSource: se = "[data-rgl-draggable]" } = k, H = c ?? ut("vertical"), U = H.type, ce = H.allowOverlap, le = H.preventCollision ?? !1, ue = (0, D.useMemo)(() => d ?? {
 		i: "__dropping-elem__",
-		...re
-	}, [d, re]), ue = s.type === "transform", de = s.scale, G = F ?? P, [K, fe] = (0, D.useState)(!1), [q, pe] = (0, D.useState)(() => Fn(u, t, j, U)), [J, me] = (0, D.useState)(null), [Y, X] = (0, D.useState)(!1), [he, _e] = (0, D.useState)(null), [ve, ye] = (0, D.useState)(), Se = (0, D.useRef)(void 0);
+		...ie
+	}, [d, ie]), de = s.type === "transform", W = s.scale, G = F ?? P, [K, fe] = (0, D.useState)(!1), [q, pe] = (0, D.useState)(() => Fn(u, t, j, H)), [J, me] = (0, D.useState)(null), [Y, X] = (0, D.useState)(!1), [he, _e] = (0, D.useState)(null), [ve, ye] = (0, D.useState)(), Se = (0, D.useRef)(void 0);
 	Se.current = ve;
-	let we = (0, D.useRef)(null), Te = (0, D.useRef)(null), De = (0, D.useRef)(null), ke = (0, D.useRef)(0), Ae = (0, D.useRef)(q), Me = (0, D.useRef)(u), Ne = (0, D.useRef)(t), Pe = (0, D.useRef)(W), Fe = (0, D.useRef)(null), Ie = (0, D.useRef)(!1), Le = (0, D.useRef)(null), Re = (0, D.useRef)(null);
+	let we = (0, D.useRef)(null), Te = (0, D.useRef)(null), De = (0, D.useRef)(null), ke = (0, D.useRef)(0), Ae = (0, D.useRef)(q), Me = (0, D.useRef)(u), Ne = (0, D.useRef)(t), Pe = (0, D.useRef)(U), Fe = (0, D.useRef)(null), Ie = (0, D.useRef)(!1), Le = (0, D.useRef)(null), Re = (0, D.useRef)(null);
 	Re.current = he;
 	let ze = (0, D.useRef)(C);
 	(0, D.useLayoutEffect)(() => {
@@ -18856,25 +18856,25 @@ function In(e) {
 		fe(!0), (0, Cn.deepEqual)(q, u) || g(q);
 	}, []), (0, D.useEffect)(() => {
 		if (J || he) return;
-		let e = !(0, Cn.deepEqual)(u, Me.current), n = !Pn(t, Ne.current), r = W !== Pe.current;
+		let e = !(0, Cn.deepEqual)(u, Me.current), n = !Pn(t, Ne.current), r = U !== Pe.current;
 		if (e || n || r) {
-			let n = Fn(e ? u : q, t, j, U);
+			let n = Fn(e ? u : q, t, j, H);
 			(0, Cn.deepEqual)(n, q) || pe(n);
 		}
-		Me.current = u, Ne.current = t, Pe.current = W;
+		Me.current = u, Ne.current = t, Pe.current = U;
 	}, [
 		u,
 		t,
 		j,
-		W,
 		U,
+		H,
 		J,
 		he,
 		q
 	]), (0, D.useEffect)(() => {
 		if (!J && !he && !(0, Cn.deepEqual)(q, Ae.current)) {
 			Ae.current = q;
-			let e = q.filter((e) => e.i !== le.i);
+			let e = q.filter((e) => e.i !== ue.i);
 			g(e);
 		}
 	}, [
@@ -18882,7 +18882,7 @@ function In(e) {
 		J,
 		he,
 		g,
-		le.i
+		ue.i
 	]);
 	let Ve = (0, D.useMemo)(() => {
 		if (!f) return;
@@ -18914,29 +18914,29 @@ function In(e) {
 			x: o.x,
 			y: o.y,
 			i: e
-		}, c = Oe(i, o, t, n, !0, ce, W, j, se);
-		v(c, a, o, s, r.e, r.node), pe(U.compact(c, j)), me(s);
+		}, c = Oe(i, o, t, n, !0, le, U, j, ce);
+		v(c, a, o, s, r.e, r.node), pe(H.compact(c, j)), me(s);
 	}, [
-		ce,
-		W,
-		j,
-		se,
+		le,
 		U,
+		j,
+		ce,
+		H,
 		v
 	]), We = (0, D.useCallback)((e, t, n, r) => {
 		if (!we.current) return;
 		let i = Be.current, a = we.current, o = xe(i, e);
 		if (!o) return;
-		let s = Oe(i, o, t, n, !0, ce, W, j, se), c = U.compact(s, j);
+		let s = Oe(i, o, t, n, !0, le, U, j, ce), c = H.compact(s, j);
 		y(c, a, o, null, r.e, r.node);
 		let l = De.current;
 		we.current = null, De.current = null, me(null), pe(c), l && !(0, Cn.deepEqual)(l, c) && g(c);
 	}, [
-		ce,
-		W,
-		j,
-		se,
+		le,
 		U,
+		j,
+		ce,
+		H,
 		y,
 		g
 	]), Ge = (0, D.useCallback)((e, t, n, r) => {
@@ -18957,7 +18957,7 @@ function In(e) {
 			"ne",
 			"n",
 			"nw"
-		].includes(o) && (l = e.y + (e.h - n), n = e.y !== l && l < 0 ? e.h : n, l = l < 0 ? 0 : l), s = !0), ce && !se && ge(i, {
+		].includes(o) && (l = e.y + (e.h - n), n = e.y !== l && l < 0 ? e.h : n, l = l < 0 ? 0 : l), s = !0), le && !ce && ge(i, {
 			...e,
 			w: t,
 			h: n,
@@ -18966,7 +18966,7 @@ function In(e) {
 		}).filter((t) => t.i !== e.i).length > 0 && (l = e.y, n = e.h, c = e.x, t = e.w, s = !1), e.w = t, e.h = n, (o === "n" || o === "nw" || o === "ne") && (e.y = l ?? e.y), e));
 		if (!d) return;
 		let f = u;
-		s && c !== void 0 && l !== void 0 && (f = Oe(u, d, c, l, !0, ce, W, j, se));
+		s && c !== void 0 && l !== void 0 && (f = Oe(u, d, c, l, !0, le, U, j, ce));
 		let p = {
 			w: d.w,
 			h: d.h,
@@ -18976,27 +18976,27 @@ function In(e) {
 			static: !0
 		};
 		x(f, a, d, p, r.e, r.node);
-		let m = U.compact(f, j);
+		let m = H.compact(f, j);
 		if (o === "n" || o === "nw" || o === "ne") {
 			let t = m.find((t) => t.i === e);
 			t && (t.y = d.y);
 		}
 		pe(m), me(p);
 	}, [
-		ce,
-		W,
-		j,
-		se,
+		le,
 		U,
+		j,
+		ce,
+		H,
 		x
 	]), qe = (0, D.useCallback)((e, t, n, r) => {
-		let i = Be.current, a = Te.current, o = xe(i, e), s = U.compact(i, j);
+		let i = Be.current, a = Te.current, o = xe(i, e), s = H.compact(i, j);
 		S(s, a, o ?? null, null, r.e, r.node);
 		let c = De.current;
 		Te.current = null, De.current = null, me(null), X(!1), pe(s), c && !(0, Cn.deepEqual)(c, s) && g(s);
 	}, [
 		j,
-		U,
+		H,
 		S,
 		g
 	]), Je = (0, D.useCallback)((e, t, n, r) => {
@@ -19023,9 +19023,9 @@ function In(e) {
 			clientX: e,
 			clientY: t,
 			gridElement: i,
-			droppingItem: le,
+			droppingItem: ue,
 			event: r,
-			transformScale: de,
+			transformScale: W,
 			cols: j,
 			margin: P,
 			maxRows: N,
@@ -19033,10 +19033,10 @@ function In(e) {
 			width: n,
 			containerPadding: G
 		});
-		Je(le, a, o, !!Re.current);
+		Je(ue, a, o, !!Re.current);
 	}, [
-		le,
-		de,
+		ue,
+		W,
 		j,
 		P,
 		N,
@@ -19046,22 +19046,22 @@ function In(e) {
 		Je
 	]), tt = (0, D.useCallback)(() => {
 		let e = Be.current;
-		if (!e.some((e) => e.i === le.i)) {
+		if (!e.some((e) => e.i === ue.i)) {
 			_e(null), me(null), ye(void 0);
 			return;
 		}
-		let t = U.compact(e.filter((e) => e.i !== le.i), j);
+		let t = H.compact(e.filter((e) => e.i !== ue.i), j);
 		pe(t), _e(null), me(null), ye(void 0);
 	}, [
-		le.i,
+		ue.i,
 		j,
-		U
+		H
 	]), nt = (0, D.useCallback)((e) => {
 		if (e.preventDefault(), e.stopPropagation(), Nn && !e.nativeEvent.target?.classList.contains(Mn)) return !1;
-		let t = ie ? ie(e.nativeEvent) : w(e);
+		let t = ae ? ae(e.nativeEvent) : w(e);
 		if (t === !1) return he && tt(), !1;
 		let { dragOffsetX: r = 0, dragOffsetY: i = 0, ...a } = t ?? {}, o = {
-			...le,
+			...ue,
 			...a
 		}, { newDroppingPosition: s, calculatedXY: c } = An({
 			clientX: e.clientX,
@@ -19071,7 +19071,7 @@ function In(e) {
 			event: e.nativeEvent,
 			dragOffsetX: r,
 			dragOffsetY: i,
-			transformScale: de,
+			transformScale: W,
 			cols: j,
 			margin: P,
 			maxRows: N,
@@ -19082,12 +19082,12 @@ function In(e) {
 		Je(o, s, c, !!he);
 	}, [
 		he,
-		le,
-		ie,
+		ue,
+		ae,
 		w,
 		tt,
 		Je,
-		de,
+		W,
 		j,
 		P,
 		N,
@@ -19099,19 +19099,19 @@ function In(e) {
 	}, [tt]), it = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), ke.current++;
 	}, []), at = (0, D.useCallback)((e) => {
-		let t = Be.current, n = t.find((e) => e.i === le.i);
+		let t = Be.current, n = t.find((e) => e.i === ue.i);
 		tt(), ze.current(t, n, e);
-	}, [le.i, tt]), ot = (0, D.useCallback)((e) => {
+	}, [ue.i, tt]), ot = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), ke.current = 0, at(e.nativeEvent);
 	}, [at]);
 	(0, D.useEffect)(() => {
-		if (!H || !ae) return;
+		if (!V || !oe) return;
 		let e = Fe.current;
 		if (!e) return;
 		let t = (t, n) => {
 			let r = document.elementFromPoint(t, n);
 			return r ? e.contains(r) : !1;
-		}, n = (e) => e instanceof HTMLElement && e.closest(oe) !== null, r = (e) => {
+		}, n = (e) => e instanceof HTMLElement && e.closest(se) !== null, r = (e) => {
 			let t = e.changedTouches;
 			if (!t || t.length === 0) return;
 			let n = Le.current;
@@ -19154,19 +19154,19 @@ function In(e) {
 			document.removeEventListener("touchstart", i, c), document.removeEventListener("touchmove", a, c), document.removeEventListener("touchend", o, c), document.removeEventListener("touchcancel", s, c);
 		};
 	}, [
-		H,
-		ae,
+		V,
 		oe,
+		se,
 		Ye,
 		tt,
 		at,
-		le.i
+		ue.i
 	]);
 	let st = (0, D.useCallback)((e, t) => {
 		if (!e || !e.key) return null;
 		let r = xe(q, String(e.key));
 		if (!r) return null;
-		let i = typeof r.isDraggable == "boolean" ? r.isDraggable : !r.static && I, a = typeof r.isResizable == "boolean" ? r.isResizable : !r.static && ne, o = r.resizeHandles || [...B], c = i && ee && r.isBounded !== !1, u = V;
+		let i = typeof r.isDraggable == "boolean" ? r.isDraggable : !r.static && I, a = typeof r.isResizable == "boolean" ? r.isResizable : !r.static && z, o = r.resizeHandles || [...re], c = i && ee && r.isBounded !== !1, u = B;
 		return /* @__PURE__ */ (0, A.jsx)(kn, {
 			containerWidth: n,
 			cols: j,
@@ -19174,8 +19174,8 @@ function In(e) {
 			containerPadding: G,
 			maxRows: N,
 			rowHeight: M,
-			cancel: te,
-			handle: L,
+			cancel: L,
+			handle: te,
 			onDragStart: He,
 			onDrag: Ue,
 			onDragStop: We,
@@ -19185,12 +19185,12 @@ function In(e) {
 			isDraggable: i,
 			isResizable: a,
 			isBounded: c,
-			allowMobileScroll: z,
-			useCSSTransforms: ue && K,
+			allowMobileScroll: R,
+			useCSSTransforms: de && K,
 			usePercentages: !K,
-			transformScale: de,
+			transformScale: W,
 			positionStrategy: s,
-			dragThreshold: R,
+			dragThreshold: ne,
 			w: r.w,
 			h: r.h,
 			x: r.x,
@@ -19217,8 +19217,8 @@ function In(e) {
 		G,
 		N,
 		M,
-		te,
 		L,
+		te,
 		He,
 		Ue,
 		We,
@@ -19226,16 +19226,16 @@ function In(e) {
 		Ke,
 		qe,
 		I,
-		ne,
+		z,
 		ee,
-		ue,
-		K,
 		de,
+		K,
+		W,
 		s,
-		R,
+		ne,
 		ve,
+		re,
 		B,
-		V,
 		l
 	]), ct = () => J ? /* @__PURE__ */ (0, A.jsx)(kn, {
 		w: J.w,
@@ -19253,8 +19253,8 @@ function In(e) {
 		isDraggable: !1,
 		isResizable: !1,
 		isBounded: !1,
-		useCSSTransforms: ue,
-		transformScale: de,
+		useCSSTransforms: de,
+		transformScale: W,
 		constraints: l,
 		layout: q,
 		children: /* @__PURE__ */ (0, A.jsx)("div", {})
@@ -19268,13 +19268,13 @@ function In(e) {
 		ref: lt,
 		className: dt,
 		style: ft,
-		onDrop: H ? ot : void 0,
-		onDragLeave: H ? rt : void 0,
-		onDragEnter: H ? it : void 0,
-		onDragOver: H ? nt : void 0,
+		onDrop: V ? ot : void 0,
+		onDragLeave: V ? rt : void 0,
+		onDragEnter: V ? it : void 0,
+		onDragOver: V ? nt : void 0,
 		children: [
 			D.Children.map(t, (e) => D.isValidElement(e) ? st(e) : null),
-			H && he && st(he, !0),
+			V && he && st(he, !0),
 			ct()
 		]
 	});
@@ -19336,31 +19336,31 @@ function Bn(e, t, n, r, i = !1) {
 	return r.compact(o, n);
 }
 function Vn(e) {
-	let { children: t, width: n, breakpoint: r, breakpoints: i = Ln, cols: a = Rn, layouts: o = {}, rowHeight: s = 150, maxRows: c = Infinity, margin: l = [10, 10], containerPadding: u = null, compactor: d, onBreakpointChange: f = zn, onLayoutChange: p = zn, onWidthChange: m = zn, ...h } = e, g = d ?? ut("vertical"), _ = g.type, v = g.allowOverlap, y = (0, D.useMemo)(() => r ?? ft(i, n), []), b = (0, D.useMemo)(() => pt(y, a), [y, a]), x = (0, D.useMemo)(() => mt(o, i, y, y, b, _), []), [S, C] = (0, D.useState)(y), [w, T] = (0, D.useState)(b), [E, O] = (0, D.useState)(x), [k, j] = (0, D.useState)(o), M = (0, D.useRef)(n), N = (0, D.useRef)(r), P = (0, D.useRef)(i), F = (0, D.useRef)(a), I = (0, D.useRef)(o), ee = (0, D.useRef)(_), L = (0, D.useRef)(k);
+	let { children: t, width: n, breakpoint: r, breakpoints: i = Ln, cols: a = Rn, layouts: o = {}, rowHeight: s = 150, maxRows: c = Infinity, margin: l = [10, 10], containerPadding: u = null, compactor: d, onBreakpointChange: f = zn, onLayoutChange: p = zn, onWidthChange: m = zn, ...h } = e, g = d ?? ut("vertical"), _ = g.type, v = g.allowOverlap, y = (0, D.useMemo)(() => r ?? ft(i, n), []), b = (0, D.useMemo)(() => pt(y, a), [y, a]), x = (0, D.useMemo)(() => mt(o, i, y, y, b, _), []), [S, C] = (0, D.useState)(y), [w, T] = (0, D.useState)(b), [E, O] = (0, D.useState)(x), [k, j] = (0, D.useState)(o), M = (0, D.useRef)(n), N = (0, D.useRef)(r), P = (0, D.useRef)(i), F = (0, D.useRef)(a), I = (0, D.useRef)(o), ee = (0, D.useRef)(_), te = (0, D.useRef)(k);
 	(0, D.useEffect)(() => {
-		L.current = k;
+		te.current = k;
 	}, [k]);
-	let te = (0, D.useMemo)(() => (0, Cn.deepEqual)(o, I.current) ? null : mt(o, i, S, S, w, g), [
+	let L = (0, D.useMemo)(() => (0, Cn.deepEqual)(o, I.current) ? null : mt(o, i, S, S, w, g), [
 		o,
 		i,
 		S,
 		w,
 		g
-	]), R = te ?? E;
+	]), ne = L ?? E;
 	(0, D.useEffect)(() => {
-		te !== null && (O(te), j(o), L.current = o, I.current = o);
-	}, [te, o]), (0, D.useEffect)(() => {
+		L !== null && (O(L), j(o), te.current = o, I.current = o);
+	}, [L, o]), (0, D.useEffect)(() => {
 		if (_ !== ee.current) {
-			let e = g.compact(we(R), w), t = {
-				...L.current,
+			let e = g.compact(we(ne), w), t = {
+				...te.current,
 				[S]: e
 			};
-			O(e), j(t), L.current = t, p(e, t), ee.current = _;
+			O(e), j(t), te.current = t, p(e, t), ee.current = _;
 		}
 	}, [
 		_,
 		g,
-		R,
+		ne,
 		w,
 		v,
 		S,
@@ -19370,10 +19370,10 @@ function Vn(e) {
 		if (e || o || s || c) {
 			let e = r ?? ft(i, n), o = pt(e, a), d = S;
 			if (d !== e || s || c) {
-				let n = { ...L.current };
+				let n = { ...te.current };
 				n[d] || (n[d] = we(E));
 				let r = mt(n, i, e, d, o, g), a = !n[e];
-				r = Bn(r, t, o, g, a), n[e] = r, C(e), T(o), O(r), j(n), L.current = n, f(e, o), p(r, n);
+				r = Bn(r, t, o, g, a), n[e] = r, C(e), T(o), O(r), j(n), te.current = n, f(e, o), p(r, n);
 			}
 			let h = ht(l, e), _ = u ? ht(u, e) : null;
 			m(n, h, o, _), M.current = n, N.current = r, P.current = i, F.current = a;
@@ -19396,32 +19396,32 @@ function Vn(e) {
 		p,
 		m
 	]);
-	let z = (0, D.useCallback)((e) => {
+	let R = (0, D.useCallback)((e) => {
 		let t = {
-			...L.current,
+			...te.current,
 			[S]: e
 		};
-		O(e), j(t), L.current = t, p(e, t);
-	}, [S, p]), ne = (0, D.useMemo)(() => ht(l, S), [l, S]), B = (0, D.useMemo)(() => u === null ? null : ht(u, S), [u, S]), V = (0, D.useMemo)(() => ({
+		O(e), j(t), te.current = t, p(e, t);
+	}, [S, p]), z = (0, D.useMemo)(() => ht(l, S), [l, S]), re = (0, D.useMemo)(() => u === null ? null : ht(u, S), [u, S]), B = (0, D.useMemo)(() => ({
 		cols: w,
 		rowHeight: s,
 		maxRows: c,
-		margin: ne,
-		containerPadding: B
+		margin: z,
+		containerPadding: re
 	}), [
 		w,
 		s,
 		c,
-		ne,
-		B
+		z,
+		re
 	]);
 	return /* @__PURE__ */ (0, A.jsx)(In, {
 		...h,
 		width: n,
-		gridConfig: V,
+		gridConfig: B,
 		compactor: g,
-		onLayoutChange: z,
-		layout: R,
+		onLayoutChange: R,
+		layout: ne,
 		children: t
 	});
 }
@@ -19434,21 +19434,21 @@ var Hn = D.forwardRef(function(e, t) {
 });
 Hn.displayName = "ResponsiveGridLayout";
 function Un(e) {
-	let { children: t, width: n, breakpoint: r, breakpoints: i, cols: a, layouts: o, onBreakpointChange: s, onLayoutChange: c, onWidthChange: l, rowHeight: u, maxRows: d, margin: f, containerPadding: p, droppingItem: m, compactType: h, preventCollision: g = !1, allowOverlap: _ = !1, verticalCompact: v, isDraggable: y = !0, isBounded: b = !1, draggableHandle: x, draggableCancel: S, allowMobileScroll: C, isResizable: w = !0, resizeHandles: T = ["se"], resizeHandle: E, isDroppable: D = !1, useCSSTransforms: O = !0, transformScale: k = 1, autoSize: j, className: M, style: N, innerRef: P, onDragStart: F, onDrag: I, onDragStop: ee, onResizeStart: L, onResize: te, onResizeStop: R, onDrop: z, onDropDragOver: ne } = e, B = h === void 0 ? "vertical" : h;
-	v === !1 && (B = null);
-	let V = {
+	let { children: t, width: n, breakpoint: r, breakpoints: i, cols: a, layouts: o, onBreakpointChange: s, onLayoutChange: c, onWidthChange: l, rowHeight: u, maxRows: d, margin: f, containerPadding: p, droppingItem: m, compactType: h, preventCollision: g = !1, allowOverlap: _ = !1, verticalCompact: v, isDraggable: y = !0, isBounded: b = !1, draggableHandle: x, draggableCancel: S, allowMobileScroll: C, isResizable: w = !0, resizeHandles: T = ["se"], resizeHandle: E, isDroppable: D = !1, useCSSTransforms: O = !0, transformScale: k = 1, autoSize: j, className: M, style: N, innerRef: P, onDragStart: F, onDrag: I, onDragStop: ee, onResizeStart: te, onResize: L, onResizeStop: ne, onDrop: R, onDropDragOver: z } = e, re = h === void 0 ? "vertical" : h;
+	v === !1 && (re = null);
+	let B = {
 		enabled: y,
 		bounded: b,
 		handle: x,
 		cancel: S,
 		allowMobileScroll: C
-	}, H = {
+	}, V = {
 		enabled: w,
 		handles: T,
 		handleComponent: E
-	}, re = { enabled: D }, ie;
-	ie = O ? k === 1 ? qe : Ye(k) : Je;
-	let ae = ut(B, _, g);
+	}, ie = { enabled: D }, ae;
+	ae = O ? k === 1 ? qe : Ye(k) : Je;
+	let oe = ut(re, _, g);
 	return /* @__PURE__ */ (0, A.jsx)(Hn, {
 		width: n,
 		breakpoint: r,
@@ -19459,11 +19459,11 @@ function Un(e) {
 		maxRows: d,
 		margin: f,
 		containerPadding: p,
-		compactor: ae,
-		dragConfig: V,
-		resizeConfig: H,
-		dropConfig: re,
-		positionStrategy: ie,
+		compactor: oe,
+		dragConfig: B,
+		resizeConfig: V,
+		dropConfig: ie,
+		positionStrategy: ae,
 		droppingItem: m,
 		autoSize: j,
 		className: M,
@@ -19475,11 +19475,11 @@ function Un(e) {
 		onDragStart: F,
 		onDrag: I,
 		onDragStop: ee,
-		onResizeStart: L,
-		onResize: te,
-		onResizeStop: R,
-		onDrop: z,
-		onDropDragOver: ne,
+		onResizeStart: te,
+		onResize: L,
+		onResizeStop: ne,
+		onDrop: R,
+		onDropDragOver: z,
 		children: t
 	});
 }
@@ -19999,12 +19999,12 @@ function _r({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 		} catch {
 			f(d), S(F("dashboard_save_failed", "No se pudo guardar el diseño"));
 		}
-	}, L = (e) => {
+	}, te = (e) => {
 		let t = (nr[_] || []).find((t) => t.i === e);
 		if (!t) return;
 		let n = O.current[_] || [];
-		te(n.map((n) => n.i === e ? { ...t } : n), F("reset_widget", "Widget restablecido"));
-	}, te = (e, t) => {
+		L(n.map((n) => n.i === e ? { ...t } : n), F("reset_widget", "Widget restablecido"));
+	}, L = (e, t) => {
 		let n = $n(O.current, E.current, e);
 		I(n, !0, t);
 	};
@@ -20113,15 +20113,15 @@ function _r({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 					}
 					s || (document.scrollingElement, o < 72 ? window.scrollBy(0, -14) : o > window.innerHeight - 72 && window.scrollBy(0, 14));
 				},
-				onResizeStop: (e, t, n) => n && te(Qn(e, n.i), `${F("size", "Tamaño")}: ${n.w}x${n.h}`),
-				onDragStop: (e, t, n) => te(Qn(e, n?.i), F("position_saved", "Posición guardada")),
+				onResizeStop: (e, t, n) => n && L(Qn(e, n.i), `${F("size", "Tamaño")}: ${n.w}x${n.h}`),
+				onDragStop: (e, t, n) => L(Qn(e, n?.i), F("position_saved", "Posición guardada")),
 				useCSSTransforms: !0,
 				children: e.filter((e) => d[e.id] !== !1 && (t.has(e.id) || !!e.content)).map((e) => /* @__PURE__ */ (0, A.jsx)("div", { children: /* @__PURE__ */ (0, A.jsx)(G, { children: /* @__PURE__ */ (0, A.jsx)(gr, {
 					widget: e,
 					node: t.get(e.id),
 					editing: p,
 					onHide: () => ee(e.id, !1),
-					onReset: () => L(e.id)
+					onReset: () => te(e.id)
 				}) }) }, e.id))
 			}, w) })
 		]
@@ -20256,22 +20256,22 @@ function Tr({ panel: e, entryId: t, zones: n, zone: r, online: i, states: a, can
 	let M = (t) => (a || e._hass?.states)?.[t], N = m && (r ? m.filter((e) => r.entity_ids?.includes(e.entity_id)) : m), P = N?.filter((e) => e.physical_test_kind).length, F = (t) => {
 		let n = M(t.entity_id);
 		if (n?.attributes?.device_class === "timestamp" && t.state) return `Dato informativo · ${br(t.state, e._hass?.language || "es", e._hass?.config?.time_zone) || "fecha no disponible"}`;
-		if (t.category === "unverifiable" || L(t.entity_id)) return "Estado no disponible";
+		if (t.category === "unverifiable" || te(t.entity_id)) return "Estado no disponible";
 		if (t.state === "on" || t.state === "off") {
 			let e = n?.attributes?.device_class;
 			return wr.includes(e) ? t.state === "on" ? "Actividad detectada" : "Sin actividad" : Cr.includes(e) ? t.state === "on" ? "Abierto" : "Cerrado" : t.state === "on" ? "Activo" : "Inactivo";
 		}
 		return t.state || "Estado desconocido";
-	}, I = (e) => M(e)?.attributes?.friendly_name || e, ee = (e) => e?.area || (e ? `Zona ${e.number ?? ""}` : "Todas las zonas"), L = (e) => !M(e) || [
+	}, I = (e) => M(e)?.attributes?.friendly_name || e, ee = (e) => e?.area || (e ? `Zona ${e.number ?? ""}` : "Todas las zonas"), te = (e) => !M(e) || [
 		"unknown",
 		"unavailable",
 		"offline"
-	].includes(M(e).state), te = (e) => L(e.entity_id) || e.availability === "unavailable" ? "Sin conexión" : "Disponible", R = (e) => e.battery === null ? e.battery_low === !0 ? "Batería baja · porcentaje no informado" : e.battery_low === !1 ? "Batería en estado normal · porcentaje no informado" : "Batería: sin datos en Home Assistant" : `${e.battery_low ? "Batería baja" : "Batería"} · ${e.battery}%`, z = (t) => {
+	].includes(M(e).state), L = (e) => te(e.entity_id) || e.availability === "unavailable" ? "Sin conexión" : "Disponible", ne = (e) => e.battery === null ? e.battery_low === !0 ? "Batería baja · porcentaje no informado" : e.battery_low === !1 ? "Batería en estado normal · porcentaje no informado" : "Batería: sin datos en Home Assistant" : `${e.battery_low ? "Batería baja" : "Batería"} · ${e.battery}%`, R = (t) => {
 		let n = M(t.entity_id);
 		if (t.state !== "on" || !Cr.includes(n?.attributes?.device_class)) return null;
 		let r = t.last_changed || n?.last_changed, i = r && br(r, e._hass?.language || "es", e._hass?.config?.time_zone);
 		return i ? `Abierto desde ${i} · continúa abierto` : "Abierto · hora de apertura no disponible";
-	}, ne = v || !i || !S, B = f?.current_sensor, V = B && M(B)?.attributes?.device_class, H = f?.step_phase === "close" ? "Apertura detectada. Ahora cierra el contacto." : f?.step_phase === "verified" ? "Sensor comprobado." : V === "motion" || V === "occupancy" ? "Camina frente al sensor de movimiento." : V === "vibration" ? "Activa el sensor de vibración." : "Abre el contacto y vuelve a cerrarlo.";
+	}, z = v || !i || !S, re = f?.current_sensor, B = re && M(re)?.attributes?.device_class, V = f?.step_phase === "close" ? "Apertura detectada. Ahora cierra el contacto." : f?.step_phase === "verified" ? "Sensor comprobado." : B === "motion" || B === "occupancy" ? "Camina frente al sensor de movimiento." : B === "vibration" ? "Activa el sensor de vibración." : "Abre el contacto y vuelve a cerrarlo.";
 	return /* @__PURE__ */ (0, A.jsxs)("div", {
 		className: "context-tools",
 		style: {
@@ -20319,10 +20319,10 @@ function Tr({ panel: e, entryId: t, zones: n, zone: r, online: i, states: a, can
 							/* @__PURE__ */ (0, A.jsx)("strong", { children: I(e.entity_id) }),
 							/* @__PURE__ */ (0, A.jsx)("small", { children: n.filter((t) => t.entity_ids?.includes(e.entity_id)).map(ee).join(", ") }),
 							/* @__PURE__ */ (0, A.jsx)("small", { children: Sr[e.category] }),
-							/* @__PURE__ */ (0, A.jsxs)("small", { children: ["Conexión: ", te(e)] }),
+							/* @__PURE__ */ (0, A.jsxs)("small", { children: ["Conexión: ", L(e)] }),
 							/* @__PURE__ */ (0, A.jsxs)("small", { children: ["Estado: ", F(e)] }),
-							z(e) && /* @__PURE__ */ (0, A.jsx)("small", { children: z(e) }),
-							/* @__PURE__ */ (0, A.jsx)("small", { children: R(e) }),
+							R(e) && /* @__PURE__ */ (0, A.jsx)("small", { children: R(e) }),
+							/* @__PURE__ */ (0, A.jsx)("small", { children: ne(e) }),
 							e.category === "informational" && /* @__PURE__ */ (0, A.jsx)("small", { children: "Esta entidad no es un contacto ni un detector; su estado no indica si la zona está abierta o cerrada." }),
 							e.category === "attention" && /* @__PURE__ */ (0, A.jsx)("small", { children: "Revisar batería." })
 						]
@@ -20370,7 +20370,7 @@ function Tr({ panel: e, entryId: t, zones: n, zone: r, online: i, states: a, can
 				] }) : null,
 				!!P && /* @__PURE__ */ (0, A.jsx)("button", {
 					type: "button",
-					disabled: ne || !u || !o,
+					disabled: z || !u || !o,
 					onClick: () => void j("start_walk_test", {
 						mode: u,
 						zone_id: r?.id
@@ -20394,16 +20394,16 @@ function Tr({ panel: e, entryId: t, zones: n, zone: r, online: i, states: a, can
 						!f.active && (f.reason === "expired" ? " Sesión expirada." : f.reason === "cancelled" ? " Sesión cancelada." : f.tested_count === f.total_sensors ? " Prueba completada." : " Resultado parcial.")
 					]
 				}),
-				f.active && B && /* @__PURE__ */ (0, A.jsxs)("div", {
+				f.active && re && /* @__PURE__ */ (0, A.jsxs)("div", {
 					role: "status",
-					children: [/* @__PURE__ */ (0, A.jsx)("strong", { children: I(B) }), /* @__PURE__ */ (0, A.jsx)("div", { children: L(B) ? "Sensor no disponible." : H })]
+					children: [/* @__PURE__ */ (0, A.jsx)("strong", { children: I(re) }), /* @__PURE__ */ (0, A.jsx)("div", { children: te(re) ? "Sensor no disponible." : V })]
 				}),
 				f.all_sensors.map((e) => /* @__PURE__ */ (0, A.jsxs)("div", {
 					className: "context-sensor-row",
 					children: [
 						I(e),
 						" · ",
-						f.tested_sensors[e] ? "Detectado" : f.skipped_sensors.includes(e) ? "Omitido de la prueba" : L(e) ? "No disponible" : f.active ? "Pendiente" : "No comprobado"
+						f.tested_sensors[e] ? "Detectado" : f.skipped_sensors.includes(e) ? "Omitido de la prueba" : te(e) ? "No disponible" : f.active ? "Pendiente" : "No comprobado"
 					]
 				}, e)),
 				f.active && /* @__PURE__ */ (0, A.jsxs)("div", {
@@ -20413,35 +20413,35 @@ function Tr({ panel: e, entryId: t, zones: n, zone: r, online: i, states: a, can
 						gap: 8
 					},
 					children: [
-						B && /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [
+						re && /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [
 							/* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
-								disabled: ne || f.step_phase !== "verified",
+								disabled: z || f.step_phase !== "verified",
 								onClick: () => void j("walk_test_step", { action: "continue" }),
 								children: "Continuar"
 							}),
 							/* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
-								disabled: ne,
+								disabled: z,
 								onClick: () => void j("walk_test_step", { action: "retry" }),
 								children: "Reintentar"
 							}),
 							/* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
-								disabled: ne,
+								disabled: z,
 								onClick: () => void j("walk_test_step", { action: "skip" }),
 								children: "Omitir paso"
 							})
 						] }),
 						/* @__PURE__ */ (0, A.jsx)("button", {
 							type: "button",
-							disabled: ne,
+							disabled: z,
 							onClick: () => void j("stop_walk_test", { cancel: !0 }),
 							children: "Cancelar prueba"
 						}),
 						/* @__PURE__ */ (0, A.jsx)("button", {
 							type: "button",
-							disabled: ne,
+							disabled: z,
 							onClick: () => void j("stop_walk_test", {}),
 							children: "Finalizar prueba"
 						})
@@ -24355,14 +24355,14 @@ var gc = /*@__PURE__*/ new Q(), _c = /*@__PURE__*/ new Q(), vc = /*@__PURE__*/ n
 	intersectTriangle(e, t, n, r, i) {
 		let a = this.origin, o = this.direction, s = o.x, c = o.y, l = o.z, u = e.x - a.x, d = e.y - a.y, f = e.z - a.z, p = t.x - a.x, m = t.y - a.y, h = t.z - a.z, g = n.x - a.x, _ = n.y - a.y, v = n.z - a.z, y = Math.abs(s), b = Math.abs(c), x = Math.abs(l), S, C, w, T, E, D, O, k, A, j, M, N;
 		if (y >= b && y >= x ? (w = s, D = u, A = p, N = g, s >= 0 ? (S = c, C = l, T = d, E = f, O = m, k = h, j = _, M = v) : (S = l, C = c, T = f, E = d, O = h, k = m, j = v, M = _)) : b >= x ? (w = c, D = d, A = m, N = _, c >= 0 ? (S = l, C = s, T = f, E = u, O = h, k = p, j = v, M = g) : (S = s, C = l, T = u, E = f, O = p, k = h, j = g, M = v)) : (w = l, D = f, A = h, N = v, l >= 0 ? (S = s, C = c, T = u, E = d, O = p, k = m, j = g, M = _) : (S = c, C = s, T = d, E = u, O = m, k = p, j = _, M = g)), w === 0) return null;
-		let P = S / w, F = C / w, I = 1 / w, ee = T - P * D, L = E - F * D, te = O - P * A, R = k - F * A, z = j - P * N, ne = M - F * N, B = z * R - ne * te, V = ee * ne - L * z, H = te * L - R * ee;
+		let P = S / w, F = C / w, I = 1 / w, ee = T - P * D, te = E - F * D, L = O - P * A, ne = k - F * A, R = j - P * N, z = M - F * N, re = R * ne - z * L, B = ee * z - te * R, V = L * te - ne * ee;
 		if (r) {
-			if (B < 0 || V < 0 || H < 0) return null;
-		} else if ((B < 0 || V < 0 || H < 0) && (B > 0 || V > 0 || H > 0)) return null;
-		let re = B + V + H;
-		if (re === 0) return null;
-		let ie = I * (B * D + V * A + H * N);
-		return (re > 0 ? ie < 0 : ie > 0) ? null : this.at(ie / re, i);
+			if (re < 0 || B < 0 || V < 0) return null;
+		} else if ((re < 0 || B < 0 || V < 0) && (re > 0 || B > 0 || V > 0)) return null;
+		let ie = re + B + V;
+		if (ie === 0) return null;
+		let ae = I * (re * D + B * A + V * N);
+		return (ie > 0 ? ae < 0 : ae > 0) ? null : this.at(ae / ie, i);
 	}
 	applyMatrix4(e) {
 		return this.origin.applyMatrix4(e), this.direction.transformDirection(e), this;
@@ -25745,7 +25745,7 @@ var Eu = class e extends Ws {
 					let r = n / p, i = u * Math.cos(r * Math.PI / 2), a = d * Math.sin(r * Math.PI / 2) + f;
 					for (let t = 0, n = D.length; t < n; t++) {
 						let n = O(D[t], j[t], a);
-						z(n.x, n.y, -i), r === 0 && e.push(n);
+						R(n.x, n.y, -i), r === 0 && e.push(n);
 					}
 					for (let e = 0, n = E; e < n; e++) {
 						let n = w[e];
@@ -25753,7 +25753,7 @@ var Eu = class e extends Ws {
 						let o = [];
 						for (let e = 0, t = n.length; e < t; e++) {
 							let t = O(n[e], N[e], a);
-							z(t.x, t.y, -i), r === 0 && o.push(t);
+							R(t.x, t.y, -i), r === 0 && o.push(t);
 						}
 						r === 0 && t.push(o);
 					}
@@ -25763,90 +25763,90 @@ var Eu = class e extends Ws {
 			let I = F.length, ee = d + f;
 			for (let e = 0; e < k; e++) {
 				let t = l ? O(C[e], P[e], ee) : C[e];
-				_ ? (b.copy(v.normals[0]).multiplyScalar(t.x), y.copy(v.binormals[0]).multiplyScalar(t.y), x.copy(g[0]).add(b).add(y), z(x.x, x.y, x.z)) : z(t.x, t.y, 0);
+				_ ? (b.copy(v.normals[0]).multiplyScalar(t.x), y.copy(v.binormals[0]).multiplyScalar(t.y), x.copy(g[0]).add(b).add(y), R(x.x, x.y, x.z)) : R(t.x, t.y, 0);
 			}
 			for (let e = 1; e <= s; e++) for (let t = 0; t < k; t++) {
 				let n = l ? O(C[t], P[t], ee) : C[t];
-				_ ? (b.copy(v.normals[e]).multiplyScalar(n.x), y.copy(v.binormals[e]).multiplyScalar(n.y), x.copy(g[e]).add(b).add(y), z(x.x, x.y, x.z)) : z(n.x, n.y, c / s * e);
+				_ ? (b.copy(v.normals[e]).multiplyScalar(n.x), y.copy(v.binormals[e]).multiplyScalar(n.y), x.copy(g[e]).add(b).add(y), R(x.x, x.y, x.z)) : R(n.x, n.y, c / s * e);
 			}
 			for (let e = p - 1; e >= 0; e--) {
 				let t = e / p, n = u * Math.cos(t * Math.PI / 2), r = d * Math.sin(t * Math.PI / 2) + f;
 				for (let e = 0, t = D.length; e < t; e++) {
 					let t = O(D[e], j[e], r);
-					z(t.x, t.y, c + n);
+					R(t.x, t.y, c + n);
 				}
 				for (let e = 0, t = w.length; e < t; e++) {
 					let t = w[e];
 					N = M[e];
 					for (let e = 0, i = t.length; e < i; e++) {
 						let i = O(t[e], N[e], r);
-						_ ? z(i.x, i.y + g[s - 1].y, g[s - 1].x + n) : z(i.x, i.y, c + n);
+						_ ? R(i.x, i.y + g[s - 1].y, g[s - 1].x + n) : R(i.x, i.y, c + n);
 					}
 				}
 			}
-			L(), te();
-			function L() {
+			te(), L();
+			function te() {
 				let e = r.length / 3;
 				if (l) {
 					let e = 0, t = k * e;
 					for (let e = 0; e < I; e++) {
 						let n = F[e];
-						ne(n[2] + t, n[1] + t, n[0] + t);
+						z(n[2] + t, n[1] + t, n[0] + t);
 					}
 					e = s + p * 2, t = k * e;
 					for (let e = 0; e < I; e++) {
 						let n = F[e];
-						ne(n[0] + t, n[1] + t, n[2] + t);
+						z(n[0] + t, n[1] + t, n[2] + t);
 					}
 				} else {
 					for (let e = 0; e < I; e++) {
 						let t = F[e];
-						ne(t[2], t[1], t[0]);
+						z(t[2], t[1], t[0]);
 					}
 					for (let e = 0; e < I; e++) {
 						let t = F[e];
-						ne(t[0] + k * s, t[1] + k * s, t[2] + k * s);
+						z(t[0] + k * s, t[1] + k * s, t[2] + k * s);
 					}
 				}
 				n.addGroup(e, r.length / 3 - e, 0);
 			}
-			function te() {
+			function L() {
 				let e = r.length / 3, t = 0;
-				R(D, t), t += D.length;
+				ne(D, t), t += D.length;
 				for (let e = 0, n = w.length; e < n; e++) {
 					let n = w[e];
-					R(n, t), t += n.length;
+					ne(n, t), t += n.length;
 				}
 				n.addGroup(e, r.length / 3 - e, 1);
 			}
-			function R(e, t) {
+			function ne(e, t) {
 				let n = e.length;
 				for (; --n >= 0;) {
 					let r = n, i = n - 1;
 					i < 0 && (i = e.length - 1);
 					for (let e = 0, n = s + p * 2; e < n; e++) {
 						let n = k * e, a = k * (e + 1);
-						B(t + r + n, t + i + n, t + i + a, t + r + a);
+						re(t + r + n, t + i + n, t + i + a, t + r + a);
 					}
 				}
 			}
-			function z(e, t, n) {
+			function R(e, t, n) {
 				a.push(e), a.push(t), a.push(n);
 			}
-			function ne(e, t, i) {
-				V(e), V(t), V(i);
+			function z(e, t, i) {
+				B(e), B(t), B(i);
 				let a = r.length / 3, o = h.generateTopUV(n, r, a - 3, a - 2, a - 1);
-				H(o[0]), H(o[1]), H(o[2]);
+				V(o[0]), V(o[1]), V(o[2]);
 			}
-			function B(e, t, i, a) {
-				V(e), V(t), V(a), V(t), V(i), V(a);
+			function re(e, t, i, a) {
+				B(e), B(t), B(a), B(t), B(i), B(a);
 				let o = r.length / 3, s = h.generateSideWallUV(n, r, o - 6, o - 3, o - 2, o - 1);
-				H(s[0]), H(s[1]), H(s[3]), H(s[1]), H(s[2]), H(s[3]);
+				V(s[0]), V(s[1]), V(s[3]), V(s[1]), V(s[2]), V(s[3]);
 			}
-			function V(e) {
+			function B(e) {
 				r.push(a[e * 3 + 0]), r.push(a[e * 3 + 1]), r.push(a[e * 3 + 2]);
 			}
-			function H(e) {
+			function V(e) {
 				i.push(e.x), i.push(e.y);
 			}
 		}
@@ -29947,7 +29947,7 @@ function Lm(e, t, n, r, i, a) {
 			let e = s.getVertexShaderStage(i), t = s.getFragmentShaderStage(i);
 			s.update(i, e, t), k = e.id, A = t.id;
 		}
-		let j = e.getRenderTarget(), M = e.state.buffers.depth.getReversed(), N = h.isInstancedMesh === !0, P = h.isBatchedMesh === !0, F = !!i.map, I = !!i.matcap, ee = !!x, L = !!i.aoMap, te = !!i.lightMap, R = !!i.bumpMap && i.wireframe === !1, z = !!i.normalMap, ne = !!i.displacementMap, B = !!i.emissiveMap, V = !!i.metalnessMap, H = !!i.roughnessMap, re = i.anisotropy > 0, ie = i.clearcoat > 0, ae = i.dispersion > 0, oe = i.retroreflectivity > 0, U = i.iridescence > 0, W = i.sheen > 0, se = i.transmission > 0, ce = re && !!i.anisotropyMap, le = ie && !!i.clearcoatMap, ue = ie && !!i.clearcoatNormalMap, de = ie && !!i.clearcoatRoughnessMap, G = U && !!i.iridescenceMap, K = U && !!i.iridescenceThicknessMap, fe = W && !!i.sheenColorMap, q = W && !!i.sheenRoughnessMap, pe = !!i.specularMap, J = !!i.specularColorMap, me = !!i.specularIntensityMap, Y = se && !!i.transmissionMap, X = se && !!i.thicknessMap, he = !!i.gradientMap, ge = !!i.alphaMap, _e = i.alphaTest > 0, ve = !!i.alphaHash, ye = !!i.extensions, be = 0;
+		let j = e.getRenderTarget(), M = e.state.buffers.depth.getReversed(), N = h.isInstancedMesh === !0, P = h.isBatchedMesh === !0, F = !!i.map, I = !!i.matcap, ee = !!x, te = !!i.aoMap, L = !!i.lightMap, ne = !!i.bumpMap && i.wireframe === !1, R = !!i.normalMap, z = !!i.displacementMap, re = !!i.emissiveMap, B = !!i.metalnessMap, V = !!i.roughnessMap, ie = i.anisotropy > 0, ae = i.clearcoat > 0, oe = i.dispersion > 0, se = i.retroreflectivity > 0, H = i.iridescence > 0, U = i.sheen > 0, ce = i.transmission > 0, le = ie && !!i.anisotropyMap, ue = ae && !!i.clearcoatMap, de = ae && !!i.clearcoatNormalMap, W = ae && !!i.clearcoatRoughnessMap, G = H && !!i.iridescenceMap, K = H && !!i.iridescenceThicknessMap, fe = U && !!i.sheenColorMap, q = U && !!i.sheenRoughnessMap, pe = !!i.specularMap, J = !!i.specularColorMap, me = !!i.specularIntensityMap, Y = ce && !!i.transmissionMap, X = ce && !!i.thicknessMap, he = !!i.gradientMap, ge = !!i.alphaMap, _e = i.alphaTest > 0, ve = !!i.alphaHash, ye = !!i.extensions, be = 0;
 		i.toneMapped && (j === null || j.isXRRenderTarget === !0) && (be = e.toneMapping);
 		let xe = {
 			shaderID: C,
@@ -29973,35 +29973,35 @@ function Lm(e, t, n, r, i, a) {
 			envMap: ee,
 			envMapMode: ee && x.mapping,
 			envMapCubeUVHeight: S,
-			aoMap: L,
-			lightMap: te,
-			bumpMap: R,
-			normalMap: z,
-			displacementMap: ne,
-			emissiveMap: B,
-			normalMapObjectSpace: z && i.normalMapType === 1,
-			normalMapTangentSpace: z && i.normalMapType === 0,
-			packedNormalMap: z && i.normalMapType === 0 && Im(i.normalMap.format),
-			metalnessMap: V,
-			roughnessMap: H,
-			anisotropy: re,
-			anisotropyMap: ce,
-			clearcoat: ie,
-			clearcoatMap: le,
-			clearcoatNormalMap: ue,
-			clearcoatRoughnessMap: de,
-			dispersion: ae,
-			retroreflection: oe,
-			iridescence: U,
+			aoMap: te,
+			lightMap: L,
+			bumpMap: ne,
+			normalMap: R,
+			displacementMap: z,
+			emissiveMap: re,
+			normalMapObjectSpace: R && i.normalMapType === 1,
+			normalMapTangentSpace: R && i.normalMapType === 0,
+			packedNormalMap: R && i.normalMapType === 0 && Im(i.normalMap.format),
+			metalnessMap: B,
+			roughnessMap: V,
+			anisotropy: ie,
+			anisotropyMap: le,
+			clearcoat: ae,
+			clearcoatMap: ue,
+			clearcoatNormalMap: de,
+			clearcoatRoughnessMap: W,
+			dispersion: oe,
+			retroreflection: se,
+			iridescence: H,
 			iridescenceMap: G,
 			iridescenceThicknessMap: K,
-			sheen: W,
+			sheen: U,
 			sheenColorMap: fe,
 			sheenRoughnessMap: q,
 			specularMap: pe,
 			specularColorMap: J,
 			specularIntensityMap: me,
-			transmission: se,
+			transmission: ce,
 			transmissionMap: Y,
 			thicknessMap: X,
 			gradientMap: he,
@@ -30011,18 +30011,18 @@ function Lm(e, t, n, r, i, a) {
 			alphaHash: ve,
 			combine: i.combine,
 			mapUv: F && m(i.map.channel),
-			aoMapUv: L && m(i.aoMap.channel),
-			lightMapUv: te && m(i.lightMap.channel),
-			bumpMapUv: R && m(i.bumpMap.channel),
-			normalMapUv: z && m(i.normalMap.channel),
-			displacementMapUv: ne && m(i.displacementMap.channel),
-			emissiveMapUv: B && m(i.emissiveMap.channel),
-			metalnessMapUv: V && m(i.metalnessMap.channel),
-			roughnessMapUv: H && m(i.roughnessMap.channel),
-			anisotropyMapUv: ce && m(i.anisotropyMap.channel),
-			clearcoatMapUv: le && m(i.clearcoatMap.channel),
-			clearcoatNormalMapUv: ue && m(i.clearcoatNormalMap.channel),
-			clearcoatRoughnessMapUv: de && m(i.clearcoatRoughnessMap.channel),
+			aoMapUv: te && m(i.aoMap.channel),
+			lightMapUv: L && m(i.lightMap.channel),
+			bumpMapUv: ne && m(i.bumpMap.channel),
+			normalMapUv: R && m(i.normalMap.channel),
+			displacementMapUv: z && m(i.displacementMap.channel),
+			emissiveMapUv: re && m(i.emissiveMap.channel),
+			metalnessMapUv: B && m(i.metalnessMap.channel),
+			roughnessMapUv: V && m(i.roughnessMap.channel),
+			anisotropyMapUv: le && m(i.anisotropyMap.channel),
+			clearcoatMapUv: ue && m(i.clearcoatMap.channel),
+			clearcoatNormalMapUv: de && m(i.clearcoatNormalMap.channel),
+			clearcoatRoughnessMapUv: W && m(i.clearcoatRoughnessMap.channel),
 			iridescenceMapUv: G && m(i.iridescenceMap.channel),
 			iridescenceThicknessMapUv: K && m(i.iridescenceThicknessMap.channel),
 			sheenColorMapUv: fe && m(i.sheenColorMap.channel),
@@ -30033,7 +30033,7 @@ function Lm(e, t, n, r, i, a) {
 			transmissionMapUv: Y && m(i.transmissionMap.channel),
 			thicknessMapUv: X && m(i.thicknessMap.channel),
 			alphaMapUv: ge && m(i.alphaMap.channel),
-			vertexTangents: !!v.attributes.tangent && (z || re),
+			vertexTangents: !!v.attributes.tangent && (R || ie),
 			vertexNormals: !!v.attributes.normal,
 			vertexColors: i.vertexColors,
 			vertexAlphas: i.vertexColors === !0 && !!v.attributes.color && v.attributes.color.itemSize === 4,
@@ -30041,7 +30041,7 @@ function Lm(e, t, n, r, i, a) {
 			fog: !!_,
 			useFog: i.fog === !0,
 			fogExp2: !!_ && _.isFogExp2,
-			flatShading: i.wireframe === !1 && (i.flatShading === !0 || v.attributes.normal === void 0 && z === !1 && (i.isMeshLambertMaterial || i.isMeshPhongMaterial || i.isMeshStandardMaterial || i.isMeshPhysicalMaterial)),
+			flatShading: i.wireframe === !1 && (i.flatShading === !0 || v.attributes.normal === void 0 && R === !1 && (i.isMeshLambertMaterial || i.isMeshPhongMaterial || i.isMeshStandardMaterial || i.isMeshPhysicalMaterial)),
 			sizeAttenuation: i.sizeAttenuation === !0,
 			logarithmicDepthBuffer: d,
 			reversedDepthBuffer: M,
@@ -30073,7 +30073,7 @@ function Lm(e, t, n, r, i, a) {
 			shadowMapType: e.shadowMap.type,
 			toneMapping: be,
 			decodeVideoTexture: F && i.map.isVideoTexture === !0 && Xa.getTransfer(i.map.colorSpace) === "srgb",
-			decodeVideoTextureEmissive: B && i.emissiveMap.isVideoTexture === !0 && Xa.getTransfer(i.emissiveMap.colorSpace) === "srgb",
+			decodeVideoTextureEmissive: re && i.emissiveMap.isVideoTexture === !0 && Xa.getTransfer(i.emissiveMap.colorSpace) === "srgb",
 			premultipliedAlpha: i.premultipliedAlpha,
 			doubleSided: i.side === 2,
 			flipSided: i.side === 1,
@@ -30701,7 +30701,7 @@ function ih(e, t) {
 				return r;
 			},
 			setTest: function(t) {
-				t ? V(e.DEPTH_TEST) : H(e.DEPTH_TEST);
+				t ? B(e.DEPTH_TEST) : V(e.DEPTH_TEST);
 			},
 			setMask: function(t) {
 				i !== t && !n && (e.depthMask(t), i = t);
@@ -30753,7 +30753,7 @@ function ih(e, t) {
 		let t = !1, n = null, r = null, i = null, a = null, o = null, s = null, c = null, l = null;
 		return {
 			setTest: function(n) {
-				t || (n ? V(e.STENCIL_TEST) : H(e.STENCIL_TEST));
+				t || (n ? B(e.STENCIL_TEST) : V(e.STENCIL_TEST));
 			},
 			setMask: function(r) {
 				n !== r && !t && (e.stencilMask(r), n = r);
@@ -30777,25 +30777,25 @@ function ih(e, t) {
 	}
 	let a = new n(), o = new r(), s = new i(), c = /* @__PURE__ */ new WeakMap(), l = /* @__PURE__ */ new WeakMap(), u = {}, d = {}, f = {}, p = /* @__PURE__ */ new WeakMap(), m = [], h = null, g = !1, _ = null, v = null, y = null, b = null, x = null, S = null, C = null, w = new Jo(0, 0, 0), T = 0, E = !1, D = null, O = null, k = null, A = null, j = null, M = e.getParameter(e.MAX_COMBINED_TEXTURE_IMAGE_UNITS), N = !1, P = 0, F = e.getParameter(e.VERSION);
 	F.indexOf("WebGL") === -1 ? F.indexOf("OpenGL ES") !== -1 && (P = parseFloat(/^OpenGL ES (\d)/.exec(F)[1]), N = P >= 2) : (P = parseFloat(/^WebGL (\d)/.exec(F)[1]), N = P >= 1);
-	let I = null, ee = {}, L = e.getParameter(e.SCISSOR_BOX), te = e.getParameter(e.VIEWPORT), R = new so().fromArray(L), z = new so().fromArray(te);
-	function ne(t, n, r, i) {
+	let I = null, ee = {}, te = e.getParameter(e.SCISSOR_BOX), L = e.getParameter(e.VIEWPORT), ne = new so().fromArray(te), R = new so().fromArray(L);
+	function z(t, n, r, i) {
 		let a = /* @__PURE__ */ new Uint8Array(4), o = e.createTexture();
 		e.bindTexture(t, o), e.texParameteri(t, e.TEXTURE_MIN_FILTER, e.NEAREST), e.texParameteri(t, e.TEXTURE_MAG_FILTER, e.NEAREST);
 		for (let o = 0; o < r; o++) t === e.TEXTURE_3D || t === e.TEXTURE_2D_ARRAY ? e.texImage3D(n, 0, e.RGBA, 1, 1, i, 0, e.RGBA, e.UNSIGNED_BYTE, a) : e.texImage2D(n + o, 0, e.RGBA, 1, 1, 0, e.RGBA, e.UNSIGNED_BYTE, a);
 		return o;
 	}
-	let B = {};
-	B[e.TEXTURE_2D] = ne(e.TEXTURE_2D, e.TEXTURE_2D, 1), B[e.TEXTURE_CUBE_MAP] = ne(e.TEXTURE_CUBE_MAP, e.TEXTURE_CUBE_MAP_POSITIVE_X, 6), B[e.TEXTURE_2D_ARRAY] = ne(e.TEXTURE_2D_ARRAY, e.TEXTURE_2D_ARRAY, 1, 1), B[e.TEXTURE_3D] = ne(e.TEXTURE_3D, e.TEXTURE_3D, 1, 1), a.setClear(0, 0, 0, 1), o.setClear(1), s.setClear(0), V(e.DEPTH_TEST), o.setFunc(3), ce(!1), le(1), V(e.CULL_FACE), W(0);
-	function V(t) {
+	let re = {};
+	re[e.TEXTURE_2D] = z(e.TEXTURE_2D, e.TEXTURE_2D, 1), re[e.TEXTURE_CUBE_MAP] = z(e.TEXTURE_CUBE_MAP, e.TEXTURE_CUBE_MAP_POSITIVE_X, 6), re[e.TEXTURE_2D_ARRAY] = z(e.TEXTURE_2D_ARRAY, e.TEXTURE_2D_ARRAY, 1, 1), re[e.TEXTURE_3D] = z(e.TEXTURE_3D, e.TEXTURE_3D, 1, 1), a.setClear(0, 0, 0, 1), o.setClear(1), s.setClear(0), B(e.DEPTH_TEST), o.setFunc(3), le(!1), ue(1), B(e.CULL_FACE), U(0);
+	function B(t) {
 		u[t] !== !0 && (e.enable(t), u[t] = !0);
 	}
-	function H(t) {
+	function V(t) {
 		u[t] !== !1 && (e.disable(t), u[t] = !1);
 	}
-	function re(t, n) {
+	function ie(t, n) {
 		return f[t] !== n && (e.bindFramebuffer(t, n), f[t] = n, t === e.DRAW_FRAMEBUFFER && (f[e.FRAMEBUFFER] = n), t === e.FRAMEBUFFER && (f[e.DRAW_FRAMEBUFFER] = n), !0);
 	}
-	function ie(t, n) {
+	function ae(t, n) {
 		let r = m, i = !1;
 		if (t) {
 			r = p.get(n), r === void 0 && (r = [], p.set(n, r));
@@ -30807,16 +30807,16 @@ function ih(e, t) {
 		} else r[0] !== e.BACK && (r[0] = e.BACK, i = !0);
 		i && e.drawBuffers(r);
 	}
-	function ae(t) {
+	function oe(t) {
 		return h !== t && (e.useProgram(t), h = t, !0);
 	}
-	let oe = {
+	let se = {
 		100: e.FUNC_ADD,
 		101: e.FUNC_SUBTRACT,
 		102: e.FUNC_REVERSE_SUBTRACT
 	};
-	oe[103] = e.MIN, oe[104] = e.MAX;
-	let U = {
+	se[103] = e.MIN, se[104] = e.MAX;
+	let H = {
 		200: e.ZERO,
 		201: e.ONE,
 		202: e.SRC_COLOR,
@@ -30833,12 +30833,12 @@ function ih(e, t) {
 		213: e.CONSTANT_ALPHA,
 		214: e.ONE_MINUS_CONSTANT_ALPHA
 	};
-	function W(t, n, r, i, a, o, s, c, l, u) {
+	function U(t, n, r, i, a, o, s, c, l, u) {
 		if (t === 0) {
-			g === !0 && (H(e.BLEND), g = !1);
+			g === !0 && (V(e.BLEND), g = !1);
 			return;
 		}
-		if (g === !1 && (V(e.BLEND), g = !0), t !== 5) {
+		if (g === !1 && (B(e.BLEND), g = !0), t !== 5) {
 			if (t !== _ || u !== E) {
 				if ((v !== 100 || x !== 100) && (e.blendEquation(e.FUNC_ADD), v = 100, x = 100), u) switch (t) {
 					case 1:
@@ -30874,29 +30874,29 @@ function ih(e, t) {
 			}
 			return;
 		}
-		a ||= n, o ||= r, s ||= i, (n !== v || a !== x) && (e.blendEquationSeparate(oe[n], oe[a]), v = n, x = a), (r !== y || i !== b || o !== S || s !== C) && (e.blendFuncSeparate(U[r], U[i], U[o], U[s]), y = r, b = i, S = o, C = s), (c.equals(w) === !1 || l !== T) && (e.blendColor(c.r, c.g, c.b, l), w.copy(c), T = l), _ = t, E = !1;
+		a ||= n, o ||= r, s ||= i, (n !== v || a !== x) && (e.blendEquationSeparate(se[n], se[a]), v = n, x = a), (r !== y || i !== b || o !== S || s !== C) && (e.blendFuncSeparate(H[r], H[i], H[o], H[s]), y = r, b = i, S = o, C = s), (c.equals(w) === !1 || l !== T) && (e.blendColor(c.r, c.g, c.b, l), w.copy(c), T = l), _ = t, E = !1;
 	}
-	function se(t, n) {
-		t.side === 2 ? H(e.CULL_FACE) : V(e.CULL_FACE);
+	function ce(t, n) {
+		t.side === 2 ? V(e.CULL_FACE) : B(e.CULL_FACE);
 		let r = t.side === 1;
-		n && (r = !r), ce(r), t.blending === 1 && t.transparent === !1 ? W(0) : W(t.blending, t.blendEquation, t.blendSrc, t.blendDst, t.blendEquationAlpha, t.blendSrcAlpha, t.blendDstAlpha, t.blendColor, t.blendAlpha, t.premultipliedAlpha), o.setFunc(t.depthFunc), o.setTest(t.depthTest), o.setMask(t.depthWrite), a.setMask(t.colorWrite);
+		n && (r = !r), le(r), t.blending === 1 && t.transparent === !1 ? U(0) : U(t.blending, t.blendEquation, t.blendSrc, t.blendDst, t.blendEquationAlpha, t.blendSrcAlpha, t.blendDstAlpha, t.blendColor, t.blendAlpha, t.premultipliedAlpha), o.setFunc(t.depthFunc), o.setTest(t.depthTest), o.setMask(t.depthWrite), a.setMask(t.colorWrite);
 		let i = t.stencilWrite;
-		s.setTest(i), i && (s.setMask(t.stencilWriteMask), s.setFunc(t.stencilFunc, t.stencilRef, t.stencilFuncMask), s.setOp(t.stencilFail, t.stencilZFail, t.stencilZPass)), de(t.polygonOffset, t.polygonOffsetFactor, t.polygonOffsetUnits), t.alphaToCoverage === !0 ? V(e.SAMPLE_ALPHA_TO_COVERAGE) : H(e.SAMPLE_ALPHA_TO_COVERAGE);
-	}
-	function ce(t) {
-		D !== t && (t ? e.frontFace(e.CW) : e.frontFace(e.CCW), D = t);
+		s.setTest(i), i && (s.setMask(t.stencilWriteMask), s.setFunc(t.stencilFunc, t.stencilRef, t.stencilFuncMask), s.setOp(t.stencilFail, t.stencilZFail, t.stencilZPass)), W(t.polygonOffset, t.polygonOffsetFactor, t.polygonOffsetUnits), t.alphaToCoverage === !0 ? B(e.SAMPLE_ALPHA_TO_COVERAGE) : V(e.SAMPLE_ALPHA_TO_COVERAGE);
 	}
 	function le(t) {
-		t === 0 ? H(e.CULL_FACE) : (V(e.CULL_FACE), t !== O && (t === 1 ? e.cullFace(e.BACK) : t === 2 ? e.cullFace(e.FRONT) : e.cullFace(e.FRONT_AND_BACK))), O = t;
+		D !== t && (t ? e.frontFace(e.CW) : e.frontFace(e.CCW), D = t);
 	}
 	function ue(t) {
+		t === 0 ? V(e.CULL_FACE) : (B(e.CULL_FACE), t !== O && (t === 1 ? e.cullFace(e.BACK) : t === 2 ? e.cullFace(e.FRONT) : e.cullFace(e.FRONT_AND_BACK))), O = t;
+	}
+	function de(t) {
 		t !== k && (N && e.lineWidth(t), k = t);
 	}
-	function de(t, n, r) {
-		t ? (V(e.POLYGON_OFFSET_FILL), (A !== n || j !== r) && (A = n, j = r, o.getReversed() && (n = -n), e.polygonOffset(n, r))) : H(e.POLYGON_OFFSET_FILL);
+	function W(t, n, r) {
+		t ? (B(e.POLYGON_OFFSET_FILL), (A !== n || j !== r) && (A = n, j = r, o.getReversed() && (n = -n), e.polygonOffset(n, r))) : V(e.POLYGON_OFFSET_FILL);
 	}
 	function G(t) {
-		t ? V(e.SCISSOR_TEST) : H(e.SCISSOR_TEST);
+		t ? B(e.SCISSOR_TEST) : V(e.SCISSOR_TEST);
 	}
 	function K(t) {
 		t === void 0 && (t = e.TEXTURE0 + M - 1), I !== t && (e.activeTexture(t), I = t);
@@ -30907,7 +30907,7 @@ function ih(e, t) {
 		i === void 0 && (i = {
 			type: void 0,
 			texture: void 0
-		}, ee[r] = i), (i.type !== t || i.texture !== n) && (I !== r && (e.activeTexture(r), I = r), e.bindTexture(t, n || B[t]), i.type = t, i.texture = n);
+		}, ee[r] = i), (i.type !== t || i.texture !== n) && (I !== r && (e.activeTexture(r), I = r), e.bindTexture(t, n || re[t]), i.type = t, i.texture = n);
 	}
 	function q() {
 		let t = ee[I];
@@ -30990,10 +30990,10 @@ function ih(e, t) {
 		d[t] !== n && (e.pixelStorei(t, n), d[t] = n);
 	}
 	function Se(t) {
-		R.equals(t) === !1 && (e.scissor(t.x, t.y, t.z, t.w), R.copy(t));
+		ne.equals(t) === !1 && (e.scissor(t.x, t.y, t.z, t.w), ne.copy(t));
 	}
 	function Ce(t) {
-		z.equals(t) === !1 && (e.viewport(t.x, t.y, t.z, t.w), z.copy(t));
+		R.equals(t) === !1 && (e.viewport(t.x, t.y, t.z, t.w), R.copy(t));
 	}
 	function we(t, n) {
 		let r = l.get(n);
@@ -31006,7 +31006,7 @@ function ih(e, t) {
 		c.get(n) !== r && (e.uniformBlockBinding(n, r, t.__bindingPointIndex), c.set(n, r));
 	}
 	function Ee() {
-		e.disable(e.BLEND), e.disable(e.CULL_FACE), e.disable(e.DEPTH_TEST), e.disable(e.POLYGON_OFFSET_FILL), e.disable(e.SCISSOR_TEST), e.disable(e.STENCIL_TEST), e.disable(e.SAMPLE_ALPHA_TO_COVERAGE), e.blendEquation(e.FUNC_ADD), e.blendFunc(e.ONE, e.ZERO), e.blendFuncSeparate(e.ONE, e.ZERO, e.ONE, e.ZERO), e.blendColor(0, 0, 0, 0), e.colorMask(!0, !0, !0, !0), e.clearColor(0, 0, 0, 0), e.depthMask(!0), e.depthFunc(e.LESS), o.setReversed(!1), e.clearDepth(1), e.stencilMask(4294967295), e.stencilFunc(e.ALWAYS, 0, 4294967295), e.stencilOp(e.KEEP, e.KEEP, e.KEEP), e.clearStencil(0), e.cullFace(e.BACK), e.frontFace(e.CCW), e.polygonOffset(0, 0), e.activeTexture(e.TEXTURE0), e.bindFramebuffer(e.FRAMEBUFFER, null), e.bindFramebuffer(e.DRAW_FRAMEBUFFER, null), e.bindFramebuffer(e.READ_FRAMEBUFFER, null), e.useProgram(null), e.lineWidth(1), e.scissor(0, 0, e.canvas.width, e.canvas.height), e.viewport(0, 0, e.canvas.width, e.canvas.height), e.pixelStorei(e.PACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_FLIP_Y_WEBGL, !1), e.pixelStorei(e.UNPACK_PREMULTIPLY_ALPHA_WEBGL, !1), e.pixelStorei(e.UNPACK_COLORSPACE_CONVERSION_WEBGL, e.BROWSER_DEFAULT_WEBGL), e.pixelStorei(e.PACK_ROW_LENGTH, 0), e.pixelStorei(e.PACK_SKIP_PIXELS, 0), e.pixelStorei(e.PACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_ROW_LENGTH, 0), e.pixelStorei(e.UNPACK_IMAGE_HEIGHT, 0), e.pixelStorei(e.UNPACK_SKIP_PIXELS, 0), e.pixelStorei(e.UNPACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_SKIP_IMAGES, 0), u = {}, d = {}, I = null, ee = {}, f = {}, p = /* @__PURE__ */ new WeakMap(), m = [], h = null, g = !1, _ = null, v = null, y = null, b = null, x = null, S = null, C = null, w = new Jo(0, 0, 0), T = 0, E = !1, D = null, O = null, k = null, A = null, j = null, R.set(0, 0, e.canvas.width, e.canvas.height), z.set(0, 0, e.canvas.width, e.canvas.height), a.reset(), o.reset(), s.reset();
+		e.disable(e.BLEND), e.disable(e.CULL_FACE), e.disable(e.DEPTH_TEST), e.disable(e.POLYGON_OFFSET_FILL), e.disable(e.SCISSOR_TEST), e.disable(e.STENCIL_TEST), e.disable(e.SAMPLE_ALPHA_TO_COVERAGE), e.blendEquation(e.FUNC_ADD), e.blendFunc(e.ONE, e.ZERO), e.blendFuncSeparate(e.ONE, e.ZERO, e.ONE, e.ZERO), e.blendColor(0, 0, 0, 0), e.colorMask(!0, !0, !0, !0), e.clearColor(0, 0, 0, 0), e.depthMask(!0), e.depthFunc(e.LESS), o.setReversed(!1), e.clearDepth(1), e.stencilMask(4294967295), e.stencilFunc(e.ALWAYS, 0, 4294967295), e.stencilOp(e.KEEP, e.KEEP, e.KEEP), e.clearStencil(0), e.cullFace(e.BACK), e.frontFace(e.CCW), e.polygonOffset(0, 0), e.activeTexture(e.TEXTURE0), e.bindFramebuffer(e.FRAMEBUFFER, null), e.bindFramebuffer(e.DRAW_FRAMEBUFFER, null), e.bindFramebuffer(e.READ_FRAMEBUFFER, null), e.useProgram(null), e.lineWidth(1), e.scissor(0, 0, e.canvas.width, e.canvas.height), e.viewport(0, 0, e.canvas.width, e.canvas.height), e.pixelStorei(e.PACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_FLIP_Y_WEBGL, !1), e.pixelStorei(e.UNPACK_PREMULTIPLY_ALPHA_WEBGL, !1), e.pixelStorei(e.UNPACK_COLORSPACE_CONVERSION_WEBGL, e.BROWSER_DEFAULT_WEBGL), e.pixelStorei(e.PACK_ROW_LENGTH, 0), e.pixelStorei(e.PACK_SKIP_PIXELS, 0), e.pixelStorei(e.PACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_ROW_LENGTH, 0), e.pixelStorei(e.UNPACK_IMAGE_HEIGHT, 0), e.pixelStorei(e.UNPACK_SKIP_PIXELS, 0), e.pixelStorei(e.UNPACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_SKIP_IMAGES, 0), u = {}, d = {}, I = null, ee = {}, f = {}, p = /* @__PURE__ */ new WeakMap(), m = [], h = null, g = !1, _ = null, v = null, y = null, b = null, x = null, S = null, C = null, w = new Jo(0, 0, 0), T = 0, E = !1, D = null, O = null, k = null, A = null, j = null, ne.set(0, 0, e.canvas.width, e.canvas.height), R.set(0, 0, e.canvas.width, e.canvas.height), a.reset(), o.reset(), s.reset();
 	}
 	return {
 		buffers: {
@@ -31014,17 +31014,17 @@ function ih(e, t) {
 			depth: o,
 			stencil: s
 		},
-		enable: V,
-		disable: H,
-		bindFramebuffer: re,
-		drawBuffers: ie,
-		useProgram: ae,
-		setBlending: W,
-		setMaterial: se,
-		setFlipSided: ce,
-		setCullFace: le,
-		setLineWidth: ue,
-		setPolygonOffset: de,
+		enable: B,
+		disable: V,
+		bindFramebuffer: ie,
+		drawBuffers: ae,
+		useProgram: oe,
+		setBlending: U,
+		setMaterial: ce,
+		setFlipSided: le,
+		setCullFace: ue,
+		setLineWidth: de,
+		setPolygonOffset: W,
 		setScissorTest: G,
 		activeTexture: K,
 		bindTexture: fe,
@@ -31168,7 +31168,7 @@ function ah(e, t, n, r, i, a, o) {
 			if (e === null) la("WebGLRenderer: Texture marked for update but no image data found.");
 			else if (e.complete === !1) la("WebGLRenderer: Texture marked for update but image is incomplete");
 			else {
-				H(a, t, i);
+				V(a, t, i);
 				return;
 			}
 		} else t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null);
@@ -31177,7 +31177,7 @@ function ah(e, t, n, r, i, a, o) {
 	function F(t, i) {
 		let a = r.get(t);
 		if (t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version) {
-			H(a, t, i);
+			V(a, t, i);
 			return;
 		}
 		t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null), n.bindTexture(e.TEXTURE_2D_ARRAY, a.__webglTexture, e.TEXTURE0 + i);
@@ -31185,7 +31185,7 @@ function ah(e, t, n, r, i, a, o) {
 	function I(t, i) {
 		let a = r.get(t);
 		if (t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version) {
-			H(a, t, i);
+			V(a, t, i);
 			return;
 		}
 		n.bindTexture(e.TEXTURE_3D, a.__webglTexture, e.TEXTURE0 + i);
@@ -31193,23 +31193,23 @@ function ah(e, t, n, r, i, a, o) {
 	function ee(t, i) {
 		let a = r.get(t);
 		if (t.isCubeDepthTexture !== !0 && t.version > 0 && a.__version !== t.version) {
-			re(a, t, i);
+			ie(a, t, i);
 			return;
 		}
 		n.bindTexture(e.TEXTURE_CUBE_MAP, a.__webglTexture, e.TEXTURE0 + i);
 	}
-	let L = {
+	let te = {
 		[Dr]: e.REPEAT,
 		[Or]: e.CLAMP_TO_EDGE,
 		[kr]: e.MIRRORED_REPEAT
-	}, te = {
+	}, L = {
 		[Ar]: e.NEAREST,
 		[jr]: e.NEAREST_MIPMAP_NEAREST,
 		[Mr]: e.NEAREST_MIPMAP_LINEAR,
 		[Nr]: e.LINEAR,
 		[Pr]: e.LINEAR_MIPMAP_NEAREST,
 		[Fr]: e.LINEAR_MIPMAP_LINEAR
-	}, R = {
+	}, ne = {
 		512: e.NEVER,
 		519: e.ALWAYS,
 		513: e.LESS,
@@ -31219,8 +31219,8 @@ function ah(e, t, n, r, i, a, o) {
 		516: e.GREATER,
 		517: e.NOTEQUAL
 	};
-	function z(n, a) {
-		if (a.type === 1015 && t.has("OES_texture_float_linear") === !1 && (a.magFilter === 1006 || a.magFilter === 1007 || a.magFilter === 1005 || a.magFilter === 1008 || a.minFilter === 1006 || a.minFilter === 1007 || a.minFilter === 1005 || a.minFilter === 1008) && la("WebGLRenderer: Unable to use linear filtering with floating point textures. OES_texture_float_linear not supported on this device."), e.texParameteri(n, e.TEXTURE_WRAP_S, L[a.wrapS]), e.texParameteri(n, e.TEXTURE_WRAP_T, L[a.wrapT]), (n === e.TEXTURE_3D || n === e.TEXTURE_2D_ARRAY) && e.texParameteri(n, e.TEXTURE_WRAP_R, L[a.wrapR]), e.texParameteri(n, e.TEXTURE_MAG_FILTER, te[a.magFilter]), e.texParameteri(n, e.TEXTURE_MIN_FILTER, te[a.minFilter]), a.compareFunction && (e.texParameteri(n, e.TEXTURE_COMPARE_MODE, e.COMPARE_REF_TO_TEXTURE), e.texParameteri(n, e.TEXTURE_COMPARE_FUNC, R[a.compareFunction])), t.has("EXT_texture_filter_anisotropic") === !0) {
+	function R(n, a) {
+		if (a.type === 1015 && t.has("OES_texture_float_linear") === !1 && (a.magFilter === 1006 || a.magFilter === 1007 || a.magFilter === 1005 || a.magFilter === 1008 || a.minFilter === 1006 || a.minFilter === 1007 || a.minFilter === 1005 || a.minFilter === 1008) && la("WebGLRenderer: Unable to use linear filtering with floating point textures. OES_texture_float_linear not supported on this device."), e.texParameteri(n, e.TEXTURE_WRAP_S, te[a.wrapS]), e.texParameteri(n, e.TEXTURE_WRAP_T, te[a.wrapT]), (n === e.TEXTURE_3D || n === e.TEXTURE_2D_ARRAY) && e.texParameteri(n, e.TEXTURE_WRAP_R, te[a.wrapR]), e.texParameteri(n, e.TEXTURE_MAG_FILTER, L[a.magFilter]), e.texParameteri(n, e.TEXTURE_MIN_FILTER, L[a.minFilter]), a.compareFunction && (e.texParameteri(n, e.TEXTURE_COMPARE_MODE, e.COMPARE_REF_TO_TEXTURE), e.texParameteri(n, e.TEXTURE_COMPARE_FUNC, ne[a.compareFunction])), t.has("EXT_texture_filter_anisotropic") === !0) {
 			if (a.magFilter === 1003 || a.minFilter !== 1005 && a.minFilter !== 1008 || a.type === 1015 && t.has("OES_texture_float_linear") === !1) return;
 			if (a.anisotropy > 1 || r.get(a).__currentAnisotropy) {
 				let o = t.get("EXT_texture_filter_anisotropic");
@@ -31228,7 +31228,7 @@ function ah(e, t, n, r, i, a, o) {
 			}
 		}
 	}
-	function ne(t, n) {
+	function z(t, n) {
 		let r = !1;
 		t.__webglInit === void 0 && (t.__webglInit = !0, n.addEventListener("dispose", C));
 		let i = n.source, a = p.get(i);
@@ -31244,18 +31244,18 @@ function ah(e, t, n, r, i, a, o) {
 		}
 		return r;
 	}
-	function B(e, t, n) {
+	function re(e, t, n) {
 		return Math.floor(Math.floor(e / n) / t);
 	}
-	function V(t, r, i, a) {
+	function B(t, r, i, a) {
 		let o = t.updateRanges;
 		if (o.length === 0) n.texSubImage2D(e.TEXTURE_2D, 0, 0, 0, r.width, r.height, i, a, r.data);
 		else {
 			o.sort((e, t) => e.start - t.start);
 			let s = 0;
 			for (let e = 1; e < o.length; e++) {
-				let t = o[s], n = o[e], i = t.start + t.count, a = B(n.start, r.width, 4), c = B(t.start, r.width, 4);
-				n.start <= i + 1 && a === c && B(n.start + n.count - 1, r.width, 4) === a ? t.count = Math.max(t.count, n.start + n.count - t.start) : (++s, o[s] = n);
+				let t = o[s], n = o[e], i = t.start + t.count, a = re(n.start, r.width, 4), c = re(t.start, r.width, 4);
+				n.start <= i + 1 && a === c && re(n.start + n.count - 1, r.width, 4) === a ? t.count = Math.max(t.count, n.start + n.count - t.start) : (++s, o[s] = n);
 			}
 			o.length = s + 1;
 			let c = n.getParameter(e.UNPACK_ROW_LENGTH), l = n.getParameter(e.UNPACK_SKIP_PIXELS), u = n.getParameter(e.UNPACK_SKIP_ROWS);
@@ -31267,10 +31267,10 @@ function ah(e, t, n, r, i, a, o) {
 			t.clearUpdateRanges(), n.pixelStorei(e.UNPACK_ROW_LENGTH, c), n.pixelStorei(e.UNPACK_SKIP_PIXELS, l), n.pixelStorei(e.UNPACK_SKIP_ROWS, u);
 		}
 	}
-	function H(t, o, s) {
+	function V(t, o, s) {
 		let c = e.TEXTURE_2D;
 		(o.isDataArrayTexture || o.isCompressedArrayTexture) && (c = e.TEXTURE_2D_ARRAY), o.isData3DTexture && (c = e.TEXTURE_3D);
-		let l = ne(t, o), u = o.source;
+		let l = z(t, o), u = o.source;
 		n.bindTexture(c, t.__webglTexture, e.TEXTURE0 + s);
 		let f = r.get(u);
 		if (u.version !== f.__version || l === !0) {
@@ -31282,7 +31282,7 @@ function ah(e, t, n, r, i, a, o) {
 			let t = g(o.image, !1, i.maxTextureSize);
 			t = q(o, t);
 			let r = a.convert(o.format, o.colorSpace), p = a.convert(o.type), m = b(o.internalFormat, r, p, o.normalized, o.colorSpace, o.isVideoTexture);
-			z(c, o);
+			R(c, o);
 			let h, y = o.mipmaps, C = o.isVideoTexture !== !0, w = f.__version === void 0 || l === !0, T = u.dataReady, E = S(o, t);
 			if (o.isDepthTexture) m = x(o.format === $r, o.type), w && (C ? n.texStorage2D(e.TEXTURE_2D, 1, m, t.width, t.height) : n.texImage2D(e.TEXTURE_2D, 0, m, t.width, t.height, 0, r, p, null));
 			else if (o.isDataTexture) {
@@ -31290,7 +31290,7 @@ function ah(e, t, n, r, i, a, o) {
 					C && w && n.texStorage2D(e.TEXTURE_2D, E, m, y[0].width, y[0].height);
 					for (let t = 0, i = y.length; t < i; t++) h = y[t], C ? T && n.texSubImage2D(e.TEXTURE_2D, t, 0, 0, h.width, h.height, r, p, h.data) : n.texImage2D(e.TEXTURE_2D, t, m, h.width, h.height, 0, r, p, h.data);
 					o.generateMipmaps = !1;
-				} else C ? (w && n.texStorage2D(e.TEXTURE_2D, E, m, t.width, t.height), T && V(o, t, r, p)) : n.texImage2D(e.TEXTURE_2D, 0, m, t.width, t.height, 0, r, p, t.data);
+				} else C ? (w && n.texStorage2D(e.TEXTURE_2D, E, m, t.width, t.height), T && B(o, t, r, p)) : n.texImage2D(e.TEXTURE_2D, 0, m, t.width, t.height, 0, r, p, t.data);
 			} else if (o.isCompressedTexture) {
 				if (o.isCompressedArrayTexture) {
 					C && w && n.texStorage3D(e.TEXTURE_2D_ARRAY, E, m, y[0].width, y[0].height, t.depth);
@@ -31371,9 +31371,9 @@ function ah(e, t, n, r, i, a, o) {
 		}
 		t.__version = o.version;
 	}
-	function re(t, o, s) {
+	function ie(t, o, s) {
 		if (o.image.length !== 6) return;
-		let c = ne(t, o), l = o.source;
+		let c = z(t, o), l = o.source;
 		n.bindTexture(e.TEXTURE_CUBE_MAP, t.__webglTexture, e.TEXTURE0 + s);
 		let u = r.get(l);
 		if (l.version !== u.__version || c === !0) {
@@ -31383,7 +31383,7 @@ function ah(e, t, n, r, i, a, o) {
 			let f = o.isCompressedTexture || o.image[0].isCompressedTexture, p = o.image[0] && o.image[0].isDataTexture, m = [];
 			for (let e = 0; e < 6; e++) !f && !p ? m[e] = g(o.image[e], !0, i.maxCubemapSize) : m[e] = p ? o.image[e].image : o.image[e], m[e] = q(o, m[e]);
 			let h = m[0], y = a.convert(o.format, o.colorSpace), x = a.convert(o.type), C = b(o.internalFormat, y, x, o.normalized, o.colorSpace), w = o.isVideoTexture !== !0, T = u.__version === void 0 || c === !0, E = l.dataReady, D = S(o, h);
-			z(e.TEXTURE_CUBE_MAP, o);
+			R(e.TEXTURE_CUBE_MAP, o);
 			let O;
 			if (f) {
 				w && T && n.texStorage2D(e.TEXTURE_CUBE_MAP, D, C, h.width, h.height);
@@ -31418,7 +31418,7 @@ function ah(e, t, n, r, i, a, o) {
 		}
 		t.__version = o.version;
 	}
-	function ie(t, i, o, c, l, u) {
+	function ae(t, i, o, c, l, u) {
 		let d = a.convert(o.format, o.colorSpace), f = a.convert(o.type), p = b(o.internalFormat, d, f, o.normalized, o.colorSpace), m = r.get(i), h = r.get(o);
 		if (h.__renderTarget = i, !m.__hasExternalTextures) {
 			let t = Math.max(1, i.width >> u), r = Math.max(1, i.height >> u);
@@ -31426,7 +31426,7 @@ function ah(e, t, n, r, i, a, o) {
 		}
 		n.bindFramebuffer(e.FRAMEBUFFER, t), K(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, c, l, h.__webglTexture, 0, G(i)) : (l === e.TEXTURE_2D || l >= e.TEXTURE_CUBE_MAP_POSITIVE_X && l <= e.TEXTURE_CUBE_MAP_NEGATIVE_Z) && e.framebufferTexture2D(e.FRAMEBUFFER, c, l, h.__webglTexture, u), n.bindFramebuffer(e.FRAMEBUFFER, null);
 	}
-	function ae(t, n, r) {
+	function oe(t, n, r) {
 		if (e.bindRenderbuffer(e.RENDERBUFFER, t), n.depthBuffer) {
 			let i = n.depthTexture, a = i && i.isDepthTexture ? i.type : null, o = x(n.stencilBuffer, a), c = n.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT;
 			K(n) ? s.renderbufferStorageMultisampleEXT(e.RENDERBUFFER, G(n), o, n.width, n.height) : r ? e.renderbufferStorageMultisample(e.RENDERBUFFER, G(n), o, n.width, n.height) : e.renderbufferStorage(e.RENDERBUFFER, o, n.width, n.height), e.framebufferRenderbuffer(e.FRAMEBUFFER, c, e.RENDERBUFFER, t);
@@ -31439,13 +31439,13 @@ function ah(e, t, n, r, i, a, o) {
 		}
 		e.bindRenderbuffer(e.RENDERBUFFER, null);
 	}
-	function oe(t, i, o) {
+	function se(t, i, o) {
 		let c = i.isWebGLCubeRenderTarget === !0;
 		if (n.bindFramebuffer(e.FRAMEBUFFER, t), !(i.depthTexture && i.depthTexture.isDepthTexture)) throw Error("THREE.WebGLTextures: renderTarget.depthTexture must be an instance of THREE.DepthTexture.");
 		let l = r.get(i.depthTexture);
 		if (l.__renderTarget = i, (!l.__webglTexture || i.depthTexture.image.width !== i.width || i.depthTexture.image.height !== i.height) && (i.depthTexture.image.width = i.width, i.depthTexture.image.height = i.height, i.depthTexture.needsUpdate = !0), c) {
 			if (l.__webglInit === void 0 && (l.__webglInit = !0, i.depthTexture.addEventListener("dispose", C)), l.__webglTexture === void 0) {
-				l.__webglTexture = e.createTexture(), n.bindTexture(e.TEXTURE_CUBE_MAP, l.__webglTexture), z(e.TEXTURE_CUBE_MAP, i.depthTexture);
+				l.__webglTexture = e.createTexture(), n.bindTexture(e.TEXTURE_CUBE_MAP, l.__webglTexture), R(e.TEXTURE_CUBE_MAP, i.depthTexture);
 				let t = a.convert(i.depthTexture.format), r = a.convert(i.depthTexture.type), o;
 				i.depthTexture.format === 1026 ? o = e.DEPTH_COMPONENT24 : i.depthTexture.format === 1027 && (o = e.DEPTH24_STENCIL8);
 				for (let n = 0; n < 6; n++) e.texImage2D(e.TEXTURE_CUBE_MAP_POSITIVE_X + n, 0, o, i.width, i.height, 0, t, r, null);
@@ -31456,7 +31456,7 @@ function ah(e, t, n, r, i, a, o) {
 		else if (i.depthTexture.format === 1027) K(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, p, f, u, 0, d) : e.framebufferTexture2D(e.FRAMEBUFFER, p, f, u, 0);
 		else throw Error("THREE.WebGLTextures: Unknown depthTexture format.");
 	}
-	function U(t) {
+	function H(t) {
 		let i = r.get(t), a = t.isWebGLCubeRenderTarget === !0;
 		if (i.__boundDepthTexture !== t.depthTexture) {
 			let e = t.depthTexture;
@@ -31469,21 +31469,21 @@ function ah(e, t, n, r, i, a, o) {
 			i.__boundDepthTexture = e;
 		}
 		if (t.depthTexture && !i.__autoAllocateDepthBuffer) {
-			if (a) for (let e = 0; e < 6; e++) oe(i.__webglFramebuffer[e], t, e);
+			if (a) for (let e = 0; e < 6; e++) se(i.__webglFramebuffer[e], t, e);
 			else {
 				let e = t.texture.mipmaps;
-				e && e.length > 0 ? oe(i.__webglFramebuffer[0], t, 0) : oe(i.__webglFramebuffer, t, 0);
+				e && e.length > 0 ? se(i.__webglFramebuffer[0], t, 0) : se(i.__webglFramebuffer, t, 0);
 			}
 		} else if (a) {
 			i.__webglDepthbuffer = [];
-			for (let r = 0; r < 6; r++) if (n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[r]), i.__webglDepthbuffer[r] === void 0) i.__webglDepthbuffer[r] = e.createRenderbuffer(), ae(i.__webglDepthbuffer[r], t, !1);
+			for (let r = 0; r < 6; r++) if (n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[r]), i.__webglDepthbuffer[r] === void 0) i.__webglDepthbuffer[r] = e.createRenderbuffer(), oe(i.__webglDepthbuffer[r], t, !1);
 			else {
 				let n = t.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT, a = i.__webglDepthbuffer[r];
 				e.bindRenderbuffer(e.RENDERBUFFER, a), e.framebufferRenderbuffer(e.FRAMEBUFFER, n, e.RENDERBUFFER, a);
 			}
 		} else {
 			let r = t.texture.mipmaps;
-			if (r && r.length > 0 ? n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[0]) : n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer), i.__webglDepthbuffer === void 0) i.__webglDepthbuffer = e.createRenderbuffer(), ae(i.__webglDepthbuffer, t, !1);
+			if (r && r.length > 0 ? n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[0]) : n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer), i.__webglDepthbuffer === void 0) i.__webglDepthbuffer = e.createRenderbuffer(), oe(i.__webglDepthbuffer, t, !1);
 			else {
 				let n = t.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT, r = i.__webglDepthbuffer;
 				e.bindRenderbuffer(e.RENDERBUFFER, r), e.framebufferRenderbuffer(e.FRAMEBUFFER, n, e.RENDERBUFFER, r);
@@ -31491,11 +31491,11 @@ function ah(e, t, n, r, i, a, o) {
 		}
 		n.bindFramebuffer(e.FRAMEBUFFER, null);
 	}
-	function W(t, n, i) {
+	function U(t, n, i) {
 		let a = r.get(t);
-		n !== void 0 && ie(a.__webglFramebuffer, t, t.texture, e.COLOR_ATTACHMENT0, e.TEXTURE_2D, 0), i !== void 0 && U(t);
+		n !== void 0 && ae(a.__webglFramebuffer, t, t.texture, e.COLOR_ATTACHMENT0, e.TEXTURE_2D, 0), i !== void 0 && H(t);
 	}
-	function se(t) {
+	function ce(t) {
 		let i = t.texture, s = r.get(t), c = r.get(i);
 		t.addEventListener("dispose", w);
 		let l = t.textures, u = t.isWebGLCubeRenderTarget === !0, d = l.length > 1;
@@ -31522,29 +31522,29 @@ function ah(e, t, n, r, i, a, o) {
 					let i = a.convert(r.format, r.colorSpace), o = a.convert(r.type), c = b(r.internalFormat, i, o, r.normalized, r.colorSpace, t.isXRRenderTarget === !0), u = G(t);
 					e.renderbufferStorageMultisample(e.RENDERBUFFER, u, c, t.width, t.height), e.framebufferRenderbuffer(e.FRAMEBUFFER, e.COLOR_ATTACHMENT0 + n, e.RENDERBUFFER, s.__webglColorRenderbuffer[n]);
 				}
-				e.bindRenderbuffer(e.RENDERBUFFER, null), t.depthBuffer && (s.__webglDepthRenderbuffer = e.createRenderbuffer(), ae(s.__webglDepthRenderbuffer, t, !0)), n.bindFramebuffer(e.FRAMEBUFFER, null);
+				e.bindRenderbuffer(e.RENDERBUFFER, null), t.depthBuffer && (s.__webglDepthRenderbuffer = e.createRenderbuffer(), oe(s.__webglDepthRenderbuffer, t, !0)), n.bindFramebuffer(e.FRAMEBUFFER, null);
 			}
 		}
 		if (u) {
-			n.bindTexture(e.TEXTURE_CUBE_MAP, c.__webglTexture), z(e.TEXTURE_CUBE_MAP, i);
-			for (let n = 0; n < 6; n++) if (i.mipmaps && i.mipmaps.length > 0) for (let r = 0; r < i.mipmaps.length; r++) ie(s.__webglFramebuffer[n][r], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, r);
-			else ie(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, 0);
+			n.bindTexture(e.TEXTURE_CUBE_MAP, c.__webglTexture), R(e.TEXTURE_CUBE_MAP, i);
+			for (let n = 0; n < 6; n++) if (i.mipmaps && i.mipmaps.length > 0) for (let r = 0; r < i.mipmaps.length; r++) ae(s.__webglFramebuffer[n][r], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, r);
+			else ae(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, 0);
 			_(i) && v(e.TEXTURE_CUBE_MAP), n.unbindTexture();
 		} else if (d) {
 			for (let i = 0, a = l.length; i < a; i++) {
 				let a = l[i], o = r.get(a), c = e.TEXTURE_2D;
-				(t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (c = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(c, o.__webglTexture), z(c, a), ie(s.__webglFramebuffer, t, a, e.COLOR_ATTACHMENT0 + i, c, 0), _(a) && v(c);
+				(t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (c = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(c, o.__webglTexture), R(c, a), ae(s.__webglFramebuffer, t, a, e.COLOR_ATTACHMENT0 + i, c, 0), _(a) && v(c);
 			}
 			n.unbindTexture();
 		} else {
 			let r = e.TEXTURE_2D;
-			if ((t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (r = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(r, c.__webglTexture), z(r, i), i.mipmaps && i.mipmaps.length > 0) for (let n = 0; n < i.mipmaps.length; n++) ie(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, r, n);
-			else ie(s.__webglFramebuffer, t, i, e.COLOR_ATTACHMENT0, r, 0);
+			if ((t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (r = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(r, c.__webglTexture), R(r, i), i.mipmaps && i.mipmaps.length > 0) for (let n = 0; n < i.mipmaps.length; n++) ae(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, r, n);
+			else ae(s.__webglFramebuffer, t, i, e.COLOR_ATTACHMENT0, r, 0);
 			_(i) && v(r), n.unbindTexture();
 		}
-		t.depthBuffer && U(t);
+		t.depthBuffer && H(t);
 	}
-	function ce(e) {
+	function le(e) {
 		let t = e.textures;
 		for (let i = 0, a = t.length; i < a; i++) {
 			let a = t[i];
@@ -31554,8 +31554,8 @@ function ah(e, t, n, r, i, a, o) {
 			}
 		}
 	}
-	let le = [], ue = [];
-	function de(t) {
+	let ue = [], de = [];
+	function W(t) {
 		if (t.samples > 0) {
 			if (K(t) === !1) {
 				let i = t.textures, a = t.width, o = t.height, s = e.COLOR_BUFFER_BIT, l = t.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT, u = r.get(t), d = i.length > 1;
@@ -31569,7 +31569,7 @@ function ah(e, t, n, r, i, a, o) {
 						let t = r.get(i[n]).__webglTexture;
 						e.framebufferTexture2D(e.DRAW_FRAMEBUFFER, e.COLOR_ATTACHMENT0, e.TEXTURE_2D, t, 0);
 					}
-					e.blitFramebuffer(0, 0, a, o, 0, 0, a, o, s, e.NEAREST), c === !0 && (le.length = 0, ue.length = 0, le.push(e.COLOR_ATTACHMENT0 + n), t.depthBuffer && t.storeMultisampledDepthBuffer === !1 && (le.push(l), ue.push(l), e.invalidateFramebuffer(e.DRAW_FRAMEBUFFER, ue)), e.invalidateFramebuffer(e.READ_FRAMEBUFFER, le));
+					e.blitFramebuffer(0, 0, a, o, 0, 0, a, o, s, e.NEAREST), c === !0 && (ue.length = 0, de.length = 0, ue.push(e.COLOR_ATTACHMENT0 + n), t.depthBuffer && t.storeMultisampledDepthBuffer === !1 && (ue.push(l), de.push(l), e.invalidateFramebuffer(e.DRAW_FRAMEBUFFER, de)), e.invalidateFramebuffer(e.READ_FRAMEBUFFER, ue));
 				}
 				if (n.bindFramebuffer(e.READ_FRAMEBUFFER, null), n.bindFramebuffer(e.DRAW_FRAMEBUFFER, null), d) for (let t = 0; t < i.length; t++) {
 					n.bindFramebuffer(e.FRAMEBUFFER, u.__webglMultisampledFramebuffer), e.framebufferRenderbuffer(e.FRAMEBUFFER, e.COLOR_ATTACHMENT0 + t, e.RENDERBUFFER, u.__webglColorRenderbuffer[t]);
@@ -31601,7 +31601,7 @@ function ah(e, t, n, r, i, a, o) {
 	function pe(e) {
 		return typeof HTMLImageElement < "u" && e instanceof HTMLImageElement ? (l.width = e.naturalWidth || e.width, l.height = e.naturalHeight || e.height) : typeof VideoFrame < "u" && e instanceof VideoFrame ? (l.width = e.displayWidth, l.height = e.displayHeight) : (l.width = e.width, l.height = e.height), l;
 	}
-	this.allocateTextureUnit = M, this.resetTextureUnits = k, this.getTextureUnits = A, this.setTextureUnits = j, this.setTexture2D = P, this.setTexture2DArray = F, this.setTexture3D = I, this.setTextureCube = ee, this.rebindTextures = W, this.setupRenderTarget = se, this.updateRenderTargetMipmap = ce, this.updateMultisampleRenderTarget = de, this.setupDepthRenderbuffer = U, this.setupFrameBufferTexture = ie, this.useMultisampledRTT = K, this.isReversedDepthBuffer = function() {
+	this.allocateTextureUnit = M, this.resetTextureUnits = k, this.getTextureUnits = A, this.setTextureUnits = j, this.setTexture2D = P, this.setTexture2DArray = F, this.setTexture3D = I, this.setTextureCube = ee, this.rebindTextures = U, this.setupRenderTarget = ce, this.updateRenderTargetMipmap = le, this.updateMultisampleRenderTarget = W, this.setupDepthRenderbuffer = H, this.setupFrameBufferTexture = ae, this.useMultisampledRTT = K, this.isReversedDepthBuffer = function() {
 		return n.buffers.depth.getReversed();
 	};
 }
@@ -31766,7 +31766,7 @@ var sh = "\nvoid main() {\n\n	gl_Position = vec4( position, 1.0 );\n\n}", ch = "
 			}
 			k = null, A = null, h.reset();
 			for (let e in g) delete g[e];
-			if (e.setRenderTarget(v), f = null, d = null, u = null, r = null, y = null, z.stop(), n.isPresenting = !1, e.setPixelRatio(C), e.setSize(S.width, S.height, !1), w !== null) {
+			if (e.setRenderTarget(v), f = null, d = null, u = null, r = null, y = null, R.stop(), n.isPresenting = !1, e.setPixelRatio(C), e.setSize(S.width, S.height, !1), w !== null) {
 				let e = w.camera;
 				e.fov = w.fov, e.zoom = w.zoom, e.updateProjectionMatrix(), w = null;
 			}
@@ -31829,7 +31829,7 @@ var sh = "\nvoid main() {\n\n	gl_Position = vec4( position, 1.0 );\n\n}", ch = "
 						storeMultisampledStencilBuffer: f.ignoreDepthValues === !1
 					});
 				}
-				y.isXRRenderTarget = !0, this.setFoveation(s), c = null, a = await r.requestReferenceSpace(o), z.setContext(r), z.start(), n.isPresenting = !0, n.dispatchEvent({ type: "sessionstart" });
+				y.isXRRenderTarget = !0, this.setFoveation(s), c = null, a = await r.requestReferenceSpace(o), R.setContext(r), R.start(), n.isPresenting = !0, n.dispatchEvent({ type: "sessionstart" });
 			}
 		}, this.getEnvironmentBlendMode = function() {
 			if (r !== null) return r.environmentBlendMode;
@@ -31884,9 +31884,9 @@ var sh = "\nvoid main() {\n\n	gl_Position = vec4( position, 1.0 );\n\n}", ch = "
 				camera: e,
 				fov: e.fov,
 				zoom: e.zoom
-			}), L(e, O, i);
+			}), te(e, O, i);
 		};
-		function L(e, t, n) {
+		function te(e, t, n) {
 			n === null ? e.matrix.copy(t.matrixWorld) : (e.matrix.copy(n.matrixWorld), e.matrix.invert(), e.matrix.multiply(t.matrixWorld)), e.matrix.decompose(e.position, e.quaternion, e.scale), e.updateMatrixWorld(!0), e.projectionMatrix.copy(t.projectionMatrix), e.projectionMatrixInverse.copy(t.projectionMatrixInverse), e.isPerspectiveCamera && (e.fov = va * 2 * Math.atan(1 / e.projectionMatrix.elements[5]), e.zoom = 1);
 		}
 		this.getCamera = function() {
@@ -31902,8 +31902,8 @@ var sh = "\nvoid main() {\n\n	gl_Position = vec4( position, 1.0 );\n\n}", ch = "
 		}, this.getCameraTexture = function(e) {
 			return g[e];
 		};
-		let te = null;
-		function R(t, i) {
+		let L = null;
+		function ne(t, i) {
 			if (l = i.getViewerPose(c || a), p = i, l !== null) {
 				let t = l.views;
 				f !== null && (e.setRenderTargetFramebuffer(y, f.framebuffer), e.setRenderTarget(y));
@@ -31942,14 +31942,14 @@ var sh = "\nvoid main() {\n\n	gl_Position = vec4( position, 1.0 );\n\n}", ch = "
 				let t = x[e], n = b[e];
 				t !== null && n !== void 0 && n.update(t, i, c || a);
 			}
-			te && te(t, i), i.detectedPlanes && n.dispatchEvent({
+			L && L(t, i), i.detectedPlanes && n.dispatchEvent({
 				type: "planesdetected",
 				data: i
 			}), p = null;
 		}
-		let z = new ef();
-		z.setAnimationLoop(R), this.setAnimationLoop = function(e) {
-			te = e;
+		let R = new ef();
+		R.setAnimationLoop(ne), this.setAnimationLoop = function(e) {
+			L = e;
 		}, this.dispose = function() {};
 	}
 }, dh = /*@__PURE__*/ new po(), fh = /*@__PURE__*/ new Ga();
@@ -32650,15 +32650,15 @@ var vh = class {
 		}, this.autoClear = !0, this.autoClearColor = !0, this.autoClearDepth = !0, this.autoClearStencil = !0, this.sortObjects = !0, this.clippingPlanes = [], this.localClippingEnabled = !1, this.toneMapping = 0, this.toneMappingExposure = 1, this.transmissionResolutionScale = 1;
 		let T = this, E = !1, D = null, O = null, k = null, A = null;
 		this._outputColorSpace = Yi;
-		let j = 0, M = 0, N = null, P = -1, F = null, I = new so(), ee = new so(), L = null, te = new Jo(0), R = 0, z = t.width, ne = t.height, B = 1, V = null, H = null, re = new so(0, 0, z, ne), ie = new so(0, 0, z, ne), ae = !1, oe = new Yc(), U = !1, W = !1, se = new po(), ce = new Q(), le = new so(), ue = {
+		let j = 0, M = 0, N = null, P = -1, F = null, I = new so(), ee = new so(), te = null, L = new Jo(0), ne = 0, R = t.width, z = t.height, re = 1, B = null, V = null, ie = new so(0, 0, R, z), ae = new so(0, 0, R, z), oe = !1, se = new Yc(), H = !1, U = !1, ce = new po(), le = new Q(), ue = new so(), de = {
 			background: null,
 			fog: null,
 			environment: null,
 			overrideMaterial: null,
 			isScene: !0
-		}, de = !1;
+		}, W = !1;
 		function G() {
-			return N === null ? B : 1;
+			return N === null ? re : 1;
 		}
 		let K = n;
 		function fe(e, n) {
@@ -32700,21 +32700,21 @@ var vh = class {
 			let e = q.get("WEBGL_lose_context");
 			e && e.restoreContext();
 		}, this.getPixelRatio = function() {
-			return B;
+			return re;
 		}, this.setPixelRatio = function(e) {
-			e !== void 0 && (B = e, this.setSize(z, ne, !1));
+			e !== void 0 && (re = e, this.setSize(R, z, !1));
 		}, this.getSize = function(e) {
-			return e.set(z, ne);
+			return e.set(R, z);
 		}, this.setSize = function(e, n, r = !0) {
 			if (Ne.isPresenting) {
 				la("WebGLRenderer: Can't change size while VR device is presenting.");
 				return;
 			}
-			z = e, ne = n, t.width = Math.floor(e * B), t.height = Math.floor(n * B), r === !0 && (t.style.width = e + "px", t.style.height = n + "px"), w !== null && w.setSize(t.width, t.height), this.setViewport(0, 0, e, n);
+			R = e, z = n, t.width = Math.floor(e * re), t.height = Math.floor(n * re), r === !0 && (t.style.width = e + "px", t.style.height = n + "px"), w !== null && w.setSize(t.width, t.height), this.setViewport(0, 0, e, n);
 		}, this.getDrawingBufferSize = function(e) {
-			return e.set(z * B, ne * B).floor();
+			return e.set(R * re, z * re).floor();
 		}, this.setDrawingBufferSize = function(e, n, r) {
-			z = e, ne = n, B = r, t.width = Math.floor(e * r), t.height = Math.floor(n * r), this.setViewport(0, 0, e, n);
+			R = e, z = n, re = r, t.width = Math.floor(e * r), t.height = Math.floor(n * r), this.setViewport(0, 0, e, n);
 		}, this.setEffects = function(e) {
 			if (m === 1009) {
 				ua("WebGLRenderer: setEffects() requires outputBufferType set to HalfFloatType or FloatType.");
@@ -32730,21 +32730,21 @@ var vh = class {
 		}, this.getCurrentViewport = function(e) {
 			return e.copy(I);
 		}, this.getViewport = function(e) {
-			return e.copy(re);
-		}, this.setViewport = function(e, t, n, r) {
-			e.isVector4 ? re.set(e.x, e.y, e.z, e.w) : re.set(e, t, n, r), J.viewport(I.copy(re).multiplyScalar(B).round());
-		}, this.getScissor = function(e) {
 			return e.copy(ie);
+		}, this.setViewport = function(e, t, n, r) {
+			e.isVector4 ? ie.set(e.x, e.y, e.z, e.w) : ie.set(e, t, n, r), J.viewport(I.copy(ie).multiplyScalar(re).round());
+		}, this.getScissor = function(e) {
+			return e.copy(ae);
 		}, this.setScissor = function(e, t, n, r) {
-			e.isVector4 ? ie.set(e.x, e.y, e.z, e.w) : ie.set(e, t, n, r), J.scissor(ee.copy(ie).multiplyScalar(B).round());
+			e.isVector4 ? ae.set(e.x, e.y, e.z, e.w) : ae.set(e, t, n, r), J.scissor(ee.copy(ae).multiplyScalar(re).round());
 		}, this.getScissorTest = function() {
-			return ae;
+			return oe;
 		}, this.setScissorTest = function(e) {
-			J.setScissorTest(ae = e);
+			J.setScissorTest(oe = e);
 		}, this.setOpaqueSort = function(e) {
-			V = e;
+			B = e;
 		}, this.setTransparentSort = function(e) {
-			H = e;
+			V = e;
 		}, this.getClearColor = function(e) {
 			return e.copy(Te.getClearColor());
 		}, this.setClearColor = function() {
@@ -32803,7 +32803,7 @@ var vh = class {
 			}), e.isShaderMaterial && ye.releaseShaderCache(e));
 		}
 		this.renderBufferDirect = function(e, t, n, r, i, a) {
-			t === null && (t = ue);
+			t === null && (t = de);
 			let o = i.isMesh && i.matrixWorld.determinantAffine() < 0, s = tt(e, t, n, r, i);
 			J.setMaterial(r, o);
 			let c = n.index, l = 1;
@@ -32835,14 +32835,14 @@ var vh = class {
 			} else g.render(f, m);
 		};
 		function Be(e, t, n, r) {
-			D !== null && e.isNodeMaterial && D.setObject(r, e), U === !0 && Ce.setState(e, n, !1), e.transparent === !0 && e.side === 2 && e.forceSinglePass === !1 ? (e.side = 1, e.needsUpdate = !0, Ze(e, t, r), e.side = 0, e.needsUpdate = !0, Ze(e, t, r), e.side = 2) : Ze(e, t, r);
+			D !== null && e.isNodeMaterial && D.setObject(r, e), H === !0 && Ce.setState(e, n, !1), e.transparent === !0 && e.side === 2 && e.forceSinglePass === !1 ? (e.side = 1, e.needsUpdate = !0, Ze(e, t, r), e.side = 0, e.needsUpdate = !0, Ze(e, t, r), e.side = 2) : Ze(e, t, r);
 		}
 		this.compile = function(e, t, n = null) {
 			n === null && (n = e), D !== null && D.renderStart(e, t, n), x = Se.get(n), x.init(t), C.push(x), n.traverseVisible(function(e) {
 				e.isLight && e.layers.test(t.layers) && (x.pushLight(e), e.castShadow && x.pushShadow(e));
 			}), e !== n && e.traverseVisible(function(e) {
 				e.isLight && e.layers.test(t.layers) && (x.pushLight(e), e.castShadow && x.pushShadow(e));
-			}), x.setupLights(), D !== null && D.updateLights(x.state.lightsArray), W = this.localClippingEnabled, U = Ce.init(this.clippingPlanes, W), U === !0 && Ce.setGlobalState(this.clippingPlanes, t), D !== null && we.render(x.state.shadowsArray, n, t);
+			}), x.setupLights(), D !== null && D.updateLights(x.state.lightsArray), U = this.localClippingEnabled, H = Ce.init(this.clippingPlanes, U), H === !0 && Ce.setGlobalState(this.clippingPlanes, t), D !== null && we.render(x.state.shadowsArray, n, t);
 			let r = /* @__PURE__ */ new Set();
 			return e.traverse(function(e) {
 				if (!(e.isMesh || e.isPoints || e.isLine || e.isSprite)) return;
@@ -32892,13 +32892,13 @@ var vh = class {
 			if (E === !0) return;
 			D !== null && D.renderStart(e, t);
 			let n = Ne.enabled === !0 && Ne.isPresenting === !0, r = w !== null && (N === null || n) && w.begin(T, N);
-			if (e.matrixWorldAutoUpdate === !0 && e.updateMatrixWorld(), t.parent === null && t.matrixWorldAutoUpdate === !0 && t.updateMatrixWorld(), Ne.enabled === !0 && Ne.isPresenting === !0 && (w === null || w.isCompositing() === !1) && (Ne.cameraAutoUpdate === !0 && Ne.updateCamera(t), t = Ne.getCamera()), e.isScene === !0 && e.onBeforeRender(T, e, t, N), x = Se.get(e, C.length), x.init(t), x.state.textureUnits = X.getTextureUnits(), C.push(x), se.multiplyMatrices(t.projectionMatrix, t.matrixWorldInverse), oe.setFromProjectionMatrix(se, ta, t.reversedDepth), W = this.localClippingEnabled, U = Ce.init(this.clippingPlanes, W), b = xe.get(e, S.length), b.init(), S.push(b), Ne.enabled === !0 && Ne.isPresenting === !0) {
+			if (e.matrixWorldAutoUpdate === !0 && e.updateMatrixWorld(), t.parent === null && t.matrixWorldAutoUpdate === !0 && t.updateMatrixWorld(), Ne.enabled === !0 && Ne.isPresenting === !0 && (w === null || w.isCompositing() === !1) && (Ne.cameraAutoUpdate === !0 && Ne.updateCamera(t), t = Ne.getCamera()), e.isScene === !0 && e.onBeforeRender(T, e, t, N), x = Se.get(e, C.length), x.init(t), x.state.textureUnits = X.getTextureUnits(), C.push(x), ce.multiplyMatrices(t.projectionMatrix, t.matrixWorldInverse), se.setFromProjectionMatrix(ce, ta, t.reversedDepth), U = this.localClippingEnabled, H = Ce.init(this.clippingPlanes, U), b = xe.get(e, S.length), b.init(), S.push(b), Ne.enabled === !0 && Ne.isPresenting === !0) {
 				let e = T.xr.getDepthSensingMesh();
 				e !== null && Ke(e, t, -Infinity, T.sortObjects);
 			}
-			Ke(e, t, 0, T.sortObjects), b.finish(), D !== null && D.updateLights(x.state.lightsArray), T.sortObjects === !0 && b.sort(V, H), de = Ne.enabled === !1 || Ne.isPresenting === !1 || Ne.hasDepthSensing() === !1, de && Te.addToRenderList(b, e), this.info.render.frame++, this.info.autoReset === !0 && this.info.reset(), U === !0 && Ce.beginShadows();
+			Ke(e, t, 0, T.sortObjects), b.finish(), D !== null && D.updateLights(x.state.lightsArray), T.sortObjects === !0 && b.sort(B, V), W = Ne.enabled === !1 || Ne.isPresenting === !1 || Ne.hasDepthSensing() === !1, W && Te.addToRenderList(b, e), this.info.render.frame++, this.info.autoReset === !0 && this.info.reset(), H === !0 && Ce.beginShadows();
 			let i = x.state.shadowsArray;
-			if (we.render(i, e, t), U === !0 && Ce.endShadows(), (r && w.hasRenderPass()) === !1) {
+			if (we.render(i, e, t), H === !0 && Ce.endShadows(), (r && w.hasRenderPass()) === !1) {
 				let n = b.opaque, r = b.transmissive;
 				if (x.setupLights(), t.isArrayCamera) {
 					let i = t.cameras;
@@ -32906,14 +32906,14 @@ var vh = class {
 						let a = i[t];
 						Je(n, r, e, a);
 					}
-					de && Te.render(e);
+					W && Te.render(e);
 					for (let t = 0, n = i.length; t < n; t++) {
 						let n = i[t];
 						qe(b, e, n, n.viewport);
 					}
-				} else r.length > 0 && Je(n, r, e, t), de && Te.render(e), qe(b, e, t);
+				} else r.length > 0 && Je(n, r, e, t), W && Te.render(e), qe(b, e, t);
 			}
-			N !== null && M === 0 && (X.updateMultisampleRenderTarget(N), X.updateRenderTargetMipmap(N)), r && w.end(T), e.isScene === !0 && e.onAfterRender(T, e, t), Ae.resetDefaultState(), P = -1, F = null, C.pop(), C.length > 0 ? (x = C[C.length - 1], X.setTextureUnits(x.state.textureUnits), U === !0 && Ce.setGlobalState(T.clippingPlanes, x.state.camera)) : x = null, S.pop(), b = S.length > 0 ? S[S.length - 1] : null, D !== null && D.renderEnd();
+			N !== null && M === 0 && (X.updateMultisampleRenderTarget(N), X.updateRenderTargetMipmap(N)), r && w.end(T), e.isScene === !0 && e.onAfterRender(T, e, t), Ae.resetDefaultState(), P = -1, F = null, C.pop(), C.length > 0 ? (x = C[C.length - 1], X.setTextureUnits(x.state.textureUnits), H === !0 && Ce.setGlobalState(T.clippingPlanes, x.state.camera)) : x = null, S.pop(), b = S.length > 0 ? S[S.length - 1] : null, D !== null && D.renderEnd();
 		};
 		function Ke(e, t, n, r) {
 			if (e.visible === !1) return;
@@ -32923,20 +32923,20 @@ var vh = class {
 				else if (e.isLightProbeGrid) x.pushLightProbeGrid(e);
 				else if (e.isLight) x.pushLight(e), e.castShadow && x.pushShadow(e);
 				else if (e.isSprite) {
-					if (!e.frustumCulled || e.intersectsFrustum(oe)) {
-						r && le.setFromMatrixPosition(e.matrixWorld).applyMatrix4(se);
+					if (!e.frustumCulled || e.intersectsFrustum(se)) {
+						r && ue.setFromMatrixPosition(e.matrixWorld).applyMatrix4(ce);
 						let i = ve.update(e), a = e.material;
-						a.visible && b.push(e, i, a, n, le.z, null, t);
+						a.visible && b.push(e, i, a, n, ue.z, null, t);
 					}
-				} else if ((e.isMesh || e.isLine || e.isPoints) && (!e.frustumCulled || e.intersectsFrustum(oe))) {
+				} else if ((e.isMesh || e.isLine || e.isPoints) && (!e.frustumCulled || e.intersectsFrustum(se))) {
 					let i = ve.update(e), a = e.material;
-					if (r && (e.boundingSphere === void 0 ? (i.boundingSphere === null && i.computeBoundingSphere(), le.copy(i.boundingSphere.center)) : (e.boundingSphere === null && e.computeBoundingSphere(), le.copy(e.boundingSphere.center)), le.applyMatrix4(e.matrixWorld).applyMatrix4(se)), Array.isArray(a)) {
+					if (r && (e.boundingSphere === void 0 ? (i.boundingSphere === null && i.computeBoundingSphere(), ue.copy(i.boundingSphere.center)) : (e.boundingSphere === null && e.computeBoundingSphere(), ue.copy(e.boundingSphere.center)), ue.applyMatrix4(e.matrixWorld).applyMatrix4(ce)), Array.isArray(a)) {
 						let r = i.groups;
 						for (let o = 0, s = r.length; o < s; o++) {
 							let s = r[o], c = a[s.materialIndex];
-							c && c.visible && b.push(e, i, c, n, le.z, s, t);
+							c && c.visible && b.push(e, i, c, n, ue.z, s, t);
 						}
-					} else a.visible && b.push(e, i, a, n, le.z, null, t);
+					} else a.visible && b.push(e, i, a, n, ue.z, null, t);
 				}
 			}
 			let i = e.children;
@@ -32944,7 +32944,7 @@ var vh = class {
 		}
 		function qe(e, t, n, r) {
 			let { opaque: i, transmissive: a, transparent: o } = e;
-			x.setupLightsView(n), U === !0 && Ce.setGlobalState(T.clippingPlanes, n), r && J.viewport(I.copy(r)), i.length > 0 && Ye(i, t, n), a.length > 0 && Ye(a, t, n), o.length > 0 && Ye(o, t, n), J.buffers.depth.setTest(!0), J.buffers.depth.setMask(!0), J.buffers.color.setMask(!0), J.setPolygonOffset(!1);
+			x.setupLightsView(n), H === !0 && Ce.setGlobalState(T.clippingPlanes, n), r && J.viewport(I.copy(r)), i.length > 0 && Ye(i, t, n), a.length > 0 && Ye(a, t, n), o.length > 0 && Ye(o, t, n), J.buffers.depth.setTest(!0), J.buffers.depth.setMask(!0), J.buffers.color.setMask(!0), J.setPolygonOffset(!1);
 		}
 		function Je(e, t, n, r) {
 			if ((n.isScene === !0 ? n.overrideMaterial : null) !== null) return;
@@ -32966,11 +32966,11 @@ var vh = class {
 			let a = x.state.transmissionRenderTarget[r.id], o = r.viewport || I;
 			a.setSize(o.z * T.transmissionResolutionScale, o.w * T.transmissionResolutionScale);
 			let s = T.getRenderTarget(), c = T.getActiveCubeFace(), l = T.getActiveMipmapLevel();
-			T.setRenderTarget(a), T.getClearColor(te), R = T.getClearAlpha(), R < 1 && T.setClearColor(16777215, .5), T.clear(), de && Te.render(n);
+			T.setRenderTarget(a), T.getClearColor(L), ne = T.getClearAlpha(), ne < 1 && T.setClearColor(16777215, .5), T.clear(), W && Te.render(n);
 			let u = T.toneMapping;
 			T.toneMapping = 0;
 			let d = r.viewport;
-			if (r.viewport !== void 0 && (r.viewport = void 0), x.setupLightsView(r), U === !0 && Ce.setGlobalState(T.clippingPlanes, r), Ye(e, n, r), X.updateMultisampleRenderTarget(a), X.updateRenderTargetMipmap(a), q.has("WEBGL_multisampled_render_to_texture") === !1) {
+			if (r.viewport !== void 0 && (r.viewport = void 0), x.setupLightsView(r), H === !0 && Ce.setGlobalState(T.clippingPlanes, r), Ye(e, n, r), X.updateMultisampleRenderTarget(a), X.updateRenderTargetMipmap(a), q.has("WEBGL_multisampled_render_to_texture") === !1) {
 				let e = !1;
 				for (let i = 0, a = t.length; i < a; i++) {
 					let { object: a, geometry: o, material: s, group: c } = t[i];
@@ -32981,7 +32981,7 @@ var vh = class {
 				}
 				e === !0 && (X.updateMultisampleRenderTarget(a), X.updateRenderTargetMipmap(a));
 			}
-			T.setRenderTarget(s, c, l), T.setClearColor(te, R), d !== void 0 && (r.viewport = d), T.toneMapping = u;
+			T.setRenderTarget(s, c, l), T.setClearColor(L, ne), d !== void 0 && (r.viewport = d), T.toneMapping = u;
 		}
 		function Ye(e, t, n) {
 			let r = t.isScene === !0 ? t.overrideMaterial : null;
@@ -32994,7 +32994,7 @@ var vh = class {
 			D !== null && i.isNodeMaterial && D.setObject(e, i), e.onBeforeRender(T, t, n, r, i, a), e.modelViewMatrix.multiplyMatrices(n.matrixWorldInverse, e.matrixWorld), e.normalMatrix.getNormalMatrix(e.modelViewMatrix), i.onBeforeRender(T, t, n, r, e, a), i.transparent === !0 && i.side === 2 && i.forceSinglePass === !1 ? (i.side = 1, i.needsUpdate = !0, T.renderBufferDirect(n, t, r, i, e, a), i.side = 0, i.needsUpdate = !0, T.renderBufferDirect(n, t, r, i, e, a), i.side = 2) : T.renderBufferDirect(n, t, r, i, e, a), e.onAfterRender(T, t, n, r, i, a);
 		}
 		function Ze(e, t, n) {
-			t.isScene !== !0 && (t = ue);
+			t.isScene !== !0 && (t = de);
 			let r = Y.get(e), i = x.state.lights, a = x.state.shadowsArray, o = i.state.version, s = ye.getParameters(e, i.state, a, t, n, x.state.lightProbeGridArray), c = ye.getProgramCacheKey(s), l = r.programs;
 			r.environment = e.isMeshStandardMaterial || e.isMeshLambertMaterial || e.isMeshPhongMaterial ? t.environment : null, r.fog = t.fog;
 			let u = e.isMeshStandardMaterial || e.isMeshLambertMaterial && !e.envMap || e.isMeshPhongMaterial && !e.envMap;
@@ -33028,11 +33028,11 @@ var vh = class {
 			return null;
 		}
 		function tt(e, t, n, r, i) {
-			t.isScene !== !0 && (t = ue), X.resetTextureUnits();
+			t.isScene !== !0 && (t = de), X.resetTextureUnits();
 			let a = t.fog, o = r.isMeshStandardMaterial || r.isMeshLambertMaterial || r.isMeshPhongMaterial ? t.environment : null, s = N === null ? T.outputColorSpace : N.isXRRenderTarget === !0 ? N.texture.colorSpace : Xa.workingColorSpace, c = r.isMeshStandardMaterial || r.isMeshLambertMaterial && !r.envMap || r.isMeshPhongMaterial && !r.envMap, l = he.get(r.envMap || o, c), u = r.vertexColors === !0 && !!n.attributes.color && n.attributes.color.itemSize === 4, d = !!n.attributes.tangent && (!!r.normalMap || r.anisotropy > 0), f = !!n.morphAttributes.position, p = !!n.morphAttributes.normal, m = !!n.morphAttributes.color, h = 0;
 			r.toneMapped && (N === null || N.isXRRenderTarget === !0) && (h = T.toneMapping);
 			let g = n.morphAttributes.position || n.morphAttributes.normal || n.morphAttributes.color, _ = g === void 0 ? 0 : g.length, v = Y.get(r), y = x.state.lights;
-			if (U === !0 && (W === !0 || e !== F)) {
+			if (H === !0 && (U === !0 || e !== F)) {
 				let t = e === F && r.id === P;
 				Ce.setState(r, e, t);
 			}
@@ -33048,7 +33048,7 @@ var vh = class {
 			if (C || F !== e) {
 				J.buffers.depth.getReversed() && e.reversedDepth !== !0 && (e._reversedDepth = !0, e.updateProjectionMatrix()), O.setValue(K, "projectionMatrix", e.projectionMatrix), O.setValue(K, "viewMatrix", e.matrixWorldInverse);
 				let t = O.map.cameraPosition;
-				t !== void 0 && t.setValue(K, ce.setFromMatrixPosition(e.matrixWorld)), pe.logarithmicDepthBuffer && O.setValue(K, "logDepthBufFC", 2 / (Math.log(e.far + 1) / Math.LN2)), (r.isMeshPhongMaterial || r.isMeshToonMaterial || r.isMeshLambertMaterial || r.isMeshBasicMaterial || r.isMeshStandardMaterial || r.isShaderMaterial) && O.setValue(K, "isOrthographic", e.isOrthographicCamera === !0), F !== e && (F = e, w = !0, E = !0);
+				t !== void 0 && t.setValue(K, le.setFromMatrixPosition(e.matrixWorld)), pe.logarithmicDepthBuffer && O.setValue(K, "logDepthBufFC", 2 / (Math.log(e.far + 1) / Math.LN2)), (r.isMeshPhongMaterial || r.isMeshToonMaterial || r.isMeshLambertMaterial || r.isMeshBasicMaterial || r.isMeshStandardMaterial || r.isShaderMaterial) && O.setValue(K, "isOrthographic", e.isOrthographicCamera === !0), F !== e && (F = e, w = !0, E = !0);
 			}
 			if (v.needsLights && (y.state.sunShadowMap.length > 0 && O.setValue(K, "sunShadowMap", y.state.sunShadowMap, X), y.state.directionalShadowMap.length > 0 && O.setValue(K, "directionalShadowMap", y.state.directionalShadowMap, X), y.state.spotShadowMap.length > 0 && O.setValue(K, "spotShadowMap", y.state.spotShadowMap, X), y.state.pointShadowMap.length > 0 && O.setValue(K, "pointShadowMap", y.state.pointShadowMap, X)), i.isSkinnedMesh) {
 				O.setOptional(K, i, "bindMatrix"), O.setOptional(K, i, "bindMatrixInverse");
@@ -33058,7 +33058,7 @@ var vh = class {
 			i.isBatchedMesh && (O.setOptional(K, i, "batchingTexture"), O.setValue(K, "batchingTexture", i._matricesTexture, X), O.setOptional(K, i, "batchingIdTexture"), O.setValue(K, "batchingIdTexture", i._indirectTexture, X), O.setOptional(K, i, "batchingColorTexture"), i._colorsTexture !== null && O.setValue(K, "batchingColorTexture", i._colorsTexture, X));
 			let A = n.morphAttributes;
 			if ((A.position !== void 0 || A.normal !== void 0 || A.color !== void 0) && Ee.update(i, n, S), (w || v.receiveShadow !== i.receiveShadow) && (v.receiveShadow = i.receiveShadow, O.setValue(K, "receiveShadow", i.receiveShadow)), (r.isMeshStandardMaterial || r.isMeshLambertMaterial || r.isMeshPhongMaterial) && r.envMap === null && t.environment !== null && (k.envMapIntensity.value = t.environmentIntensity), k.dfgLUT !== void 0 && (k.dfgLUT.value = _h()), w) {
-				if (O.setValue(K, "toneMappingExposure", T.toneMappingExposure), v.needsLights && nt(k, E), a && r.fog === !0 && be.refreshFogUniforms(k, a), be.refreshMaterialUniforms(k, r, B, ne, x.state.transmissionRenderTarget[e.id]), v.needsLights && v.lightProbeGrid) {
+				if (O.setValue(K, "toneMappingExposure", T.toneMappingExposure), v.needsLights && nt(k, E), a && r.fog === !0 && be.refreshFogUniforms(k, a), be.refreshMaterialUniforms(k, r, re, z, x.state.transmissionRenderTarget[e.id]), v.needsLights && v.lightProbeGrid) {
 					let e = v.lightProbeGrid;
 					k.probesSH.value = e.texture, k.probesMin.value.copy(e.boundingBox.min), k.probesMax.value.copy(e.boundingBox.max), k.probesResolution.value.copy(e.resolution);
 				}
@@ -33097,7 +33097,7 @@ var vh = class {
 			if (e) {
 				let o = Y.get(e);
 				if (o.__useDefaultFramebuffer !== void 0) {
-					J.bindFramebuffer(K.FRAMEBUFFER, o.__webglFramebuffer), I.copy(e.viewport), ee.copy(e.scissor), L = e.scissorTest, J.viewport(I), J.scissor(ee), J.setScissorTest(L), P = -1;
+					J.bindFramebuffer(K.FRAMEBUFFER, o.__webglFramebuffer), I.copy(e.viewport), ee.copy(e.scissor), te = e.scissorTest, J.viewport(I), J.scissor(ee), J.setScissorTest(te), P = -1;
 					return;
 				}
 				if (o.__webglFramebuffer === void 0) X.setupRenderTarget(e);
@@ -33112,9 +33112,9 @@ var vh = class {
 				let s = e.texture;
 				(s.isData3DTexture || s.isDataArrayTexture || s.isCompressedArrayTexture) && (a = !0);
 				let c = Y.get(e).__webglFramebuffer;
-				e.isWebGLCubeRenderTarget ? (r = Array.isArray(c[t]) ? c[t][n] : c[t], i = !0) : r = e.samples > 0 && X.useMultisampledRTT(e) === !1 ? Y.get(e).__webglMultisampledFramebuffer : Array.isArray(c) ? c[n] : c, I.copy(e.viewport), ee.copy(e.scissor), L = e.scissorTest;
-			} else I.copy(re).multiplyScalar(B).floor(), ee.copy(ie).multiplyScalar(B).floor(), L = ae;
-			if (n !== 0 && (r = O), J.bindFramebuffer(K.FRAMEBUFFER, r) && J.drawBuffers(e, r), J.viewport(I), J.scissor(ee), J.setScissorTest(L), i) {
+				e.isWebGLCubeRenderTarget ? (r = Array.isArray(c[t]) ? c[t][n] : c[t], i = !0) : r = e.samples > 0 && X.useMultisampledRTT(e) === !1 ? Y.get(e).__webglMultisampledFramebuffer : Array.isArray(c) ? c[n] : c, I.copy(e.viewport), ee.copy(e.scissor), te = e.scissorTest;
+			} else I.copy(ie).multiplyScalar(re).floor(), ee.copy(ae).multiplyScalar(re).floor(), te = oe;
+			if (n !== 0 && (r = O), J.bindFramebuffer(K.FRAMEBUFFER, r) && J.drawBuffers(e, r), J.viewport(I), J.scissor(ee), J.setScissorTest(te), i) {
 				let r = Y.get(e.texture);
 				K.framebufferTexture2D(K.FRAMEBUFFER, K.COLOR_ATTACHMENT0, K.TEXTURE_CUBE_MAP_POSITIVE_X + t, r.__webglTexture, n);
 			} else if (a) {
@@ -33554,9 +33554,9 @@ function kh(e) {
 				new Q(0, -.43, .23)
 			], !0), 64, .025, 6, !0), T);
 		}
-		let L = new Vo();
-		b.add(L);
-		let te = new Wu({
+		let te = new Vo();
+		b.add(te);
+		let L = new Wu({
 			color: 132880,
 			metalness: .78,
 			roughness: .055,
@@ -33565,51 +33565,51 @@ function kh(e) {
 			envMapIntensity: 3.2,
 			emissive: x,
 			emissiveIntensity: .08
-		}), R = D(new Au(.46, 48, 36), te, L);
-		R.position.z = .2;
-		let z = document.createElement("canvas");
-		z.width = z.height = 64;
-		let ne = z.getContext("2d");
-		if (ne) {
-			let e = ne.createRadialGradient(23, 21, 1, 32, 32, 30);
-			e.addColorStop(0, "rgba(255,255,255,.98)"), e.addColorStop(.12, "rgba(226,246,255,.72)"), e.addColorStop(.42, "rgba(151,211,255,.18)"), e.addColorStop(1, "rgba(100,180,255,0)"), ne.fillStyle = e, ne.fillRect(0, 0, 64, 64);
+		}), ne = D(new Au(.46, 48, 36), L, te);
+		ne.position.z = .2;
+		let R = document.createElement("canvas");
+		R.width = R.height = 64;
+		let z = R.getContext("2d");
+		if (z) {
+			let e = z.createRadialGradient(23, 21, 1, 32, 32, 30);
+			e.addColorStop(0, "rgba(255,255,255,.98)"), e.addColorStop(.12, "rgba(226,246,255,.72)"), e.addColorStop(.42, "rgba(151,211,255,.18)"), e.addColorStop(1, "rgba(100,180,255,0)"), z.fillStyle = e, z.fillRect(0, 0, 64, 64);
 		}
-		let B = new sl(z);
-		B.colorSpace = Yi;
-		let V = new ec({
-			map: B,
+		let re = new sl(R);
+		re.colorSpace = Yi;
+		let B = new ec({
+			map: re,
 			transparent: !0,
 			depthWrite: !1,
 			toneMapped: !1,
 			blending: 2
-		}), H = new mc(V);
-		H.scale.set(.23, .23, 1), L.add(H);
-		let re = V.clone(), ie = new mc(re);
-		ie.scale.set(.105, .105, 1), L.add(ie);
-		let ae = new xc({
+		}), V = new mc(B);
+		V.scale.set(.23, .23, 1), te.add(V);
+		let ie = B.clone(), ae = new mc(ie);
+		ae.scale.set(.105, .105, 1), te.add(ae);
+		let oe = new xc({
 			color: wh.away.three,
 			toneMapped: !1
-		}), oe = new xc({
+		}), se = new xc({
 			color: wh.alarm.three,
 			toneMapped: !1
-		}), U = new Xc({
+		}), H = new Xc({
 			color: x,
 			transparent: !0,
 			opacity: .95,
 			toneMapped: !1
-		}), W = new Hl();
-		W.moveTo(-.3, -.24), W.lineTo(-.3, .1), W.quadraticCurveTo(-.3, .3, -.1, .3), W.lineTo(.24, .3), W.quadraticCurveTo(.3, .3, .3, .24), W.lineTo(.3, .18), W.lineTo(-.1, .18), W.quadraticCurveTo(-.18, .18, -.18, .1), W.lineTo(-.18, -.24), W.quadraticCurveTo(-.18, -.3, -.24, -.3), W.quadraticCurveTo(-.3, -.3, -.3, -.24), W.closePath();
+		}), U = new Hl();
+		U.moveTo(-.3, -.24), U.lineTo(-.3, .1), U.quadraticCurveTo(-.3, .3, -.1, .3), U.lineTo(.24, .3), U.quadraticCurveTo(.3, .3, .3, .24), U.lineTo(.3, .18), U.lineTo(-.1, .18), U.quadraticCurveTo(-.18, .18, -.18, .1), U.lineTo(-.18, -.24), U.quadraticCurveTo(-.18, -.3, -.24, -.3), U.quadraticCurveTo(-.3, -.3, -.3, -.24), U.closePath();
 		for (let e = 0; e < 4; e++) {
 			let e = new Vo();
 			e.visible = !1, h.add(e), M.push(e);
-			let t = D(new Eu(W, {
+			let t = D(new Eu(U, {
 				depth: .12,
 				bevelEnabled: !0,
 				bevelSize: .018,
 				bevelThickness: .025,
 				bevelSegments: 1,
 				curveSegments: 4
-			}), ae, e);
+			}), oe, e);
 			t.position.z = -.04;
 			let n = new Ws().setFromPoints([
 				new Q(-.265, -.235, .105),
@@ -33617,9 +33617,9 @@ function kh(e) {
 				new Q(-.245, .265, .105),
 				new Q(.235, .265, .105)
 			]);
-			E.push(n), e.add(new il(n, U));
+			E.push(n), e.add(new il(n, H));
 		}
-		let se = [
+		let ce = [
 			0,
 			1,
 			2
@@ -33630,34 +33630,34 @@ function kh(e) {
 			depthWrite: !1,
 			side: 2,
 			toneMapped: !1
-		})), ce = se.map((e, t) => {
+		})), le = ce.map((e, t) => {
 			let n = O(1, t === 0 ? .042 : .032, e, h);
 			return n.visible = !1, n;
 		});
 		h.add(new md(12181503, 527904, .65));
-		let le = new jd(15332607, 2);
-		le.position.set(-3, 4, 5), h.add(le);
-		let ue = new Od(x, 18, 12);
-		ue.position.set(2, -1, 3), h.add(ue);
-		let de = 0, G = 0, K = 0, fe = !0, q = !1, pe = !1, J = 0, me = 0, Y = "", X = "", he = 0, ge = -10, _e = -10, ve = -10, ye = !1, be = 0, xe = 28, Se = 0, Ce = 0, we = new Ch(c), Te = new Jo(), Ee = new Z(), De = new Z(), Oe = window.matchMedia("(prefers-reduced-motion: reduce)"), ke = r.getRootNode() instanceof ShadowRoot ? r.getRootNode().host : r.closest("argus-panel"), Ae = () => Oe.matches || !!ke?.classList.contains("argus-perf-essential"), je = -1, Me = -1, Ne = -1, Pe = !0, Fe = () => {
+		let ue = new jd(15332607, 2);
+		ue.position.set(-3, 4, 5), h.add(ue);
+		let de = new Od(x, 18, 12);
+		de.position.set(2, -1, 3), h.add(de);
+		let W = 0, G = 0, K = 0, fe = !0, q = !1, pe = !1, J = 0, me = 0, Y = "", X = "", he = 0, ge = -10, _e = -10, ve = -10, ye = !1, be = 0, xe = 28, Se = 0, Ce = 0, we = new Ch(c), Te = new Jo(), Ee = new Z(), De = new Z(), Oe = window.matchMedia("(prefers-reduced-motion: reduce)"), ke = r.getRootNode() instanceof ShadowRoot ? r.getRootNode().host : r.closest("argus-panel"), Ae = () => Oe.matches || !!ke?.classList.contains("argus-perf-essential"), je = -1, Me = -1, Ne = -1, Pe = !0, Fe = () => {
 			Pe = !0;
 		}, Ie = () => {
 			let e = ke?.classList.contains("argus-perf-light") ? .75 : 1, t = Ae() ? .6 : Math.min(e, we.quality), n = t <= .7;
 			f.dataset.argusRenderQuality = n ? "light" : "full", C.transmission = n ? 0 : .8, l.transmissionResolutionScale = n ? .25 : .5;
-			let r = Math.min(window.devicePixelRatio || 1, 2), i = n ? 4e6 : 8e6, a = Math.max(Math.min(r, n ? 1 : 1.75), r * t), o = Math.min(a, Math.sqrt(i / (de * G)));
-			de > 0 && G > 0 && (de !== je || G !== Me || o !== Ne) && (l.setDrawingBufferSize(de, G, o), je = de, Me = G, Ne = o);
+			let r = Math.min(window.devicePixelRatio || 1, 2), i = n ? 4e6 : 8e6, a = Math.max(Math.min(r, n ? 1 : 1.75), r * t), o = Math.min(a, Math.sqrt(i / (W * G)));
+			W > 0 && G > 0 && (W !== je || G !== Me || o !== Ne) && (l.setDrawingBufferSize(W, G, o), je = W, Me = G, Ne = o);
 		}, Le = () => {
 			!q && !pe && fe && !document.hidden && !J && (J = window.requestAnimationFrame(Xe));
 		};
 		a.current = Le;
 		let Re = new ResizeObserver(() => {
-			let e = f.getBoundingClientRect(), t = de !== e.width || G !== e.height;
-			if (de = e.width, G = e.height, de <= 0 || G <= 0) return;
-			t && Fe(), g.aspect = de / G, g.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(Va.degToRad(g.fov / 2)) * g.aspect)), g.updateProjectionMatrix(), xe = Number.parseFloat(getComputedStyle(f).borderTopLeftRadius) || 0;
+			let e = f.getBoundingClientRect(), t = W !== e.width || G !== e.height;
+			if (W = e.width, G = e.height, W <= 0 || G <= 0) return;
+			t && Fe(), g.aspect = W / G, g.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(Va.degToRad(g.fov / 2)) * g.aspect)), g.updateProjectionMatrix(), xe = Number.parseFloat(getComputedStyle(f).borderTopLeftRadius) || 0;
 			let n = d?.getBoundingClientRect();
-			if (K = n ? Math.min(n.width, n.height) : Math.min(de, G), n) {
+			if (K = n ? Math.min(n.width, n.height) : Math.min(W, G), n) {
 				let t = 2 * g.position.z * Math.tan(Va.degToRad(g.fov / 2)), r = t * g.aspect;
-				De.set(((n.left + n.width / 2 - e.left) / de - .5) * r, -((n.top + n.height / 2 - e.top) / G - .5) * t);
+				De.set(((n.left + n.width / 2 - e.left) / W - .5) * r, -((n.top + n.height / 2 - e.top) / G - .5) * t);
 			} else De.set(0, 0);
 			Le();
 		});
@@ -33684,39 +33684,39 @@ function kh(e) {
 		};
 		ze.addEventListener("pointermove", Be), ze.addEventListener("pointerdown", Ve), ze.addEventListener("pointerleave", He), l.domElement.addEventListener("webglcontextlost", Ge);
 		let Ke = new Q(), qe = new Q(), Je = new Q(), Ye = (t) => {
-			if (pe || document.hidden || !fe || de <= 0 || G <= 0) return;
+			if (pe || document.hidden || !fe || W <= 0 || G <= 0) return;
 			Pe &&= (Ie(), !1);
 			let r = t / 1e3, i = n.current, a = Ae(), s = i.state !== Y || `${i.pulse}:${i.pulseKey}` !== X, c = me ? t - me : 1e3 / 60, u = (e) => a ? 1 : xh(e, c);
 			me = t, i.state !== Y && (i.state === "disarmed" && (Y.startsWith("armed_") || Y === "triggered") && (ge = r), Y = i.state, he = r);
 			let d = `${i.pulse}:${i.pulseKey}`;
 			d !== X && (X = d, i.pulse && (_e = r));
 			let p = i.state === "triggered" || i.pulse === "sos";
-			x.lerp(Te.set(p ? Oh.triggered : Oh[i.state] ?? Oh.unknown), u(.12)), T.color.copy(x), T.emissive.copy(x), ue.color.copy(x), w.color.lerp(S.set(1190212).lerp(x, .38), u(.12)), S.set(1582138).lerp(x, .92), C.color.lerp(S, u(.16));
+			x.lerp(Te.set(p ? Oh.triggered : Oh[i.state] ?? Oh.unknown), u(.12)), T.color.copy(x), T.emissive.copy(x), de.color.copy(x), w.color.lerp(S.set(1190212).lerp(x, .38), u(.12)), S.set(1582138).lerp(x, .92), C.color.lerp(S, u(.16));
 			let m = i.state === "armed_away" && !p;
-			U.color.setHex(p ? wh.alarm.three : wh.away.three), U.opacity = m ? 1 : .58, te.emissive.copy(x), k.children.forEach((e) => {
+			H.color.setHex(p ? wh.alarm.three : wh.away.three), H.opacity = m ? 1 : .58, L.emissive.copy(x), k.children.forEach((e) => {
 				e instanceof il && e.material.color.copy(x);
 			});
 			let _ = r - _e, v = i.pulse === "sos" ? 1.3 : .65, y = p || i.state === "armed_away", E = i.state === "armed_away" ? r - he : Infinity, D = p ? Math.min(r - _e, r - he) : Infinity;
 			(y && !ye || p && s) && (ve = r), ye = y;
-			let O = (p ? D : E) - .65, N = !a && O >= 0 && O < .4 ? Math.sin(Math.PI * O / .4) : 0, P = r - ve, F = a ? Number(y) : y ? 1 - (1 - Math.min(1, Math.max(0, P - 1.05) / .85)) ** 3 : 0, R = a ? 0 : p ? Math.sin(r * 43) * .022 + Math.sin(r * 67) * .009 : Math.sin(r * 82) * .105 * N, z = a ? 0 : p ? Math.cos(r * 47) * .014 + Math.sin(r * 71) * .006 : Math.cos(r * 74) * .035 * N, ne = i.state !== "disarmed" && i.state !== "unavailable" && i.state !== "unknown" || performance.now() < be, B = 2 * g.position.z * Math.tan(Va.degToRad(g.fov / 2)), V = B * g.aspect, re = [
+			let O = (p ? D : E) - .65, N = !a && O >= 0 && O < .4 ? Math.sin(Math.PI * O / .4) : 0, P = r - ve, F = a ? Number(y) : y ? 1 - (1 - Math.min(1, Math.max(0, P - 1.05) / .85)) ** 3 : 0, ne = a ? 0 : p ? Math.sin(r * 43) * .022 + Math.sin(r * 67) * .009 : Math.sin(r * 82) * .105 * N, R = a ? 0 : p ? Math.cos(r * 47) * .014 + Math.sin(r * 71) * .006 : Math.cos(r * 74) * .035 * N, z = i.state !== "disarmed" && i.state !== "unavailable" && i.state !== "unknown" || performance.now() < be, re = 2 * g.position.z * Math.tan(Va.degToRad(g.fov / 2)), B = re * g.aspect, ie = [
 				[-.18, .16],
 				[.18, .16],
 				[.18, -.16],
 				[-.18, -.16],
 				[0, 0]
-			], W = i.state === "armed_away" && !p, le = y && !a && !W ? re[Math.floor(r * 1.15) % re.length] : [Ee.x * .55, -Ee.y * .55], q = W ? 0 : y || ne || i.pulse === "sensor" ? 1 : 0, J = le[0] * q, Se = le[1] * q, Ce = u(.1), we = i.state === "disarmed" ? r - ge : Infinity, Oe = !a && we >= 0 && we < 1.05 ? Math.sin(Math.PI * we / 1.05) : 0;
-			L.position.x += (J + Math.sin(r * 92) * .09 * Oe - L.position.x) * Ce, L.position.y += (Se + Math.cos(r * 88) * .07 * Oe - L.position.y) * Ce;
-			let ke = !ne && i.pulse !== "sensor" && i.state === "disarmed";
-			L.rotation.x += ((a ? 0 : Ee.y * .12) - L.rotation.x) * Ce;
+			], U = i.state === "armed_away" && !p, ue = y && !a && !U ? ie[Math.floor(r * 1.15) % ie.length] : [Ee.x * .55, -Ee.y * .55], q = U ? 0 : y || z || i.pulse === "sensor" ? 1 : 0, J = ue[0] * q, Se = ue[1] * q, Ce = u(.1), we = i.state === "disarmed" ? r - ge : Infinity, Oe = !a && we >= 0 && we < 1.05 ? Math.sin(Math.PI * we / 1.05) : 0;
+			te.position.x += (J + Math.sin(r * 92) * .09 * Oe - te.position.x) * Ce, te.position.y += (Se + Math.cos(r * 88) * .07 * Oe - te.position.y) * Ce;
+			let ke = !z && i.pulse !== "sensor" && i.state === "disarmed";
+			te.rotation.x += ((a ? 0 : Ee.y * .12) - te.rotation.x) * Ce;
 			let je = !a && O >= 0 && O < .42 ? O < .15 ? Math.sin(O / .15 * Math.PI / 2) : Math.cos((O - .15) / .27 * Math.PI / 2) : 0;
-			L.scale.set(1 + je * .08, 1 - je * .9, 1);
+			te.scale.set(1 + je * .08, 1 - je * .9, 1);
 			let Me = r * (ke ? .16 : p ? 1.4 : .42) + Math.atan2(Ee.y, Ee.x) * .72 + b.rotation.y * .8;
 			for (let [e, t, n] of [[
-				H,
+				V,
 				Me,
 				.22
 			], [
-				ie,
+				ae,
 				-Me * 1.35 + 2.1,
 				.31
 			]]) {
@@ -33724,20 +33724,20 @@ function kh(e) {
 				e.position.set(r, i, .2 + Math.sqrt(Math.max(.01, .2116 - r * r - i * i)) + .012), e.material.opacity = (a ? .72 : ke ? .38 : .92) * (1 - je);
 			}
 			let Ne = i.state === "disarmed" && !p && !a;
-			b.rotation.x += ((Ne ? Ee.y * .16 + Math.sin(r * .6) * .018 : 0) - b.rotation.x) * u(.22), b.rotation.y += ((Ne ? Ee.x * .25 + Math.sin(r * .45) * .035 : 0) - b.rotation.y) * u(.22), b.position.set(De.x + R, De.y + z, 0);
-			let Fe = Math.max(0, 1 - (r - he) / .8), Le = B * Math.min(260, K * .5) / (G * 3.2);
+			b.rotation.x += ((Ne ? Ee.y * .16 + Math.sin(r * .6) * .018 : 0) - b.rotation.x) * u(.22), b.rotation.y += ((Ne ? Ee.x * .25 + Math.sin(r * .45) * .035 : 0) - b.rotation.y) * u(.22), b.position.set(De.x + ne, De.y + R, 0);
+			let Fe = Math.max(0, 1 - (r - he) / .8), Le = re * (f.closest(".ios-fullscreen") && window.matchMedia("(max-width: 760px) and (orientation: portrait)").matches ? Math.min(440, K * .86) : Math.min(260, K * .5)) / (G * 3.2);
 			b.scale.setScalar(Le * (a ? 1 : 1 + Math.sin(r * 1.6) * .009 - Fe * .07)), M.forEach((e, t) => {
 				e.visible = y && (a || P >= 1.05);
 				let n = e.children.find((e) => e instanceof Nc);
-				n && (n.material = p ? oe : ae);
-				let r = t === 0 || t === 3 ? -1 : 1, i = t < 2 ? 1 : -1, o = B * (de < 600 ? 30 : 42) / G, s = V * xe / de, c = B * xe / G, l = de < 600 ? o * .6 : s + o * .3, u = de < 600 ? o * .6 : c + o * .3, d = r * (V / 2 - l), m = f.getBoundingClientRect(), h = f.closest(".ios-fullscreen"), g = h ? Math.max(0, -m.top) : 0, _ = h ? Math.min(G, (window.visualViewport?.height || window.innerHeight) - m.top) : G, v = B * (.5 - (i > 0 ? g : _) / G) - i * u;
+				n && (n.material = p ? se : oe);
+				let r = t === 0 || t === 3 ? -1 : 1, i = t < 2 ? 1 : -1, o = re * (W < 600 ? 30 : 42) / G, s = B * xe / W, c = re * xe / G, l = W < 600 ? o * .6 : s + o * .3, u = W < 600 ? o * .6 : c + o * .3, d = r * (B / 2 - l), m = f.getBoundingClientRect(), h = f.closest(".ios-fullscreen"), g = h ? Math.max(0, -m.top) : 0, _ = h ? Math.min(G, (window.visualViewport?.height || window.innerHeight) - m.top) : G, v = re * (.5 - (i > 0 ? g : _) / G) - i * u;
 				e.position.set(Va.lerp(De.x + r * .72 * Le, d, F), Va.lerp(De.y + i * .72 * Le, v, F), 0);
 				let b = Va.lerp(.6, o, F);
 				e.scale.set(-r * b, i * b, b), e.rotation.z = a ? 0 : (1 - F) * Math.PI * 2;
 			});
 			let Re = Math.min(1, Math.max(0, (r - he) / .42)), ze = a || i.state === "disarmed" ? 0 : Math.PI * 2 * (1 - (1 - Re) ** 3);
 			k.rotation.z = i.state === "disarmed" && !a ? r * .25 : ze + (!a && e.variant === "core" && !p ? Math.sin(r * .3) * .035 : 0), A.forEach((e, t) => {
-				let n = F, i = t === 0 || t === 3 ? -1 : 1, o = t < 2 ? 1 : -1, s = i * (V / 2 - .78) - De.x, c = o * (B / 2 - .72) - De.y;
+				let n = F, i = t === 0 || t === 3 ? -1 : 1, o = t < 2 ? 1 : -1, s = i * (B / 2 - .78) - De.x, c = o * (re / 2 - .72) - De.y;
 				e.visible = n < .65, e.position.set(s * n / Le, c * n / Le, 0), e.scale.setScalar(1 - .75 * n);
 				let l = e.userData.modeArc;
 				l && (l.visible = !y || n < .58), e.rotation.y = a ? 0 : Math.sin(Re * Math.PI) * .5;
@@ -33761,23 +33761,23 @@ function kh(e) {
 					w.rotation.z = Math.PI / 2 + (Math.cos(e) < 0 ? Math.PI : 0);
 				}
 				ee(t);
-			}), T.emissiveIntensity = a ? .65 : .7 + Math.sin(r * 2) * .1 + (_ < v || p ? .35 : 0), te.emissiveIntensity = ke ? .004 : p ? .055 : i.state === "armed_away" ? .045 : ne ? .012 : .006;
-			let Be = !a && (p || i.pulse === "sensor"), Ve = 2.35, He = 2.2, Ue = Math.min(V, B) * .43;
-			ce.forEach((e, t) => {
+			}), T.emissiveIntensity = a ? .65 : .7 + Math.sin(r * 2) * .1 + (_ < v || p ? .35 : 0), L.emissiveIntensity = ke ? .004 : p ? .055 : i.state === "armed_away" ? .045 : z ? .012 : .006;
+			let Be = !a && (p || i.pulse === "sensor"), Ve = 2.35, He = 2.2, Ue = Math.min(B, re) * .43;
+			le.forEach((e, t) => {
 				let n = (r % Ve + Ve - t * .28) % Ve, i = n / He, a = Be && n < He;
 				if (e.visible = a, !a) return;
-				let o = Le * .72 + (Ue - Le * .72) * i, s = se[t];
+				let o = Le * .72 + (Ue - Le * .72) * i, s = ce[t];
 				e.position.set(De.x, De.y, .05 - t * .002), e.scale.setScalar(o), s.opacity = .56 * (1 - i) ** 1.35, e.scale.set(o, o, Math.max(.28, 1 - i * .72));
 			}), l.render(h, g);
 			for (let { object: e, group: t, width: n } of I) {
 				e.localToWorld(Ke.set(0, 0, 0)).project(g), e.localToWorld(qe.set(n / 2, 0, 0)).project(g), e.localToWorld(Je.set(0, -.15, 0)).project(g);
-				let r = (qe.x - Ke.x) * de / 512, i = (Ke.y - qe.y) * G / 512, a = (Je.x - Ke.x) * de / 144, o = (Ke.y - Je.y) * G / 144;
-				t.setAttribute("transform", `matrix(${r} ${i} ${a} ${o} ${(1 + Ke.x) * de / 2} ${(1 - Ke.y) * G / 2})`);
+				let r = (qe.x - Ke.x) * W / 512, i = (Ke.y - qe.y) * G / 512, a = (Je.x - Ke.x) * W / 144, o = (Ke.y - Je.y) * G / 144;
+				t.setAttribute("transform", `matrix(${r} ${i} ${a} ${o} ${(1 + Ke.x) * W / 2} ${(1 - Ke.y) * G / 2})`);
 			}
 		}, Xe = (e) => {
 			J = 0;
 			let t = performance.now();
-			if (Ye(e), !Ae() && fe && !document.hidden && de > 0 && G > 0) {
+			if (Ye(e), !Ae() && fe && !document.hidden && W > 0 && G > 0) {
 				if (e >= Ce) {
 					let n = we.quality, r = we.sample(e, performance.now() - t);
 					r && (l.domElement.dataset.argusFrames = JSON.stringify(r), l.domElement.dataset.argusColorSpace = l.outputColorSpace, n !== we.quality && Fe());
@@ -33818,7 +33818,7 @@ function kh(e) {
 		return at.observe(f), document.addEventListener("visibilitychange", Qe), Oe.addEventListener("change", tt), Le(), () => {
 			q = !0, a.current = () => {}, window.clearTimeout(Se), Se = 0, Ze(), Re.disconnect(), at.disconnect(), it.disconnect(), delete f.dataset.argusRenderQuality, window.removeEventListener("scroll", $e, et), window.removeEventListener("wheel", $e, et), window.removeEventListener("touchmove", $e, et), document.removeEventListener("visibilitychange", Qe), Oe.removeEventListener("change", tt), ze.removeEventListener("click", We), ze.removeEventListener("pointermove", Be), ze.removeEventListener("pointerdown", Ve), ze.removeEventListener("pointerleave", He), l.domElement.removeEventListener("webglcontextlost", Ge), m.remove(), E.forEach((e) => e.dispose()), h.traverse((e) => {
 				e instanceof il && e.material.dispose();
-			}), C.dispose(), w.dispose(), T.dispose(), te.dispose(), ae.dispose(), oe.dispose(), U.dispose(), P.forEach((e) => e.dispose()), B.dispose(), V.dispose(), re.dispose(), se.forEach((e) => e.dispose()), y.dispose(), l.dispose(), l.domElement.remove();
+			}), C.dispose(), w.dispose(), T.dispose(), L.dispose(), oe.dispose(), se.dispose(), H.dispose(), P.forEach((e) => e.dispose()), re.dispose(), B.dispose(), ie.dispose(), ce.forEach((e) => e.dispose()), y.dispose(), l.dispose(), l.domElement.remove();
 		};
 	}, [
 		e.variant,
@@ -33838,15 +33838,15 @@ function kh(e) {
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityShield.tsx
-function Ah({ label: e, state: t, pulse: n, zones: r, zonesEnabled: i }) {
-	let [a, o] = (0, D.useState)(!0);
+function Ah({ label: e, state: t, pulse: n, zones: r, zonesEnabled: i, onSelectZone: a }) {
+	let [o, s] = (0, D.useState)(!0);
 	(0, D.useEffect)(() => {
-		let e = window.matchMedia("(prefers-reduced-motion: reduce)"), t = () => o(e.matches);
+		let e = window.matchMedia("(prefers-reduced-motion: reduce)"), t = () => s(e.matches);
 		return t(), e.addEventListener("change", t), () => e.removeEventListener("change", t);
 	}, []);
-	let s = t === "triggered" || n === "sos", c = i === !1 ? 7 : r?.length || 0;
+	let c = t === "triggered" || n === "sos", l = i === !1 ? 7 : r?.length || 0;
 	i === !1 && (r = []);
-	let l = t === "triggered" || n === "sos" ? wh.alarm.css : t === "armed_home" ? wh.home.css : t === "armed_away" ? wh.away.css : t === "armed_night" ? wh.night.css : t === "disarmed" ? wh.disarmed.css : "#a4aab4";
+	let u = t === "triggered" || n === "sos" ? wh.alarm.css : t === "armed_home" ? wh.home.css : t === "armed_away" ? wh.away.css : t === "armed_night" ? wh.night.css : t === "disarmed" ? wh.disarmed.css : "#a4aab4";
 	return /* @__PURE__ */ (0, A.jsxs)("svg", {
 		role: "img",
 		"aria-label": [e, ...(r || []).map((e) => `Zona ${e.number}: ${e.area || "Sin área"}`)].join(". "),
@@ -33860,39 +33860,54 @@ function Ah({ label: e, state: t, pulse: n, zones: r, zonesEnabled: i }) {
 		},
 		children: [
 			/* @__PURE__ */ (0, A.jsxs)("g", { children: [
-				!a && /* @__PURE__ */ (0, A.jsx)("animateTransform", {
+				!o && /* @__PURE__ */ (0, A.jsx)("animateTransform", {
 					attributeName: "transform",
 					type: "rotate",
-					values: t === "disarmed" || s ? "0 80 80;360 80 80" : "-2 80 80;2 80 80;-2 80 80",
-					dur: s ? "4s" : t === "disarmed" ? "25.13s" : "12s",
+					values: t === "disarmed" || c ? "0 80 80;360 80 80" : "-2 80 80;2 80 80;-2 80 80",
+					dur: c ? "4s" : t === "disarmed" ? "25.13s" : "12s",
 					repeatCount: "indefinite"
-				}, t + ":" + !!s),
+				}, t + ":" + !!c),
 				/* @__PURE__ */ (0, A.jsx)("circle", {
-					opacity: +!!c,
+					opacity: +!!l,
 					cx: "80",
 					cy: "80",
 					r: "55",
 					fill: "none",
-					stroke: l,
+					stroke: u,
 					strokeWidth: "15",
-					strokeDasharray: c ? `${2 * Math.PI * 55 / c * .79} ${2 * Math.PI * 55 / c * .21}` : void 0,
+					strokeDasharray: l ? `${2 * Math.PI * 55 / l * .79} ${2 * Math.PI * 55 / l * .21}` : void 0,
 					strokeDashoffset: r?.length ? 2 * Math.PI * 55 / r.length * .395 : void 0
 				}),
 				r?.map((e, t) => {
-					let n = t * 2 * Math.PI / r.length - Math.PI / 2, i = n * 180 / Math.PI + 90, a = Math.cos(i * Math.PI / 180) < 0 ? i + 180 : i, o = e.area?.trim() || "Sin área";
+					let n = t * 2 * Math.PI / r.length - Math.PI / 2, i = n * 180 / Math.PI + 90, o = Math.cos(i * Math.PI / 180) < 0 ? i + 180 : i, s = e.area?.trim() || "Sin área";
 					return /* @__PURE__ */ (0, A.jsxs)("g", {
-						transform: `translate(${80 + 55 * Math.cos(n)}, ${80 + 55 * Math.sin(n)}) rotate(${a})`,
+						role: "button",
+						tabIndex: 0,
+						"aria-label": `Zona ${e.number}: ${s}`,
+						onClick: () => a?.(e.id),
+						onKeyDown: (t) => {
+							(t.key === "Enter" || t.key === " ") && (t.preventDefault(), a?.(e.id));
+						},
+						style: {
+							cursor: "pointer",
+							pointerEvents: "auto"
+						},
+						transform: `translate(${80 + 55 * Math.cos(n)}, ${80 + 55 * Math.sin(n)}) rotate(${o})`,
 						fill: "#080e14",
 						textAnchor: "middle",
-						fontSize: "5",
-						children: [/* @__PURE__ */ (0, A.jsxs)("text", {
-							y: "-1",
-							fontWeight: "bold",
-							children: ["ZONA ", e.number]
-						}), /* @__PURE__ */ (0, A.jsx)("text", {
-							y: "5",
-							children: o.length > 10 ? o.slice(0, 9) + "…" : o
-						})]
+						fontSize: "6",
+						children: [
+							/* @__PURE__ */ (0, A.jsx)("title", { children: `Zona ${e.number}: ${s}` }),
+							/* @__PURE__ */ (0, A.jsxs)("text", {
+								y: "-1",
+								fontWeight: "bold",
+								children: ["ZONA ", e.number]
+							}),
+							/* @__PURE__ */ (0, A.jsx)("text", {
+								y: "5",
+								children: s.length > 10 ? s.slice(0, 9) + "…" : s
+							})
+						]
 					}, e.id);
 				})
 			] }),
@@ -33901,7 +33916,7 @@ function Ah({ label: e, state: t, pulse: n, zones: r, zonesEnabled: i }) {
 				cy: "80",
 				r: "34",
 				fill: "#090d12",
-				stroke: l,
+				stroke: u,
 				strokeWidth: "3"
 			}),
 			/* @__PURE__ */ (0, A.jsx)("circle", {
@@ -33924,7 +33939,7 @@ function Ah({ label: e, state: t, pulse: n, zones: r, zonesEnabled: i }) {
 				cx: "89",
 				cy: "91",
 				r: "2",
-				fill: l
+				fill: u
 			})
 		]
 	});
@@ -33954,7 +33969,7 @@ function jh(e) {
 }
 //#endregion
 //#region src/features/dashboard/components/ConsoleGlass.css?inline
-var Mh = ":host .entry.entry .security-console.security-console{--console-accent:#69d5b0;--console-glass:linear-gradient(155deg, #ffffff24, #ffffff0b 65%), #18202cb8;--console-edge:#fff3;--console-shadow:inset 0 1px 0 #ffffff26, 0 6px 20px #00000026;color:#f4f6fa;text-shadow:none!important;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif!important}:host .entry.entry.argus-alarm-attention[data-alert-pulse=sos],:host .entry.entry.argus-alarm-attention[data-alert-pulse=sensor]{isolation:isolate!important}:host .entry.entry .security-console.security-console .console-hud-loc{align-items:center!important;gap:10px!important;font-size:17px!important;font-weight:600!important;display:flex!important}:host .entry.entry .security-console.security-console .console-hud-loc svg{opacity:.8;flex-shrink:0}:host .entry.entry .security-console.security-console .liquid-btn,:host .entry.entry .security-console.security-console .console-hud-right button,:host .entry.entry .security-console.security-console .argus-connection-pill{background:var(--console-glass)!important;border:1px solid var(--console-edge)!important;box-shadow:var(--console-shadow)!important;-webkit-backdrop-filter:blur(16px)saturate(125%)!important;text-shadow:none!important;transition:background-color .22s,border-color .22s,color .22s,box-shadow .22s,transform .16s cubic-bezier(.2,.8,.2,1)!important}:host .entry.entry .security-console.security-console .liquid-btn{color:#eef2f8!important;padding:12px 8px!important}:host .entry.entry .security-console.security-console .liquid-btn span:last-child{letter-spacing:0!important;text-shadow:none!important;font-size:13px!important;font-weight:600!important}:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon{box-shadow:none!important;background:#ffffff12!important;border:0!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{padding:0 12px!important}:host .entry.entry .security-console.security-console .console-modes-vertical .console-mode-dot{filter:drop-shadow(0 0 4px color-mix(in srgb, var(--console-accent) 55%, transparent))!important}:host .entry.entry .security-console.security-console .liquid-btn.active{color:var(--console-accent)!important;border-color:var(--console-accent)!important;background:linear-gradient(155deg, #ffffff1f, transparent), color-mix(in srgb, var(--console-accent) 14%, #18202c)!important;box-shadow:inset 0 0 0 1px var(--console-accent), var(--console-shadow)!important}@media (hover:hover){:host .entry.entry .security-console.security-console button:not(:disabled):hover{border-color:#ffffff6b!important;transform:translateY(-1px)!important}}:host .entry.entry .security-console.security-console button:not(:disabled):active{transform:scale(.98)!important}:host .entry.entry .security-console.security-console .argus-system-status{color:var(--console-accent)!important;border:1px solid color-mix(in srgb, var(--console-accent) 45%, transparent)!important;letter-spacing:.01em!important;text-shadow:none!important;background:#18202cd9!important;font-size:13px!important;font-weight:600!important;transition:color .22s,border-color .22s!important;animation:none!important}:host .entry.entry .security-console.security-console .console-shield-art{animation:none!important}@keyframes console-state-enter{0%{opacity:.45;transform:translateY(3px)scale(.98)}to{opacity:1;transform:none}}:host .entry.entry .security-console.security-console .console-sensor{text-shadow:none!important;background:#18202ccc!important;border-color:#ffffff1f!important;flex-shrink:0!important;transition:border-color .2s,background-color .2s!important;box-shadow:inset 0 1px #ffffff0b!important}:host .entry.entry .security-console.security-console .console-sensor.open{background:#4b1f2acc!important;border-color:#ff8e98a6!important}:host .entry.entry .security-console.security-console .console-sensor.unavailable{border-style:dashed!important}:host .entry.entry .security-console.security-console .console-sensor-icon{filter:none!important;animation:none!important}:host .entry.entry .security-console.security-console .console-sensor-name{font-size:13px!important;font-weight:500!important}:host .entry.entry .security-console.security-console .console-sensor-state{text-shadow:none!important;font-weight:600!important}:host .entry.entry .security-console.security-console .console-battery-badge,:host .entry.entry .security-console.security-console .console-delay-badge{-webkit-backdrop-filter:none!important;text-shadow:none!important;box-shadow:none!important}:host .entry.entry .security-console.security-console .argus-sta-wrap{box-shadow:none!important;border-color:#ff8e9880!important}:host .entry.entry .security-console.security-console .argus-sta-wrap *{text-shadow:none!important}:host .entry.entry .security-console.security-console .console-sensor:focus-visible{outline-offset:2px!important;outline:3px solid #7dd3fc!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console{--console-glass:#000;--console-edge:#fff;--console-accent:#fff;--console-shadow:none;color:#fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-system-status,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap{box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill{-webkit-backdrop-filter:none!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active{color:#000!important;box-shadow:none!important;background:#fff!important;border-color:#fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-name,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-state{color:#fff!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console *,:host .entry.entry .security-console.security-console :before,:host .entry.entry .security-console.security-console :after{transition:none!important;animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console *{transition:none!important;animation:none!important}:host .entry.entry .security-console.security-console .argus-opening-icon{fill:none;stroke:currentColor;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px;overflow:visible}:host .entry.entry .security-console.security-console .argus-opening-frame{fill:none}:host .entry.entry .security-console.security-console .argus-door-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transform-origin:13px 26px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-door-leaf circle{fill:currentColor;stroke:none}:host .entry.entry .security-console.security-console .argus-opening-icon--door.is-open .argus-door-leaf{transform:skewY(-12deg)scaleX(.4)}:host .entry.entry .security-console.security-console .argus-garage-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-opening-icon--garage.is-open .argus-garage-leaf{transform:translateY(-19px)}:host .entry.entry .security-console.security-console .argus-opening-icon.is-bypassed{opacity:.6}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .argus-door-leaf,:host .entry.entry .security-console.security-console .argus-garage-leaf{transition:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-door-leaf,:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-garage-leaf{transition:none!important}:host .entry.entry .security-console.security-console .argus-window-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transform-origin:9px 24px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-opening-icon--window.is-open .argus-window-leaf{transform:skewY(-12deg)scaleX(.4)}:host .entry.entry .security-console.security-console .argus-motion-waves{opacity:0;transition:opacity .22s}:host .entry.entry .security-console.security-console .argus-opening-icon--motion.is-open .argus-motion-waves{opacity:1;animation:.6s ease-out console-motion-detected}@keyframes console-motion-detected{0%{opacity:.25;transform:translate(-2px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .argus-window-leaf,:host .entry.entry .security-console.security-console .argus-motion-waves{transition:none!important;animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-window-leaf,:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-motion-waves{transition:none!important;animation:none!important}:host .entry.entry .security-console.security-console[data-alarm-state=armed_home]{--console-accent:var(--argus-mode-home,#ffad55)}:host .entry.entry .security-console.security-console[data-alarm-state=armed_away]{--console-accent:var(--argus-mode-away,#a855f7)}:host .entry.entry .security-console.security-console[data-alarm-state=armed_night]{--console-accent:var(--argus-mode-night,#72b6ff)}:host .entry.entry .security-console.security-console .liquid-btn span{color:inherit!important;filter:none!important}:host .entry.entry .security-console.security-console .console-shield{color:var(--console-accent);transition:color .32s!important}:host .entry.entry .security-console.security-console .console-shield-symbol{transform-origin:120px 124px;animation:.42s cubic-bezier(.2,.8,.2,1) both shield-symbol-arrive}@keyframes shield-symbol-arrive{0%{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}:host .entry.entry .security-console.security-console .console-shield-check{stroke-dasharray:70;stroke-dashoffset:0;animation:.45s ease-out shield-check-draw}@keyframes shield-check-draw{0%{stroke-dashoffset:70px}to{stroke-dashoffset:0}}:host(.argus-contrast-high) .entry.entry .security-console.security-console{--console-accent:#fff!important;background:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc{color:#fff!important;text-shadow:none!important;background:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active span{color:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap{border-radius:32px!important;overflow:hidden!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .console-shield-symbol,:host .entry.entry .security-console.security-console .console-shield-check{animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-symbol,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-check{animation:none!important}:host .entry.entry .security-console.security-console .btn-home{--console-accent:var(--argus-mode-home,#ffad55)}:host .entry.entry .security-console.security-console .btn-away{--console-accent:var(--argus-mode-away,#a855f7)}:host .entry.entry .security-console.security-console .btn-night{--console-accent:var(--argus-mode-night,#72b6ff)}:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon{color:var(--console-accent)!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn{--console-accent:#fff}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active .mode-btn-icon{color:#000!important}:host .entry.entry .security-console.security-console .console-hud-loc{overflow-wrap:anywhere!important;background:0 0!important;border-radius:12px!important;flex:0 360px!important;width:auto!important;max-width:360px!important;padding:0!important;font-size:15px!important}:host .entry.entry .security-console.security-console .console-hud{justify-content:space-between!important}:host .entry.entry .security-console.security-console .argus-connection-pill{letter-spacing:0!important;text-transform:none!important;border-radius:12px!important;flex-shrink:0!important;height:44px!important;min-height:44px!important;padding:0 12px!important;font-size:12px!important;font-weight:600!important}:host .entry.entry .security-console.security-console .argus-connection-label{letter-spacing:0!important;text-transform:none!important;font-size:12px!important}:host .entry.entry .security-console.security-console .argus-connection-dot{box-shadow:none!important;background:#34d399!important}:host .entry.entry .security-console.security-console .argus-connection-pill[data-online=false] .argus-connection-dot{background:#ff7b85!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_home{color:#ffad55!important;border-color:#ffad55!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_away{color:#a855f7!important;border-color:#a855f7!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_night{color:#72b6ff!important;border-color:#72b6ff!important}:host .entry.entry .security-console.security-console .console-hud-loc{background:var(--console-glass)!important;border:1px solid var(--console-edge)!important;box-shadow:var(--console-shadow)!important;box-sizing:border-box!important;border-radius:12px!important;align-self:stretch!important;min-height:44px!important;padding:10px 12px!important;line-height:1.35!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc{box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .liquid-btn,:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .argus-sta-track,:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .argus-sta-thumb,:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .console-sensor{-webkit-backdrop-filter:none!important}:host .entry.entry .security-console.security-console .btn-home .console-mode-dot{background:var(--argus-mode-home,#ffad55)!important}:host .entry.entry .security-console.security-console .btn-away .console-mode-dot{background:var(--argus-mode-away,#a855f7)!important}:host .entry.entry .security-console.security-console .btn-night .console-mode-dot{background:var(--argus-mode-night,#72b6ff)!important}:host .entry.entry .security-console.security-console .btn-away.active{--console-accent:#a855f7;color:#e9c7ff!important;background:linear-gradient(150deg,#a855f785,#481270c7)!important;border-color:#b52cff!important;box-shadow:inset 0 0 0 1px #e9c7ffb8,0 0 24px #a855f785!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_away{color:#e9c7ff!important;border-color:#a855f7!important;box-shadow:0 0 24px #a855f77a!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn:disabled:not(.active){color:#9297a2!important;opacity:.48!important;filter:grayscale()!important;cursor:not-allowed!important;box-shadow:inset 0 1px #ffffff09!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn:disabled:not(.active) .console-mode-dot{box-shadow:none!important;filter:grayscale()!important;background:#7c8089!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn.active:disabled{opacity:1!important;filter:none!important;cursor:not-allowed!important}", Nh = ":host #entries{width:100%;min-width:0;container:argus-panel/inline-size}:host .entry.entry{container:argus-console/inline-size;box-sizing:border-box!important;backdrop-filter:none!important;width:min(100%,1440px)!important;min-width:0!important;max-width:1440px!important;height:auto!important;min-height:0!important;box-shadow:none!important;background:#000!important;border-radius:clamp(18px,2.2cqw,30px)!important;margin-inline:auto!important;position:relative!important;overflow:hidden!important}:host .entry.entry>canvas.console-emblem-canvas{z-index:1!important;pointer-events:none!important;width:100%!important;height:100%!important;display:block!important;position:absolute!important;inset:0!important}:host .entry.entry .entry-content.security-console.security-console{z-index:3!important;box-sizing:border-box!important;grid-template:\"header header header\"\"controls emblem sensors\"minmax(0,1fr)/minmax(0,1fr) minmax(220px,.72fr) minmax(0,1fr)!important;align-content:center!important;align-items:center!important;gap:clamp(12px,2cqw,26px)!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;margin:0!important;padding:clamp(14px,2.2cqw,32px)!important;display:grid!important;position:relative!important;overflow:visible!important}:host .entry.entry .security-console.security-console .console-hud{grid-area:header!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:\"home online actions\"!important;place-items:center stretch!important;gap:8px!important;width:100%!important;height:auto!important;min-height:38px!important;margin:0!important;display:grid!important;position:relative!important;inset:auto!important}:host .entry.entry .security-console.security-console .console-hud-loc{box-sizing:border-box!important;white-space:nowrap!important;text-overflow:ellipsis!important;grid-area:home!important;justify-self:start!important;width:max-content!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:38px!important;margin:0!important;padding:6px 12px!important;font-size:clamp(11px,1.2cqw,16px)!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .argus-connection-pill{box-sizing:border-box!important;letter-spacing:0!important;white-space:nowrap!important;grid-area:online!important;justify-self:center!important;width:max-content!important;min-width:0!important;max-width:100%!important;height:38px!important;min-height:38px!important;margin:0!important;padding:0 10px!important;font-size:clamp(9px,1.05cqw,12px)!important;position:static!important;inset:auto!important}:host .entry.entry .security-console.security-console .console-hud-right{grid-area:actions!important;justify-content:flex-end!important;justify-self:end!important;align-items:center!important;width:auto!important;height:auto!important;margin:0!important;display:flex!important;position:static!important;inset:auto!important}:host .entry.entry .security-console.security-console .console-hud-right .entry-fs{width:38px!important;min-width:38px!important;height:38px!important;min-height:38px!important;margin:0!important;display:inline-flex!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{grid-area:controls!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-content:center!important;place-self:center stretch!important;align-items:center!important;gap:8px!important;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;display:grid!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{box-sizing:border-box!important;border-radius:999px!important;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:clamp(38px,4.4cqw,48px)!important;padding:0 12px!important;display:flex!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-dot{background:var(--console-accent)!important;width:11px!important;min-width:11px!important;height:11px!important;min-height:11px!important;box-shadow:0 0 0 1px #ffffff38, 0 0 10px color-mix(in srgb, var(--console-accent) 38%, transparent)!important;border-radius:50%!important;flex:none!important;display:inline-block!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{text-overflow:ellipsis!important;white-space:nowrap!important;max-width:calc(100% - 20px)!important;font-size:clamp(10px,1.15cqw,14px)!important;font-weight:600!important;line-height:1.2!important;display:inline-block!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .liquid-stack>.argus-sta-wrap{grid-column:1/-1!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important}:host .entry.entry .security-console.security-console .argus-sta-wrap{justify-self:start!important;width:100%!important;min-width:0!important;max-width:min(100%,520px)!important}:host .entry.entry .security-console.security-console .argus-sta-track{border-radius:999px!important;width:100%!important;height:clamp(52px,5.2cqw,64px)!important;min-height:52px!important}:host .entry.entry .security-console.security-console .argus-sta-thumb{--sta-thumb-size:clamp(40px, 4.2cqw, 52px);width:var(--sta-thumb-size)!important;height:var(--sta-thumb-size)!important;margin-top:calc(var(--sta-thumb-size) / -2)!important;top:50%!important;left:4px!important}:host .entry.entry .security-console.security-console .argus-sta-thumb svg{flex:0 0 60%!important;width:60%!important;height:60%!important}:host .entry.entry .security-console.security-console .argus-sta-label{left:calc(var(--sta-thumb-size,40px) + 16px)!important;max-width:calc(100% - var(--sta-thumb-size,40px) - 28px)!important;letter-spacing:.02em!important;white-space:nowrap!important;text-overflow:ellipsis!important;font-size:clamp(9px,1.1cqw,13px)!important;right:12px!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .entry-icon{box-sizing:border-box!important;grid-area:emblem!important;justify-content:center!important;place-self:center stretch!important;align-items:center!important;width:100%!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0 0 28px!important;animation:none!important;display:flex!important;position:relative!important;overflow:visible!important;transform:none!important}:host .entry.entry .security-console.security-console .console-emblem-viewport{aspect-ratio:1!important;flex:0 auto!important;width:min(100%,22cqw,280px)!important;min-width:0!important;display:block!important;position:relative!important;overflow:visible!important}:host .entry.entry .security-console.security-console .console-emblem-3d{pointer-events:none!important;width:100%!important;height:100%!important;position:absolute!important;inset:0!important}:host .entry.entry .security-console.security-console .console-emblem-3d .console-emblem-canvas-host{position:absolute;inset:0}:host .entry.entry .security-console.security-console .console-emblem-3d canvas{width:100%!important;height:100%!important;display:block!important}:host .entry.entry .security-console.security-console .console-emblem-unavailable{aspect-ratio:1!important;width:100%!important;display:block!important}:host .entry.entry .security-console.security-console .argus-system-status{z-index:3!important;box-sizing:border-box!important;white-space:nowrap!important;letter-spacing:0!important;text-align:center!important;width:max-content!important;max-width:min(100%,260px)!important;height:auto!important;min-height:30px!important;margin:0!important;padding:5px 10px!important;font-size:clamp(10px,1.05cqw,13px)!important;position:absolute!important;top:calc(100% + 12px)!important;bottom:auto!important;left:50%!important;transform:translate(-50%)!important}:host .entry.entry .security-console.security-console .console-modes-vertical.sos-modes-locked>.liquid-btn,:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn:disabled{opacity:.34!important;filter:grayscale()saturate(.15)!important;cursor:not-allowed!important;pointer-events:none!important}@container argus-console (width<=559px){:host .entry.entry .security-console.security-console .entry-icon{padding-bottom:34px!important}}:host .entry.entry .security-console.security-console .console-sensors{scrollbar-width:thin!important;flex-flow:wrap!important;grid-area:sensors!important;justify-content:center!important;align-items:center!important;gap:6px!important;width:100%!important;min-width:0!important;max-width:none!important;max-height:100px!important;margin:0!important;display:flex!important;overflow:auto!important}:host .entry.entry .security-console.security-console .console-sensors:empty{display:none!important}:host .entry.entry .security-console.security-console .console-sensor{box-sizing:border-box!important;flex:0 auto!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:32px!important;padding:4px 9px!important}:host .entry.entry .security-console.security-console .console-sensor-name{text-overflow:ellipsis!important;white-space:nowrap!important;max-width:180px!important;overflow:hidden!important}@media (orientation:landscape){@container argus-panel (width>=1100px){:host .entry.entry:not(.ios-fullscreen){aspect-ratio:3!important;height:min(33.333cqw,480px)!important;min-height:0!important}:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template:\"header header header\"42px\"controls emblem sensors\"minmax(0,1fr)/minmax(0,1fr) minmax(220px,.72fr) minmax(0,1fr)!important;align-content:stretch!important;gap:clamp(12px,1.6cqw,24px)!important;height:100%!important;padding:clamp(16px,1.8cqw,26px)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,22cqw,280px)!important}}}@container argus-console (width<=559px){:host .entry.entry .entry-content.security-console.security-console{grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important;gap:12px!important;padding:12px!important}:host .entry.entry .security-console.security-console .console-emblem-viewport{width:min(62cqw,250px)!important}:host .entry.entry .security-console.security-console .entry-icon{padding-bottom:34px!important}:host .entry.entry .security-console.security-console .argus-system-status{top:calc(100% + 2px)!important}:host .entry.entry .security-console.security-console .console-hud{padding-inline:26px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical,:host .entry.entry .security-console.security-console .liquid-stack>.argus-sta-wrap{width:calc(100% - 52px)!important;margin-inline:26px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{gap:6px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:48px!important}:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(38px,1fr)!important;gap:5px!important}:host .entry.entry .security-console.security-console .console-hud-loc{padding-inline:8px!important}:host .entry.entry .security-console.security-console .argus-connection-pill{padding-inline:7px!important}:host .entry.entry .security-console.security-console .console-hud-right .entry-fs{width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important}:host .entry.entry .security-console.security-console .argus-sta-track{height:48px!important}}:host .entry.entry.ios-fullscreen{z-index:99999999!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;border:0!important;border-radius:0!important;width:100dvw!important;max-width:none!important;height:100dvh!important;min-height:0!important;margin:0!important;padding:0!important;position:fixed!important;inset:0!important;overflow:hidden auto!important;container:argus-fullscreen/size!important}:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-height:100%!important;padding:max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left))!important}@container argus-fullscreen (width>=900px) and (height>=480px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template:\"header header header\"42px\"controls emblem sensors\"minmax(0,1fr)/minmax(0,1fr) minmax(240px,.72fr) minmax(0,1fr)!important;gap:clamp(14px,2.2cqw,30px)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(28cqw,42cqh,360px)!important}}@container argus-fullscreen (width<=899px) and (height>=400px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-areas:\"header header\"\"controls emblem\"\"sensors sensors\"!important;gap:12px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(38cqw,48cqh,360px)!important}}@container argus-fullscreen (height<=399px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{padding:8px max(12px, env(safe-area-inset-left)) 8px max(12px, env(safe-area-inset-right))!important;grid-template:\"header header\"\"controls emblem\"minmax(0,1fr)\"sensors sensors\"/minmax(0,1fr) minmax(0,1fr)!important;gap:5px 12px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(34cqw,42cqh,220px)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{padding-bottom:20px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:36px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-track{height:50px!important;min-height:50px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-thumb{--sta-thumb-size:40px;width:40px!important;height:40px!important;margin-top:-20px!important;top:50%!important;left:4px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-label{max-width:calc(100% - 68px)!important;left:56px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors{max-height:38px!important}}@container argus-fullscreen (width<=520px) and (height>=400px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{padding:max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom))!important;grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important;gap:10px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(50cqw,34cqh,230px)!important}}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button{color:#fff!important;backdrop-filter:none!important;background:#000!important;border:2px solid #fff!important}:host .entry.entry .security-console.security-console button:focus-visible,:host .entry.entry .security-console.security-console .argus-sta-track:focus-visible{outline-offset:2px!important;outline:3px solid #7dd3fc!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console *,:host .entry.entry .security-console.security-console :before,:host .entry.entry .security-console.security-console :after{scroll-behavior:auto!important}}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap{margin-block-start:8px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap--disarm{filter:drop-shadow(0 0 10px color-mix(in srgb, var(--console-accent) 34%, transparent))}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap--sos{filter:drop-shadow(0 0 10px color-mix(in srgb, var(--console-accent) 30%, transparent))}@container argus-console (width<=559px){:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap{margin-block-start:6px!important}}@media (orientation:landscape) and (height<=480px){@container argus-console (width>=360px){:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap{margin-block-start:4px!important}}}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .security-console.security-console .console-hud{inset:max(12px, env(safe-area-inset-top)) 12px auto!important;grid-template-columns:minmax(0,1fr) auto auto!important;gap:6px!important;width:auto!important;position:absolute!important}:host .entry.entry.ios-fullscreen .console-hud-loc{overflow-wrap:anywhere;white-space:normal!important;font-size:12px!important}:host .entry.entry.ios-fullscreen .entry-exit-fs{padding:6px 10px!important;position:static!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical{margin-top:18px!important}}:host .security-context{box-sizing:border-box;background:#171d26;border:1px solid #ffffff20;border-radius:18px;grid-area:sensors;width:100%;min-width:0;padding:14px}:host .security-context p{margin:6px 0;font-size:.85rem}:host .entry.entry .security-console.security-console .security-context .console-sensors{justify-content:flex-start!important;max-height:min(32vh,240px)!important}@media (width>=761px){:host .entry.entry .security-console.security-console .console-modes-vertical{box-sizing:border-box;border-radius:18px;background:#171d26!important;border:1px solid #ffffff20!important;grid-template-columns:minmax(0,1fr)!important;padding:12px!important}}:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled{opacity:1!important;border-color:var(--console-accent)!important;border-style:dashed!important}:host .entry.entry .security-console.security-console .console-modes-vertical{background:0 0!important;border:0!important;padding:0!important}:host .console-nav-caption{color:#a8b4c4;letter-spacing:.12em;text-transform:uppercase;grid-column:1/-1;font-size:.7rem}:host .console-nav-sos{border-top:1px solid #ffffff19;margin-top:8px;padding-top:12px}:host .security-context{background:#111820c9;border-color:#ffffff13;padding:clamp(16px,2cqw,28px)}:host .security-context header strong{font-size:clamp(17px,2cqw,24px)}:host .security-context .context-tools{gap:8px;margin-top:18px;display:grid}:host .security-context .context-tools small{color:#a8b4c4;text-transform:uppercase;letter-spacing:.09em}:host .security-context button{color:#eef2f8;background:#ffffff09;border:1px solid #ffffff18;border-radius:14px;padding:9px 12px}:host .security-context .context-tool{text-align:start;gap:4px;display:grid}:host .security-context .context-tool span{color:#a8b4c4;font-size:.8rem}:host .security-context .context-back{margin:8px 4px 4px 0}@media (prefers-reduced-motion:no-preference){:host .security-context header{animation:.24s ease-out both argus-context-enter}@keyframes argus-context-enter{0%{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}}@container argus-console (560px<=width<680px){:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,310px)!important}}@container argus-console (680px<=width<900px){:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template-rows:auto auto auto!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-areas:\"header header\"\"controls emblem\"\"sensors sensors\"!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,310px)!important}}@container argus-fullscreen (width>=1000px) and (height>=480px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template-columns:minmax(0,1fr) minmax(240px,1.65fr) minmax(0,1.14fr)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(100%,38cqw,440px)!important}}:host .entry.entry .security-console.security-console .security-context .console-sensors{grid-template-columns:minmax(0,1fr);gap:8px!important;margin-top:10px!important;display:grid!important}:host .security-context .context-sensor-row{border-bottom:1px solid #ffffff13;gap:6px;padding:8px 0;display:grid}:host .security-context .context-primary,:host .security-context .context-call a{color:#b8e9ff;border-color:#38bdf855}:host .security-context .context-call{flex-wrap:wrap;align-items:center;gap:8px;display:flex}@container argus-console (width>=900px){:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{grid-template-columns:minmax(0,1fr)!important;justify-self:start!important;max-width:300px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.liquid-btn{justify-content:flex-start!important;padding-inline:18px!important}}@container argus-console (width>=1000px){:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template-columns:minmax(0,1fr) minmax(240px,1.65fr) minmax(0,1.14fr)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,38cqw,440px)!important}}@media (orientation:landscape){@container argus-panel (width>=1100px){:host .entry.entry:not(.ios-fullscreen){aspect-ratio:auto!important;height:clamp(520px,42cqw,640px)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .entry-icon{padding-bottom:48px!important}}}:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled .console-mode-dot{background:var(--console-accent)!important;opacity:1!important}:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled .console-mode-label{color:#e8edf6!important}@container argus-console (width<=559px){:host .entry.entry .security-console.security-console .console-hud{box-sizing:border-box!important;grid-template-columns:minmax(0,1fr) auto auto!important;padding-inline:4px!important}}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;max-width:none!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.liquid-btn{justify-content:center!important;min-height:38px!important;padding-inline:5px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{font-size:clamp(10px,1cqw,13px)!important}:host .security-context{--context-accent:#68d9b0;background:0 0;border:0;gap:10px;min-width:0;padding:0;display:grid}:host .security-context[data-tone=warning]{--context-accent:#e6bc75}:host .security-context[data-tone=alarm]{--context-accent:#ff847d}:host .security-context .context-heading,:host .security-context .context-eyebrow{color:#a5bcb4;letter-spacing:.13em;text-transform:uppercase;font-size:10px;font-weight:650}:host .security-context .context-heading{justify-content:space-between;gap:8px;display:flex}:host .security-context .context-live{color:#79c5a9}:host .security-context .context-live:before{content:\"●\";margin-inline-end:5px}:host .security-context header{background:radial-gradient(ellipse at 96% 0%, color-mix(in srgb, var(--context-accent) 12%, transparent), transparent 72%), #121a18;border:1px solid #a9d4c222;border-radius:17px;gap:6px;padding:16px 46px 16px 16px;display:grid;position:relative}:host .security-context header strong{font-size:clamp(20px,2cqw,29px);line-height:1.1}:host .security-context header p{color:#b0c1bc;margin:0;line-height:1.45}:host .security-context .context-shield{width:22px;height:22px;color:var(--context-accent);position:absolute;top:16px;right:15px}:host .security-context[data-tone=alarm] .context-shield path:last-child{display:none}:host .security-context .context-tools{margin:0}:host .security-context .context-verification{grid-template-columns:repeat(2,minmax(0,1fr))}:host .security-context .context-verification>small{grid-column:1/-1}:host .security-context .context-tool{background:#151e1d;border-color:#a9d4c222;padding:12px}:host .security-context .context-tool strong{overflow-wrap:anywhere;font-size:12px}:host .security-context .context-tool span{font-size:11px;line-height:1.35}:host .entry.entry .security-console.security-console .security-context .console-sensors:empty{display:none!important}:host .security-context .context-sensor-row{background:#151e1d;border:1px solid #a9d4c222;border-radius:13px;padding:8px}:host .security-context button:hover{border-color:#a9d4c255}:host .security-context button:focus-visible{outline-offset:2px;outline:2px solid #9ccfbe}@media (prefers-reduced-motion:no-preference){:host .security-context button{transition:background-color .22s,border-color .22s,transform .2s}:host .security-context button:active{transform:translateY(1px)}}:host .entry.entry .entry-content.security-console.security-console{background:0 0!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.liquid-btn{gap:4px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{max-width:none!important;font-size:clamp(9px,.95cqw,13px)!important}:host .security-context .context-tool{overflow-wrap:anywhere;min-width:0;white-space:normal!important}.context-pin-slot:empty,.security-context:has(.context-pin-slot>.open)>:not(.context-pin-slot){display:none}#pin-modal[data-disarm-presentation=context].open{backdrop-filter:none;z-index:1;background:0 0;padding:0;position:relative;inset:auto}#pin-modal[data-disarm-presentation=context] .modal{width:100%;max-height:min(70dvh,100cqh)}#pin-modal[data-disarm-presentation=dialog].open{box-sizing:border-box;backdrop-filter:none;padding:16px;position:fixed}#pin-modal[data-disarm-presentation] :focus-visible{outline-offset:2px;outline:2px solid #9ccfbe}@media (prefers-reduced-motion:no-preference){#pin-modal[data-disarm-presentation=context].open:not(.pin-closing) .modal:not(.pin-rejected){animation:.24s ease-out both argus-context-enter}#pin-modal[data-disarm-presentation=context].pin-closing .modal{animation:.22s ease-in reverse both argus-context-enter}}@media (prefers-reduced-motion:reduce){#pin-modal[data-disarm-presentation] .modal{animation:none!important}#pin-modal[data-disarm-presentation] .pin-btn-round{transition:none}}:host .security-context .context-indicators{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0;display:grid}:host .security-context .context-indicators>div,:host .security-context .context-activity{background:linear-gradient(145deg,#1b2825,#111918);border:1px solid #a9d4c222;border-radius:12px;min-width:0;padding:10px}:host .security-context .context-indicators dt{color:#abc0b9;text-transform:uppercase;overflow-wrap:anywhere;font-size:.65rem}:host .security-context .context-indicators dd{color:#edf7f3;font-variant-numeric:tabular-nums;margin:3px 0 0;font-size:1.2rem}:host .security-context .context-activity ul{margin:4px 0 0;padding:0;list-style:none}:host .security-context .context-activity li{flex-wrap:wrap;justify-content:space-between;gap:4px 10px;padding-block:5px;font-size:.75rem;display:flex}:host .security-context .context-activity time,:host .security-context .context-activity p{color:#abc0b9}@media (prefers-reduced-motion:no-preference){:host .security-context .context-indicators,:host .security-context .context-activity{animation:.24s ease-out both argus-context-enter}}:host .entry.entry{background:radial-gradient(at 50% 57%,#15342b66,#0000 58%),radial-gradient(at 90% 18%,#17282238,#0000 42%),#060908!important}:host .security-context .context-heading{padding-inline:3px}:host .security-context header{background:radial-gradient(ellipse at 95% 12%, color-mix(in srgb, var(--context-accent) 15%, transparent), transparent 58%), linear-gradient(145deg, #1b2322, #111715);border-radius:20px;padding:20px clamp(56px,7cqw,88px) 20px 18px;box-shadow:inset 0 1px #ffffff09,0 8px 20px #0003}:host .security-context .context-shield{box-sizing:content-box;border:1px solid color-mix(in srgb, var(--context-accent) 38%, transparent);background:color-mix(in srgb, var(--context-accent) 9%, transparent);border-radius:14px;padding:9px}:host .security-context .context-indicators{gap:8px;margin-top:5px}:host .security-context .context-indicators>div{border-radius:15px;flex-direction:column-reverse;justify-content:end;min-height:58px;padding:10px 11px;display:flex}:host .security-context .context-indicators dd{margin:0 0 3px;font-size:clamp(1.45rem,2.4cqw,2.15rem);font-weight:750;line-height:1}:host .security-context .context-indicators>div:nth-child(2) dd{color:#57dfb5}:host .security-context[data-tone=warning] .context-indicators>div:last-child dd{color:#e6bc75}:host .security-context .context-tool,:host .security-context .context-indicators>div,:host .security-context .context-activity{background:linear-gradient(145deg,#1a2321,#111715);box-shadow:inset 0 1px #ffffff09}:host .security-context .context-activity li+li{border-top:1px solid #a9d4c222}:host .entry.entry .security-console.security-console .entry-icon,:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{padding-bottom:0!important}@container argus-console (width<560px){:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,250px)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .liquid-stack.console-modes-vertical,:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .liquid-stack>.argus-sta-wrap{width:100%!important;margin-inline:0!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:44px!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-mode-label{font-size:11px!important}}:host .security-context{grid-template-columns:minmax(0,1fr)}:host .security-context .context-view-title,:host .security-context .context-sensor-row{overflow-wrap:anywhere;min-width:0}:host .security-context .context-sensor-row{grid-template-columns:minmax(0,1fr)}:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor{grid-template-columns:auto minmax(0,1fr);justify-content:stretch!important;display:grid!important}:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor-name{overflow-wrap:anywhere;white-space:normal!important;max-width:none!important}:host .security-context .context-sensor-row .console-sensor-status-wrap{flex-wrap:wrap;grid-column:2;min-width:0}:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor-state{overflow-wrap:anywhere;white-space:normal!important}:host .entry.entry .security-console.security-console .security-context>.console-sensors{grid-area:auto!important}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .security-console.security-console{min-height:100%;height:auto!important;padding-top:max(12px, env(safe-area-inset-top))!important;flex-direction:column!important;gap:18px!important;display:flex!important;overflow:visible!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-hud{box-sizing:border-box;flex:none;order:-2;grid-template-columns:minmax(0,1fr) auto auto!important;width:100%!important;position:relative!important;inset:auto!important}:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{flex:none;order:-1;min-height:240px;position:relative!important;inset:auto!important}:host .entry.entry.ios-fullscreen .context-verification-dialog{z-index:100001;background:#111a22;border-radius:20px;padding:18px;overflow-y:auto;inset:max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom))!important;position:fixed!important}}.context-verify-entry[data-pending=true]{border-color:#ffb340;box-shadow:inset 0 0 0 1px #ffb340}:host .light-siren-settings{border:1px solid var(--argus-border,#ffffff40);background:var(--argus-card-bg,#18212b);border-radius:16px;margin-block:10px;padding:14px}:host .light-siren-settings summary{cursor:pointer;flex-wrap:wrap;justify-content:space-between;gap:8px;display:flex}:host .light-siren-settings label{grid-template-columns:minmax(0,1fr) minmax(80px,1fr);align-items:center;gap:12px;margin-block:14px;display:grid}:host .light-siren-settings select{color:#fff;background:#111a22;border:1px solid #ffffff70;border-radius:12px;width:100%;min-width:0;padding:10px}:host([argus-contrast=high]) .log-item,:host(.argus-contrast-high) .log-item{color:#fff!important;backdrop-filter:none!important;background:#000!important;border:2px solid #fff!important}:host([argus-contrast=high]) .log-item *,:host(.argus-contrast-high) .log-item *{color:#fff!important;opacity:1!important;text-shadow:none!important}:host([argus-contrast=high]) .log-meta,:host(.argus-contrast-high) .log-meta{color:#fff!important}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{transition:height .35s;width:100%!important;height:clamp(270px,39dvh,440px)!important;min-height:0!important}:host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded=true] .entry-icon{height:clamp(190px,26dvh,280px)!important}:host .entry.entry.ios-fullscreen .console-emblem-viewport{width:100%!important;max-width:none!important;height:100%!important}}@media (prefers-reduced-motion:reduce){:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{transition:none!important}}:host .entry.entry .security-console.security-console .console-hud-loc,:host .entry.entry .security-console.security-console .argus-connection-pill{height:auto!important;min-height:44px!important;font-size:clamp(16px,1.8cqw,22px)!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label,:host .entry.entry .security-console.security-console .argus-sta-label{white-space:normal!important;font-size:clamp(17px,2cqw,24px)!important;line-height:1.25!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:52px!important}:host .security-context p{line-height:1.4;font-size:clamp(16px,1.8cqw,21px)!important}:host .security-context header>strong{font-size:clamp(24px,2.6cqw,32px)!important}:host .security-context .context-eyebrow,:host .security-console .console-section-title{letter-spacing:.06em!important;font-size:16px!important}@media (width<=480px){:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto!important}:host .entry.entry .security-console.security-console .console-hud-loc{white-space:normal!important;grid-column:1/-1!important}}:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto auto!important;grid-template-areas:\"home online tools\"!important;align-items:center!important;display:grid!important}:host .entry.entry .security-console.security-console .console-hud-loc{white-space:nowrap!important;text-overflow:ellipsis!important;grid-area:home/auto!important;width:100%!important;font-size:clamp(13px,1.6cqw,20px)!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .argus-connection-pill{grid-area:online!important;font-size:clamp(12px,1.4cqw,18px)!important}:host .entry.entry .security-console.security-console .console-hud-right{grid-area:tools!important}:host .entry.entry .security-console.security-console .console-mode-label{white-space:nowrap!important;text-overflow:clip!important;font-size:clamp(14px,1.6cqw,20px)!important;overflow:visible!important}@media (orientation:landscape) and (height<=600px){:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{gap:4px!important;padding-inline:6px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{white-space:nowrap!important;font-size:14px!important;overflow:visible!important}:host .entry.entry .security-console.security-console .argus-sta-label{white-space:nowrap!important;font-size:15px!important}}@media (orientation:portrait) and (width<=760px){:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{height:clamp(300px,45dvh,500px)!important}:host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded=true] .entry-icon{height:clamp(220px,30dvh,330px)!important}:host .entry.entry.ios-fullscreen .console-emblem-unavailable{width:100%!important;max-width:none!important;height:100%!important;max-height:none!important}}", Ph = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.security-console .entry-fs{-webkit-backdrop-filter:blur(12px)!important;color:#fff!important;cursor:pointer!important;background:#ffffff14!important;border:1px solid #fff3!important;border-radius:12px!important;flex-shrink:0!important;justify-content:center!important;align-items:center!important;width:38px!important;min-width:38px!important;height:38px!important;padding:0!important;font-size:16px!important;transition:all .2s cubic-bezier(.16,1,.3,1)!important;display:inline-flex!important;box-shadow:0 4px 12px #00000040!important}.security-console .entry-fs:hover{background:#ffffff2e!important;border-color:#ffffff61!important;transform:translateY(-1px)scale(1.04)!important;box-shadow:0 6px 16px #00000059!important}.argus-system-status{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.argus-system-status--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.argus-system-status--armed_home,.argus-system-status--armed_away,.argus-system-status--armed_night,.argus-system-status--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.argus-system-status--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}.argus-system-status--armed_away{color:#e9c7ff!important;text-shadow:0 0 12px #a855f7e6!important;background:linear-gradient(135deg,#a855f76b 0%,#5d00a847 100%)!important;border:1.5px solid #a855f7f2!important;box-shadow:inset 0 1.5px #ffffff94,0 0 26px #a855f794,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}@media (width<=700px){.security-console .entry-icon .argus-system-status{margin-bottom:14px!important}}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg, var(--argus-mode-home,#ffad55) 0%, #d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg, var(--argus-mode-away,#a855f7) 0%, #7e22ce 100%)!important;border:1px solid #e9d5ffd9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #a855f78c!important}.security-console .btn-night.active{background:linear-gradient(135deg, var(--argus-mode-night,#72b6ff) 0%, #1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;width:fit-content!important;max-width:340px!important;max-height:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;flex-direction:column!important;place-self:center!important;align-items:flex-start!important;gap:6px!important;margin:0 auto!important;padding:0!important;display:flex!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;gap:5px!important;max-height:320px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 2px #00000080!important;box-sizing:border-box!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff24 0%,#ffffff08 100%)!important;border:1px solid #fff3!important;border-radius:999px!important;justify-content:flex-start!important;align-items:center!important;gap:8px!important;width:fit-content!important;max-width:100%!important;height:34px!important;min-height:34px!important;padding:5px 14px!important;transition:background .25s,box-shadow .25s,border-color .25s,transform .15s!important;display:inline-flex!important;box-shadow:inset 0 1px #ffffff4d,inset 0 -1px #0000001f,0 2px 8px #00000038!important}.console-sensor:hover{transform:translateY(-1px)scale(1.01)!important;box-shadow:inset 0 1px #ffffff73,0 5px 14px #0000004d!important}.console-sensor.open{background:linear-gradient(135deg,#ef444452 0%,#b91c1c21 100%)!important;border-color:#ef444499!important;box-shadow:inset 0 1px #ffffff61,0 0 12px #ef444447,0 2px 8px #00000038!important}.console-sensor.unavailable{background:linear-gradient(135deg,#94a3b81f 0%,#64748b0a 100%)!important;border-style:dashed!important;border-color:#94a3b847!important}.console-sensor-icon{filter:drop-shadow(0 1px 3px #0006)!important;flex-shrink:0!important;justify-content:center!important;align-items:center!important;font-size:14px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 4px);width:18px;height:18px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-main{flex:0 auto!important;align-items:center!important;min-width:0!important;display:flex!important;overflow:hidden!important}.console-sensor-name{letter-spacing:.02em!important;white-space:nowrap!important;text-overflow:ellipsis!important;color:#fff!important;min-width:0!important;font-size:10.5px!important;font-weight:800!important;line-height:1.2!important;overflow:hidden!important}.console-sensor-status-wrap{flex-shrink:0!important;align-items:center!important;gap:5px!important;margin-left:0!important;display:inline-flex!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:3px!important;font-size:10px!important;font-weight:800!important;display:inline-flex!important}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}.security-console .console-sensor{justify-content:flex-start!important;align-items:center!important;width:fit-content!important;min-width:0!important;max-width:100%!important;display:inline-flex!important}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}:host .context-zone-picker{gap:4px;min-width:0;display:grid}:host .context-zone-picker>div{flex-wrap:wrap;gap:4px;display:flex}:host .context-zone-picker summary:focus-visible,:host .security-context button:focus-visible{outline-offset:2px;outline:2px solid}.context-zone-picker{background:#182321a6;border:1px solid #9bbeb438;border-radius:20px;padding:12px}.context-zone-picker button[aria-pressed=true]{outline:2px solid var(--context-accent,#54d9b4);outline-offset:-2px}.context-verify-entry{box-sizing:border-box;width:100%}.context-verification-dialog{box-sizing:border-box;overscroll-behavior:contain;color:#eef4f5;background:#111e22;border:1px solid #9bbeb44d;border-radius:24px;width:100%;min-width:0;max-width:100%;max-height:none;padding:20px;overflow:auto}.context-verification-dialog[hidden],.context-verify-entry[hidden]{display:none!important}.context-verification-dialog .context-heading{justify-content:space-between;align-items:center;gap:12px;display:flex}.context-verification-dialog .context-verification{margin-block:16px}.context-verification-dialog button:focus-visible{outline-offset:3px;outline:2px solid #54d9b4}";
+var Mh = ":host .entry.entry .security-console.security-console{--console-accent:#69d5b0;--console-glass:linear-gradient(155deg, #ffffff24, #ffffff0b 65%), #18202cb8;--console-edge:#fff3;--console-shadow:inset 0 1px 0 #ffffff26, 0 6px 20px #00000026;color:#f4f6fa;text-shadow:none!important;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif!important}:host .entry.entry.argus-alarm-attention[data-alert-pulse=sos],:host .entry.entry.argus-alarm-attention[data-alert-pulse=sensor]{isolation:isolate!important}:host .entry.entry .security-console.security-console .console-hud-loc{align-items:center!important;gap:10px!important;font-size:17px!important;font-weight:600!important;display:flex!important}:host .entry.entry .security-console.security-console .console-hud-loc svg{opacity:.8;flex-shrink:0}:host .entry.entry .security-console.security-console .liquid-btn,:host .entry.entry .security-console.security-console .console-hud-right button,:host .entry.entry .security-console.security-console .argus-connection-pill{background:var(--console-glass)!important;border:1px solid var(--console-edge)!important;box-shadow:var(--console-shadow)!important;-webkit-backdrop-filter:blur(16px)saturate(125%)!important;text-shadow:none!important;transition:background-color .22s,border-color .22s,color .22s,box-shadow .22s,transform .16s cubic-bezier(.2,.8,.2,1)!important}:host .entry.entry .security-console.security-console .liquid-btn{color:#eef2f8!important;padding:12px 8px!important}:host .entry.entry .security-console.security-console .liquid-btn span:last-child{letter-spacing:0!important;text-shadow:none!important;font-size:13px!important;font-weight:600!important}:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon{box-shadow:none!important;background:#ffffff12!important;border:0!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{padding:0 12px!important}:host .entry.entry .security-console.security-console .console-modes-vertical .console-mode-dot{filter:drop-shadow(0 0 4px color-mix(in srgb, var(--console-accent) 55%, transparent))!important}:host .entry.entry .security-console.security-console .liquid-btn.active{color:var(--console-accent)!important;border-color:var(--console-accent)!important;background:linear-gradient(155deg, #ffffff1f, transparent), color-mix(in srgb, var(--console-accent) 14%, #18202c)!important;box-shadow:inset 0 0 0 1px var(--console-accent), var(--console-shadow)!important}@media (hover:hover){:host .entry.entry .security-console.security-console button:not(:disabled):hover{border-color:#ffffff6b!important;transform:translateY(-1px)!important}}:host .entry.entry .security-console.security-console button:not(:disabled):active{transform:scale(.98)!important}:host .entry.entry .security-console.security-console .argus-system-status{color:var(--console-accent)!important;border:1px solid color-mix(in srgb, var(--console-accent) 45%, transparent)!important;letter-spacing:.01em!important;text-shadow:none!important;background:#18202cd9!important;font-size:13px!important;font-weight:600!important;transition:color .22s,border-color .22s!important;animation:none!important}:host .entry.entry .security-console.security-console .console-shield-art{animation:none!important}@keyframes console-state-enter{0%{opacity:.45;transform:translateY(3px)scale(.98)}to{opacity:1;transform:none}}:host .entry.entry .security-console.security-console .console-sensor{text-shadow:none!important;background:#18202ccc!important;border-color:#ffffff1f!important;flex-shrink:0!important;transition:border-color .2s,background-color .2s!important;box-shadow:inset 0 1px #ffffff0b!important}:host .entry.entry .security-console.security-console .console-sensor.open{background:#4b1f2acc!important;border-color:#ff8e98a6!important}:host .entry.entry .security-console.security-console .console-sensor.unavailable{border-style:dashed!important}:host .entry.entry .security-console.security-console .console-sensor-icon{filter:none!important;animation:none!important}:host .entry.entry .security-console.security-console .console-sensor-name{font-size:13px!important;font-weight:500!important}:host .entry.entry .security-console.security-console .console-sensor-state{text-shadow:none!important;font-weight:600!important}:host .entry.entry .security-console.security-console .console-battery-badge,:host .entry.entry .security-console.security-console .console-delay-badge{-webkit-backdrop-filter:none!important;text-shadow:none!important;box-shadow:none!important}:host .entry.entry .security-console.security-console .argus-sta-wrap{box-shadow:none!important;border-color:#ff8e9880!important}:host .entry.entry .security-console.security-console .argus-sta-wrap *{text-shadow:none!important}:host .entry.entry .security-console.security-console .console-sensor:focus-visible{outline-offset:2px!important;outline:3px solid #7dd3fc!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console{--console-glass:#000;--console-edge:#fff;--console-accent:#fff;--console-shadow:none;color:#fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-system-status,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap{box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill{-webkit-backdrop-filter:none!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active{color:#000!important;box-shadow:none!important;background:#fff!important;border-color:#fff!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-name,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-state{color:#fff!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console *,:host .entry.entry .security-console.security-console :before,:host .entry.entry .security-console.security-console :after{transition:none!important;animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console *{transition:none!important;animation:none!important}:host .entry.entry .security-console.security-console .argus-opening-icon{fill:none;stroke:currentColor;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px;overflow:visible}:host .entry.entry .security-console.security-console .argus-opening-frame{fill:none}:host .entry.entry .security-console.security-console .argus-door-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transform-origin:13px 26px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-door-leaf circle{fill:currentColor;stroke:none}:host .entry.entry .security-console.security-console .argus-opening-icon--door.is-open .argus-door-leaf{transform:skewY(-12deg)scaleX(.4)}:host .entry.entry .security-console.security-console .argus-garage-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-opening-icon--garage.is-open .argus-garage-leaf{transform:translateY(-19px)}:host .entry.entry .security-console.security-console .argus-opening-icon.is-bypassed{opacity:.6}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .argus-door-leaf,:host .entry.entry .security-console.security-console .argus-garage-leaf{transition:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-door-leaf,:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-garage-leaf{transition:none!important}:host .entry.entry .security-console.security-console .argus-window-leaf{fill:color-mix(in srgb, currentColor 15%, transparent);transform-origin:9px 24px;transition:transform .5s cubic-bezier(.2,.8,.2,1)}:host .entry.entry .security-console.security-console .argus-opening-icon--window.is-open .argus-window-leaf{transform:skewY(-12deg)scaleX(.4)}:host .entry.entry .security-console.security-console .argus-motion-waves{opacity:0;transition:opacity .22s}:host .entry.entry .security-console.security-console .argus-opening-icon--motion.is-open .argus-motion-waves{opacity:1;animation:.6s ease-out console-motion-detected}@keyframes console-motion-detected{0%{opacity:.25;transform:translate(-2px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .argus-window-leaf,:host .entry.entry .security-console.security-console .argus-motion-waves{transition:none!important;animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-window-leaf,:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-motion-waves{transition:none!important;animation:none!important}:host .entry.entry .security-console.security-console[data-alarm-state=armed_home]{--console-accent:var(--argus-mode-home,#ffad55)}:host .entry.entry .security-console.security-console[data-alarm-state=armed_away]{--console-accent:var(--argus-mode-away,#a855f7)}:host .entry.entry .security-console.security-console[data-alarm-state=armed_night]{--console-accent:var(--argus-mode-night,#72b6ff)}:host .entry.entry .security-console.security-console .liquid-btn span{color:inherit!important;filter:none!important}:host .entry.entry .security-console.security-console .console-shield{color:var(--console-accent);transition:color .32s!important}:host .entry.entry .security-console.security-console .console-shield-symbol{transform-origin:120px 124px;animation:.42s cubic-bezier(.2,.8,.2,1) both shield-symbol-arrive}@keyframes shield-symbol-arrive{0%{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}:host .entry.entry .security-console.security-console .console-shield-check{stroke-dasharray:70;stroke-dashoffset:0;animation:.45s ease-out shield-check-draw}@keyframes shield-check-draw{0%{stroke-dashoffset:70px}to{stroke-dashoffset:0}}:host(.argus-contrast-high) .entry.entry .security-console.security-console{--console-accent:#fff!important;background:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc{color:#fff!important;text-shadow:none!important;background:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active span{color:#000!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap{border-radius:32px!important;overflow:hidden!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console .console-shield-symbol,:host .entry.entry .security-console.security-console .console-shield-check{animation:none!important}}:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-symbol,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-check{animation:none!important}:host .entry.entry .security-console.security-console .btn-home{--console-accent:var(--argus-mode-home,#ffad55)}:host .entry.entry .security-console.security-console .btn-away{--console-accent:var(--argus-mode-away,#a855f7)}:host .entry.entry .security-console.security-console .btn-night{--console-accent:var(--argus-mode-night,#72b6ff)}:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon{color:var(--console-accent)!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn{--console-accent:#fff}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active .mode-btn-icon{color:#000!important}:host .entry.entry .security-console.security-console .console-hud-loc{overflow-wrap:anywhere!important;background:0 0!important;border-radius:12px!important;flex:0 360px!important;width:auto!important;max-width:360px!important;padding:0!important;font-size:15px!important}:host .entry.entry .security-console.security-console .console-hud{justify-content:space-between!important}:host .entry.entry .security-console.security-console .argus-connection-pill{letter-spacing:0!important;text-transform:none!important;border-radius:12px!important;flex-shrink:0!important;height:44px!important;min-height:44px!important;padding:0 12px!important;font-size:12px!important;font-weight:600!important}:host .entry.entry .security-console.security-console .argus-connection-label{letter-spacing:0!important;text-transform:none!important;font-size:12px!important}:host .entry.entry .security-console.security-console .argus-connection-dot{box-shadow:none!important;background:#34d399!important}:host .entry.entry .security-console.security-console .argus-connection-pill[data-online=false] .argus-connection-dot{background:#ff7b85!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_home{color:#ffad55!important;border-color:#ffad55!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_away{color:#a855f7!important;border-color:#a855f7!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_night{color:#72b6ff!important;border-color:#72b6ff!important}:host .entry.entry .security-console.security-console .console-hud-loc{background:var(--console-glass)!important;border:1px solid var(--console-edge)!important;box-shadow:var(--console-shadow)!important;box-sizing:border-box!important;border-radius:12px!important;align-self:stretch!important;min-height:44px!important;padding:10px 12px!important;line-height:1.35!important}:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc{box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .liquid-btn,:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .argus-sta-track,:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .argus-sta-thumb,:host .entry.entry[data-argus-render-quality=light] .security-console.security-console .console-sensor{-webkit-backdrop-filter:none!important}:host .entry.entry .security-console.security-console .btn-home .console-mode-dot{background:var(--argus-mode-home,#ffad55)!important}:host .entry.entry .security-console.security-console .btn-away .console-mode-dot{background:var(--argus-mode-away,#a855f7)!important}:host .entry.entry .security-console.security-console .btn-night .console-mode-dot{background:var(--argus-mode-night,#72b6ff)!important}:host .entry.entry .security-console.security-console .btn-away.active{--console-accent:#a855f7;color:#e9c7ff!important;background:linear-gradient(150deg,#a855f785,#481270c7)!important;border-color:#b52cff!important;box-shadow:inset 0 0 0 1px #e9c7ffb8,0 0 24px #a855f785!important}:host .entry.entry .security-console.security-console .argus-system-status--armed_away{color:#e9c7ff!important;border-color:#a855f7!important;box-shadow:0 0 24px #a855f77a!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn:disabled:not(.active){color:#9297a2!important;opacity:.48!important;filter:grayscale()!important;cursor:not-allowed!important;box-shadow:inset 0 1px #ffffff09!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn:disabled:not(.active) .console-mode-dot{box-shadow:none!important;filter:grayscale()!important;background:#7c8089!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn.active:disabled{opacity:1!important;filter:none!important;cursor:not-allowed!important}", Nh = ":host #entries{width:100%;min-width:0;container:argus-panel/inline-size}:host .entry.entry{container:argus-console/inline-size;box-sizing:border-box!important;backdrop-filter:none!important;width:min(100%,1440px)!important;min-width:0!important;max-width:1440px!important;height:auto!important;min-height:0!important;box-shadow:none!important;background:#000!important;border-radius:clamp(18px,2.2cqw,30px)!important;margin-inline:auto!important;position:relative!important;overflow:hidden!important}:host .entry.entry>canvas.console-emblem-canvas{z-index:1!important;pointer-events:none!important;width:100%!important;height:100%!important;display:block!important;position:absolute!important;inset:0!important}:host .entry.entry .entry-content.security-console.security-console{z-index:3!important;box-sizing:border-box!important;grid-template:\"header header header\"\"controls emblem sensors\"minmax(0,1fr)/minmax(0,1fr) minmax(220px,.72fr) minmax(0,1fr)!important;align-content:center!important;align-items:center!important;gap:clamp(12px,2cqw,26px)!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;margin:0!important;padding:clamp(14px,2.2cqw,32px)!important;display:grid!important;position:relative!important;overflow:visible!important}:host .entry.entry .security-console.security-console .console-hud{grid-area:header!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:\"home online actions\"!important;place-items:center stretch!important;gap:8px!important;width:100%!important;height:auto!important;min-height:38px!important;margin:0!important;display:grid!important;position:relative!important;inset:auto!important}:host .entry.entry .security-console.security-console .console-hud-loc{box-sizing:border-box!important;white-space:nowrap!important;text-overflow:ellipsis!important;grid-area:home!important;justify-self:start!important;width:max-content!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:38px!important;margin:0!important;padding:6px 12px!important;font-size:clamp(11px,1.2cqw,16px)!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .argus-connection-pill{box-sizing:border-box!important;letter-spacing:0!important;white-space:nowrap!important;grid-area:online!important;justify-self:center!important;width:max-content!important;min-width:0!important;max-width:100%!important;height:38px!important;min-height:38px!important;margin:0!important;padding:0 10px!important;font-size:clamp(9px,1.05cqw,12px)!important;position:static!important;inset:auto!important}:host .entry.entry .security-console.security-console .console-hud-right{grid-area:actions!important;justify-content:flex-end!important;justify-self:end!important;align-items:center!important;width:auto!important;height:auto!important;margin:0!important;display:flex!important;position:static!important;inset:auto!important}:host .entry.entry .security-console.security-console .console-hud-right .entry-fs{width:38px!important;min-width:38px!important;height:38px!important;min-height:38px!important;margin:0!important;display:inline-flex!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{grid-area:controls!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-content:center!important;place-self:center stretch!important;align-items:center!important;gap:8px!important;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;display:grid!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{box-sizing:border-box!important;border-radius:999px!important;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:clamp(38px,4.4cqw,48px)!important;padding:0 12px!important;display:flex!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-dot{background:var(--console-accent)!important;width:11px!important;min-width:11px!important;height:11px!important;min-height:11px!important;box-shadow:0 0 0 1px #ffffff38, 0 0 10px color-mix(in srgb, var(--console-accent) 38%, transparent)!important;border-radius:50%!important;flex:none!important;display:inline-block!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{text-overflow:ellipsis!important;white-space:nowrap!important;max-width:calc(100% - 20px)!important;font-size:clamp(10px,1.15cqw,14px)!important;font-weight:600!important;line-height:1.2!important;display:inline-block!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .liquid-stack>.argus-sta-wrap{grid-column:1/-1!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important}:host .entry.entry .security-console.security-console .argus-sta-wrap{justify-self:start!important;width:100%!important;min-width:0!important;max-width:min(100%,520px)!important}:host .entry.entry .security-console.security-console .argus-sta-track{border-radius:999px!important;width:100%!important;height:clamp(52px,5.2cqw,64px)!important;min-height:52px!important}:host .entry.entry .security-console.security-console .argus-sta-thumb{--sta-thumb-size:clamp(40px, 4.2cqw, 52px);width:var(--sta-thumb-size)!important;height:var(--sta-thumb-size)!important;margin-top:calc(var(--sta-thumb-size) / -2)!important;top:50%!important;left:4px!important}:host .entry.entry .security-console.security-console .argus-sta-thumb svg{flex:0 0 60%!important;width:60%!important;height:60%!important}:host .entry.entry .security-console.security-console .argus-sta-label{left:calc(var(--sta-thumb-size,40px) + 16px)!important;max-width:calc(100% - var(--sta-thumb-size,40px) - 28px)!important;letter-spacing:.02em!important;white-space:nowrap!important;text-overflow:ellipsis!important;font-size:clamp(9px,1.1cqw,13px)!important;right:12px!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .entry-icon{box-sizing:border-box!important;grid-area:emblem!important;justify-content:center!important;place-self:center stretch!important;align-items:center!important;width:100%!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0 0 28px!important;animation:none!important;display:flex!important;position:relative!important;overflow:visible!important;transform:none!important}:host .entry.entry .security-console.security-console .console-emblem-viewport{aspect-ratio:1!important;flex:0 auto!important;width:min(100%,22cqw,280px)!important;min-width:0!important;display:block!important;position:relative!important;overflow:visible!important}:host .entry.entry .security-console.security-console .console-emblem-3d{pointer-events:none!important;width:100%!important;height:100%!important;position:absolute!important;inset:0!important}:host .entry.entry .security-console.security-console .console-emblem-3d .console-emblem-canvas-host{position:absolute;inset:0}:host .entry.entry .security-console.security-console .console-emblem-3d canvas{width:100%!important;height:100%!important;display:block!important}:host .entry.entry .security-console.security-console .console-emblem-unavailable{aspect-ratio:1!important;width:100%!important;display:block!important}:host .entry.entry .security-console.security-console .argus-system-status{z-index:3!important;box-sizing:border-box!important;white-space:nowrap!important;letter-spacing:0!important;text-align:center!important;width:max-content!important;max-width:min(100%,260px)!important;height:auto!important;min-height:30px!important;margin:0!important;padding:5px 10px!important;font-size:clamp(10px,1.05cqw,13px)!important;position:absolute!important;top:calc(100% + 12px)!important;bottom:auto!important;left:50%!important;transform:translate(-50%)!important}:host .entry.entry .security-console.security-console .console-modes-vertical.sos-modes-locked>.liquid-btn,:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn:disabled{opacity:.34!important;filter:grayscale()saturate(.15)!important;cursor:not-allowed!important;pointer-events:none!important}@container argus-console (width<=559px){:host .entry.entry .security-console.security-console .entry-icon{padding-bottom:34px!important}}:host .entry.entry .security-console.security-console .console-sensors{scrollbar-width:thin!important;flex-flow:wrap!important;grid-area:sensors!important;justify-content:center!important;align-items:center!important;gap:6px!important;width:100%!important;min-width:0!important;max-width:none!important;max-height:100px!important;margin:0!important;display:flex!important;overflow:auto!important}:host .entry.entry .security-console.security-console .console-sensors:empty{display:none!important}:host .entry.entry .security-console.security-console .console-sensor{box-sizing:border-box!important;flex:0 auto!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:32px!important;padding:4px 9px!important}:host .entry.entry .security-console.security-console .console-sensor-name{text-overflow:ellipsis!important;white-space:nowrap!important;max-width:180px!important;overflow:hidden!important}@media (orientation:landscape){@container argus-panel (width>=1100px){:host .entry.entry:not(.ios-fullscreen){aspect-ratio:3!important;height:min(33.333cqw,480px)!important;min-height:0!important}:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template:\"header header header\"42px\"controls emblem sensors\"minmax(0,1fr)/minmax(0,1fr) minmax(220px,.72fr) minmax(0,1fr)!important;align-content:stretch!important;gap:clamp(12px,1.6cqw,24px)!important;height:100%!important;padding:clamp(16px,1.8cqw,26px)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,22cqw,280px)!important}}}@container argus-console (width<=559px){:host .entry.entry .entry-content.security-console.security-console{grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important;gap:12px!important;padding:12px!important}:host .entry.entry .security-console.security-console .console-emblem-viewport{width:min(62cqw,250px)!important}:host .entry.entry .security-console.security-console .entry-icon{padding-bottom:34px!important}:host .entry.entry .security-console.security-console .argus-system-status{top:calc(100% + 2px)!important}:host .entry.entry .security-console.security-console .console-hud{padding-inline:26px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical,:host .entry.entry .security-console.security-console .liquid-stack>.argus-sta-wrap{width:calc(100% - 52px)!important;margin-inline:26px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{gap:6px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:48px!important}:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(38px,1fr)!important;gap:5px!important}:host .entry.entry .security-console.security-console .console-hud-loc{padding-inline:8px!important}:host .entry.entry .security-console.security-console .argus-connection-pill{padding-inline:7px!important}:host .entry.entry .security-console.security-console .console-hud-right .entry-fs{width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important}:host .entry.entry .security-console.security-console .argus-sta-track{height:48px!important}}:host .entry.entry.ios-fullscreen{z-index:99999999!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;border:0!important;border-radius:0!important;width:100dvw!important;max-width:none!important;height:100dvh!important;min-height:0!important;margin:0!important;padding:0!important;position:fixed!important;inset:0!important;overflow:hidden auto!important;container:argus-fullscreen/size!important}:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-height:100%!important;padding:max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left))!important}@container argus-fullscreen (width>=900px) and (height>=480px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template:\"header header header\"42px\"controls emblem sensors\"minmax(0,1fr)/minmax(0,1fr) minmax(240px,.72fr) minmax(0,1fr)!important;gap:clamp(14px,2.2cqw,30px)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(28cqw,42cqh,360px)!important}}@container argus-fullscreen (width<=899px) and (height>=400px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-areas:\"header header\"\"controls emblem\"\"sensors sensors\"!important;gap:12px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(38cqw,48cqh,360px)!important}}@container argus-fullscreen (height<=399px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{padding:8px max(12px, env(safe-area-inset-left)) 8px max(12px, env(safe-area-inset-right))!important;grid-template:\"header header\"\"controls emblem\"minmax(0,1fr)\"sensors sensors\"/minmax(0,1fr) minmax(0,1fr)!important;gap:5px 12px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(34cqw,42cqh,220px)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{padding-bottom:20px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:36px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-track{height:50px!important;min-height:50px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-thumb{--sta-thumb-size:40px;width:40px!important;height:40px!important;margin-top:-20px!important;top:50%!important;left:4px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-label{max-width:calc(100% - 68px)!important;left:56px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors{max-height:38px!important}}@container argus-fullscreen (width<=520px) and (height>=400px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{padding:max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom))!important;grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important;gap:10px!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(50cqw,34cqh,230px)!important}}:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill,:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button{color:#fff!important;backdrop-filter:none!important;background:#000!important;border:2px solid #fff!important}:host .entry.entry .security-console.security-console button:focus-visible,:host .entry.entry .security-console.security-console .argus-sta-track:focus-visible{outline-offset:2px!important;outline:3px solid #7dd3fc!important}@media (prefers-reduced-motion:reduce){:host .entry.entry .security-console.security-console *,:host .entry.entry .security-console.security-console :before,:host .entry.entry .security-console.security-console :after{scroll-behavior:auto!important}}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap{margin-block-start:8px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap--disarm{filter:drop-shadow(0 0 10px color-mix(in srgb, var(--console-accent) 34%, transparent))}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap--sos{filter:drop-shadow(0 0 10px color-mix(in srgb, var(--console-accent) 30%, transparent))}@container argus-console (width<=559px){:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap{margin-block-start:6px!important}}@media (orientation:landscape) and (height<=480px){@container argus-console (width>=360px){:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.argus-sta-wrap{margin-block-start:4px!important}}}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .security-console.security-console .console-hud{inset:max(12px, env(safe-area-inset-top)) 12px auto!important;grid-template-columns:minmax(0,1fr) auto auto!important;gap:6px!important;width:auto!important;position:absolute!important}:host .entry.entry.ios-fullscreen .console-hud-loc{overflow-wrap:anywhere;white-space:normal!important;font-size:12px!important}:host .entry.entry.ios-fullscreen .entry-exit-fs{padding:6px 10px!important;position:static!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical{margin-top:18px!important}}:host .security-context{box-sizing:border-box;background:#171d26;border:1px solid #ffffff20;border-radius:18px;grid-area:sensors;width:100%;min-width:0;padding:14px}:host .security-context p{margin:6px 0;font-size:.85rem}:host .entry.entry .security-console.security-console .security-context .console-sensors{justify-content:flex-start!important;max-height:min(32vh,240px)!important}@media (width>=761px){:host .entry.entry .security-console.security-console .console-modes-vertical{box-sizing:border-box;border-radius:18px;background:#171d26!important;border:1px solid #ffffff20!important;grid-template-columns:minmax(0,1fr)!important;padding:12px!important}}:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled{opacity:1!important;border-color:var(--console-accent)!important;border-style:dashed!important}:host .entry.entry .security-console.security-console .console-modes-vertical{background:0 0!important;border:0!important;padding:0!important}:host .console-nav-caption{color:#a8b4c4;letter-spacing:.12em;text-transform:uppercase;grid-column:1/-1;font-size:.7rem}:host .console-nav-sos{border-top:1px solid #ffffff19;margin-top:8px;padding-top:12px}:host .security-context{background:#111820c9;border-color:#ffffff13;padding:clamp(16px,2cqw,28px)}:host .security-context header strong{font-size:clamp(17px,2cqw,24px)}:host .security-context .context-tools{gap:8px;margin-top:18px;display:grid}:host .security-context .context-tools small{color:#a8b4c4;text-transform:uppercase;letter-spacing:.09em}:host .security-context button{color:#eef2f8;background:#ffffff09;border:1px solid #ffffff18;border-radius:14px;padding:9px 12px}:host .security-context .context-tool{text-align:start;gap:4px;display:grid}:host .security-context .context-tool span{color:#a8b4c4;font-size:.8rem}:host .security-context .context-back{margin:8px 4px 4px 0}@media (prefers-reduced-motion:no-preference){:host .security-context header{animation:.24s ease-out both argus-context-enter}@keyframes argus-context-enter{0%{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}}@container argus-console (560px<=width<680px){:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template:\"header\"\"emblem\"\"controls\"\"sensors\"/minmax(0,1fr)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,310px)!important}}@container argus-console (680px<=width<900px){:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template-rows:auto auto auto!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-areas:\"header header\"\"controls emblem\"\"sensors sensors\"!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,310px)!important}}@container argus-fullscreen (width>=1000px) and (height>=480px){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{grid-template-columns:minmax(0,1fr) minmax(240px,1.65fr) minmax(0,1.14fr)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:min(100%,38cqw,440px)!important}}:host .entry.entry .security-console.security-console .security-context .console-sensors{grid-template-columns:minmax(0,1fr);gap:8px!important;margin-top:10px!important;display:grid!important}:host .security-context .context-sensor-row{border-bottom:1px solid #ffffff13;gap:6px;padding:8px 0;display:grid}:host .security-context .context-primary,:host .security-context .context-call a{color:#b8e9ff;border-color:#38bdf855}:host .security-context .context-call{flex-wrap:wrap;align-items:center;gap:8px;display:flex}@container argus-console (width>=900px){:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{grid-template-columns:minmax(0,1fr)!important;justify-self:start!important;max-width:300px!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.liquid-btn{justify-content:flex-start!important;padding-inline:18px!important}}@container argus-console (width>=1000px){:host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console{grid-template-columns:minmax(0,1fr) minmax(240px,1.65fr) minmax(0,1.14fr)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,38cqw,440px)!important}}@media (orientation:landscape){@container argus-panel (width>=1100px){:host .entry.entry:not(.ios-fullscreen){aspect-ratio:auto!important;height:clamp(520px,42cqw,640px)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .entry-icon{padding-bottom:48px!important}}}:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled .console-mode-dot{background:var(--console-accent)!important;opacity:1!important}:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled .console-mode-label{color:#e8edf6!important}@container argus-console (width<=559px){:host .entry.entry .security-console.security-console .console-hud{box-sizing:border-box!important;grid-template-columns:minmax(0,1fr) auto auto!important;padding-inline:4px!important}}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;max-width:none!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.liquid-btn{justify-content:center!important;min-height:38px!important;padding-inline:5px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{font-size:clamp(10px,1cqw,13px)!important}:host .security-context{--context-accent:#68d9b0;background:0 0;border:0;gap:10px;min-width:0;padding:0;display:grid}:host .security-context[data-tone=warning]{--context-accent:#e6bc75}:host .security-context[data-tone=alarm]{--context-accent:#ff847d}:host .security-context .context-heading,:host .security-context .context-eyebrow{color:#a5bcb4;letter-spacing:.13em;text-transform:uppercase;font-size:10px;font-weight:650}:host .security-context .context-heading{justify-content:space-between;gap:8px;display:flex}:host .security-context .context-live{color:#79c5a9}:host .security-context .context-live:before{content:\"●\";margin-inline-end:5px}:host .security-context header{background:radial-gradient(ellipse at 96% 0%, color-mix(in srgb, var(--context-accent) 12%, transparent), transparent 72%), #121a18;border:1px solid #a9d4c222;border-radius:17px;gap:6px;padding:16px 46px 16px 16px;display:grid;position:relative}:host .security-context header strong{font-size:clamp(20px,2cqw,29px);line-height:1.1}:host .security-context header p{color:#b0c1bc;margin:0;line-height:1.45}:host .security-context .context-shield{width:22px;height:22px;color:var(--context-accent);position:absolute;top:16px;right:15px}:host .security-context[data-tone=alarm] .context-shield path:last-child{display:none}:host .security-context .context-tools{margin:0}:host .security-context .context-verification{grid-template-columns:repeat(2,minmax(0,1fr))}:host .security-context .context-verification>small{grid-column:1/-1}:host .security-context .context-tool{background:#151e1d;border-color:#a9d4c222;padding:12px}:host .security-context .context-tool strong{overflow-wrap:anywhere;font-size:12px}:host .security-context .context-tool span{font-size:11px;line-height:1.35}:host .entry.entry .security-console.security-console .security-context .console-sensors:empty{display:none!important}:host .security-context .context-sensor-row{background:#151e1d;border:1px solid #a9d4c222;border-radius:13px;padding:8px}:host .security-context button:hover{border-color:#a9d4c255}:host .security-context button:focus-visible{outline-offset:2px;outline:2px solid #9ccfbe}@media (prefers-reduced-motion:no-preference){:host .security-context button{transition:background-color .22s,border-color .22s,transform .2s}:host .security-context button:active{transform:translateY(1px)}}:host .entry.entry .entry-content.security-console.security-console{background:0 0!important}:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical>.liquid-btn{gap:4px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{max-width:none!important;font-size:clamp(9px,.95cqw,13px)!important}:host .security-context .context-tool{overflow-wrap:anywhere;min-width:0;white-space:normal!important}.context-pin-slot:empty,.security-context:has(.context-pin-slot>.open)>:not(.context-pin-slot){display:none}#pin-modal[data-disarm-presentation=context].open{backdrop-filter:none;z-index:1;background:0 0;padding:0;position:relative;inset:auto}#pin-modal[data-disarm-presentation=context] .modal{width:100%;max-height:min(70dvh,100cqh)}#pin-modal[data-disarm-presentation=dialog].open{box-sizing:border-box;backdrop-filter:none;padding:16px;position:fixed}#pin-modal[data-disarm-presentation] :focus-visible{outline-offset:2px;outline:2px solid #9ccfbe}@media (prefers-reduced-motion:no-preference){#pin-modal[data-disarm-presentation=context].open:not(.pin-closing) .modal:not(.pin-rejected){animation:.24s ease-out both argus-context-enter}#pin-modal[data-disarm-presentation=context].pin-closing .modal{animation:.22s ease-in reverse both argus-context-enter}}@media (prefers-reduced-motion:reduce){#pin-modal[data-disarm-presentation] .modal{animation:none!important}#pin-modal[data-disarm-presentation] .pin-btn-round{transition:none}}:host .security-context .context-indicators{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0;display:grid}:host .security-context .context-indicators>div,:host .security-context .context-activity{background:linear-gradient(145deg,#1b2825,#111918);border:1px solid #a9d4c222;border-radius:12px;min-width:0;padding:10px}:host .security-context .context-indicators dt{color:#abc0b9;text-transform:uppercase;overflow-wrap:anywhere;font-size:.65rem}:host .security-context .context-indicators dd{color:#edf7f3;font-variant-numeric:tabular-nums;margin:3px 0 0;font-size:1.2rem}:host .security-context .context-activity ul{margin:4px 0 0;padding:0;list-style:none}:host .security-context .context-activity li{flex-wrap:wrap;justify-content:space-between;gap:4px 10px;padding-block:5px;font-size:.75rem;display:flex}:host .security-context .context-activity time,:host .security-context .context-activity p{color:#abc0b9}@media (prefers-reduced-motion:no-preference){:host .security-context .context-indicators,:host .security-context .context-activity{animation:.24s ease-out both argus-context-enter}}:host .entry.entry{background:radial-gradient(at 50% 57%,#15342b66,#0000 58%),radial-gradient(at 90% 18%,#17282238,#0000 42%),#060908!important}:host .security-context .context-heading{padding-inline:3px}:host .security-context header{background:radial-gradient(ellipse at 95% 12%, color-mix(in srgb, var(--context-accent) 15%, transparent), transparent 58%), linear-gradient(145deg, #1b2322, #111715);border-radius:20px;padding:20px clamp(56px,7cqw,88px) 20px 18px;box-shadow:inset 0 1px #ffffff09,0 8px 20px #0003}:host .security-context .context-shield{box-sizing:content-box;border:1px solid color-mix(in srgb, var(--context-accent) 38%, transparent);background:color-mix(in srgb, var(--context-accent) 9%, transparent);border-radius:14px;padding:9px}:host .security-context .context-indicators{gap:8px;margin-top:5px}:host .security-context .context-indicators>div{border-radius:15px;flex-direction:column-reverse;justify-content:end;min-height:58px;padding:10px 11px;display:flex}:host .security-context .context-indicators dd{margin:0 0 3px;font-size:clamp(1.45rem,2.4cqw,2.15rem);font-weight:750;line-height:1}:host .security-context .context-indicators>div:nth-child(2) dd{color:#57dfb5}:host .security-context[data-tone=warning] .context-indicators>div:last-child dd{color:#e6bc75}:host .security-context .context-tool,:host .security-context .context-indicators>div,:host .security-context .context-activity{background:linear-gradient(145deg,#1a2321,#111715);box-shadow:inset 0 1px #ffffff09}:host .security-context .context-activity li+li{border-top:1px solid #a9d4c222}:host .entry.entry .security-console.security-console .entry-icon,:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{padding-bottom:0!important}@container argus-console (width<560px){:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport{width:min(100%,250px)!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .liquid-stack.console-modes-vertical,:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .liquid-stack>.argus-sta-wrap{width:100%!important;margin-inline:0!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:44px!important}:host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-mode-label{font-size:11px!important}}:host .security-context{grid-template-columns:minmax(0,1fr)}:host .security-context .context-view-title,:host .security-context .context-sensor-row{overflow-wrap:anywhere;min-width:0}:host .security-context .context-sensor-row{grid-template-columns:minmax(0,1fr)}:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor{grid-template-columns:auto minmax(0,1fr);justify-content:stretch!important;display:grid!important}:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor-name{overflow-wrap:anywhere;white-space:normal!important;max-width:none!important}:host .security-context .context-sensor-row .console-sensor-status-wrap{flex-wrap:wrap;grid-column:2;min-width:0}:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor-state{overflow-wrap:anywhere;white-space:normal!important}:host .entry.entry .security-console.security-console .security-context>.console-sensors{grid-area:auto!important}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .security-console.security-console{min-height:100%;height:auto!important;padding-top:max(12px, env(safe-area-inset-top))!important;flex-direction:column!important;gap:18px!important;display:flex!important;overflow:visible!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-hud{box-sizing:border-box;flex:none;order:-2;grid-template-columns:minmax(0,1fr) auto auto!important;width:100%!important;position:relative!important;inset:auto!important}:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{flex:none;order:-1;min-height:240px;position:relative!important;inset:auto!important}:host .entry.entry.ios-fullscreen .context-verification-dialog{z-index:100001;background:#111a22;border-radius:20px;padding:18px;overflow-y:auto;inset:max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom))!important;position:fixed!important}}.context-verify-entry[data-pending=true]{border-color:#ffb340;box-shadow:inset 0 0 0 1px #ffb340}:host .light-siren-settings{border:1px solid var(--argus-border,#ffffff40);background:var(--argus-card-bg,#18212b);border-radius:16px;margin-block:10px;padding:14px}:host .light-siren-settings summary{cursor:pointer;flex-wrap:wrap;justify-content:space-between;gap:8px;display:flex}:host .light-siren-settings label{grid-template-columns:minmax(0,1fr) minmax(80px,1fr);align-items:center;gap:12px;margin-block:14px;display:grid}:host .light-siren-settings select{color:#fff;background:#111a22;border:1px solid #ffffff70;border-radius:12px;width:100%;min-width:0;padding:10px}:host([argus-contrast=high]) .log-item,:host(.argus-contrast-high) .log-item{color:#fff!important;backdrop-filter:none!important;background:#000!important;border:2px solid #fff!important}:host([argus-contrast=high]) .log-item *,:host(.argus-contrast-high) .log-item *{color:#fff!important;opacity:1!important;text-shadow:none!important}:host([argus-contrast=high]) .log-meta,:host(.argus-contrast-high) .log-meta{color:#fff!important}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{transition:height .35s;width:100%!important;height:clamp(270px,39dvh,440px)!important;min-height:0!important}:host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded=true] .entry-icon{height:clamp(190px,26dvh,280px)!important}:host .entry.entry.ios-fullscreen .console-emblem-viewport{width:100%!important;max-width:none!important;height:100%!important}}@media (prefers-reduced-motion:reduce){:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{transition:none!important}}:host .entry.entry .security-console.security-console .console-hud-loc,:host .entry.entry .security-console.security-console .argus-connection-pill{height:auto!important;min-height:44px!important;font-size:clamp(16px,1.8cqw,22px)!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label,:host .entry.entry .security-console.security-console .argus-sta-label{white-space:normal!important;font-size:clamp(17px,2cqw,24px)!important;line-height:1.25!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{min-height:52px!important}:host .security-context p{line-height:1.4;font-size:clamp(16px,1.8cqw,21px)!important}:host .security-context header>strong{font-size:clamp(24px,2.6cqw,32px)!important}:host .security-context .context-eyebrow,:host .security-console .console-section-title{letter-spacing:.06em!important;font-size:16px!important}@media (width<=480px){:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto!important}:host .entry.entry .security-console.security-console .console-hud-loc{white-space:normal!important;grid-column:1/-1!important}}:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto auto!important;grid-template-areas:\"home online tools\"!important;align-items:center!important;display:grid!important}:host .entry.entry .security-console.security-console .console-hud-loc{white-space:nowrap!important;text-overflow:ellipsis!important;grid-area:home/auto!important;width:100%!important;font-size:clamp(13px,1.6cqw,20px)!important;overflow:hidden!important}:host .entry.entry .security-console.security-console .argus-connection-pill{grid-area:online!important;font-size:clamp(12px,1.4cqw,18px)!important}:host .entry.entry .security-console.security-console .console-hud-right{grid-area:tools!important}:host .entry.entry .security-console.security-console .console-mode-label{white-space:nowrap!important;text-overflow:clip!important;font-size:clamp(14px,1.6cqw,20px)!important;overflow:visible!important}@media (orientation:landscape) and (height<=600px){:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn{gap:4px!important;padding-inline:6px!important}:host .entry.entry .security-console.security-console .console-modes-vertical>.liquid-btn .console-mode-label{white-space:nowrap!important;font-size:14px!important;overflow:visible!important}:host .entry.entry .security-console.security-console .argus-sta-label{white-space:nowrap!important;font-size:15px!important}}@media (orientation:portrait) and (width<=760px){:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{height:clamp(300px,45dvh,500px)!important}:host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded=true] .entry-icon{height:clamp(220px,30dvh,330px)!important}:host .entry.entry.ios-fullscreen .console-emblem-unavailable{width:100%!important;max-width:none!important;height:100%!important;max-height:none!important}}:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,max-content) max-content max-content!important;justify-content:start!important;gap:8px!important}:host .entry.entry .security-console.security-console .console-hud-loc{width:auto!important;min-width:0!important;max-width:100%!important}:host .entry.entry .security-console.security-console .entry-exit-fs{position:static!important;inset:auto!important}:host .entry.entry .security-console.security-console .security-context{box-shadow:none!important;backdrop-filter:none!important;background:0 0!important;border:none!important}:host .entry.entry .security-console.security-console .console-home-text{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}:host .entry.entry .security-console.security-console .console-hud-loc>svg{flex-shrink:0}@media (width<=760px) and (orientation:portrait){:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console{flex-direction:column!important;min-height:0!important;display:flex!important}:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon{height:var(--console-core-space,35dvh)!important;flex:0 0 var(--console-core-space,35dvh)!important;justify-content:center!important;align-items:center!important;min-height:0!important;padding:0!important;display:flex!important}:host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded=true] .entry-icon{height:var(--console-core-space,28dvh)!important}:host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport{width:var(--console-core-diameter,80vw)!important;height:var(--console-core-diameter,80vw)!important;aspect-ratio:1!important;flex:none!important;max-width:100%!important}:host .entry.entry.ios-fullscreen .security-console.security-console :is(.console-hud,.console-modes-vertical,.security-context){flex-shrink:0!important}}@media (width<=420px){:host .entry.entry .security-console.security-console .console-hud{grid-template-columns:minmax(0,1fr) auto auto!important;grid-template-areas:\"home home tools\"\"online online tools\"!important;align-items:start!important}:host .entry.entry .security-console.security-console .argus-connection-pill{justify-self:start!important}:host .entry.entry .security-console.security-console .console-hud-loc{white-space:normal!important}:host .entry.entry .security-console.security-console .console-home-text{white-space:normal;overflow-wrap:anywhere}}", Ph = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.security-console .entry-fs{-webkit-backdrop-filter:blur(12px)!important;color:#fff!important;cursor:pointer!important;background:#ffffff14!important;border:1px solid #fff3!important;border-radius:12px!important;flex-shrink:0!important;justify-content:center!important;align-items:center!important;width:38px!important;min-width:38px!important;height:38px!important;padding:0!important;font-size:16px!important;transition:all .2s cubic-bezier(.16,1,.3,1)!important;display:inline-flex!important;box-shadow:0 4px 12px #00000040!important}.security-console .entry-fs:hover{background:#ffffff2e!important;border-color:#ffffff61!important;transform:translateY(-1px)scale(1.04)!important;box-shadow:0 6px 16px #00000059!important}.argus-system-status{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.argus-system-status--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.argus-system-status--armed_home,.argus-system-status--armed_away,.argus-system-status--armed_night,.argus-system-status--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.argus-system-status--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}.argus-system-status--armed_away{color:#e9c7ff!important;text-shadow:0 0 12px #a855f7e6!important;background:linear-gradient(135deg,#a855f76b 0%,#5d00a847 100%)!important;border:1.5px solid #a855f7f2!important;box-shadow:inset 0 1.5px #ffffff94,0 0 26px #a855f794,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}@media (width<=700px){.security-console .entry-icon .argus-system-status{margin-bottom:14px!important}}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg, var(--argus-mode-home,#ffad55) 0%, #d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg, var(--argus-mode-away,#a855f7) 0%, #7e22ce 100%)!important;border:1px solid #e9d5ffd9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #a855f78c!important}.security-console .btn-night.active{background:linear-gradient(135deg, var(--argus-mode-night,#72b6ff) 0%, #1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;width:fit-content!important;max-width:340px!important;max-height:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;flex-direction:column!important;place-self:center!important;align-items:flex-start!important;gap:6px!important;margin:0 auto!important;padding:0!important;display:flex!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;gap:5px!important;max-height:320px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 2px #00000080!important;box-sizing:border-box!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff24 0%,#ffffff08 100%)!important;border:1px solid #fff3!important;border-radius:999px!important;justify-content:flex-start!important;align-items:center!important;gap:8px!important;width:fit-content!important;max-width:100%!important;height:34px!important;min-height:34px!important;padding:5px 14px!important;transition:background .25s,box-shadow .25s,border-color .25s,transform .15s!important;display:inline-flex!important;box-shadow:inset 0 1px #ffffff4d,inset 0 -1px #0000001f,0 2px 8px #00000038!important}.console-sensor:hover{transform:translateY(-1px)scale(1.01)!important;box-shadow:inset 0 1px #ffffff73,0 5px 14px #0000004d!important}.console-sensor.open{background:linear-gradient(135deg,#ef444452 0%,#b91c1c21 100%)!important;border-color:#ef444499!important;box-shadow:inset 0 1px #ffffff61,0 0 12px #ef444447,0 2px 8px #00000038!important}.console-sensor.unavailable{background:linear-gradient(135deg,#94a3b81f 0%,#64748b0a 100%)!important;border-style:dashed!important;border-color:#94a3b847!important}.console-sensor-icon{filter:drop-shadow(0 1px 3px #0006)!important;flex-shrink:0!important;justify-content:center!important;align-items:center!important;font-size:14px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 4px);width:18px;height:18px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-main{flex:0 auto!important;align-items:center!important;min-width:0!important;display:flex!important;overflow:hidden!important}.console-sensor-name{letter-spacing:.02em!important;white-space:nowrap!important;text-overflow:ellipsis!important;color:#fff!important;min-width:0!important;font-size:10.5px!important;font-weight:800!important;line-height:1.2!important;overflow:hidden!important}.console-sensor-status-wrap{flex-shrink:0!important;align-items:center!important;gap:5px!important;margin-left:0!important;display:inline-flex!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:3px!important;font-size:10px!important;font-weight:800!important;display:inline-flex!important}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}.security-console .console-sensor{justify-content:flex-start!important;align-items:center!important;width:fit-content!important;min-width:0!important;max-width:100%!important;display:inline-flex!important}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}:host .context-zone-picker{gap:4px;min-width:0;display:grid}:host .context-zone-picker>div{flex-wrap:wrap;gap:4px;display:flex}:host .context-zone-picker summary:focus-visible,:host .security-context button:focus-visible{outline-offset:2px;outline:2px solid}.context-zone-picker{background:#182321a6;border:1px solid #9bbeb438;border-radius:20px;padding:12px}.context-zone-picker button[aria-pressed=true]{outline:2px solid var(--context-accent,#54d9b4);outline-offset:-2px}.context-verify-entry{box-sizing:border-box;width:100%}.context-verification-dialog{box-sizing:border-box;overscroll-behavior:contain;color:#eef4f5;background:#111e22;border:1px solid #9bbeb44d;border-radius:24px;width:100%;min-width:0;max-width:100%;max-height:none;padding:20px;overflow:auto}.context-verification-dialog[hidden],.context-verify-entry[hidden]{display:none!important}.context-verification-dialog .context-heading{justify-content:space-between;align-items:center;gap:12px;display:flex}.context-verification-dialog .context-verification{margin-block:16px}.context-verification-dialog button:focus-visible{outline-offset:3px;outline:2px solid #54d9b4}";
 //#endregion
 //#region src/features/dashboard/components/SensorChip.tsx
 function Fh(e, t) {
@@ -34425,58 +34440,85 @@ function Jh({ panel: e, kind: t, label: n, icon: r, touchLabel: i, activeSos: a 
 //#endregion
 //#region src/features/dashboard/components/SecurityConsole.tsx
 function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r, entryIndex: i }) {
-	let a = (0, D.useRef)(!1), [o, s] = (0, D.useState)(!1), [c, l] = (0, D.useState)(null), u = Vh(e), [d, f] = (0, D.useState)(0), p = (0, D.useRef)({});
+	let a = (0, D.useRef)(!1), [o, s] = (0, D.useState)(!1), [c, l] = (0, D.useState)(null), u = Vh(e), [d, f] = (0, D.useState)(0), p = (0, D.useRef)({}), m = (0, D.useRef)(null);
 	(0, D.useEffect)(() => {
+		let e = m.current;
+		if (!e || !t) return;
+		let n = 0, r = () => {
+			if (n = 0, !window.matchMedia("(max-width: 760px) and (orientation: portrait)").matches) {
+				e.style.removeProperty("--console-core-space"), e.style.removeProperty("--console-core-diameter");
+				return;
+			}
+			let t = getComputedStyle(e), r = (e) => Number.parseFloat(e) || 0, i = [
+				".console-hud",
+				".console-modes-vertical",
+				".security-context"
+			].map((t) => e.querySelector(t)).filter(Boolean), a = i.reduce((e, t) => {
+				let n = getComputedStyle(t);
+				return e + t.getBoundingClientRect().height + r(n.marginTop) + r(n.marginBottom);
+			}, 0), o = window.visualViewport, s = (o?.offsetTop || 0) + (o?.height || window.innerHeight), c = Math.max(0, s - e.getBoundingClientRect().top - 12) - a - r(t.paddingTop) - r(t.paddingBottom) - r(t.rowGap) * i.length, l = e.clientWidth - r(t.paddingLeft) - r(t.paddingRight), u = Math.max(100, c), d = Math.max(0, Math.min(l, u));
+			e.style.setProperty("--console-core-space", `${u}px`), e.style.setProperty("--console-core-diameter", `${d}px`);
+		}, i = () => {
+			n ||= requestAnimationFrame(r);
+		}, a = new ResizeObserver(i);
+		return a.observe(e), e.querySelectorAll(".console-hud,.console-modes-vertical,.security-context").forEach((e) => a.observe(e)), window.addEventListener("resize", i), window.visualViewport?.addEventListener("resize", i), i(), () => {
+			a.disconnect(), cancelAnimationFrame(n), window.removeEventListener("resize", i), window.visualViewport?.removeEventListener("resize", i);
+		};
+	}, [
+		t,
+		d,
+		i
+	]), (0, D.useEffect)(() => {
 		let t = () => f((e) => e + 1);
 		return e.addEventListener("argus-state-update", t), window.addEventListener("argus-state-update", t), () => {
 			e.removeEventListener("argus-state-update", t), window.removeEventListener("argus-state-update", t);
 		};
 	}, [e]);
-	let m = u.dashboard, h = u.hass, g = e._cardConfig?.entity || e._config?.entity, _ = e._cardConfig?.entry_id || e._config?.entry_id || m?.entry_id, [v, y] = (0, D.useState)(null), b = (0, D.useRef)(null), x = (0, D.useRef)(null), [S, C] = (0, D.useState)(!1);
+	let h = u.dashboard, g = u.hass, _ = e._cardConfig?.entity || e._config?.entity, v = e._cardConfig?.entry_id || e._config?.entry_id || h?.entry_id, [y, b] = (0, D.useState)(null), x = (0, D.useRef)(null), S = (0, D.useRef)(null), [C, w] = (0, D.useState)(!1);
 	(0, D.useEffect)(() => {
-		S && x.current?.focus();
-	}, [S]);
-	let w = (0, D.useRef)(null), T = (0, D.useRef)(null), [E, O] = (0, D.useState)(!1);
+		C && S.current?.focus();
+	}, [C]);
+	let T = (0, D.useRef)(null), E = (0, D.useRef)(null), [O, k] = (0, D.useState)(!1);
 	(0, D.useEffect)(() => {
-		E && w.current?.focus();
-	}, [E]);
-	let [k, j] = (0, D.useState)(!1), [M, N] = (0, D.useState)(!1), [P, F] = (0, D.useState)(!1), I = m?.entries?.findIndex((e) => g ? e.entity_id === g : e.entry_id === _) ?? -1;
-	if (i === void 0 && m?.entries?.length && (g || _) && I < 0) return /* @__PURE__ */ (0, A.jsxs)("div", {
+		O && T.current?.focus();
+	}, [O]);
+	let [j, M] = (0, D.useState)(!1), [N, P] = (0, D.useState)(!1), [F, I] = (0, D.useState)(!1), ee = h?.entries?.findIndex((e) => _ ? e.entity_id === _ : e.entry_id === v) ?? -1;
+	if (i === void 0 && h?.entries?.length && (_ || v) && ee < 0) return /* @__PURE__ */ (0, A.jsxs)("div", {
 		role: "status",
 		children: [
 			e._t?.("unavailable") || "No disponible",
 			": ",
-			g || _
+			_ || v
 		]
 	});
-	let ee = i ?? (I >= 0 ? I : 0), L = m?.entries?.[ee];
+	let te = i ?? (ee >= 0 ? ee : 0), L = h?.entries?.[te];
 	if (!L) {
-		if (m?.entries?.length && I < 0) return null;
+		if (h?.entries?.length && ee < 0) return null;
 		let t = e._cardConfig?.entity || e._config?.entity || "alarm_control_panel.argus";
-		if (!t || !h?.states?.[t]) return null;
+		if (!t || !g?.states?.[t]) return null;
 		L = { entity_id: t };
 	}
-	let te = e._renderEntryBackground?.(e._weatherState, e._isNight) || "", R = L.entity_id && h?.states[L.entity_id] ? h.states[L.entity_id].state : "unknown", z = u.translate, ne = e._homeName || e._ui?.home_name || h?.config?.location_name || z("home_fallback") || "Hogar", B = R === "triggered", V = !!h?.states?.[L.entity_id]?.attributes?.argus_panic_active, H = B || V, re = e._hass ? e._hass.connected !== !1 : !1, ie = !!h?.states?.[L.entity_id]?.attributes?.arming_waiting_for_sensors, ae = h?.states?.[L.entity_id]?.attributes?.arming_target, oe = {
+	let ne = e._renderEntryBackground?.(e._weatherState, e._isNight) || "", R = L.entity_id && g?.states[L.entity_id] ? g.states[L.entity_id].state : "unknown", z = u.translate, re = e._homeName || e._ui?.home_name || g?.config?.location_name || z("home_fallback") || "Hogar", B = R === "triggered", V = !!g?.states?.[L.entity_id]?.attributes?.argus_panic_active, ie = B || V, ae = e._hass ? e._hass.connected !== !1 : !1, oe = !!g?.states?.[L.entity_id]?.attributes?.arming_waiting_for_sensors, se = g?.states?.[L.entity_id]?.attributes?.arming_target, H = {
 		armed_home: z("mode_home"),
 		armed_away: z("mode_away"),
 		armed_night: z("mode_night")
-	}[ae], U = R === "pending" || R === "arming" || ie, W = !re || ["unknown", "unavailable"].includes(R) || B || R !== "disarmed" || U, se = () => {
+	}[se], U = R === "pending" || R === "arming" || oe, ce = !ae || ["unknown", "unavailable"].includes(R) || B || R !== "disarmed" || U, le = () => {
 		if (B) return z("system_triggered") || "ALARMA ACTIVADA";
-		if (ie) {
-			let e = h?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [];
+		if (oe) {
+			let e = g?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [];
 			return e.length ? (z("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(e.length)) : z("waiting_sensors") || "ESPERANDO SENSORES";
 		}
 		return R === "unknown" || R === "unavailable" ? z("unavailable") : R === "arming" ? z("arming") : R === "pending" ? z("pending") : R === "disarmed" ? "DESARMADO" : R === "armed_home" ? (z("system_armed") || "ARMADO") + " · " + (z("mode_home") || "CASA") : R === "armed_away" ? (z("system_armed") || "ARMADO") + " · " + (z("mode_away") || "AUSENTE") : R === "armed_night" ? (z("system_armed") || "ARMADO") + " · " + (z("mode_night") || "NOCHE") : z("system_armed") || "ARMADO";
-	}, ce = {
-		"--console-accent": H ? wh.alarm.css : R === "armed_home" ? wh.home.css : R === "armed_away" ? wh.away.css : R === "armed_night" ? wh.night.css : R === "disarmed" ? wh.disarmed.css : "#a4aab4",
+	}, ue = {
+		"--console-accent": ie ? wh.alarm.css : R === "armed_home" ? wh.home.css : R === "armed_away" ? wh.away.css : R === "armed_night" ? wh.night.css : R === "disarmed" ? wh.disarmed.css : "#a4aab4",
 		"--argus-mode-disarmed": wh.disarmed.css,
 		"--argus-mode-home": wh.home.css,
 		"--argus-mode-away": wh.away.css,
 		"--argus-mode-night": wh.night.css,
 		"--argus-mode-alarm": wh.alarm.css
-	}, le = [], ue = h?.states?.[L.entity_id]?.attributes?.cycle_bypassed_sensors || [], de = async (t, n, r) => {
+	}, de = [], W = g?.states?.[L.entity_id]?.attributes?.cycle_bypassed_sensors || [], G = async (t, n, r) => {
 		if (a.current) return;
-		let i = h?.states?.[L.entity_id]?.attributes?.arming_generation;
+		let i = g?.states?.[L.entity_id]?.attributes?.arming_generation;
 		a.current = !0, s(!0), l(null);
 		try {
 			if (!await e._showArgusConfirmModal(r ? `${n} quedará omitido durante este armado. La protección será parcial.` : `${n} volverá a estar protegido y podrá disparar la alarma.`)) return;
@@ -34491,24 +34533,24 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		} finally {
 			a.current = !1, s(!1);
 		}
-	}, G = h?.states?.[L.entity_id]?.attributes?.arming_bypass_eligible_sensors || [], K = h?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [], fe = {};
+	}, K = g?.states?.[L.entity_id]?.attributes?.arming_bypass_eligible_sensors || [], fe = g?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [], q = {};
 	if (L.entity_id) {
-		let t = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, n = h?.states?.[L.entity_id]?.attributes || {};
+		let t = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, n = g?.states?.[L.entity_id]?.attributes || {};
 		R.startsWith("armed_") && (p.current[L.entity_id] = R.slice(6));
 		let r = String(n.arming_target || n.triggered_mode || n.panic_previous_state || "").replace(/^armed_/, "");
-		fe = t[R.startsWith("armed_") ? R.slice(6) : (U || B) && (r || p.current[L.entity_id]) || "disarmed"] || {};
-		let i = fe.bypassed_sensors || [];
-		[.../* @__PURE__ */ new Set([...fe.sensors || [], ...i])].forEach((e) => {
-			le.push({
+		q = t[R.startsWith("armed_") ? R.slice(6) : (U || B) && (r || p.current[L.entity_id]) || "disarmed"] || {};
+		let i = q.bypassed_sensors || [];
+		[.../* @__PURE__ */ new Set([...q.sensors || [], ...i])].forEach((e) => {
+			de.push({
 				id: e,
 				isBypassed: i.includes(e)
 			});
 		});
 	}
-	let q = le;
-	q.length, le.map((e) => e.id);
-	let pe = q.filter((e) => {
-		let t = h?.states?.[e.id];
+	let pe = de;
+	pe.length, de.map((e) => e.id);
+	let J = pe.filter((e) => {
+		let t = g?.states?.[e.id];
 		return !t || [
 			"unknown",
 			"unavailable",
@@ -34522,51 +34564,51 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			"triggered",
 			"unlocked"
 		].includes(String(t.state).toLowerCase());
-	}).map((e) => e.id), J = H ? "sos" : pe.length ? "sensor" : "", me = J === "sos" ? `sos:${L.entity_id}` : pe.join("|"), Y = (e._ui?.zones_enabled === !1 ? [] : e._ui?.zones || []).filter((e) => e.enabled !== !1), X = h?.states?.[L.entity_id]?.attributes?.triggered_by, he = Y.map((e, t) => ({
+	}).map((e) => e.id), me = ie ? "sos" : J.length ? "sensor" : "", Y = me === "sos" ? `sos:${L.entity_id}` : J.join("|"), X = (e._ui?.zones_enabled === !1 ? [] : e._ui?.zones || []).filter((e) => e.enabled !== !1), he = g?.states?.[L.entity_id]?.attributes?.triggered_by, ge = X.map((e, t) => ({
 		id: e.id,
 		name: `Zona ${e.number || t + 1}`,
 		area: e.area || "",
 		number: e.number || t + 1,
-		triggered: B && (e.entity_ids || []).includes(X),
+		triggered: B && (e.entity_ids || []).includes(he),
 		open: (e.entity_ids || []).some((e) => {
-			let t = h?.states?.[e];
+			let t = g?.states?.[e];
 			return t && (u.isSensorActive?.(t) ?? [
 				"on",
 				"open",
 				"detected"
 			].includes(t.state));
 		}),
-		sensors: (e.entity_ids || []).filter((e) => h?.states?.[e] && u.isSensorActive(h.states[e])).map((e) => h?.states?.[e]?.attributes?.friendly_name || e)
-	})), ge = e._walkTestEntryId === L.entry_id ? e._walkTestSession : null, _e = !!ge?.active, ve = (e) => {
-		y(e), O(!!e), N(!1), j(!1), F(!1);
-	}, ye = Y.find((e) => e.id === v), be = he.find((e) => e.triggered), xe = X && h?.states?.[X], Se = e._hass?.states?.[L.entity_id], Ce = Se?.state || "unknown", we = {
+		sensors: (e.entity_ids || []).filter((e) => g?.states?.[e] && u.isSensorActive(g.states[e])).map((e) => g?.states?.[e]?.attributes?.friendly_name || e)
+	})), _e = e._walkTestEntryId === L.entry_id ? e._walkTestSession : null, ve = !!_e?.active, ye = (e) => {
+		b(e), k(!!e), P(!1), M(!1), I(!1);
+	}, be = X.find((e) => e.id === y), xe = ge.find((e) => e.triggered), Se = he && g?.states?.[he], Ce = e._hass?.states?.[L.entity_id], we = Ce?.state || "unknown", Te = {
 		home: "En Casa",
 		away: "Ausente",
 		night: "Noche"
-	}, Te = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, Ee = String(Se?.attributes?.arming_target || Ce).replace(/^armed_/, ""), De = we[Ee], Oe = !!Se?.attributes?.arming_waiting_for_sensors, ke = De && Te[Ee], Ae = ke && new Set((ke.sensors || []).filter((e) => !(ke.bypassed_sensors || ke.bypassedSensors || []).includes(e) && !ue.includes(e))), je = Oe ? new Set(Se?.attributes?.arming_blocking_sensors || []) : void 0, Me = !_e && !ye && !M && !U && !H && (Ce === "disarmed" || !!Ae), Ne = (e) => re ? u.getEntityState(e) : void 0, Pe = (e) => yr(e, Ne, u.isSensorActive, Ae || void 0, je), Fe = Y.map((e) => Pe(e.entity_ids || [])).filter((e) => e !== "notApplicable"), Ie = ye && Pe(ye.entity_ids || []), Le = Fe.filter((e) => e === "ready").length, Re = Fe.filter((e) => e === "pending").length, ze = Fe.length - Le - Re, Be = {
+	}, Ee = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, De = String(Ce?.attributes?.arming_target || we).replace(/^armed_/, ""), Oe = Te[De], ke = !!Ce?.attributes?.arming_waiting_for_sensors, Ae = Oe && Ee[De], je = Ae && new Set((Ae.sensors || []).filter((e) => !(Ae.bypassed_sensors || Ae.bypassedSensors || []).includes(e) && !W.includes(e))), Me = ke ? new Set(Ce?.attributes?.arming_blocking_sensors || []) : void 0, Ne = !ve && !be && !N && !U && !ie && (we === "disarmed" || !!je), Pe = (e) => ae ? u.getEntityState(e) : void 0, Fe = (e) => yr(e, Pe, u.isSensorActive, je || void 0, Me), Ie = X.map((e) => Fe(e.entity_ids || [])).filter((e) => e !== "notApplicable"), Le = be && Fe(be.entity_ids || []), Re = Ie.filter((e) => e === "ready").length, ze = Ie.filter((e) => e === "pending").length, Be = Ie.length - Re - ze, Ve = {
 		home: "En Casa",
 		away: "Ausente",
 		night: "Noche"
-	}[String(h?.states?.[L.entity_id]?.attributes?.triggered_mode || "").replace(/^armed_/, "")], Ve = q.some((e) => !e.isBypassed && !ue.includes(e.id) && (!h?.states?.[e.id] || [
+	}[String(g?.states?.[L.entity_id]?.attributes?.triggered_mode || "").replace(/^armed_/, "")], He = pe.some((e) => !e.isBypassed && !W.includes(e.id) && (!g?.states?.[e.id] || [
 		"unknown",
 		"unavailable",
 		"offline"
-	].includes(h.states[e.id].state))), He = Oe ? "Armado en espera" : Ce === "triggered" ? "ALARMA ACTIVA" : Ce.startsWith("armed_") && De ? `Armado · ${De}` : Ce === "disarmed" ? "Desarmado" : ["arming", "pending"].includes(Ce) ? "Armado en curso" : "Estado sin verificar", Ue = Y.filter((e) => e.entity_ids?.some((e) => ue.includes(e))).map((e) => e.area || `Zona ${e.number}`), We = [
-		Re ? `Zonas que requieren atención: ${Re}.` : "",
-		ze ? `${ze} zona(s) sin verificar.` : "",
-		Fe.length ? "" : "No hay zonas evaluables en este alcance."
-	].filter(Boolean).join(" "), Ge = e._ui?.emergency_number ? e._normaliseEmergencyNumber?.(e._ui.emergency_number) : "";
+	].includes(g.states[e.id].state))), Ue = ke ? "Armado en espera" : we === "triggered" ? "ALARMA ACTIVA" : we.startsWith("armed_") && Oe ? `Armado · ${Oe}` : we === "disarmed" ? "Desarmado" : ["arming", "pending"].includes(we) ? "Armado en curso" : "Estado sin verificar", We = X.filter((e) => e.entity_ids?.some((e) => W.includes(e))).map((e) => e.area || `Zona ${e.number}`), Ge = [
+		ze ? `Zonas que requieren atención: ${ze}.` : "",
+		Be ? `${Be} zona(s) sin verificar.` : "",
+		Ie.length ? "" : "No hay zonas evaluables en este alcance."
+	].filter(Boolean).join(" "), Ke = e._ui?.emergency_number ? e._normaliseEmergencyNumber?.(e._ui.emergency_number) : "";
 	return /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [/* @__PURE__ */ (0, A.jsx)("style", { dangerouslySetInnerHTML: { __html: Ph + Mh + Nh } }), /* @__PURE__ */ (0, A.jsxs)("div", {
-		"data-entry-index": ee,
-		"data-alert-pulse": J || void 0,
-		className: `entry ${t ? "ios-fullscreen" : ""} ${ie ? "argus-waiting" : ""} ${J ? "argus-alarm-attention" : ""}`,
+		"data-entry-index": te,
+		"data-alert-pulse": me || void 0,
+		className: `entry ${t ? "ios-fullscreen" : ""} ${oe ? "argus-waiting" : ""} ${me ? "argus-alarm-attention" : ""}`,
 		style: {
 			position: "relative",
 			width: "100%",
 			height: "auto"
 		},
 		children: [
-			/* @__PURE__ */ (0, A.jsx)("div", { dangerouslySetInnerHTML: { __html: te } }),
+			/* @__PURE__ */ (0, A.jsx)("div", { dangerouslySetInnerHTML: { __html: ne } }),
 			e._kioskLocked && !t && /* @__PURE__ */ (0, A.jsxs)("button", {
 				className: "btn-unlock-kiosk",
 				onClick: r,
@@ -34589,16 +34631,18 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 				children: ["🔓 ", z("unlock_kiosk") || "Desbloquear kiosco"]
 			}),
 			/* @__PURE__ */ (0, A.jsxs)("div", {
+				ref: m,
 				className: "entry-content security-console",
-				"data-context-expanded": ie || E || ye ? "true" : "false",
-				"data-alarm-state": ie ? "pending" : R,
-				style: ce,
+				"data-context-expanded": oe || O || be ? "true" : "false",
+				"data-alarm-state": oe ? "pending" : R,
+				style: ue,
 				children: [
 					/* @__PURE__ */ (0, A.jsxs)("div", {
 						className: "console-hud",
 						children: [
 							/* @__PURE__ */ (0, A.jsxs)("span", {
 								className: "console-hud-loc",
+								title: re,
 								children: [/* @__PURE__ */ (0, A.jsxs)("svg", {
 									"aria-hidden": "true",
 									viewBox: "0 0 24 24",
@@ -34610,16 +34654,19 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									strokeLinecap: "round",
 									strokeLinejoin: "round",
 									children: [/* @__PURE__ */ (0, A.jsx)("path", { d: "m3 10 9-7 9 7v10H3z" }), /* @__PURE__ */ (0, A.jsx)("path", { d: "M9 20v-7h6v7" })]
-								}), ne]
+								}), /* @__PURE__ */ (0, A.jsx)("span", {
+									className: "console-home-text",
+									children: re
+								})]
 							}),
 							/* @__PURE__ */ (0, A.jsxs)("div", {
 								role: "status",
 								"aria-live": "polite",
 								className: "argus-connection-pill",
-								"data-online": re ? "true" : "false",
+								"data-online": ae ? "true" : "false",
 								children: [/* @__PURE__ */ (0, A.jsx)("i", { className: "argus-connection-dot" }), /* @__PURE__ */ (0, A.jsx)("span", {
 									className: "argus-connection-label",
-									children: re ? "Argus en línea" : "Argus desconectado"
+									children: ae ? "Argus en línea" : "Argus desconectado"
 								})]
 							}),
 							/* @__PURE__ */ (0, A.jsxs)("div", {
@@ -34676,24 +34723,24 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 						]
 					}),
 					/* @__PURE__ */ (0, A.jsx)("div", {
-						className: `entry-icon ${H ? "sos-core-active" : ""}`,
+						className: `entry-icon ${ie ? "sos-core-active" : ""}`,
 						children: /* @__PURE__ */ (0, A.jsx)("div", {
 							className: "console-emblem-viewport",
 							children: /* @__PURE__ */ (0, A.jsx)(jh, {
-								state: ie ? "pending" : R,
-								label: se(),
+								state: oe ? "pending" : R,
+								label: le(),
 								variant: e._getProfileShieldStyle?.() || "core",
-								pulse: V ? "sos" : J,
-								pulseKey: me,
-								zones: he,
-								zonesEnabled: Y.length > 0,
-								onSelectZone: ve
+								pulse: V ? "sos" : me,
+								pulseKey: Y,
+								zones: ge,
+								zonesEnabled: X.length > 0,
+								onSelectZone: ye
 							})
 						})
 					}),
 					/* @__PURE__ */ (0, A.jsxs)("nav", {
 						"aria-label": "Modos de seguridad y emergencia",
-						className: `liquid-stack console-modes-vertical ${W ? "sos-modes-locked" : ""}`,
+						className: `liquid-stack console-modes-vertical ${ce ? "sos-modes-locked" : ""}`,
 						children: [
 							/* @__PURE__ */ (0, A.jsx)("span", {
 								className: "console-nav-caption",
@@ -34702,9 +34749,9 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							/* @__PURE__ */ (0, A.jsxs)("button", {
 								type: "button",
 								"aria-pressed": R === "armed_home",
-								disabled: W,
-								className: `liquid-btn btn-home ${R === "armed_home" ? "active" : U && ae === "armed_home" ? "mode-requested" : ""}`,
-								onClick: () => u.handleAction(ee, "home"),
+								disabled: ce,
+								className: `liquid-btn btn-home ${R === "armed_home" ? "active" : U && se === "armed_home" ? "mode-requested" : ""}`,
+								onClick: () => u.handleAction(te, "home"),
 								children: [/* @__PURE__ */ (0, A.jsx)("span", {
 									className: "console-mode-dot",
 									"aria-hidden": "true"
@@ -34716,9 +34763,9 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							/* @__PURE__ */ (0, A.jsxs)("button", {
 								type: "button",
 								"aria-pressed": R === "armed_away",
-								disabled: W,
-								className: `liquid-btn btn-away ${R === "armed_away" ? "active" : U && ae === "armed_away" ? "mode-requested" : ""}`,
-								onClick: () => u.handleAction(ee, "away"),
+								disabled: ce,
+								className: `liquid-btn btn-away ${R === "armed_away" ? "active" : U && se === "armed_away" ? "mode-requested" : ""}`,
+								onClick: () => u.handleAction(te, "away"),
 								children: [/* @__PURE__ */ (0, A.jsx)("span", {
 									className: "console-mode-dot",
 									"aria-hidden": "true"
@@ -34730,9 +34777,9 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							/* @__PURE__ */ (0, A.jsxs)("button", {
 								type: "button",
 								"aria-pressed": R === "armed_night",
-								disabled: W,
-								className: `liquid-btn btn-night ${R === "armed_night" ? "active" : U && ae === "armed_night" ? "mode-requested" : ""}`,
-								onClick: () => u.handleAction(ee, "night"),
+								disabled: ce,
+								className: `liquid-btn btn-night ${R === "armed_night" ? "active" : U && se === "armed_night" ? "mode-requested" : ""}`,
+								onClick: () => u.handleAction(te, "night"),
 								children: [/* @__PURE__ */ (0, A.jsx)("span", {
 									className: "console-mode-dot",
 									"aria-hidden": "true"
@@ -34763,7 +34810,7 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 										rx: "2"
 									}), /* @__PURE__ */ (0, A.jsx)("path", { d: "M7 11V7a5 5 0 0 1 9.9-1" })]
 								}),
-								onConfirm: () => u.handleAction(ee, "disarm")
+								onConfirm: () => u.handleAction(te, "disarm")
 							}),
 							/* @__PURE__ */ (0, A.jsx)("span", {
 								className: "console-nav-caption console-nav-sos",
@@ -34799,55 +34846,55 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									strokeLinejoin: "round",
 									children: [/* @__PURE__ */ (0, A.jsx)("path", { d: "M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" }), /* @__PURE__ */ (0, A.jsx)("path", { d: "M12 9v4m0 4h.01" })]
 								}),
-								onConfirm: () => V ? e._stopSOS?.(ee) : (e._sosEntryIdx = ee, e._triggerSOS?.())
+								onConfirm: () => V ? e._stopSOS?.(te) : (e._sosEntryIdx = te, e._triggerSOS?.())
 							})
 						]
 					}),
 					/* @__PURE__ */ (0, A.jsxs)(Er, {
-						online: re,
-						focused: E,
-						tone: H ? "alarm" : U || ue.length ? "warning" : "normal",
-						overviewAttention: Me && Re > 0,
-						accent: R.startsWith("armed_") && !H ? ce["--console-accent"] : void 0,
-						indicatorScope: Ae && De ? De : void 0,
-						indicators: Y.length ? [
+						online: ae,
+						focused: O,
+						tone: ie ? "alarm" : U || W.length ? "warning" : "normal",
+						overviewAttention: Ne && ze > 0,
+						accent: R.startsWith("armed_") && !ie ? ue["--console-accent"] : void 0,
+						indicatorScope: je && Oe ? Oe : void 0,
+						indicators: X.length ? [
 							{
 								label: "Zonas",
-								value: Fe.length
+								value: Ie.length
 							},
 							{
 								label: "Listas",
-								value: Le
+								value: Re
 							},
 							{
 								label: "Pendientes",
-								value: Re
+								value: ze
 							}
 						] : void 0,
 						selection: /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [/* @__PURE__ */ (0, A.jsxs)("button", {
-							hidden: E || !Y.length,
-							ref: T,
+							hidden: O || !X.length,
+							ref: E,
 							className: "context-tool context-verify-entry",
-							"data-pending": Re > 0 ? "true" : "false",
+							"data-pending": ze > 0 ? "true" : "false",
 							type: "button",
-							onClick: () => O(!0),
+							onClick: () => k(!0),
 							children: [/* @__PURE__ */ (0, A.jsx)("strong", { children: "Verificar zonas" }), /* @__PURE__ */ (0, A.jsx)("span", { children: "Revisar todas las zonas o una individualmente." })]
 						}), /* @__PURE__ */ (0, A.jsxs)("section", {
-							hidden: !E,
+							hidden: !O,
 							className: "context-verification-dialog",
 							"aria-label": "Verificar zonas",
 							onKeyDown: (e) => {
-								e.key === "Escape" && (e.stopPropagation(), O(!1), requestAnimationFrame(() => T.current?.focus()));
+								e.key === "Escape" && (e.stopPropagation(), k(!1), requestAnimationFrame(() => E.current?.focus()));
 							},
 							children: [
 								/* @__PURE__ */ (0, A.jsxs)("div", {
 									className: "context-heading",
 									children: [/* @__PURE__ */ (0, A.jsx)("strong", { children: "Verificar zonas" }), /* @__PURE__ */ (0, A.jsx)("button", {
-										ref: w,
+										ref: T,
 										type: "button",
 										"aria-label": "Cerrar verificación",
 										onClick: () => {
-											O(!1), requestAnimationFrame(() => T.current?.focus());
+											k(!1), requestAnimationFrame(() => E.current?.focus());
 										},
 										children: "Cerrar"
 									})]
@@ -34859,36 +34906,36 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									"aria-label": "Zona contextual",
 									children: /* @__PURE__ */ (0, A.jsxs)("div", { children: [/* @__PURE__ */ (0, A.jsx)("button", {
 										type: "button",
-										"aria-pressed": !v,
-										onClick: () => ve(null),
+										"aria-pressed": !y,
+										onClick: () => ye(null),
 										children: "Todas las zonas"
-									}), he.map((e) => /* @__PURE__ */ (0, A.jsxs)("button", {
+									}), ge.map((e) => /* @__PURE__ */ (0, A.jsxs)("button", {
 										type: "button",
-										"aria-pressed": v === e.id,
-										onClick: () => ve(e.id),
+										"aria-pressed": y === e.id,
+										onClick: () => ye(e.id),
 										children: [e.name, e.area ? " · " + e.area : ""]
 									}, e.id))] })
 								}),
 								/* @__PURE__ */ (0, A.jsx)("p", {
 									role: "status",
-									children: ye ? ye.area || he.find((e) => e.id === v)?.name : "Todas las zonas"
+									children: be ? be.area || ge.find((e) => e.id === y)?.name : "Todas las zonas"
 								}),
 								/* @__PURE__ */ (0, A.jsxs)("div", {
 									className: "context-tools context-verification",
 									children: [/* @__PURE__ */ (0, A.jsxs)("button", {
 										className: "context-tool",
 										type: "button",
-										"aria-pressed": M,
+										"aria-pressed": N,
 										onClick: () => {
-											j(!1), N(!0);
+											M(!1), P(!0);
 										},
 										children: [/* @__PURE__ */ (0, A.jsx)("strong", { children: "Diagnóstico automático" }), /* @__PURE__ */ (0, A.jsx)("span", { children: "Consultar en Home Assistant si los sensores están abiertos o cerrados, disponibles y su batería." })]
 									}), e._isAdmin && /* @__PURE__ */ (0, A.jsxs)("button", {
 										className: "context-tool",
 										type: "button",
-										"aria-pressed": k,
+										"aria-pressed": j,
 										onClick: () => {
-											N(!1), j(!0);
+											P(!1), M(!0);
 										},
 										children: [/* @__PURE__ */ (0, A.jsx)("strong", { children: "Prueba física" }), /* @__PURE__ */ (0, A.jsx)("span", { children: "Abre y cierra contactos o activa detectores siguiendo una sesión guiada o libre." })]
 									})]
@@ -34896,101 +34943,101 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 								/* @__PURE__ */ (0, A.jsx)(Tr, {
 									panel: e,
 									entryId: L.entry_id,
-									zones: Y,
-									zone: ye,
-									online: re,
-									states: h?.states,
-									canStart: Ce === "disarmed" && !H && !U,
-									visible: E,
-									diagnostic: M,
-									choose: k
+									zones: X,
+									zone: be,
+									online: ae,
+									states: g?.states,
+									canStart: we === "disarmed" && !ie && !U,
+									visible: O,
+									diagnostic: N,
+									choose: j
 								}, L.entry_id)
 							]
 						})] }),
 						navigation: /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [
-							_e && /* @__PURE__ */ (0, A.jsx)("button", {
+							ve && /* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
 								onClick: () => void e._stopWalkTest(),
 								children: "Finalizar prueba"
 							}),
-							(V || B) && Ge && /* @__PURE__ */ (0, A.jsxs)("div", {
+							(V || B) && Ke && /* @__PURE__ */ (0, A.jsxs)("div", {
 								className: "context-tools",
-								children: [/* @__PURE__ */ (0, A.jsx)("small", { children: "Llamada de emergencia" }), S ? /* @__PURE__ */ (0, A.jsxs)("div", {
+								children: [/* @__PURE__ */ (0, A.jsx)("small", { children: "Llamada de emergencia" }), C ? /* @__PURE__ */ (0, A.jsxs)("div", {
 									className: "context-call",
 									role: "group",
 									"aria-label": "Confirmación de llamada",
 									onKeyDown: (e) => {
-										e.key === "Escape" && (e.stopPropagation(), C(!1), requestAnimationFrame(() => b.current?.focus()));
+										e.key === "Escape" && (e.stopPropagation(), w(!1), requestAnimationFrame(() => x.current?.focus()));
 									},
 									children: [
 										/* @__PURE__ */ (0, A.jsxs)("span", { children: [
 											"¿Llamar al ",
-											Ge,
+											Ke,
 											"?"
 										] }),
 										/* @__PURE__ */ (0, A.jsx)("button", {
-											ref: x,
+											ref: S,
 											type: "button",
 											onClick: () => {
-												C(!1), requestAnimationFrame(() => b.current?.focus());
+												w(!1), requestAnimationFrame(() => x.current?.focus());
 											},
 											children: "Ahora no"
 										}),
 										/* @__PURE__ */ (0, A.jsx)("a", {
-											href: `tel:${Ge}`,
-											onClick: () => C(!1),
+											href: `tel:${Ke}`,
+											onClick: () => w(!1),
 											children: "Llamar"
 										})
 									]
 								}) : /* @__PURE__ */ (0, A.jsx)("button", {
-									ref: b,
+									ref: x,
 									type: "button",
-									onClick: () => C(!0),
+									onClick: () => w(!0),
 									children: "Llamar"
 								})]
 							}),
-							ye && /* @__PURE__ */ (0, A.jsx)("button", {
+							be && /* @__PURE__ */ (0, A.jsx)("button", {
 								className: "context-back",
 								type: "button",
 								onClick: () => {
-									y(null), N(!1), j(!1), F(!1);
+									b(null), P(!1), M(!1), I(!1);
 								},
 								children: "← Estado"
 							}),
-							M && !ye && /* @__PURE__ */ (0, A.jsx)("button", {
+							N && !be && /* @__PURE__ */ (0, A.jsx)("button", {
 								className: "context-back",
 								type: "button",
-								onClick: () => N(!1),
+								onClick: () => P(!1),
 								children: "← Estado"
 							}),
-							B && (ye || _e || M) && /* @__PURE__ */ (0, A.jsx)("button", {
+							B && (be || ve || N) && /* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
-								onClick: () => F(!P),
-								children: P ? "Volver a la zona" : "Alarma activa · Ver incidente"
+								onClick: () => I(!F),
+								children: F ? "Volver a la zona" : "Alarma activa · Ver incidente"
 							})
 						] }),
-						title: V ? "SOS / PÁNICO ACTIVO" : B && (!(ye || _e || M) || P) ? "ALARMA ACTIVA" : He,
-						detail: V ? `Sistema de seguridad: ${He}.` : B && (!(ye || _e || M) || P) ? [
-							Be && `Modo: ${Be}`,
-							be?.area || be?.name,
-							xe?.attributes?.friendly_name || X
-						].filter(Boolean).join(" · ") : Ce === R ? U ? [oe && `Modo solicitado: ${oe}.`, ie && `Condiciones pendientes: ${K.length}.`].filter(Boolean).join(" ") : R.startsWith("armed_") ? [
-							Ve && "Protección degradada: sensor sin conexión.",
-							ue.length && `Protección parcial: ${ue.length} sensor(es) omitido(s)${Ue.length ? " · " + Ue.join(", ") : ""}.`,
-							We
-						].filter(Boolean).join(" ") : Me && Y.length ? We : void 0 : "Esperando confirmación del servidor.",
-						view: ye && !P ? ye.area || he.find((e) => e.id === v)?.name : _e && !P ? `Modo de prueba · ${ge.tested_count || 0} de ${ge.total_sensors || 0} verificados` : M && !P ? "Diagnóstico de sensores" : void 0,
+						title: V ? "SOS / PÁNICO ACTIVO" : B && (!(be || ve || N) || F) ? "ALARMA ACTIVA" : Ue,
+						detail: V ? `Sistema de seguridad: ${Ue}.` : B && (!(be || ve || N) || F) ? [
+							Ve && `Modo: ${Ve}`,
+							xe?.area || xe?.name,
+							Se?.attributes?.friendly_name || he
+						].filter(Boolean).join(" · ") : we === R ? U ? [H && `Modo solicitado: ${H}.`, oe && `Condiciones pendientes: ${fe.length}.`].filter(Boolean).join(" ") : R.startsWith("armed_") ? [
+							He && "Protección degradada: sensor sin conexión.",
+							W.length && `Protección parcial: ${W.length} sensor(es) omitido(s)${We.length ? " · " + We.join(", ") : ""}.`,
+							Ge
+						].filter(Boolean).join(" ") : Ne && X.length ? Ge : void 0 : "Esperando confirmación del servidor.",
+						view: be && !F ? be.area || ge.find((e) => e.id === y)?.name : ve && !F ? `Modo de prueba · ${_e.tested_count || 0} de ${_e.total_sensors || 0} verificados` : N && !F ? "Diagnóstico de sensores" : void 0,
 						children: [
 							c && /* @__PURE__ */ (0, A.jsx)("small", {
 								role: "alert",
 								children: c
 							}),
-							ye && !_e && !P && /* @__PURE__ */ (0, A.jsxs)("div", {
+							be && !ve && !F && /* @__PURE__ */ (0, A.jsxs)("div", {
 								className: "context-sensor-row",
 								children: [
-									/* @__PURE__ */ (0, A.jsx)("small", { children: Ie === "ready" ? "Zona lista" : Ie === "pending" ? "Zona pendiente" : Ie === "notApplicable" ? "No aplica a este modo" : "Zona sin verificar" }),
-									!ye.entity_ids?.length && /* @__PURE__ */ (0, A.jsx)("small", { children: "Sin sensores configurados." }),
-									!ye.entity_ids?.length && e._isAdmin && /* @__PURE__ */ (0, A.jsx)("button", {
+									/* @__PURE__ */ (0, A.jsx)("small", { children: Le === "ready" ? "Zona lista" : Le === "pending" ? "Zona pendiente" : Le === "notApplicable" ? "No aplica a este modo" : "Zona sin verificar" }),
+									!be.entity_ids?.length && /* @__PURE__ */ (0, A.jsx)("small", { children: "Sin sensores configurados." }),
+									!be.entity_ids?.length && e._isAdmin && /* @__PURE__ */ (0, A.jsx)("button", {
 										className: "context-back",
 										type: "button",
 										onClick: () => {
@@ -35001,30 +35048,30 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									})
 								]
 							}),
-							M && !P && !H ? null : _e && !P && !V ? (ge.all_sensors || []).filter((e) => !ye || ye.entity_ids?.includes(e)).map((e) => {
-								let t = Object.values(ge.tested_sensors || {}).some((t) => t === e || t.entity_id === e);
+							N && !F && !ie ? null : ve && !F && !V ? (_e.all_sensors || []).filter((e) => !be || be.entity_ids?.includes(e)).map((e) => {
+								let t = Object.values(_e.tested_sensors || {}).some((t) => t === e || t.entity_id === e);
 								return /* @__PURE__ */ (0, A.jsxs)("div", {
 									className: "context-sensor-row",
 									children: [
 										t ? "✓" : "○",
 										" ",
-										h?.states?.[e]?.attributes?.friendly_name || e
+										g?.states?.[e]?.attributes?.friendly_name || e
 									]
 								}, e);
-							}) : (ye && !(B && P) ? (ye.entity_ids || []).map((e) => q.find((t) => t.id === e) || { id: e }) : M && !U && !B || R === "disarmed" && !U ? Array.from(new Set(Y.flatMap((e) => e.entity_ids || []).concat(q.map((e) => e.id)))).map((e) => q.find((t) => t.id === e) || { id: e }) : Y.length && !ye && ie ? [] : ie ? K.map((e) => ({ id: e })) : q).map((t) => {
-								let n = String(t.id || "").trim(), r = Ne(n), i = String(t.name || r?.attributes?.friendly_name || n), a = String(r?.attributes?.device_class || ""), s = !a && !n.startsWith("lock.") ? "generic" : Fh(n, a), c = s === "lock", l = ie && K.includes(n), d = vr(r), f = d !== "available", p = String(r?.state || "").toLowerCase(), m = a === "timestamp", g = m ? "Dato informativo" : p, _ = m && !f ? br(r.state, h?.language || "es", h?.config?.time_zone) : null, v = !f && u.isSensorActive(r), y = e._getSensorBattery?.(n, r) ?? null, b = Object.entries(we).filter(([e]) => {
-									let t = Te[e];
+							}) : (be && !(B && F) ? (be.entity_ids || []).map((e) => pe.find((t) => t.id === e) || { id: e }) : N && !U && !B || R === "disarmed" && !U ? Array.from(new Set(X.flatMap((e) => e.entity_ids || []).concat(pe.map((e) => e.id)))).map((e) => pe.find((t) => t.id === e) || { id: e }) : X.length && !be && oe ? [] : oe ? fe.map((e) => ({ id: e })) : pe).map((t) => {
+								let n = String(t.id || "").trim(), r = Pe(n), i = String(t.name || r?.attributes?.friendly_name || n), a = String(r?.attributes?.device_class || ""), s = !a && !n.startsWith("lock.") ? "generic" : Fh(n, a), c = s === "lock", l = oe && fe.includes(n), d = vr(r), f = d !== "available", p = String(r?.state || "").toLowerCase(), m = a === "timestamp", h = m ? "Dato informativo" : p, _ = m && !f ? br(r.state, g?.language || "es", g?.config?.time_zone) : null, v = !f && u.isSensorActive(r), y = e._getSensorBattery?.(n, r) ?? null, b = Object.entries(Te).filter(([e]) => {
+									let t = Ee[e];
 									return t?.sensors?.includes(n) && !(t.bypassed_sensors || t.bypassedSensors || []).includes(n);
-								}).map(([, e]) => e), x, S = fe?.sensor_settings?.[t.id] || fe?.sensor_settings?.[n];
-								S ? S.type === "instant" || S.delay === 0 ? x = 0 : S.delay !== void 0 && S.delay !== null && (x = Number(S.delay)) : ((fe?.entry_sensors || []).includes(t.id) || (fe?.entry_sensors || []).includes(n)) && (x = fe?.entry_delay !== void 0 && fe?.entry_delay !== null ? Number(fe.entry_delay) : void 0);
-								let C = ue.includes(n), w = l && G.includes(n) && e._isAdmin && L.entry_id, T = C && R.startsWith("armed_") && e._isAdmin && L.entry_id, E = !f && [
+								}).map(([, e]) => e), x, S = q?.sensor_settings?.[t.id] || q?.sensor_settings?.[n];
+								S ? S.type === "instant" || S.delay === 0 ? x = 0 : S.delay !== void 0 && S.delay !== null && (x = Number(S.delay)) : ((q?.entry_sensors || []).includes(t.id) || (q?.entry_sensors || []).includes(n)) && (x = q?.entry_delay !== void 0 && q?.entry_delay !== null ? Number(q.entry_delay) : void 0);
+								let C = W.includes(n), w = l && K.includes(n) && e._isAdmin && L.entry_id, T = C && R.startsWith("armed_") && e._isAdmin && L.entry_id, E = !f && [
 									"off",
 									"closed",
 									"locked",
 									"clear",
 									"idle"
 								].includes(p);
-								return (!ye || P) && (ie && !l || !ie && !M && !C && !v && !f && !t.isBypassed && !(y !== null && y <= 20)) ? null : /* @__PURE__ */ (0, A.jsxs)("div", {
+								return (!be || F) && (oe && !l || !oe && !N && !C && !v && !f && !t.isBypassed && !(y !== null && y <= 20)) ? null : /* @__PURE__ */ (0, A.jsxs)("div", {
 									className: "context-sensor-row",
 									children: [
 										/* @__PURE__ */ (0, A.jsx)(Bh, {
@@ -35038,13 +35085,13 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 											battery: y,
 											delay: x,
 											iconHtml: e._getSensorIcon?.(r, t) || "",
-											statusLabelOpen: s === "motion" ? "Detección activa" : s === "generic" ? g : z("status_open"),
-											statusLabelClosed: s === "motion" ? "Sin detección" : s === "generic" ? g : z("status_closed"),
+											statusLabelOpen: s === "motion" ? "Detección activa" : s === "generic" ? h : z("status_open"),
+											statusLabelClosed: s === "motion" ? "Sin detección" : s === "generic" ? h : z("status_closed"),
 											bypassedLabel: z("bypassed_sensor") || "OMITIDO",
 											isLockLike: c,
 											visualType: s
 										}, t.id),
-										(ye || M) && /* @__PURE__ */ (0, A.jsx)("small", { children: [
+										(be || N) && /* @__PURE__ */ (0, A.jsx)("small", { children: [
 											m ? "Fecha y hora" : a || n.split(".")[0],
 											_,
 											d === "available" ? "Disponible" : d === "offline" ? "Revisar conexión" : "Sin datos verificables",
@@ -35052,20 +35099,20 @@ function Yh({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 											b.length > 0 && b.join(", "),
 											l && "Bloqueo confirmado del armado"
 										].filter(Boolean).join(" · ") }),
-										l && /* @__PURE__ */ (0, A.jsx)("small", { children: [Y.find((e) => e.entity_ids?.includes(n))?.area, f ? "Bloqueo por falta de conexión o datos" : "Bloqueo por sensor abierto o activo"].filter(Boolean).join(" · ") }),
+										l && /* @__PURE__ */ (0, A.jsx)("small", { children: [X.find((e) => e.entity_ids?.includes(n))?.area, f ? "Bloqueo por falta de conexión o datos" : "Bloqueo por sensor abierto o activo"].filter(Boolean).join(" · ") }),
 										C && E && /* @__PURE__ */ (0, A.jsx)("small", { children: "Sensor recuperado. Sigue omitido en este armado." }),
 										w && /* @__PURE__ */ (0, A.jsx)("button", {
 											className: "context-primary",
 											type: "button",
 											disabled: o,
-											onClick: () => void de(n, i, !0),
+											onClick: () => void G(n, i, !0),
 											children: "Omitir por este armado"
 										}),
 										T && /* @__PURE__ */ (0, A.jsx)("button", {
 											className: "context-primary",
 											type: "button",
 											disabled: !E || o,
-											onClick: () => void de(n, i, !1),
+											onClick: () => void G(n, i, !1),
 											children: E ? "Reincorporar al armado" : "Esperando que el sensor vuelva a estado normal"
 										})
 									]
@@ -35652,7 +35699,7 @@ function _g(e) {
 		return;
 	}
 	let s = e.shadowRoot.getElementById("argus-react-dashboard-style");
-	s || (s = document.createElement("style"), s.id = "argus-react-dashboard-style", s.textContent = le + ue + de + "#argus-dashboard-root-v3{display:block;width:100%;min-width:0;contain:layout style;}#argus-dashboard-root-v3>.argus-dashboard{width:100%;min-width:0;}", e.shadowRoot.appendChild(s));
+	s || (s = document.createElement("style"), s.id = "argus-react-dashboard-style", s.textContent = ue + de + W + "#argus-dashboard-root-v3{display:block;width:100%;min-width:0;contain:layout style;}#argus-dashboard-root-v3>.argus-dashboard{width:100%;min-width:0;}", e.shadowRoot.appendChild(s));
 	let c = (0, O.createRoot)(o);
 	e._argusReactRoot = c, c.render(/* @__PURE__ */ (0, A.jsx)(_r, {
 		widgets: r,

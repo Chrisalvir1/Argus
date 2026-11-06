@@ -1,3 +1,12 @@
+## [3.0.5] - 2026-11-06
+
+- Medir el espacio visible de la consola vertical para adaptar únicamente el núcleo, manteniendo los tamaños de modos, SOS y controles.
+- Corregir la prioridad de estilos y usar la orientación del viewport para dimensionar el núcleo.
+- Reorganizar hogar/estado/salida en móviles estrechos para evitar solapamientos y mantener nombres legibles.
+- Mejorar las zonas SVG con etiquetas mayores, nombres accesibles y selección táctil/teclado.
+- Quitar el fondo rectangular del panel contextual.
+- TypeScript, build y 69 pruebas frontend pasan. Verificación visual física pendiente en iPhone y Echo Show.
+
 ## [3.0.4] - 2026-11-06
 
 - Mostrar sensores heredados de todos los modos directamente en el selector de zona; quitar sensores conserva el contexto del editor.
