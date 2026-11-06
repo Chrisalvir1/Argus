@@ -59,7 +59,7 @@ _VOICE_FIELDS = (
     CONF_ARMING_VOICE_MESSAGE_ARMED,
     CONF_ARMING_VOICE_MESSAGE_CANCELLED, CONF_ARMING_VOICE_MESSAGE_TRIGGERED,
     CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,
-    CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED,
+    CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED, "arming_voice_message_disarmed",
 )
 _MAX_UPLOAD_BYTES = 50 * 1024 * 1024
 _ALLOWED_MEDIA_EXTENSIONS = {
@@ -482,7 +482,7 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
             "entity_id": entity_id,
             "state": state.state if state else "unavailable",
             "attributes": dict(state.attributes) if state else {},
-            "pin_configured": bool(entry.options.get("code") or entry.data.get("code")),
+            "pin_configured": bool(entry.options.get("code", entry.data.get("code", ""))),
             "user_pin_configured": has_user_disarm_pin,
         })
     try:
@@ -711,7 +711,7 @@ async def ws_argus_validate_master_pin(hass, connection, msg) -> None:
     if limiter.is_blocked(key):
         connection.send_error(msg["id"], "rate_limited", "Too many failed attempts; try again later")
         return
-    current = entry.options.get("code") or entry.data.get("code") or ""
+    current = entry.options.get("code", entry.data.get("code", ""))
     if not current:
         connection.send_result(msg["id"], {"valid": True, "pin_configured": False})
         return
@@ -746,7 +746,7 @@ async def ws_argus_export_config(hass, connection, msg) -> None:
     entry = hass.config_entries.async_get_entry(entry_id)
     master_pin_hash = ""
     if entry:
-        master_pin_hash = entry.options.get("code") or entry.data.get("code") or ""
+        master_pin_hash = entry.options.get("code", entry.data.get("code", ""))
     config["_argus_backup"] = {"version": 1, "master_pin_hash": master_pin_hash}
     connection.send_result(msg["id"], {"config": config})
 
@@ -928,8 +928,10 @@ async def ws_argus_get_zones(hass, connection, msg) -> None:
     device_reg = dr.async_get(hass)
     devices = [{"device_id": device.id, "name": device.name or device.id, "area_id": device.area_id}
                for device in device_reg.devices]
+    zone_data = await async_load_ui_data(hass, entry_id)
     connection.send_result(msg["id"], {
-        "zones": (await async_load_ui_data(hass, entry_id)).get("zones", []),
+        "zones": zone_data.get("zones", []) if zone_data.get("zones_enabled") else zone_data.get("zones_saved", []),
+        "zones_enabled": zone_data.get("zones_enabled", False),
         "available_entities": _serialize_available_entities(hass),
         "available_devices": devices,
     })
@@ -937,20 +939,28 @@ async def ws_argus_get_zones(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_zones", vol.Optional("entry_id"): str,
-    vol.Required("zones"): list,
+    vol.Required("zones"): list, vol.Optional("zones_enabled"): bool,
 })
 @websocket_api.async_response
 async def ws_argus_save_zones(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     try:
         profile, _ = await _require_argus_admin(hass, connection, entry_id)
-        from .zones import project_zone_modes, sanitize_zones
+        from .zones import zone_activation_updates, sanitize_zones
         entity_ids = {item["entity_id"] for item in _serialize_available_entities(hass)}
         device_ids = {device.id for device in dr.async_get(hass).devices}
         zones = sanitize_zones(msg["zones"], entity_ids, device_ids)
         current = await async_load_ui_data(hass, entry_id)
-        modes = project_zone_modes(current.get("modes", {}), current.get("zones", []), zones)
-        saved = await async_save_ui_data(hass, {"zones": zones, "zones_initialized": True, "modes": modes}, entry_id)
+        enabled = msg.get("zones_enabled", current.get("zones_enabled", False))
+        if enabled != current.get("zones_enabled", False):
+            # Reject policy changes unless every Argus panel is confirmed disarmed.
+            panels = [state for state in hass.states.async_all("alarm_control_panel")
+                      if (er.async_get(hass).async_get(state.entity_id) is not None
+                          and er.async_get(hass).async_get(state.entity_id).config_entry_id == entry_id)]
+            if not panels or any(state.state != "disarmed" or state.attributes.get("argus_panic_active") for state in panels):
+                raise ValueError("Desarma Argus y detén SOS antes de cambiar Activar zonas.")
+        updates = zone_activation_updates(current, zones, enabled)
+        saved = await async_save_ui_data(hass, updates, entry_id)
     except (ArgusAuthError, ValueError) as err:
         if isinstance(err, ArgusAuthError):
             connection.send_error(msg["id"], err.code, err.message)
@@ -963,7 +973,7 @@ async def ws_argus_save_zones(hass, connection, msg) -> None:
         return
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     await async_append_audit_log(hass, "zones_updated", user=profile.get("name", "Unknown"), entry_id=entry_id)
-    connection.send_result(msg["id"], {"success": True, "zones": saved.get("zones", []), "modes": saved.get("modes", {})})
+    connection.send_result(msg["id"], {"success": True, "zones": saved.get("zones", []) if enabled else saved.get("zones_saved", []), "zones_enabled": enabled, "modes": saved.get("modes", {})})
 
 
 @websocket_api.websocket_command({
@@ -1012,13 +1022,14 @@ async def ws_argus_get_voice_config(hass, connection, msg) -> None:
         CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED: "msg_alarm_sensor_closed",
     }
     default_messages = {field: translate(language, key) for field, key in default_message_keys.items()}
+    default_messages["arming_voice_message_disarmed"] = "Argus de seguridad desarmado." if language == "es" else "Argus security disarmed."
     mode = msg.get("mode", "")
     assigned_zones = []
-    if mode in {"disarmed", "home", "away", "night"}:
+    if mode in {"", "disarmed", "home", "away", "night"}:
         entity_registry = er.async_get(hass)
         for zone in ui_data.get("zones", []):
             zone_modes = zone.get("modes", []) if isinstance(zone, dict) else []
-            if not isinstance(zone_modes, list) or not isinstance(zone, dict) or zone.get("enabled", True) is False or mode not in zone_modes:
+            if not isinstance(zone_modes, list) or not isinstance(zone, dict) or zone.get("enabled", True) is False or (mode and mode not in zone_modes):
                 continue
             sensors = []
             for entity_id in zone.get("entity_ids", []):
@@ -1123,6 +1134,7 @@ async def ws_argus_get_media_players(hass, connection, msg) -> None:
     vol.Required("type"): "argus/update_master_pin",
     vol.Required("entry_id"): str,
     vol.Required("pin"): str,
+    vol.Optional("confirm_pin"): str,
     vol.Optional("current_pin", default=""): str,
 })
 @websocket_api.async_response
@@ -1139,6 +1151,9 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
         connection.send_error(msg["id"], "not_found", "Argus config entry not found")
         return
     new_pin = msg["pin"]
+    if "confirm_pin" in msg and msg["confirm_pin"] != new_pin:
+        connection.send_error(msg["id"], "invalid_pin", "New PIN confirmation does not match")
+        return
     if new_pin and not validate_pin(new_pin):
         connection.send_error(msg["id"], "invalid_pin", "PIN must be 4-12 non-trivial digits")
         return
@@ -1149,7 +1164,7 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
         connection.send_error(msg["id"], "rate_limited", "Too many failed attempts; try again later")
         return
 
-    current = entry.options.get("code") or entry.data.get("code") or ""
+    current = entry.options.get("code", entry.data.get("code", ""))
     if current and not verify_pin(msg.get("current_pin", ""), current):
         blocked = limiter.record_failure(key)
         await async_append_audit_log(
@@ -1200,7 +1215,7 @@ async def ws_argus_verify_master_pin_for_screen_unlock(hass, connection, msg) ->
         connection.send_error(msg["id"], "rate_limited", "Too many failed attempts; try again later")
         return
 
-    current = entry.options.get("code") or entry.data.get("code") or ""
+    current = entry.options.get("code", entry.data.get("code", ""))
     if not current:
         connection.send_error(msg["id"], "no_master_pin_configured", "Master PIN not configured")
         return
@@ -1631,7 +1646,7 @@ async def ws_argus_perform_alarm_action(hass, connection, msg) -> None:
             if panel is None:
                 connection.send_error(msg["id"], "not_found", "Alarm entity not found")
                 return
-            await panel.async_stop_panic()
+            await panel.async_stop_panic(code=msg.get("code"), context=ctx)
         else:
             await hass.services.async_call(
                 "alarm_control_panel", service, service_data, blocking=True, context=ctx

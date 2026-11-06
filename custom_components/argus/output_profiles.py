@@ -20,7 +20,7 @@ from .storage import async_save_ui_data
 
 _LOGGER = logging.getLogger(__name__)
 _ALLOWED_OUTPUT_DOMAINS = {"alarm_control_panel", "fan", "input_boolean", "light", "script", "siren", "switch"}
-_FLASH_MODES = {"none", "gentle", "rapid"}
+_FLASH_MODES = {"none", "gentle", "rapid", "breathing"}
 _COLOR_MODES = {"hs", "xy", "rgb", "rgbw", "rgbww"}
 _NATIVE_EFFECT_NAMES = {"flash", "slow flash", "slow_flash", "blink", "strobe", "police"}
 
@@ -103,17 +103,29 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, st
     data: dict[str, Any] = {"entity_id": entity_id}
 
     rgb = _normalise_rgb(settings.get("rgb_color"))
-    has_color = bool(rgb and (supported_modes.intersection(_COLOR_MODES) or not supported_modes))
+    has_color = bool(rgb and supported_modes.intersection(_COLOR_MODES))
 
     if has_color:
         # Exact RGB requested by user
         data["rgb_color"] = rgb
+        # Explicitly stop a prior native effect only with a neutral effect the
+        # device actually advertises. Its original effect stays in the snapshot.
+        neutral = next((effect for effect in (attrs.get("effect_list") or [])
+                        if str(effect).lower() == "none"), None)
+        if neutral is not None:
+            data["effect"] = neutral
         if supports_brightness:
             data["brightness_pct"] = 100
     elif supports_brightness:
         data["brightness_pct"] = 100
 
     flash_mode = str(settings.get("flash_mode") or ("gentle" if settings.get("gentle_flash") else "none"))
+    if flash_mode == "breathing":
+        # HA LightEntityFeature.TRANSITION = 32; never invent native effects.
+        if supports_brightness and int(attrs.get("supported_features") or 0) & 32:
+            data["transition"] = 1.2
+            return data, "brightness_pulse", 1.5
+        return data, "steady_safe", 0.0
     if flash_mode == "none":
         return data, "steady", 0.0
 
@@ -157,6 +169,8 @@ def _capture_light_state(hass: HomeAssistant, entity_id: str) -> dict[str, Any] 
         service_data["hs_color"] = list(attrs["hs_color"])
     elif color_mode == "xy" and isinstance(attrs.get("xy_color"), (list, tuple)):
         service_data["xy_color"] = list(attrs["xy_color"])
+    elif color_mode in {"rgbw", "rgbww"} and isinstance(attrs.get(f"{color_mode}_color"), (list, tuple)):
+        service_data[f"{color_mode}_color"] = list(attrs[f"{color_mode}_color"])
     elif color_mode in {"rgb", "rgbw", "rgbww"} and _normalise_rgb(attrs.get("rgb_color")):
         service_data["rgb_color"] = _normalise_rgb(attrs.get("rgb_color"))
     elif color_mode == "color_temp":
@@ -172,8 +186,6 @@ def _capture_light_state(hass: HomeAssistant, entity_id: str) -> dict[str, Any] 
         service_data["rgb_color"] = _normalise_rgb(attrs.get("rgb_color"))
     elif "color_temp" in modes and isinstance(attrs.get("color_temp_kelvin"), (int, float)):
         service_data["color_temp_kelvin"] = int(attrs["color_temp_kelvin"])
-    elif modes.intersection(_COLOR_MODES):
-        service_data["rgb_color"] = [255, 255, 255]
 
     effect = attrs.get("effect")
     effect_names = [str(item) for item in (attrs.get("effect_list") or [])]
@@ -191,6 +203,9 @@ async def _restore_light_state(hass: HomeAssistant, entity_id: str, snapshot: di
         return
     data = copy.deepcopy(snapshot.get("service_data") or {"entity_id": entity_id})
     data["entity_id"] = entity_id
+    state = hass.states.get(entity_id)
+    if state and int(state.attributes.get("supported_features") or 0) & 32:
+        data["transition"] = 0
     if len(data) > 1:
         await hass.services.async_call("light", "turn_on", data, blocking=True)
     if snapshot.get("was_on"):
@@ -285,6 +300,7 @@ async def _async_dispatch_with_output_profiles(self, activate: bool, sirens) -> 
             task = tasks.pop(entity_id, None)
             if task:
                 task.cancel()
+                await asyncio.gather(task, return_exceptions=True)
             domain = entity_id.split(".", 1)[0]
             try:
                 if domain == "light":
@@ -316,7 +332,16 @@ async def _async_dispatch_with_output_profiles(self, activate: bool, sirens) -> 
                     await self.hass.services.async_call("light", "turn_on", data, blocking=False)
                 continue
             service = "alarm_trigger" if domain == "alarm_control_panel" else "turn_on"
-            await self.hass.services.async_call(domain, service, {"entity_id": entity_id}, blocking=False)
+            output_data = {"entity_id": entity_id}
+            if domain == "siren":
+                mode_cfg = self._mode_config(self._triggered_mode) if self._triggered_mode else {}
+                tone = (mode_cfg.get("siren_settings") or {}).get(entity_id, {}).get("tone")
+                state = self.hass.states.get(entity_id)
+                tones = state.attributes.get("available_tones", []) if state else []
+                matching = [value for value in tones if tone is not None and str(value) == str(tone)]
+                if matching:
+                    output_data["tone"] = matching[0]
+            await self.hass.services.async_call(domain, service, output_data, blocking=False)
         except Exception as err:
             _LOGGER.warning("Argus output call failed for %s: %s", entity_id, err)
             try:

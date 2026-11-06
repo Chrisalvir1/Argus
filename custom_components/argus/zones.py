@@ -165,3 +165,68 @@ def project_zone_modes(modes: dict, previous: list[dict], zones: list[dict]) -> 
         sos_config["sensor_settings"] = sos_settings
         sos_config["bypassed_sensors"] = [sensor for sensor in sos_config.get("bypassed_sensors", []) if sensor not in managed]
     return projected
+
+
+def zone_activation_updates(current: dict, zones: list[dict], enabled: bool) -> dict:
+    """Keep inactive definitions separate from effective security assignments."""
+    import copy
+
+    if enabled and not zones:
+        zones = default_zones()
+    was_enabled = current.get("zones_enabled", False)
+    modes = current.get("modes", {})
+    updates = {"zones_enabled": enabled, "zones_initialized": True,
+               "zones_saved": copy.deepcopy(zones), "zones": zones if enabled else []}
+    if enabled:
+        if not was_enabled:
+            updates["zones_legacy_modes"] = copy.deepcopy(modes)
+        updates["modes"] = project_zone_modes(modes, current.get("zones", []), zones)
+    elif was_enabled:
+        restored = project_zone_modes(modes, current.get("zones", []), [])
+        baseline = current.get("zones_legacy_modes", {})
+        # Restore only sensor assignments; other mode settings may have been edited.
+        for key, value in baseline.items():
+            if key == "__by_entity__":
+                for entity_id, scope in value.items():
+                    target = restored.setdefault(key, {}).setdefault(entity_id, {})
+                    _restore_zone_sensor_fields(target, scope)
+            elif isinstance(value, dict):
+                _restore_zone_sensor_fields(restored, {key: value})
+        updates["modes"] = restored
+    else:
+        updates["modes"] = copy.deepcopy(modes)
+    return updates
+
+
+def _restore_zone_sensor_fields(target: dict, source: dict) -> None:
+    import copy
+    for mode, config in source.items():
+        if not isinstance(config, dict):
+            continue
+        dest = target.setdefault(mode, {})
+        for field in ("sensors", "sensor_settings", "bypassed_sensors"):
+            if field in config:
+                dest[field] = copy.deepcopy(config[field])
+            else:
+                dest.pop(field, None)
+
+
+def zone_event_payloads(zones: list[dict], entity_id: str, states) -> list[dict]:
+    """Describe physical states for HA automations, independently of alarm latching."""
+    results = []
+    for zone in zones:
+        sensors = zone.get("entity_ids", [])
+        if not zone.get("enabled", True) or entity_id not in sensors:
+            continue
+        values = {sensor: getattr(states.get(sensor), "state", "unavailable") for sensor in sensors}
+        active = [sensor for sensor, value in values.items() if str(value).lower() in _ACTIVE]
+        unverifiable = [sensor for sensor, value in values.items()
+                        if str(value).lower() not in _ACTIVE | _CLOSED]
+        results.append({"zone_id": zone["id"], "zone_number": zone.get("number"),
+                        "zone_area": zone.get("area", ""), "entity_id": entity_id,
+                        "state": values[entity_id], "sensor_states": values,
+                        "active_sensors": active, "unverifiable_sensors": unverifiable,
+                        "any_sensor_active": bool(active),
+                        "all_sensors_active": bool(sensors) and len(active) == len(sensors),
+                        "all_sensors_closed": bool(sensors) and not active and not unverifiable})
+    return results

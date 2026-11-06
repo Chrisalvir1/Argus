@@ -562,3 +562,13 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+.context-zone-picker { padding: 12px; border: 1px solid rgba(155,190,180,.22); border-radius: 20px; background: rgba(24,35,33,.65); }
+.context-zone-picker button[aria-pressed="true"] { outline: 2px solid var(--context-accent, #54d9b4); outline-offset: -2px; }
+
+.context-verify-entry { width: 100%; box-sizing: border-box; }
+.context-verification-dialog { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; max-height: none; overflow: auto; overscroll-behavior: contain; color: #eef4f5; background: #111e22; border: 1px solid rgba(155,190,180,.3); border-radius: 24px; padding: 20px; }
+.context-verification-dialog[hidden], .context-verify-entry[hidden] { display: none !important; }
+.context-verification-dialog .context-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.context-verification-dialog .context-verification { margin-block: 16px; }
+.context-verification-dialog button:focus-visible { outline: 2px solid #54d9b4; outline-offset: 3px; }

@@ -34,19 +34,26 @@ def physical_test_kind(state):
 def diagnose_sensor(entity_id, state):
     attributes = state.attributes if state else {}
     kind = physical_test_kind(state)
-    battery = attributes.get("battery_level")
+    battery = attributes.get("battery_level", attributes.get("battery"))
     battery = battery if type(battery) in (int, float) and 0 <= battery <= 100 else None
+    battery_low = attributes.get("battery_low")
+    if type(battery_low) is not bool:
+        battery_low = battery is not None and battery <= 20 if battery is not None else None
     if state is None or state.state in {"unknown", "unavailable", "offline"}:
         category = "unverifiable"
-    elif attributes.get("battery_low") is True or (battery is not None and battery <= 20):
+    elif battery_low is True:
         category = "attention"
     elif not entity_id.startswith("binary_sensor."):
         category = "informational"
     else:
         category = "correct"
+    last_changed = getattr(state, "last_changed", None) if state else None
+    last_updated = getattr(state, "last_updated", None) if state else None
     return {"entity_id": entity_id, "category": category, "state": state.state if state else None,
-            "battery": battery, "physical_test_kind": kind,
-            "last_updated": state.last_updated.isoformat() if state else None}
+            "availability": "unavailable" if category == "unverifiable" else "available",
+            "battery": battery, "battery_low": battery_low, "physical_test_kind": kind,
+            "last_changed": last_changed.isoformat() if last_changed else None,
+            "last_updated": last_updated.isoformat() if last_updated else None}
 
 
 class WalkTestSession:

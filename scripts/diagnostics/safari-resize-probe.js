@@ -1,7 +1,7 @@
-// Run in Safari Web Inspector, only in the isolated Argus lab after profile login.
+// Run in Safari Web Inspector on the local Argus instance at 127.0.0.1:8123.
 // No security commands; restores the temporary inline width and disconnects.
 (async () => {
-  if (location.origin !== 'http://127.0.0.1:18127') throw new Error('Isolated lab required');
+  if (location.origin !== 'http://127.0.0.1:8123') throw new Error('Open local Argus at http://127.0.0.1:8123 first');
   const find = root => {
     for (const element of root.querySelectorAll('*')) {
       if (element.localName === 'argus-panel-v2018') return element;

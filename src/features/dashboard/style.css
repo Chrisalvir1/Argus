@@ -85,7 +85,7 @@
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="access-control"] #w-access{height:100%!important;max-height:none!important;min-width:0;min-height:0;overflow:auto!important;padding:clamp(12px,2cqi,24px)!important;overscroll-behavior-y:auto}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="access-control"] #access-workspace{min-width:0;max-width:100%}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #w-modes{display:flex!important;flex-direction:column!important;height:100%!important;max-height:none!important;min-width:0;min-height:0;overflow:hidden!important;padding:clamp(12px,2cqi,24px)!important}
-#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:8px;flex:0 0 auto;min-width:0;margin-bottom:10px!important}
+#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;flex:0 0 auto;min-width:0;margin-bottom:10px!important}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab{min-width:0;min-height:46px;padding:8px;white-space:normal}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-view{flex:1 1 auto;min-width:0;min-height:0;overflow:auto!important;overscroll-behavior-y:auto}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="security-status"] #w-github{height:100%!important;max-height:none!important;min-width:0;min-height:0;overflow:auto!important;padding:clamp(10px,1.7cqi,20px)!important}
@@ -105,14 +105,14 @@
 @media(prefers-reduced-motion:no-preference){.argus-dashboard-grid .react-grid-item:not(.react-draggable-dragging):not(.resizing){transition-timing-function:var(--argus-widget-ease)}}
 @media(prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="activity-history"] #activity-log .log-item{animation:none!important;will-change:auto!important}
-#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs .tab-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:700px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:2px!important;padding:4px!important;min-height:44px!important;margin-bottom:8px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab{min-width:0!important;min-height:36px!important;padding:4px 1px!important;gap:1px!important;border-radius:10px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab .tab-icon{font-size:14px!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab .tab-label{font-size:clamp(8px,2.05vw,10px)!important;letter-spacing:0!important;line-height:1.05!important;white-space:nowrap!important}}
+#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs .tab-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:700px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:2px!important;padding:4px!important;min-height:44px!important;margin-bottom:8px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab{min-width:0!important;min-height:36px!important;padding:4px 1px!important;gap:1px!important;border-radius:10px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab .tab-icon{font-size:14px!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab .tab-label{font-size:clamp(8px,2.05vw,10px)!important;letter-spacing:0!important;line-height:1.05!important;white-space:nowrap!important}}
 
 /* Every dashboard panel follows its widget's own width, including when users
    resize or freely position cards on a wide screen. */
 #argus-dashboard-root-v3 .argus-widget__content,
 #argus-dashboard-root-v3 .argus-widget__content>.panel{min-width:0!important;max-width:100%!important}
 #argus-dashboard-root-v3 .argus-widget__content>.panel :where(h1,h2,h3,h4,p,small,label,button,a,input,select,textarea){box-sizing:border-box;min-width:0;max-width:100%}
-#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:clamp(1px,.65cqi,8px)!important;width:100%!important;min-width:0!important;min-height:48px!important;padding:4px!important;overflow:visible!important}
+#argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:clamp(1px,.65cqi,8px)!important;width:100%!important;min-width:0!important;min-height:48px!important;padding:4px!important;overflow:visible!important}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab{min-width:0!important;min-height:42px!important;padding:clamp(2px,.7cqi,8px)!important;gap:2px!important;border-radius:12px!important}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab .tab-icon{font-size:clamp(13px,1.55cqi,20px)!important;line-height:1!important}
 #argus-dashboard-root-v3 .argus-widget[data-widget-kind="alarm-configuration"] #mode-tabs>.tab .tab-label{display:block!important;min-width:0!important;max-width:100%!important;font-size:clamp(9px,.95cqi,12px)!important;line-height:1.05!important;letter-spacing:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
@@ -159,3 +159,41 @@
   #argus-dashboard-root-v3 .argus-widget[data-widget-kind="security-status"] .support-actions-grid{grid-template-columns:minmax(0,1fr)!important}
 }
 .argus-dashboard__restore-entry{display:block;margin:8px 16px 12px auto;padding:9px 14px;border:1px solid rgba(255,255,255,.2);border-radius:14px;background:rgba(255,255,255,.09);color:#fff;font:inherit;font-weight:700;cursor:pointer;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.argus-dashboard__restore-entry:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}
+
+/* Explicit high contrast applies to React widgets as well as legacy content. */
+:host(:is([argus-contrast="high"], .argus-contrast-high)) {
+  --glass-bg:#080c13; --glass-border:#94a3b8;
+  --v2066-glass:#080c13; --v2066-border:#94a3b8;
+  --v2066-text:#fff; --v2066-muted:#e2e8f0;
+  --primary-text-color:#fff; --secondary-text-color:#e2e8f0;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) :is(
+  .argus-widget, .argus-widget__menu, .argus-widget__edit-header,
+  .security-context, .security-context .context-tools,
+  .security-context section, .security-context article,
+  .context-zone-picker, .context-sensor-row, .context-sensor-card,
+  .context-verification-dialog, .modal, #profile-dropdown,
+  .mode-section-card, .user-card, .log-item, .glass-subpanel
+) {
+  background:#080c13!important; color:#fff!important;
+  border-color:#94a3b8!important; box-shadow:none!important;
+  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) :is(
+  .argus-widget, .security-context, .modal, #profile-dropdown
+) :is(h1,h2,h3,h4,p,label,small,.hint,.muted,.small,.setting-help,.context-sensor-name) {
+  color:#fff!important; text-shadow:none!important;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) :is(input,select,textarea) {
+  background:#080c13!important; color:#fff!important; border-color:#94a3b8!important;
+  -webkit-text-fill-color:#fff;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) ::placeholder {
+  color:#cbd5e1!important; opacity:1;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible {
+  outline:3px solid #7dd3fc!important; outline-offset:3px!important;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) :is(button,a,summary):not(:disabled) {
+  border-color:#94a3b8;
+}

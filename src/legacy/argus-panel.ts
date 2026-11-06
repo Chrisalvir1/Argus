@@ -1,4 +1,7 @@
 // @ts-nocheck
+import { showSettingsPrompt } from '../features/profile/settings-prompt';
+import { clockFormat, clockTime } from '../features/profile/clock';
+import { isAlarmOutput, isModeSensor } from '../features/dashboard/entity-compatibility';
 import { disposeProfileDialog, mountProfileDialog } from '../features/profile/dialog';
 /**
  * Argus Home Hub – v2.0.99
@@ -333,7 +336,7 @@ const TEXTS = {
     'no_pin_badge': 'SIN PIN',
     'configured_pin_badge': 'CONFIGURADO',
     'configure_btn': 'Configurar',
-    'enter_new_pin': 'Introduce el nuevo PIN (4 a 8 dígitos):',
+    'enter_new_pin': 'Nuevo PIN (4 a 12 dígitos). Deja ambos campos nuevos vacíos para eliminarlo:',
     'enter_current_pin': 'Introduce el PIN actual:',
     'confirm_remove_access_pin': '¿Estás seguro de que deseas eliminar el Pin de perfil Argus?',
     'confirm_remove_master_pin': '¿Estás seguro de que deseas eliminar el Pin de Armado del sistema?',
@@ -1043,6 +1046,90 @@ _tmpl.innerHTML = `
     background: rgba(11, 16, 26, 0.95) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
   }
+  :host([argus-contrast="high"]) .glass,
+  :host(.argus-contrast-high) .glass,
+  :host([argus-contrast="high"]) .mode-section-card,
+  :host(.argus-contrast-high) .mode-section-card,
+  :host([argus-contrast="high"]) .access-section,
+  :host(.argus-contrast-high) .access-section,
+  :host([argus-contrast="high"]) .user-card,
+  :host(.argus-contrast-high) .user-card,
+  :host([argus-contrast="high"]) .log-item,
+  :host(.argus-contrast-high) .log-item,
+  :host([argus-contrast="high"]) .security-context,
+  :host(.argus-contrast-high) .security-context,
+  :host([argus-contrast="high"]) .context-zone-picker,
+  :host(.argus-contrast-high) .context-zone-picker,
+  :host([argus-contrast="high"]) .context-sensor-row,
+  :host(.argus-contrast-high) .context-sensor-row,
+  :host([argus-contrast="high"]) .context-sensor-card,
+  :host(.argus-contrast-high) .context-sensor-card,
+  :host([argus-contrast="high"]) .subsection,
+  :host(.argus-contrast-high) .subsection,
+  :host([argus-contrast="high"]) .mode-sensor-none,
+  :host(.argus-contrast-high) .mode-sensor-none {
+    background-color: #0b101a !important;
+    background-image: none !important;
+    border-color: #8793a5 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  :host([argus-contrast="high"]) .glass.panel,
+  :host(.argus-contrast-high) .glass.panel,
+  :host([argus-contrast="high"]) .entry:not(:has(.security-console)),
+  :host(.argus-contrast-high) .entry:not(:has(.security-console)),
+  :host([argus-contrast="high"]) .entry-content:not(.security-console):not(:has(.security-console)),
+  :host(.argus-contrast-high) .entry-content:not(.security-console):not(:has(.security-console)),
+  :host([argus-contrast="high"]) .glass.panel:not(:has(.security-console)),
+  :host(.argus-contrast-high) .glass.panel:not(:has(.security-console)) {
+    color: #ffffff !important;
+    background-color: #080c13 !important;
+    background-image: none !important;
+    border-color: #8793a5 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  :host([argus-contrast="high"]) .glass :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host(.argus-contrast-high) .glass :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host([argus-contrast="high"]) .mode-section-card :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host(.argus-contrast-high) .mode-section-card :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host([argus-contrast="high"]) .access-section :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host(.argus-contrast-high) .access-section :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host([argus-contrast="high"]) .security-context :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host(.argus-contrast-high) .security-context :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host([argus-contrast="high"]) .context-sensor-row :is(h1,h2,h3,h4,p,label,span,strong,small),
+  :host(.argus-contrast-high) .context-sensor-row :is(h1,h2,h3,h4,p,label,span,strong,small) {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+  }
+  :host([argus-contrast="high"]) :is(input,select,textarea,button,.ghost,.primary,.glass-control),
+  :host(.argus-contrast-high) :is(input,select,textarea,button,.ghost,.primary,.glass-control) {
+    color: #ffffff !important;
+    border-color: #aab4c2 !important;
+  }
+  :host([argus-contrast="high"]) :is(input,select,textarea,.glass-control),
+  :host(.argus-contrast-high) :is(input,select,textarea,.glass-control) {
+    background-color: #080c13 !important;
+  }
+  :host([argus-contrast="high"]) :is(button,.ghost):not(.primary):not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):not(.active):not(.tab.active):not(.zone-choice.is-selected):not([aria-pressed="true"]),
+  :host(.argus-contrast-high) :is(button,.ghost):not(.primary):not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):not(.active):not(.tab.active):not(.zone-choice.is-selected):not([aria-pressed="true"]) {
+    background-color: #1a2230 !important;
+  }
+  :host([argus-contrast="high"]) :is(button,input,select,textarea,[tabindex]):focus-visible,
+  :host(.argus-contrast-high) :is(button,input,select,textarea,[tabindex]):focus-visible {
+    outline: 3px solid #7dd3fc !important;
+    outline-offset: 2px !important;
+  }
+  :host([argus-contrast="high"]) .log-item--armed .log-icon,
+  :host(.argus-contrast-high) .log-item--armed .log-icon { border-color: #fbbf24 !important; }
+  :host([argus-contrast="high"]) .log-item--disarmed .log-icon,
+  :host(.argus-contrast-high) .log-item--disarmed .log-icon { border-color: #4ade80 !important; }
+  :host([argus-contrast="high"]) .log-item--triggered .log-icon,
+  :host(.argus-contrast-high) .log-item--triggered .log-icon { border-color: #fb7185 !important; }
 
   :host {
     --hud-text-color: #fff;
@@ -1088,6 +1175,11 @@ _tmpl.innerHTML = `
     -webkit-overflow-scrolling: touch !important;
     margin: 0 !important;
     padding: 0 !important;
+  }
+  /* WebKit repaints background-attachment:fixed while rubber-band scrolling.
+     Keep the wallpaper on its own viewport-fixed layer instead of the HA host. */
+  :host(.fullscreen-active) #argus-canvas-bg {
+    display: none !important;
   }
   :host(.fullscreen-active) .hero,
   :host(.fullscreen-active) #argus-dashboard-root-v3,
@@ -1790,6 +1882,19 @@ _tmpl.innerHTML = `
   }
   .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}
   .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}
+  /* Safari was recompositing the full glass card while it was moving under a
+     stationary pointer: the hover transform and soft-light overlay stacked
+     on top of the large backdrop-filter surface. Keep the same glass and
+     highlight, but avoid moving/blending that surface during scroll and the
+     elastic top/bottom overscroll repaint. */
+  @supports (-webkit-backdrop-filter: blur(1px)) {
+    .entry { transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important; }
+    .entry:hover { transform: none !important; }
+    .entry::after {
+      background: linear-gradient(120deg,rgba(255,255,255,.07),transparent 22%,transparent 74%,rgba(255,255,255,.025));
+      mix-blend-mode: normal !important;
+    }
+  }
   .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}
   .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}
   .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
@@ -2183,11 +2288,15 @@ _tmpl.innerHTML = `
   #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}
   #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}
   .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}
-  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}
+  @media(max-width:600px){.sel-grid{grid-template-columns:1fr;grid-template-rows:minmax(0,1.25fr) minmax(0,.75fr)}}
   .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}
-  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}
+  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;grid-auto-rows:max-content;gap:8px;align-content:start;padding-right:4px}
   .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
   .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}
+  #selector-modal .pick-row{height:auto;min-height:max-content;box-sizing:border-box;align-self:start}
+  #selector-modal .pick-row>div{min-width:0}
+  #selector-modal .pick-row-name{overflow-wrap:anywhere}
+  #selector-modal .pick-row:focus-within{outline:2px solid #76b7ff;outline-offset:-2px}
   .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}
   .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}
   .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}
@@ -2288,7 +2397,7 @@ _tmpl.innerHTML = `
     .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}
   }
 
-  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}
+  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);contain:paint}
   #argus-canvas-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}
 
 .sensor-pill {
@@ -3068,7 +3177,9 @@ _tmpl.innerHTML = `
   .hero-clock{width:auto!important;justify-items:start!important}
   .hero-pills{justify-content:flex-start!important}
 }
-  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+  /* border-radius + overflow already clip the glass card. Avoid a redundant
+     WebKit mask that can add another compositing surface during scroll. */
+  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: none; }
 
 /* Profile Frosted Glass & Jelly Spring Animation */
 @keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}
@@ -3609,7 +3720,7 @@ class ArgusPanel extends HTMLElement {
     this.attachShadow({ mode: 'open' }).appendChild(_tmpl.content.cloneNode(true));
     this._wsId = 1; this._socket = null; this._dashboard = null;
     this._ui = null; this._available = []; this._mode = 'home'; this._modeView = 'mode'; this._modeEntryId = null;
-    this._zonesLoaded = false; this._zonesLoading = false; this._zoneList = [] as any[];
+    this._zonesEnabled = false; this._zonesLoaded = false; this._zonesLoading = false; this._zoneList = [] as any[];
     this._zoneEntities = [] as any[];
     this._zoneOpenId = null as string | null; this._zoneDraft = null as any;
     this._zoneDecision = null as (() => void) | null;
@@ -3664,35 +3775,10 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
-  _getClockFormat() {
-    const fmt = this._ui?.personalization?.clock_format
-      ?? this._ui?.clock_format 
-      ?? this._dashboard?.clock_format 
-      ?? 'auto';
-    return ['auto', '12h', '24h'].includes(fmt) ? fmt : 'auto';
-  }
+  _getClockFormat() { return clockFormat(this._ui, this._dashboard); }
 
-  _formatTime(dateInput) {
-    if (!dateInput) return '';
-    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
-    if (isNaN(date.getTime())) return '';
-
-    const clockPref = this._getClockFormat();
-    const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
-    const is12h = clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')));
-
-    if (is12h) {
-      let hours = date.getHours();
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      return `${hours}:${minutes} ${ampm}`;
-    } else {
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${hours}:${minutes}`;
-    }
+  _formatTime(value) {
+    return value ? clockTime(value, this._getClockFormat(), String(this._hass?.locale?.time_format || '')) : '';
   }
 
   _formatDateTime(dateInput) {
@@ -5792,6 +5878,7 @@ class ArgusPanel extends HTMLElement {
     }
     this._hideInitialCurtain();
     this._currentProfile = dashboard.current_profile || null;
+    this._initContrastMode();
     const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
     if (bootstrapOverlay) {
       if (this._currentProfile && !this._welcomeShownThisMount) {
@@ -6716,18 +6803,23 @@ class ArgusPanel extends HTMLElement {
       return {
         emergency_number: this._normaliseEmergencyNumber(input?.value || this._emergencyNumber || '911'),
         panic_outputs: [...(this._panicOutputs || [])],
+        notif_targets: [...(this._notifTargets || [])],
       };
     }
     const config = JSON.parse(JSON.stringify(this._currentModeConfig()));
     const wait = this.shadowRoot.getElementById('mode-wait-if-open') as HTMLInputElement | null;
     if (wait) config.open_sensors_policy = wait.checked ? 'pending' : 'allow';
     config.light_siren_settings = { ...(config.light_siren_settings || {}) };
-    this.shadowRoot.querySelectorAll<HTMLInputElement>('[data-light-siren-color]').forEach(input => {
-      const hex = input.value || '#ff0000';
-      config.light_siren_settings[input.dataset.lightSirenColor] = {
-        rgb_color: [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)),
-        gentle_flash: Boolean(this.shadowRoot.querySelector<HTMLInputElement>(`[data-light-siren-flash="${CSS.escape(input.dataset.lightSirenColor)}"]`)?.checked),
-      };
+    this.shadowRoot.querySelectorAll<HTMLElement>('[data-light-output]').forEach(row => {
+      const id = row.dataset.lightOutput;
+      const color = row.querySelector<HTMLInputElement>('[data-light-siren-color]');
+      const mode = row.querySelector<HTMLSelectElement>('[data-light-siren-mode]');
+      const settings = {...(config.light_siren_settings[id] || {})};
+      if (color) settings.rgb_color = [1, 3, 5].map(i => parseInt(color.value.slice(i, i + 2), 16));
+      else delete settings.rgb_color;
+      settings.flash_mode = mode?.value || 'none';
+      settings.gentle_flash = settings.flash_mode === 'gentle';
+      config.light_siren_settings[id] = settings;
     });
     return { config };
   }
@@ -6792,6 +6884,12 @@ class ArgusPanel extends HTMLElement {
           if (this._mode === 'sos') {
             this._emergencyNumber = savedState.emergency_number;
             this._panicOutputs = [...savedState.panic_outputs];
+            this._notifTargets = [...(savedState.notif_targets || [])];
+            if (this._ui) {
+              this._ui.emergency_number = this._emergencyNumber;
+              this._ui.panic_outputs = [...this._panicOutputs];
+              this._ui.notif_targets = [...this._notifTargets];
+            }
           } else {
             const entityId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
             this._ui.modes = this._ui.modes || {};
@@ -6830,8 +6928,8 @@ class ArgusPanel extends HTMLElement {
     let bubble = tabs.querySelector('.tab-bubble');
     const existingButtons = tabs.querySelectorAll('.tab');
 
-    const tabsNeedRebuild = !bubble || existingButtons.length !== modes.length + 1
-      || !tabs.querySelector('[data-mode-view="zones"]');
+    const tabsNeedRebuild = !bubble || existingButtons.length !== modes.length + 2
+      || !tabs.querySelector('[data-mode-view="voice"]');
     if (tabsNeedRebuild) {
       tabs.className = 'tabs';
       tabs.innerHTML = `
@@ -6840,6 +6938,7 @@ class ArgusPanel extends HTMLElement {
           <span class="tab-icon" style="font-size:20px">🛡️</span>
           <span class="tab-label">Zonas</span>
         </button>
+        <button type="button" class="tab" data-mode-view="voice"><span class="tab-icon">🔊</span><span class="tab-label">Voz de Argus</span></button>
         ${modes.map(m => `
           <button type="button" class="tab ${m === this._mode ? 'active' : ''}" data-mode="${m}">
             <span class="tab-icon" style="font-size: 20px;">${icons[m]}</span>
@@ -6854,6 +6953,10 @@ class ArgusPanel extends HTMLElement {
         const guardMode = () => this._guardModeDraft(open);
         if (!this._guardZoneDraft(guardMode)) return;
         guardMode();
+      });
+      tabs.querySelector('[data-mode-view="voice"]')?.addEventListener('click', () => {
+        const open = () => { this._modeView = 'voice'; this._renderModeTabs(); this._renderModeView(); };
+        if (this._guardZoneDraft(() => this._guardModeDraft(open))) this._guardModeDraft(open);
       });
       tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', (e) => {
         e.preventDefault();
@@ -6884,8 +6987,8 @@ class ArgusPanel extends HTMLElement {
     const buttons = tabs.querySelectorAll('.tab');
     let activeBtn = null;
     buttons.forEach(btn => {
-      if ((btn.dataset.modeView === 'zones' && this._modeView === 'zones')
-        || (btn.dataset.mode === this._mode && this._modeView !== 'zones')) {
+      if ((btn.dataset.modeView && btn.dataset.modeView === this._modeView)
+        || (btn.dataset.mode === this._mode && this._modeView !== 'zones' && this._modeView !== 'voice')) {
         btn.classList.add('active');
         activeBtn = btn;
       } else {
@@ -6894,7 +6997,7 @@ class ArgusPanel extends HTMLElement {
     });
 
     if (bubble && activeBtn) {
-      bubble.className = `tab-bubble bubble-${this._modeView === 'zones' ? 'zones' : this._mode}`;
+      bubble.className = `tab-bubble bubble-${['zones', 'voice'].includes(this._modeView) ? this._modeView : this._mode}`;
       const updateBubblePos = () => {
         const currentActive = tabs.querySelector('.tab.active') as HTMLElement || activeBtn;
         const currentBubble = tabs.querySelector('.tab-bubble') as HTMLElement || bubble;
@@ -7007,6 +7110,11 @@ class ArgusPanel extends HTMLElement {
     }
     const readonly = !this._isAdmin;
 
+    if (this._modeView === 'voice') {
+      el.innerHTML = '<div id="mode-voice-slot"></div>';
+      this._renderVoiceSettings(el);
+      return;
+    }
     if (this._modeView === 'zones') {
       el.innerHTML = `<div class="mode-grid-layout"><div class="mode-section-card" id="argus-zone-editor"></div></div><span id="mode-status" role="status" style="display:block;text-align:center;min-height:20px;font-weight:700"></span>`;
       this._renderZones(el.querySelector('#argus-zone-editor'));
@@ -7031,8 +7139,8 @@ class ArgusPanel extends HTMLElement {
                 <input id="mode-emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(emergencyNumber)}" style="width:130px;min-height:38px;padding:6px 10px;font-size:18px;font-weight:900;text-align:center;border-radius:10px;background:rgba(0,0,0,0.25);color:#fff;border:1px solid rgba(255,255,255,0.2);letter-spacing:1.5px">
               </div>
             </div>
-            <div class="small" style="margin-top:12px;opacity:0.6;font-size:11px;">
-              ℹ️ Al activar el SOS desde el panel o widget, se iniciará la marcación rápida y se registrará el evento de auxilio en el historial forense.
+            <div class="small" style="margin-top:12px;opacity:0.82;font-size:12px;">
+              ℹ️ Argus no llama automáticamente. El teléfono de emergencia solo se abre si una persona pulsa la acción de llamada.
             </div>
           </div>
 
@@ -7057,26 +7165,17 @@ class ArgusPanel extends HTMLElement {
             </div>
           </div>
 
-          <!-- Card 3: Unified Informative Diagnostic Card -->
-          <div class="mode-section-card" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:4px;">
-              <span style="font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Protocolo Informativo de Auxilio y Difusión</span>
-              <span style="font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:6px;background:rgba(74,222,128,0.12);color:#4ade80">✓ Activo</span>
+          <div class="mode-section-card" id="sos-notifications-card" style="width:100%;box-sizing:border-box;padding:20px 24px;border-radius:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:12px;flex-wrap:wrap;">
+              <div>
+                <div class="mode-section-title" style="font-size:15px;font-weight:900;margin-bottom:4px;">📱 Notificaciones móviles</div>
+                <p class="small" style="margin:0;line-height:1.5;opacity:.84;">Para recibir un aviso SOS en un teléfono, instala Home Assistant Companion, conéctalo a esta instancia y permite las notificaciones en el teléfono. Después elige aquí el servicio de ese dispositivo (por ejemplo, notify.mobile_app_mi_telefono), pulsa Agregar y guarda la configuración. Repite para cada teléfono.</p>
+              </div>
+              ${readonly ? '' : `<div style="display:flex;gap:8px;align-items:center;flex:1 1 280px;max-width:460px;"><select id="sos-notif-select" class="glass-control" aria-label="Teléfono o servicio para avisos SOS" style="flex:1;min-width:0"></select><button type="button" class="ghost" id="btn-add-sos-notif" aria-label="Agregar destino de notificación SOS" style="white-space:nowrap">＋ Agregar</button></div>`}
             </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;font-size:11px;">
-              <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
-                <span style="font-size:14px">🚨</span>
-                <div><strong style="color:#fff;font-size:11px">Disparo Inmediato:</strong> <span style="opacity:0.7">Sin retardos de salida ni entrada.</span></div>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
-                <span style="font-size:14px">📱</span>
-                <div><strong style="color:#fff;font-size:11px">Notificación Push:</strong> <span style="opacity:0.7">Alerta crítica a dispositivos autorizados.</span></div>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
-                <span style="font-size:14px">📋</span>
-                <div><strong style="color:#fff;font-size:11px">Auditoría:</strong> <span style="opacity:0.7">Registro inmutable en el historial.</span></div>
-              </div>
-            </div>
+            <div id="sos-notif-targets" aria-live="polite" style="display:flex;flex-wrap:wrap;gap:8px;width:100%;"></div>
+            <p class="small" style="margin:12px 0 0;opacity:.78;line-height:1.45;">Al activar SOS, Argus solicita a Home Assistant que envíe el aviso a cada servicio guardado. Guardar esta lista no manda una prueba. La entrega depende de que el teléfono esté registrado y tenga permiso para recibir avisos. La lista también se usa para avisos críticos. Argus no envía SMS ni llama automáticamente; un SMS requiere un servicio de mensajería configurado en Home Assistant y cualquier llamada exige que alguien pulse la acción del teléfono.</p>
+            ${readonly ? '' : `<span id="sos-notif-status" role="status" style="display:block;margin-top:8px;min-height:18px;font-size:12px;font-weight:700;"></span>`}
           </div>
         </div>
         ${readonly ? '' : `
@@ -7091,12 +7190,14 @@ class ArgusPanel extends HTMLElement {
 
       if (!readonly) {
         el.querySelector('#btn-mode-select-sos-outputs')?.addEventListener('click', () => this._openModal('alarm_device'));
+        el.querySelector('#btn-add-sos-notif')?.addEventListener('click', () => this._addNotifTarget('sos-notif-select'));
         el.querySelectorAll('[data-remove]').forEach(btn =>
           btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
         );
         el.querySelector('#save-sos-mode')?.addEventListener('click', () => this._saveSosMode());
       }
-      this._renderVoiceSettings(el);
+
+      this._renderNotifications();
       this._ensureModeDraftBaseline();
       return;
     }
@@ -7136,9 +7237,22 @@ class ArgusPanel extends HTMLElement {
           </div>
           ${sirens.filter(x => x.startsWith('light.')).map(x => {
             const setting = cfg.light_siren_settings?.[x] || {};
+            const attrs = this._hass?.states?.[x]?.attributes || {};
+            const modes = Array.isArray(attrs.supported_color_modes) ? attrs.supported_color_modes : [];
+            const rgbSupported = modes.some(mode => ['hs', 'xy', 'rgb', 'rgbw', 'rgbww'].includes(mode));
+            const breathing = modes.some(mode => mode !== 'onoff') && (Number(attrs.supported_features || 0) & 32);
             const rgb = Array.isArray(setting.rgb_color) ? setting.rgb_color : [255, 0, 0];
             const hex = '#' + rgb.map(v => Number(v).toString(16).padStart(2, '0')).join('');
-            return `<details class="light-siren-settings"><summary>⚙ ${this._escapeHtml(this._hass?.states?.[x]?.attributes?.friendly_name || x)}</summary><label>${this._t('light_siren_color') || 'Color'} <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}"></label><label class="checkbox-label"><input type="checkbox" data-light-siren-flash="${this._escapeHtml(x)}" ${setting.gentle_flash ? 'checked' : ''}> ${this._t('light_siren_flash') || 'Destello suave si está disponible'}</label></details>`;
+            const flash = setting.flash_mode || (setting.gentle_flash ? 'gentle' : 'none');
+            return `<details class="light-siren-settings" data-light-output="${this._escapeHtml(x)}"><summary>⚙ ${this._escapeHtml(attrs.friendly_name || x)}</summary>${rgbSupported ? `<label>Color de alarma <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}" ${readonly ? 'disabled' : ''}></label>` : '<p class="small">Esta luz no anuncia control de color RGB.</p>'}<label>Efecto de alarma<select data-light-siren-mode="${this._escapeHtml(x)}" ${readonly ? 'disabled' : ''}><option value="none" ${flash === 'none' ? 'selected' : ''}>Color fijo</option>${breathing ? `<option value="breathing" ${flash === 'breathing' ? 'selected' : ''}>Respiración media · conserva el color</option>` : ''}<option value="gentle" ${flash === 'gentle' ? 'selected' : ''}>Destello suave</option></select></label><p class="small">Al desarmar, Argus restaura el estado anterior que Home Assistant haya proporcionado.</p></details>`;
+          }).join('')}
+          ${sirens.map(id => {
+            const attrs = this._hass?.states?.[id]?.attributes || {};
+            const tone = id.startsWith('siren.');
+            const options = tone ? attrs.available_tones : [];
+            if (!Array.isArray(options) || !options.length) return '';
+            const selected = tone ? cfg.siren_settings?.[id]?.tone : cfg.light_siren_settings?.[id]?.effect;
+            return `<label class="zone-field">${tone ? 'Tono' : 'Efecto'} · ${this._escapeHtml(attrs.friendly_name || id)}<select data-output-mode="${this._escapeHtml(id)}" data-output-kind="${tone ? 'tone' : 'effect'}" ${readonly ? 'disabled' : ''}><option value="">Predeterminado del dispositivo</option>${options.map(option => `<option value="${this._escapeHtml(String(option))}" ${String(selected) === String(option) ? 'selected' : ''}>${this._escapeHtml(String(option))}</option>`).join('')}</select></label>`;
           }).join('')}
           ${readonly ? '' : `<button class="ghost" data-open-selector="alarm_device" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">＋ Agregar dispositivos y paneles compatibles</button>`}
         </div>
@@ -7173,8 +7287,19 @@ class ArgusPanel extends HTMLElement {
       );
       el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
     }
+    el.querySelectorAll<HTMLSelectElement>('[data-output-mode]').forEach(input => input.addEventListener('change', () => {
+      if (!this._isAdmin) return;
+      const id = input.dataset.outputMode;
+      const kind = input.dataset.outputKind;
+      const current = this._currentModeConfig();
+      const key = kind === 'tone' ? 'siren_settings' : 'light_siren_settings';
+      current[key] = {...(current[key] || {}), [id]: {...(current[key]?.[id] || {})}};
+      if (input.value) current[key][id][kind] = input.value;
+      else delete current[key][id][kind];
+      this._ui.modes.__by_entity__[this._modeEntryId][this._mode] = current;
+    }));
     this._renderModeZoneSummary(el.querySelector('#mode-zone-summary'));
-    this._renderVoiceSettings(el);
+
     this._ensureModeDraftBaseline();
   }
 
@@ -7185,15 +7310,23 @@ class ArgusPanel extends HTMLElement {
 
   _renderModeZoneSummary(container: HTMLElement | null) {
     if (!container) return;
+    if (this._ui?.zones_enabled === false) {
+      const cfg = this._currentModeConfig();
+      container.innerHTML = `<div class="mode-section-title">Sensores</div><p class="small">Sensores asignados a este modo, incluidos los conservados de tu configuración anterior.</p><div class="mode-sensor-grid">${(cfg.sensors || []).map(id => this._chip(id, 'sensor')).join('') || '<div class="mode-sensor-none">Ninguno seleccionado</div>'}</div><p class="small">Puertas, ventanas, movimiento, humo, gas, garaje y otros sensores publicados en Home Assistant. Los sensores numéricos e informativos conservan su estado; seleccionarlos no crea una regla de alarma por umbral.</p>${this._isAdmin ? '<button type="button" class="ghost" data-add-mode-sensors>＋ Agregar sensores</button>' : ''}`;
+      container.querySelector('[data-add-mode-sensors]')?.addEventListener('click', () => this._openModal('sensor'));
+      container.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', () => this._removeChip(btn.dataset.remove)));
+      container.querySelectorAll('[data-edit-sensor-delay]').forEach(btn => btn.addEventListener('click', () => this._openSensorDelayModal(btn.dataset.editSensorDelay)));
+      return;
+    }
     if (!this._zonesLoaded) {
       container.innerHTML = '<div class="mode-section-title">🛡️ Zonas asignadas</div><p class="small">Cargando zonas…</p>';
       this._loadZones();
       return;
     }
-    const assigned = this._zoneList.filter((zone: any) => zone.enabled !== false && (zone.modes || []).includes(this._mode));
+    const assigned = (this._zonesEnabled ? this._zoneList : []).filter((zone: any) => zone.enabled !== false && (zone.modes || []).includes(this._mode));
     container.innerHTML = `<div class="mode-section-title">🛡️ Zonas asignadas a este modo</div>${assigned.length
       ? `<div class="mode-zone-summary-items${assigned.length > 1 ? ' is-scrollable' : ''}">${assigned.map((zone: any) => `<div class="mode-zone-assigned"><strong>Zona ${this._escapeHtml(zone.number)}</strong><span>${this._escapeHtml(zone.area || zone.name)} · ${(zone.entity_ids || []).length} sensor${(zone.entity_ids || []).length === 1 ? '' : 'es'}</span></div>`).join('')}</div>`
-      : '<p class="small">No hay zonas asignadas a este modo. Configúralas en la pestaña Zonas.</p>'}`;
+      : `<p class="small">${this._zonesEnabled ? 'No hay zonas asignadas a este modo. Configúralas en la pestaña Zonas.' : 'Zonas desactivadas. Se conservan los sensores configurados por modo. Puedes activarlas en la pestaña Zonas.'}</p>`}`;
   }
 
   _guardZoneDraft(continueTo: () => void): boolean {
@@ -7216,7 +7349,7 @@ class ArgusPanel extends HTMLElement {
     try {
       const result = await this._send('argus/save_zones', {entry_id: this._zoneEntryId(), zones: next});
       this._zoneList = result.zones || next;
-      this._ui.zones = this._zoneList;
+      this._ui.zones = this._zonesEnabled ? this._zoneList : [];
       if (result.modes) this._ui.modes = result.modes;
       this._zoneDraft = structuredClone(this._zoneList.find((item: any) => item.id === zone.id));
       this._renderZones(this.shadowRoot.getElementById('argus-zone-editor'));
@@ -7252,11 +7385,42 @@ class ArgusPanel extends HTMLElement {
     return { condition: 'open', delay: Number.isFinite(inheritedDelay) ? Math.max(0, inheritedDelay) : 0, delay_unit: 'seconds' };
   }
 
+  _renderZoneActivation(container: HTMLElement) {
+    container.insertAdjacentHTML('afterbegin', `<label class="zone-field"><span>Activar zonas</span><input type="checkbox" data-zones-enabled ${this._zonesEnabled ? 'checked' : ''} ${this._isAdmin ? '' : 'disabled'}></label><p class="zone-help">${this._zonesEnabled ? 'Las zonas guardadas determinan los sensores y condiciones de cada modo.' : 'Argus utiliza la configuración anterior de sensores por modo. Activa zonas para configurarlas aquí.'}</p>`);
+    container.querySelector<HTMLInputElement>('[data-zones-enabled]')?.addEventListener('change', async (event) => {
+      const input = event.target as HTMLInputElement;
+      const enabled = input.checked;
+      input.checked = this._zonesEnabled;
+      if (!this._guardZoneDraft(() => {})) return;
+      input.disabled = true;
+      try {
+        const result = await this._send('argus/save_zones', {entry_id: this._zoneEntryId(), zones: this._zoneList, zones_enabled: enabled});
+        this._zonesEnabled = result.zones_enabled === true;
+        this._zoneList = result.zones || [];
+        this._ui.zones_enabled = this._zonesEnabled;
+        this._ui.zones = this._zonesEnabled ? this._zoneList : [];
+        if (result.modes) this._ui.modes = result.modes;
+        this._zoneDraft = null; this._zoneOpenId = null;
+        this._renderZones(container);
+        this._renderModeZoneSummary(this.shadowRoot.getElementById('mode-zone-summary'));
+        this._renderEntries(); this.dispatchEvent(new CustomEvent('argus-state-update'));
+      } catch (error) {
+        input.disabled = false;
+        this._setZoneError(error.message || String(error));
+      }
+    });
+  }
+
   _renderZones(container: HTMLElement | null) {
     if (!container) return;
     if (!this._zonesLoaded) {
       container.innerHTML = '<div class="mode-section-title">🛡️ Zonas</div><p class="small">Cargando zonas…</p>';
       this._loadZones();
+      return;
+    }
+    if (!this._zonesEnabled) {
+      container.innerHTML = '<div class="zone-status small" role="status"></div>';
+      this._renderZoneActivation(container);
       return;
     }
     const zones = [...this._zoneList];
@@ -7310,6 +7474,7 @@ class ArgusPanel extends HTMLElement {
       </div>`).join('')}
       ${this._isAdmin && zones.length < 10 ? '<button type="button" class="ghost" data-zone-add>＋ Agregar zona</button>' : ''}
       <div class="zone-status small" role="status" style="margin-top:9px"></div>`;
+    this._renderZoneActivation(container);
     container.querySelectorAll<HTMLElement>('[data-zone-open]').forEach(button => button.addEventListener('click', () => {
       const id = button.dataset.zoneOpen;
       const open = () => { this._zoneOpenId = id === this._zoneOpenId ? null : id; this._zoneDraft = this._zoneOpenId ? structuredClone(zones.find((zone: any) => zone.id === id)) : null; this._zoneDecision = null; this._renderZones(container); };
@@ -7359,7 +7524,7 @@ class ArgusPanel extends HTMLElement {
       if (!this._zoneList.some((zone: any) => zone.id === draft.id)) {this._zoneDraft = null; this._zoneOpenId = null; this._renderZones(container); return;}
       try {
         const result = await this._send('argus/save_zones', {entry_id: this._zoneEntryId(), zones: this._zoneList.filter((zone: any) => zone.id !== draft.id)});
-        this._zoneList = result.zones; this._ui.zones = this._zoneList;
+        this._zoneList = result.zones; this._ui.zones = this._zonesEnabled ? this._zoneList : [];
         if (result.modes) this._ui.modes = result.modes;
         this._zoneDraft = null; this._zoneOpenId = null; this._renderZones(container);
         this._renderEntries(); this.dispatchEvent(new CustomEvent('argus-state-update'));
@@ -7379,10 +7544,11 @@ class ArgusPanel extends HTMLElement {
     this._zonesLoading = true;
     const entryId = this._zoneEntryId();
     this._send('argus/get_zones', {entry_id: entryId}).then((result: any) => {
+      this._zonesEnabled = result.zones_enabled === true;
       this._zoneList = result.zones || [];
       this._zoneEntities = (result.available_entities || []).filter((item: any) => ['binary_sensor', 'sensor', 'lock'].includes(item.domain));
       this._zonesLoaded = true; this._zonesLoading = false;
-      if (this._ui) this._ui.zones = this._zoneList;
+      if (this._ui) { this._ui.zones = this._zonesEnabled ? this._zoneList : []; this._ui.zones_enabled = this._zonesEnabled; }
       this._renderZones(this.shadowRoot.getElementById('argus-zone-editor'));
       this._renderModeZoneSummary(this.shadowRoot.getElementById('mode-zone-summary'));
     }).catch((err: any) => {
@@ -7398,7 +7564,7 @@ class ArgusPanel extends HTMLElement {
     const details = document.createElement('details');
     details.className = 'mode-section-card argus-mode-voice-card';
     details.style.cssText = 'border-radius:18px;padding:16px;box-sizing:border-box';
-        details.innerHTML = `<summary style="cursor:pointer;font-weight:800">🔊 Avisos de voz · ${this._escapeHtml(({home:'En Casa',away:'Ausente',night:'Noche'} as Record<string,string>)[this._mode] || this._mode)}</summary><div class="argus-voice-body small" style="padding-top:12px">Abre para configurar los avisos de voz.</div>`;
+    details.innerHTML = `<summary style="cursor:pointer;font-weight:800">🔊 Voz de Argus · Configuración general</summary><div class="argus-voice-body small" style="padding-top:12px">Configura la voz una sola vez para todos los modos.</div>`;
     const voiceSlot = container.querySelector('#mode-voice-slot');
     (voiceSlot || container).append(details);
     details.addEventListener('toggle', async () => {
@@ -7406,14 +7572,14 @@ class ArgusPanel extends HTMLElement {
       const body = details.querySelector('.argus-voice-body') as HTMLElement;
       body.textContent = 'Cargando…';
       try {
-        const data = await this._send('argus/get_voice_config', {entry_id: this._dashboard?.entry_id, mode: this._mode});
+        const data = await this._send('argus/get_voice_config', {entry_id: this._dashboard?.entry_id});
         if (!details.isConnected) return;
         (details as any).__voiceLoaded = true;
         const values = data.values || {};
         const defaultMessages = data.default_messages || {};
         const assignedZones = Array.isArray(data.assigned_zones) ? data.assigned_zones : [];
         const modeNames: Record<string, string> = {disarmed: 'Desarmado', home: 'En Casa', away: 'Ausente', night: 'Noche', sos: 'SOS'};
-        const modeName = modeNames[this._mode] || this._mode;
+        const modeName = 'el modo seleccionado';
         const enabledKey = 'arming_voice_enabled';
         const ttsKey = 'arming_voice_tts';
         const playersKey = 'arming_voice_players';
@@ -7441,6 +7607,7 @@ class ArgusPanel extends HTMLElement {
           ['arming_voice_message_last', 'Cuando queda un sensor abierto', 'Se usa si, al cerrar un sensor, queda exactamente otro pendiente.'],
           ['arming_voice_message_complete', 'Cuando todas las zonas están cerradas', 'Confirma que ya puede armarse en el modo elegido.'],
           ['arming_voice_message_armed', 'Cuando termina el armado', 'Confirma que Argus ya quedó armado.'],
+          ['arming_voice_message_disarmed', 'Al desarmar', 'Se anuncia después de que el servidor confirma el desarmado.'],
           ['arming_voice_message_cancelled', 'Si se cancela el armado', 'Avisa que se canceló el armado en espera.'],
           ['arming_voice_message_triggered', 'Cuando se activa la alarma', 'Nombra las zonas y sensores que la activaron.'],
           ['arming_voice_message_additional_triggered', 'Si se abre otro sensor durante la alarma', 'Nombra el nuevo sensor y confirma que la alarma sigue activa.'],
@@ -7525,10 +7692,10 @@ class ArgusPanel extends HTMLElement {
         };
         const zonePreview = assignedZones.length
           ? `<div class="argus-voice-zone-list">${assignedZones.map((zone: any) => `<section class="argus-voice-zone"><strong>Zona ${this._escapeHtml(zone.number)}${zone.area ? ` · ${this._escapeHtml(zone.area)}` : ' · Sin área'}</strong><ul>${(zone.sensors || []).map((sensor: any) => `<li class="argus-voice-sensor-row" data-voice-zone-sensor="${this._escapeHtml(sensor.entity_id)}" data-fallback-state="${this._escapeHtml(sensor.state || 'unknown')}"><span class="argus-voice-state-dot" aria-hidden="true"></span><span class="argus-voice-sensor-name">${this._escapeHtml(sensor.name)}</span><span class="argus-voice-sensor-state">${this._voiceZoneStateLabel(sensor.state)}</span></li>`).join('') || '<li>Sin sensores asignados</li>'}</ul></section>`).join('')}</div>`
-          : '<p class="small">No hay zonas asignadas a este modo. Argus no verificará sensores de zonas al armarlo.</p>';
+          : '<p class="small">No hay zonas activas. Argus utiliza los sensores configurados en cada modo.</p>';
         body.innerHTML = `
           ${data.imported_existing_settings ? '<p class="argus-voice-import-note">Se importó tu configuración de voz anterior. Desde ahora puedes editarla aquí sin perder los mensajes y reproductores que ya tenías.</p>' : ''}
-          <section class="argus-voice-zone-preview mode-section-card"><strong>🛡️ Zonas de este modo · ${this._escapeHtml(modeName)}</strong><p class="small">Argus revisará estas zonas al armarse. Estado actual: <span class="argus-voice-open-key"><i></i> Abierto</span> · <span class="argus-voice-closed-key"><i></i> Cerrado</span></p>${zonePreview}</section>
+          <section class="argus-voice-zone-preview mode-section-card"><strong>🛡️ Zonas configuradas · Todos los modos</strong><p class="small">Configuración única para todos los modos. En cada acción, Argus menciona solo los sensores asignados al modo que estás utilizando. Estado actual: <span class="argus-voice-open-key"><i></i> Abierto</span> · <span class="argus-voice-closed-key"><i></i> Cerrado</span></p>${zonePreview}</section>
           <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-voice="${enabledKey}" ${values[enabledKey] ? 'checked' : ''} ${locked(enabledKey)}> Activar avisos de voz</label>
           <label style="display:block;margin-top:12px">Motor TTS
             <select class="glass-control" data-voice="${ttsKey}" ${locked(ttsKey)} style="display:block;width:100%;margin-top:5px;border-radius:12px">
@@ -7544,7 +7711,7 @@ class ArgusPanel extends HTMLElement {
               ${playerRows(data.media_players || [])}
             </div>
           </fieldset>
-          <details><summary style="cursor:pointer">Mensajes de voz · ${this._escapeHtml(modeName)}</summary>
+          <details><summary style="cursor:pointer">Mensajes generales de voz</summary>
           <p class="small">Cada mensaje se usa solo en la situación que indica su título. En los avisos que mencionan sensores, escribe solo tu frase: Argus añade automáticamente el conteo y los nombres de las zonas, sus áreas y sus sensores según las zonas asignadas a ${this._escapeHtml(modeName)}. No hace falta escribir esos nombres. Los avisos de inicio, cierre y finalización se usan durante el armado en espera, si está activado; los avisos de alarma se usan cuando la alarma está activa. Cambiar el texto no modifica el funcionamiento del armado.</p>
             ${messageFields.map(([key, label, description]) => {
               const hasCustom = Boolean(values[key]);
@@ -7787,12 +7954,21 @@ class ArgusPanel extends HTMLElement {
       }
       await this._send('argus/save_ui', {
         emergency_number: emergencyNumber,
-        panic_outputs: this._panicOutputs || []
+        panic_outputs: this._panicOutputs || [],
+        notif_targets: this._notifTargets || [],
       });
       this._emergencyNumber = emergencyNumber;
       if (!this._ui) this._ui = {};
       this._ui.emergency_number = emergencyNumber;
       this._ui.panic_outputs = this._panicOutputs || [];
+      this._ui.notif_targets = [...(this._notifTargets || [])];
+      const notifStatus = this.shadowRoot.getElementById('sos-notif-status');
+      if (notifStatus) {
+        notifStatus.textContent = this._notifTargets.length
+          ? `✓ ${this._notifTargets.length} destino(s) guardado(s) para avisos SOS y eventos críticos.`
+          : 'No hay teléfonos seleccionados; Argus no enviará avisos push hasta que agregues uno.';
+        notifStatus.className = this._notifTargets.length ? 'status ok' : 'status';
+      }
       this._modeDraftBaselines.set(this._modeDraftKey(), JSON.stringify(this._captureModeDraftState()));
       if (status) {
         status.textContent = '✓ ' + (this._t('mode_saved') || 'Configuración SOS guardada');
@@ -7928,44 +8104,47 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Notifications ───────────────────────────────────────────────── */
-  _populateNotifSelect() {
-    const sel = this.shadowRoot.getElementById('notif-select');
+  _populateNotifSelect(selectId = 'notif-select') {
+    const sel = this.shadowRoot.getElementById(selectId) as HTMLSelectElement | null;
     if (!sel) return;
     const services = this._hass?.services?.notify || {};
     const notifyEntities = Object.values(this._hass?.states || {})
       .filter(state => state?.entity_id?.startsWith('notify.') && state.entity_id !== 'notify.persistent_notification')
       .map(state => ({ value: `entity:${state.entity_id}`, label: state.attributes?.friendly_name || state.entity_id }));
     const legacyServices = Object.keys(services)
-      .filter(k => !['notify', 'send_message', 'persistent_notification'].includes(k) && !this._notifTargets.includes(k))
+      .filter(k => !['notify', 'send_message', 'persistent_notification'].includes(k) && !(this._notifTargets || []).includes(k))
       .map(k => ({ value: k, label: k.replace(/_/g, ' ') }));
-    const opts = [...notifyEntities, ...legacyServices].filter(option => !this._notifTargets.includes(option.value));
+    const opts = [...notifyEntities, ...legacyServices].filter(option => !(this._notifTargets || []).includes(option.value));
 
+    const placeholder = this._t('notif_no_services') || 'No hay servicios de notificación móvil disponibles.';
     sel.innerHTML = opts.length
       ? opts.map(({ value, label }) => `<option value="${this._escapeHtml(value)}">${this._escapeHtml(`🔔 ${label}`)}</option>`).join('')
-      : `<option value="">— ${this._escapeHtml(this._t('notif_no_services'))} —</option>`;
+      : `<option value="">— ${this._escapeHtml(placeholder)} —</option>`;
+    sel.disabled = !opts.length;
   }
 
-  _addNotifTarget() {
-    const sel = this.shadowRoot.getElementById('notif-select');
+  _addNotifTarget(selectId = 'notif-select') {
+    const sel = this.shadowRoot.getElementById(selectId) as HTMLSelectElement | null;
     const val = sel?.value;
-    if (!val || this._notifTargets.includes(val)) return;
+    if (!val || (this._notifTargets || []).includes(val)) return;
     this._notifTargets.push(val);
-    this._renderNotifChips();
-    this._populateNotifSelect();
+    this._renderNotifications();
   }
 
-  _renderNotifChips() {
-    const el = this.shadowRoot.getElementById('notif-targets');
+  _renderNotifChips(containerId = 'notif-targets', canRemove = this._isAdmin) {
+    const el = this.shadowRoot.getElementById(containerId);
     if (!el) return;
-    el.innerHTML = this._notifTargets.map(t => `
-      <span class="notif-chip" style="color:#ffffff !important;font-weight:700;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);">🔔 ${this._escapeHtml(t.replace(/^entity:notify\./, '').replace(/_/g,' '))}
-        <button data-notif-remove="${this._escapeHtml(t)}" style="color:#ffffff;opacity:0.75;cursor:pointer;margin-left:4px;font-weight:bold;">✕</button>
-      </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
+    const targets = Array.isArray(this._notifTargets) ? this._notifTargets : [];
+    el.innerHTML = targets.map(t => {
+      const entityId = t.startsWith('entity:') ? t.slice('entity:'.length) : (t.startsWith('notify.') ? t : '');
+      const label = (entityId && this._hass?.states?.[entityId]?.attributes?.friendly_name)
+        || t.replace(/^entity:notify\./, '').replace(/^notify\./, '').replace(/_/g, ' ');
+      return `<span class="notif-chip" style="color:#ffffff !important;font-weight:700;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);">🔔 ${this._escapeHtml(label)}${canRemove ? ` <button type="button" data-notif-remove="${this._escapeHtml(t)}" aria-label="Quitar ${this._escapeHtml(label)}" style="color:#ffffff;opacity:0.85;cursor:pointer;margin-left:4px;font-weight:bold;">✕</button>` : ''}</span>`;
+    }).join('') || `<span class="small" style="opacity:.8">${canRemove ? 'No hay teléfonos o servicios seleccionados todavía.' : 'No hay destinos de notificación configurados.'}</span>`;
     el.querySelectorAll('[data-notif-remove]').forEach(btn =>
       btn.addEventListener('click', () => {
         this._notifTargets = this._notifTargets.filter(x => x !== btn.dataset.notifRemove);
-        this._renderNotifChips();
-        this._populateNotifSelect();
+        this._renderNotifications();
       })
     );
   }
@@ -7973,6 +8152,8 @@ class ArgusPanel extends HTMLElement {
   _renderNotifications() {
     this._renderNotifChips();
     this._populateNotifSelect();
+    this._renderNotifChips('sos-notif-targets', this._isAdmin);
+    this._populateNotifSelect('sos-notif-select');
   }
 
   async _saveNotifications() {
@@ -7982,6 +8163,8 @@ class ArgusPanel extends HTMLElement {
         await this._send('argus/save_ui', {
           notif_targets: this._notifTargets,
         });
+        if (this._ui) this._ui.notif_targets = [...this._notifTargets];
+        this._renderNotifications();
         if (status) { status.textContent = '✓'; status.className = 'status ok'; }
       } catch (e) {
         if (status) { status.textContent = e.message; status.className = 'status err'; }
@@ -8709,11 +8892,13 @@ class ArgusPanel extends HTMLElement {
 
   _updateCanvasBackground() {
     const bgContainer = this.shadowRoot.getElementById('argus-canvas-bg');
+    const isCompact = this.hasAttribute('compact') || this.classList.contains('argus-compact') || Boolean(this._cardConfig?.compact);
+    const backgroundImage = `url('/api/argus_static/argus-default-bg.jpg')`;
     this.setAttribute('data-bg-mode', 'default');
 
     if (bgContainer) {
       bgContainer.innerHTML = '';
-      bgContainer.style.backgroundImage = '';
+      bgContainer.style.backgroundImage = isCompact ? '' : backgroundImage;
     }
 
     // Stop and remove any WebGL canvas loops to guarantee liquid-smooth rendering
@@ -8723,11 +8908,14 @@ class ArgusPanel extends HTMLElement {
       canvas.remove();
     });
 
-    this.style.backgroundImage = `url('/api/argus_static/argus-default-bg.jpg')`;
+    // Compact HA cards keep the wallpaper within their own bounds. In the
+    // full panel, the existing fixed layer preserves viewport positioning
+    // without triggering Safari's fixed-background repaint during scroll.
+    this.style.backgroundImage = isCompact ? backgroundImage : 'none';
     this.style.backgroundSize = 'cover';
     this.style.backgroundPosition = 'center';
     this.style.backgroundRepeat = 'no-repeat';
-    this.style.backgroundAttachment = 'fixed';
+    this.style.backgroundAttachment = 'scroll';
   }
 
   _renderEntryBackground(ws, isNight) {
@@ -8815,13 +9003,24 @@ class ArgusPanel extends HTMLElement {
   async _stopSOS(idx) {
     const entry = this._dashboard?.entries?.[idx];
     if (!entry?.entry_id) return false;
-    try {
-      await this._send('argus/perform_alarm_action', { action: 'stop_sos', entry_id: entry.entry_id });
-      return true;
-    } catch (err) {
-      alert(this._format('panic_stop_error', { error: err?.message || err }));
-      return false;
-    }
+    const requiresPin = entry.pin_configured === true || entry.user_pin_configured === true;
+    let pending = false;
+    const stop = async (code = null) => {
+      if (pending) return false;
+      pending = true;
+      try {
+        await this._send('argus/perform_alarm_action', { action: 'stop_sos', entry_id: entry.entry_id, ...(code ? {code} : {}) });
+        return true;
+      } catch (err) {
+        const message = this._format('panic_stop_error', { error: err?.message || err });
+        const error = this.shadowRoot.getElementById('pin-error');
+        if (requiresPin && error) error.textContent = message;
+        else alert(message);
+        return false;
+      } finally { pending = false; }
+    };
+    if (requiresPin) { this._showPinModal(stop, 'sos_stop'); return false; }
+    return stop();
   }
 
   _savePersonalization() {
@@ -9011,8 +9210,10 @@ class ArgusPanel extends HTMLElement {
       return;
     }
 
+    if (!p1 && !await this._showArgusConfirmModal('¿Eliminar el PIN de armado?', { confirmLabel: 'Eliminar PIN' })) return;
+
     try {
-      await this._send('argus/update_master_pin', { pin: p1, current_pin: pinCurrent });
+      await this._send('argus/update_master_pin', { pin: p1, confirm_pin: p2, current_pin: pinCurrent });
       if (status) {
         status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted');
         status.className = 'status ok';
@@ -9293,6 +9494,12 @@ class ArgusPanel extends HTMLElement {
     });
   }
 
+  _showArgusInputModal(options) { return showSettingsPrompt(this.shadowRoot, '', options, true); }
+
+  async _showArgusConfirmModal(message, options = {}) {
+    return (await showSettingsPrompt(this.shadowRoot, message, options)) !== null;
+  }
+
   _runWithPin(action) {
     action();
   }
@@ -9310,7 +9517,7 @@ class ArgusPanel extends HTMLElement {
     const description = this.shadowRoot.getElementById('l-pin-modal-desc');
     if (description) description.textContent = presentation === 'disarm'
       ? (this._getCurrentLangCode() === 'es' ? 'Introduce el PIN de armado para desarmar el sistema.' : 'Enter the arming PIN to disarm the system.')
-      : this._t('pin_modal_desc');
+      : presentation === 'sos_stop' ? (this._getCurrentLangCode() === 'es' ? 'Introduce el PIN de armado para detener SOS. El estado de armado se conserva.' : 'Enter the alarm PIN to stop SOS. Arming state is preserved.') : this._t('pin_modal_desc');
     this._pinCallback = onConfirm;
     if (this._pinCloseTimer) {
       clearTimeout(this._pinCloseTimer);
@@ -9496,16 +9703,10 @@ class ArgusPanel extends HTMLElement {
   /* ── Selector modal ──────────────────────────────────────────────── */
   _selectAll() {
     const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
-    const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = (this._available || []).filter(x => {
       if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
-      if (this._selectorTarget === 'siren' || this._selectorTarget === 'alarm_device' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','alarm_control_panel'].includes(x.domain);
-      if (x.domain === 'lock') return true;
-      if (x.domain === 'binary_sensor') {
-        const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
-        return INTRUSION_DC.includes(dc);
-      }
-      return false;
+      if (this._selectorTarget === 'siren' || this._selectorTarget === 'alarm_device' || this._selectorTarget === 'panic') return isAlarmOutput(x.entity_id, (this._dashboard?.entries || []).map(entry => entry.entity_id));
+      return isModeSensor(x.entity_id);
     }).filter(x => !q || [x.entity_id, x.name, x.area].filter(Boolean).join(' ').toLowerCase().includes(q));
     items.forEach(x => { if (!this._selected.includes(x.entity_id)) this._selected.push(x.entity_id); });
     this._renderSelector(true);
@@ -9596,16 +9797,10 @@ class ArgusPanel extends HTMLElement {
 
     if (rebuildList) {
       const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
-      const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
       const items = (this._available || []).filter(x => {
         if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
-        if (this._selectorTarget === 'siren' || this._selectorTarget === 'alarm_device' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','alarm_control_panel'].includes(x.domain);
-        if (x.domain === 'lock') return true;
-        if (x.domain === 'binary_sensor') {
-          const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
-          return INTRUSION_DC.includes(dc);
-        }
-        return false;
+        if (this._selectorTarget === 'siren' || this._selectorTarget === 'alarm_device' || this._selectorTarget === 'panic') return isAlarmOutput(x.entity_id, (this._dashboard?.entries || []).map(entry => entry.entity_id));
+        return isModeSensor(x.entity_id);
       }).filter(x => !q || [x.entity_id, x.name, x.area, x.entity_id.split('.')[1]].filter(Boolean).join(' ').toLowerCase().includes(q));
 
       list.innerHTML = items.map(x => {
@@ -9892,6 +10087,8 @@ class ArgusPanel extends HTMLElement {
     try {
       const stored = localStorage.getItem(`argus_contrast_${profId}`);
       if (stored === 'high' || stored === 'standard') return stored;
+      const global = localStorage.getItem('argus_contrast_global');
+      if (global === 'high' || global === 'standard') return global;
     } catch (_) {}
     return 'standard';
   }
@@ -10065,6 +10262,12 @@ class ArgusPanel extends HTMLElement {
           </select>
         </div>
 
+        <label class="setting-label" for="dropdown-clock-select">Formato de hora</label>
+        <select id="dropdown-clock-select" class="glass-control" aria-label="Formato de hora" style="width:100%;margin-bottom:12px">
+          <option value="auto" ${this._getClockFormat() === 'auto' ? 'selected' : ''}>Automático · Home Assistant</option>
+          <option value="12h" ${this._getClockFormat() === '12h' ? 'selected' : ''}>12 horas · AM / PM</option>
+          <option value="24h" ${this._getClockFormat() === '24h' ? 'selected' : ''}>24 horas</option>
+        </select>
         <!-- Appearance & Contrast Selector -->
         <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
           <label style="font-size: 11.5px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 6px;">${this._t('contrast_selector_lbl') || '👁️ Aspecto y Contraste'}</label>
@@ -10220,6 +10423,21 @@ class ArgusPanel extends HTMLElement {
       });
     }
 
+    dropdown.querySelector<HTMLSelectElement>('#dropdown-clock-select')?.addEventListener('change', async event => {
+      const select = event.target as HTMLSelectElement;
+      const previous = this._getClockFormat();
+      select.disabled = true;
+      try {
+        await this._send('argus/save_ui', {clock_format: select.value});
+        this._ui.clock_format = select.value;
+        this._clockFormat = select.value;
+        this._updateHeroClock();
+      } catch (error) {
+        select.value = previous;
+        await this._showArgusConfirmModal(error.message || String(error), {confirmLabel: 'OK'});
+      } finally { select.disabled = false; }
+    });
+
     // Contrast dropdown change listener
     const contrastSelect = dropdown.querySelector('#dropdown-contrast-select');
     if (contrastSelect) {
@@ -10265,16 +10483,28 @@ class ArgusPanel extends HTMLElement {
       profileDialog.close();
       const newPin = await this._showArgusInputModal({
         title: `🔑 ${this._t('access_pin_lbl') || 'Pin perfil Argus'}`,
-        label: this._t('enter_new_pin') || 'Introduce el nuevo PIN (4 a 8 dígitos):',
+        label: this._t('enter_new_pin') || 'Nuevo PIN (4 a 12 dígitos). Deja ambos campos nuevos vacíos para eliminarlo:',
         placeholder: '••••',
         type: 'password',
         numeric: true,
       });
-      if (newPin === null || !newPin.trim()) return;
+      if (newPin === null) return;
+      const confirmedPin = await this._showArgusInputModal({
+        title: 'Confirmar nuevo PIN de armado',
+        label: 'Repite el nuevo PIN. Para eliminarlo, déjalo vacío también.',
+        type: 'password', numeric: true,
+      });
+      if (confirmedPin === null) return;
+      if (newPin !== confirmedPin) {
+        await this._showArgusConfirmModal('Los nuevos PIN no coinciden. No se realizó ningún cambio.', { confirmLabel: 'OK' });
+        return;
+      }
+      if (!newPin && !await this._showArgusConfirmModal('¿Eliminar el PIN de armado? Se comprobará el PIN actual antes de eliminarlo.', { confirmLabel: 'Eliminar PIN' })) return;
       try {
         await this._send('argus/save_user_access_pin', {
           argus_user_id: prof.id,
-          pin: newPin.trim(),
+          pin: newPin,
+          confirm_pin: confirmedPin,
         });
         prof.access_pin_configured = true;
         if (this._ui?.users) {
@@ -10326,7 +10556,7 @@ class ArgusPanel extends HTMLElement {
       const entryId = this._dashboard?.entries?.[0]?.entry_id || this._dashboard?.entry_id || this._modeEntryId;
       
       let currentPin = '';
-      if (hasMasterPin && prof.role !== 'admin') {
+      if (hasMasterPin) {
         const enteredCurrent = await this._showArgusInputModal({
           title: `🔑 ${this._t('master_pin_lbl') || 'Pin de Armado'}`,
           label: this._t('enter_current_pin') || 'Introduce el PIN actual:',
@@ -10340,21 +10570,33 @@ class ArgusPanel extends HTMLElement {
 
       const newPin = await this._showArgusInputModal({
         title: `🔑 ${this._t('master_pin_lbl') || 'Pin de Armado'}`,
-        label: this._t('enter_new_pin') || 'Introduce el nuevo PIN (4 a 8 dígitos):',
+        label: this._t('enter_new_pin') || 'Nuevo PIN (4 a 12 dígitos). Deja ambos campos nuevos vacíos para eliminarlo:',
         placeholder: '••••',
         type: 'password',
         numeric: true,
       });
-      if (newPin === null || !newPin.trim()) return;
+      if (newPin === null) return;
+      const confirmedPin = await this._showArgusInputModal({
+        title: 'Confirmar nuevo PIN de armado',
+        label: 'Repite el nuevo PIN. Para eliminarlo, déjalo vacío también.',
+        type: 'password', numeric: true,
+      });
+      if (confirmedPin === null) return;
+      if (newPin !== confirmedPin) {
+        await this._showArgusConfirmModal('Los nuevos PIN no coinciden. No se realizó ningún cambio.', { confirmLabel: 'OK' });
+        return;
+      }
+      if (!newPin && !await this._showArgusConfirmModal('¿Eliminar el PIN de armado? Se comprobará el PIN actual antes de eliminarlo.', { confirmLabel: 'Eliminar PIN' })) return;
 
       try {
         await this._send('argus/update_master_pin', {
           entry_id: entryId,
-          pin: newPin.trim(),
+          pin: newPin,
+          confirm_pin: confirmedPin,
           current_pin: currentPin,
         });
         if (this._dashboard?.entries?.[0]) {
-          this._dashboard.entries[0].pin_configured = true;
+          this._dashboard.entries[0].pin_configured = Boolean(newPin);
         }
         await this._showArgusConfirmModal(this._t('pin_updated') || 'PIN actualizado exitosamente', { confirmLabel: 'OK' });
         this._load();
@@ -10372,7 +10614,7 @@ class ArgusPanel extends HTMLElement {
       const entryId = this._dashboard?.entries?.[0]?.entry_id || this._dashboard?.entry_id || this._modeEntryId;
       
       let currentPin = '';
-      if (hasMasterPin && prof.role !== 'admin') {
+      if (hasMasterPin) {
         const enteredCurrent = await this._showArgusInputModal({
           title: `🔑 ${this._t('master_pin_lbl') || 'Pin de Armado'}`,
           label: this._t('enter_current_pin') || 'Introduce el PIN actual para confirmar eliminación:',
@@ -10397,6 +10639,7 @@ class ArgusPanel extends HTMLElement {
         await this._send('argus/update_master_pin', {
           entry_id: entryId,
           pin: '',
+          confirm_pin: '',
           current_pin: currentPin,
         });
         if (this._dashboard?.entries?.[0]) {
@@ -11007,6 +11250,7 @@ class ArgusPanel extends HTMLElement {
   async _runProfileWelcomeAnimation(user) {
     // Set profile and initialize hero display immediately so the target element is mounted in DOM
     this._currentProfile = user;
+    this._initContrastMode();
     this._updateHeroProfileDisplay();
 
     // Load Argus behind the welcome animation. Waiting until the animation

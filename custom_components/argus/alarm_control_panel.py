@@ -998,6 +998,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         new_state = event.data.get("new_state")
         entity_id = event.data.get("entity_id")
 
+        old_state = event.data.get("old_state")
+        if entity_id and getattr(old_state, "state", None) != getattr(new_state, "state", None):
+            from .zones import zone_event_payloads
+            for payload in zone_event_payloads(self._ui_config.get("zones", []), entity_id, self.hass.states):
+                self.hass.bus.async_fire("argus_zone_changed", {
+                    **payload, "alarm_entity_id": self.entity_id,
+                    "entry_id": self._config_entry.entry_id,
+                })
+
         if entity_id and self._arm_request:
             self.hass.async_create_task(self._async_recheck_arm_request())
 
@@ -1833,13 +1842,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         except Exception:  # noqa: BLE001
             _LOGGER.exception("Argus: failed to dispatch armed mode %s", mode)
 
-    async def _require_alarm_actor_permission(self, permission: str) -> None:
+    async def _require_alarm_actor_permission(self, permission: str, context=None) -> None:
         """Enforce Argus permissions on HA calls attributed to a standard user."""
         from homeassistant.exceptions import HomeAssistantError
         from .auth import _get_argus_profile
         from .session import async_get_session_manager
 
-        actor_id = getattr(getattr(self, "_context", None), "user_id", None)
+        actor_id = getattr(context or getattr(self, "_context", None), "user_id", None)
         if not actor_id:
             return
         actor = await self.hass.auth.async_get_user(actor_id)
@@ -1914,10 +1923,23 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             "entry_id": self._config_entry.entry_id,
         })
 
-    async def async_stop_panic(self) -> None:
+    async def async_stop_panic(self, code=None, context=None) -> None:
         """Stop the manual emergency while preserving the intrusion state."""
         if not self._panic_active:
             return
+        await self._require_alarm_actor_permission("sos", context=context)
+        personal_pin = any(user.get("enabled", True) and user.get("permissions", {}).get("disarm", False)
+                           and (user.get("master_pin_hash") or user.get("pin") or user.get("access_pin_hash"))
+                           for user in self._ui_config.get("users", []))
+        if self._code or personal_pin:
+            actor_id = str(getattr(context or getattr(self, "_context", None), "user_id", None) or "default")
+            limiter = self.hass.data.setdefault(f"{DOMAIN}_pin_limiter_{self._config_entry.entry_id}", PinAttemptLimiter())
+            if limiter.is_blocked(actor_id):
+                raise HomeAssistantError("Too many failed PIN attempts; try again later")
+            if not self._validate_code(code):
+                limiter.record_failure(actor_id)
+                raise HomeAssistantError("Invalid or missing alarm PIN; stop SOS from Argus with your PIN")
+            limiter.reset(actor_id)
         intrusion_outputs = self._get_siren_entities() if self._alarm_state == AlarmControlPanelState.TRIGGERED else ()
         outputs = [entity for entity in self._active_panic_outputs if entity not in intrusion_outputs]
         self._panic_active = False

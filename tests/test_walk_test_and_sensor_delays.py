@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import datetime
 from pathlib import Path
 import sys
 import time
@@ -26,6 +27,58 @@ walk_test_mod = load_module("argus.core.walk_test", COMPONENT / "core" / "walk_t
 WalkTestManager = walk_test_mod.WalkTestManager
 WalkTestSession = walk_test_mod.WalkTestSession
 async_get_walk_test_manager = walk_test_mod.async_get_walk_test_manager
+
+
+class TestSensorDiagnosisPayload(unittest.TestCase):
+    def test_contact_diagnosis_includes_live_status_battery_and_change_time(self):
+        changed = datetime.datetime(2026, 11, 5, 12, 30, tzinfo=datetime.timezone.utc)
+        state = SimpleNamespace(
+            entity_id="binary_sensor.patio_door",
+            state="on",
+            attributes={"device_class": "door", "battery": 18},
+            last_changed=changed,
+            last_updated=changed,
+        )
+
+        result = walk_test_mod.diagnose_sensor(state.entity_id, state)
+
+        self.assertEqual(result["state"], "on")
+        self.assertEqual(result["availability"], "available")
+        self.assertEqual(result["battery"], 18)
+        self.assertTrue(result["battery_low"])
+        self.assertEqual(result["last_changed"], changed.isoformat())
+        self.assertEqual(result["physical_test_kind"], "contact")
+
+    def test_informational_entity_does_not_masquerade_as_security_sensor(self):
+        changed = datetime.datetime(2026, 11, 5, 12, 30, tzinfo=datetime.timezone.utc)
+        state = SimpleNamespace(
+            entity_id="sensor.sun_next_dawn",
+            state="2026-11-06T11:01:00+00:00",
+            attributes={"device_class": "timestamp"},
+            last_changed=changed,
+            last_updated=changed,
+        )
+
+        result = walk_test_mod.diagnose_sensor(state.entity_id, state)
+
+        self.assertEqual(result["category"], "informational")
+        self.assertEqual(result["availability"], "available")
+        self.assertIsNone(result["battery"])
+        self.assertIsNone(result["physical_test_kind"])
+
+    def test_unavailable_sensor_reports_connection_failure(self):
+        state = SimpleNamespace(
+            entity_id="binary_sensor.patio_door",
+            state="unavailable",
+            attributes={"device_class": "door"},
+            last_changed=None,
+            last_updated=None,
+        )
+
+        result = walk_test_mod.diagnose_sensor(state.entity_id, state)
+
+        self.assertEqual(result["category"], "unverifiable")
+        self.assertEqual(result["availability"], "unavailable")
 
 
 class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):

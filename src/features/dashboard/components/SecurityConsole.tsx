@@ -50,6 +50,12 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const callCancel = useRef<HTMLButtonElement | null>(null);
   const [callOpen, setCallOpen] = useState(false);
   useEffect(() => { if (callOpen) callCancel.current?.focus(); }, [callOpen]);
+  const verificationClose = useRef<HTMLButtonElement>(null);
+  const verificationOrigin = useRef<HTMLButtonElement>(null);
+  const [verificationOpen, setVerificationOpen] = useState(false);
+  useEffect(() => {
+    if (verificationOpen) verificationClose.current?.focus();
+  }, [verificationOpen]);
   const [chooseTest, setChooseTest] = useState(false);
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [incidentOpen, setIncidentOpen] = useState(false);
@@ -298,7 +304,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
         <div className={`entry-icon ${alarmActive ? 'sos-core-active' : ''}`}>
             <div className="console-emblem-viewport">
-            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} variant={panel._getProfileShieldStyle?.() || 'core'} pulse={panicActive ? 'sos' : pulse} pulseKey={pulseKey} zones={zones} onSelectZone={selectContextZone} />
+            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} variant={panel._getProfileShieldStyle?.() || 'core'} pulse={panicActive ? 'sos' : pulse} pulseKey={pulseKey} zones={zones} zonesEnabled={panel._ui?.zones_enabled !== false} onSelectZone={selectContextZone} />
             </div>
           </div>
 
@@ -335,26 +341,62 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
           <SecurityContext
             online={isOnline}
+            focused={verificationOpen}
             tone={alarmActive ? 'alarm' : isPending || cycleBypassed.length ? 'warning' : 'normal'}
             overviewAttention={showOverview && pendingZones > 0}
             accent={state.startsWith('armed_') && !alarmActive ? modeAccentStyles['--console-accent'] : undefined}
             indicatorScope={required && modeName ? modeName : undefined}
-            indicators={showOverview ? [
+            indicators={[
               { label: 'Zonas', value: zoneChecks.length },
               { label: 'Listas', value: readyZones },
               { label: 'Pendientes', value: pendingZones },
-            ] : undefined}
-            navigation={<>
-              {zones.length > 0 && <details className="context-zone-picker">
-                <summary>Zona para diagnóstico</summary>
-                <div>
-                  <button type="button" aria-pressed={!selectedZoneId} onClick={() => selectContextZone(null)}>Todas las zonas</button>
-                  {zones.map((zone: {id: string; name: string; area: string}) =>
-                    <button type="button" key={zone.id} aria-pressed={selectedZoneId === zone.id}
-                      onClick={() => selectContextZone(zone.id)}>{zone.name}{zone.area ? ' · ' + zone.area : ''}</button>
-                  )}
+            ]}
+            selection={<>
+              <button hidden={verificationOpen} ref={verificationOrigin} className="context-tool context-verify-entry" type="button"
+                onClick={() => setVerificationOpen(true)}>
+                <strong>Verificar zonas</strong><span>Revisar todas las zonas o una individualmente.</span>
+              </button>
+              <section hidden={!verificationOpen} className="context-verification-dialog" aria-label="Verificar zonas"
+                onKeyDown={event => {
+                  if (event.key === 'Escape') {
+                    event.stopPropagation();
+                    setVerificationOpen(false);
+                    requestAnimationFrame(() => verificationOrigin.current?.focus());
+                  }
+                }}>
+                <div className="context-heading"><strong>Verificar zonas</strong>
+                  <button ref={verificationClose} type="button" aria-label="Cerrar verificación" onClick={() => {
+                    setVerificationOpen(false);
+                    requestAnimationFrame(() => verificationOrigin.current?.focus());
+                  }}>Cerrar</button>
                 </div>
-              </details>}
+                <p>Elige todas las zonas o una zona y después cómo quieres comprobarla.</p>
+                <div className="context-zone-picker" role="group" aria-label="Zona contextual">
+                  <div>
+                    <button type="button" aria-pressed={!selectedZoneId} onClick={() => selectContextZone(null)}>Todas las zonas</button>
+                    {zones.map((zone: {id: string; name: string; area: string}) =>
+                      <button type="button" key={zone.id} aria-pressed={selectedZoneId === zone.id}
+                        onClick={() => selectContextZone(zone.id)}>{zone.name}{zone.area ? ' · ' + zone.area : ''}</button>)}
+                  </div>
+                </div>
+                <p role="status">{selectedZone ? selectedZone.area || zones.find((item: any) => item.id === selectedZoneId)?.name : 'Todas las zonas'}</p>
+                <div className="context-tools context-verification">
+                  <button className="context-tool" type="button" aria-pressed={diagnosticOpen}
+                    onClick={() => { setChooseTest(false); setDiagnosticOpen(true); }}>
+                    <strong>Diagnóstico automático</strong><span>Consultar en Home Assistant si los sensores están abiertos o cerrados, disponibles y su batería.</span>
+                  </button>
+                  {panel._isAdmin && <button className="context-tool" type="button" aria-pressed={chooseTest}
+                    onClick={() => { setDiagnosticOpen(false); setChooseTest(true); }}>
+                    <strong>Prueba física</strong><span>Abre y cierra contactos o activa detectores siguiendo una sesión guiada o libre.</span>
+                  </button>}
+                </div>
+            <ContextSensorChecks key={entry.entry_id} panel={panel} entryId={entry.entry_id}
+              zones={configuredZones} zone={selectedZone} online={isOnline} states={hass?.states}
+              canStart={confirmedState === 'disarmed' && !alarmActive && !isPending}
+              visible={verificationOpen} diagnostic={diagnosticOpen} choose={chooseTest} />
+              </section>
+            </>}
+            navigation={<>
               {testing && <button type="button" onClick={() => void panel._stopWalkTest()}>Finalizar prueba</button>}
               {(panicActive || triggered) && emergencyNumber && <div className="context-tools">
                 <small>Llamada de emergencia</small>
@@ -378,21 +420,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 setIncidentOpen(false);
               }}>← Estado</button>}
               {diagnosticOpen && !selectedZone && <button className="context-back" type="button" onClick={() => setDiagnosticOpen(false)}>← Estado</button>}
-              {!testing && !triggered && !isPending && !panicActive && !diagnosticOpen && !selectedZone && state === 'disarmed' && (
-                <div className="context-tools context-verification">
-                  <small>Verificar zonas</small>
-                  <button className="context-tool" type="button" onClick={() => setDiagnosticOpen(true)}>
-                    <strong>Diagnóstico automático</strong><span>Revisar disponibilidad, estado y batería.</span>
-                  </button>
-                  {panel._isAdmin && entry.entry_id && <button className="context-tool" type="button" onClick={() => setChooseTest(true)}>
-                    <strong>Prueba física</strong><span>Comprobar los sensores en el lugar.</span>
-                  </button>}
-                </div>
-              )}
-              {selectedZone && !diagnosticOpen && !alarmActive && !isPending && <button className="context-back" type="button" onClick={() => setDiagnosticOpen(true)}>Diagnóstico de la zona</button>}
-              {selectedZone && state === 'disarmed' && !isPending && panel._isAdmin && entry.entry_id && (
-                <button className="context-back" type="button" onClick={() => setChooseTest(true)}>Probar sensores</button>
-              )}
               {triggered && (selectedZone || testing || diagnosticOpen) && <button type="button" onClick={() => setIncidentOpen(!incidentOpen)}>
                 {incidentOpen ? 'Volver a la zona' : 'Alarma activa · Ver incidente'}
               </button>}
@@ -410,10 +437,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               : diagnosticOpen && !incidentOpen ? 'Diagnóstico de sensores' : undefined}
 
           >
-            <ContextSensorChecks key={entry.entry_id} panel={panel} entryId={entry.entry_id}
-              zones={configuredZones} zone={selectedZone} online={isOnline}
-              canStart={confirmedState === 'disarmed' && !alarmActive && !isPending}
-              visible={!incidentOpen && !alarmActive} diagnostic={diagnosticOpen} choose={chooseTest} />
             {bypassError && <small role="alert">{bypassError}</small>}
             {selectedZone && !testing && !incidentOpen && <div className="context-sensor-row">
               <small>{selectedZoneStatus === 'ready' ? 'Zona lista' : selectedZoneStatus === 'pending' ? 'Zona pendiente' :

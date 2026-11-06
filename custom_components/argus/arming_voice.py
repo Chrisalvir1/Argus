@@ -423,3 +423,16 @@ async def async_announce_alarm_sensor_closed(hass, config_entry, *, alarm_entity
   })
   await _async_speak(hass, options, message, lang)
 def install_cancel_announcement():return None
+
+
+async def async_announce_disarmed(hass, config_entry):
+    """Announce only a server-confirmed transition to disarmed."""
+    lang = await _get_language(hass, config_entry)
+    options = _options(hass, config_entry)
+    template = options.get("arming_voice_message_disarmed")
+    message = template or ("Argus de seguridad desarmado." if lang == "es" else "Argus security disarmed.")
+    try:
+        message = message.format(mode=translate(lang, "disarmed"), home=config_entry.title)
+    except (KeyError, ValueError):
+        pass
+    await _async_speak(hass, options, message, lang)

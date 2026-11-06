@@ -14,17 +14,17 @@ class TestV210RuntimeContract(unittest.TestCase):
     def test_python_pin_is_in_the_supported_range(self):
         pin = tuple(map(int, (ROOT / ".python-version").read_text().strip().split(".")))
         self.assertGreaterEqual(len(pin), 2)
-        self.assertTrue((3, 12) <= pin[:2] < (3, 15))
+        self.assertTrue((3, 14) <= pin[:2] < (3, 16))
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())
-        self.assertEqual(project["project"]["requires-python"], ">=3.12,<3.15")
+        self.assertEqual(project["project"]["requires-python"], ">=3.14,<3.16")
         for workflow in ("validate.yml", "release.yml"):
             source = (ROOT / ".github" / "workflows" / workflow).read_text()
             if workflow == "release.yml":
                 self.assertIn("python-version-file: '.python-version'", source)
             else:
                 self.assertIn("python-version: ${{ matrix.python }}", source)
-                self.assertIn("python: ['3.12', '3.13', '3.14']", source)
-            self.assertIn("(3, 12, 0) <= sys.version_info < (3, 15, 0)", source)
+                self.assertIn("python: ['3.14', '3.15']", source)
+            self.assertIn("(3, 14, 0) <= sys.version_info < (3, 16, 0)", source)
 
     def test_node_26_and_typescript_702_are_enforced(self):
         package = (ROOT / "package.json").read_text()

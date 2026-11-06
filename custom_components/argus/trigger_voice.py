@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import asyncio
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
-from .arming_voice import async_announce_alarm_triggered, async_announce_alarm_sensor_closed
+from .arming_voice import async_announce_alarm_triggered, async_announce_alarm_sensor_closed, async_announce_disarmed
 _ACTIVE={"on","open","unlocked","active","motion","recording"}
 _REPEAT_INTERVAL=30
 _MODE_STATES={"home":AlarmControlPanelState.ARMED_HOME,"away":AlarmControlPanelState.ARMED_AWAY,"night":AlarmControlPanelState.ARMED_NIGHT}
@@ -101,9 +101,12 @@ def install_trigger_voice() -> None:
     if not remaining:stop_repeat_alarm_voice(self)
   return result
  async def wrapped_disarm(self,*args,**kwargs):
+  was_disarmed = self._alarm_state == AlarmControlPanelState.DISARMED
   result=await original_disarm(self,*args,**kwargs)
   if self._alarm_state==AlarmControlPanelState.DISARMED:
    stop_repeat_alarm_voice(self);self._argus_triggered_sensors=[];self._argus_open_triggered_sensors=set();self.async_write_ha_state()
+   if not was_disarmed:
+    self.hass.async_create_task(async_announce_disarmed(self.hass, self._config_entry))
   return result
  def wrapped_attrs(self):
   attrs=original_attrs(self);sensor_ids=list(getattr(self,"_argus_triggered_sensors",[]) or []);attrs["triggered_sensors"]=sensor_ids;attrs["triggered_sensor_names"]=[self.hass.states.get(e).attributes.get("friendly_name",e) if self.hass.states.get(e) else e for e in sensor_ids];attrs["triggered_sensor_count"]=len(sensor_ids);return attrs

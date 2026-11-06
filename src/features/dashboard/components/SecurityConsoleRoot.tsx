@@ -73,10 +73,15 @@ export function SecurityConsoleRoot({ panel }: { panel: any }) {
   const renderAllEntries = !cardMode && !explicitlySelected && entries.length > 1;
   const indexes: Array<number | undefined> = bridge.fullscreen && bridge.fullscreenIndex >= 0 ? [bridge.fullscreenIndex] : renderAllEntries ? entries.map((_: unknown, index: number) => index) : [undefined];
 
+  const selectedIndex = entries.findIndex((entry: any) => bridge.selectedEntity
+    ? entry.entity_id === bridge.selectedEntity
+    : entry.entry_id === (bridge.selectedEntry || panel._dashboard?.entry_id));
+  const resolvedIndex = (index: number | undefined) => index ?? (selectedIndex >= 0 ? selectedIndex : 0);
+
   return (
     <div style={{ width: '100%', height: 'auto' }}>
       {indexes.map(index => <SecurityConsole
-        key={index ?? bridge.selectedEntry ?? bridge.selectedEntity ?? 0}
+        key={entries[resolvedIndex(index)]?.entry_id ?? entries[resolvedIndex(index)]?.entity_id ?? resolvedIndex(index)}
         panel={panel}
         entryIndex={index}
         isFullscreen={isFullscreen}
@@ -85,7 +90,7 @@ export function SecurityConsoleRoot({ panel }: { panel: any }) {
             if (typeof panel._exitFullscreenView === 'function') panel._exitFullscreenView();
             else { panel.classList.remove('fullscreen-active'); document.body.style.overflow = ''; setIsFullscreen(false); }
           } else {
-            const entryEl = panel.shadowRoot?.querySelector(`.entry[data-entry-index="${index ?? 0}"]`);
+            const entryEl = panel.shadowRoot?.querySelector(`.entry[data-entry-index="${resolvedIndex(index)}"]`);
             if (typeof panel._toggleFullscreen === 'function') panel._toggleFullscreen(entryEl);
             else { panel.classList.add('fullscreen-active'); document.body.style.overflow = 'hidden'; setIsFullscreen(true); }
           }

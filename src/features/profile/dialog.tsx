@@ -24,6 +24,13 @@ const STYLES = `
 #profile-dropdown .profile-card-tile{min-width:0!important;max-width:100%!important;border-radius:16px!important}
 #profile-dropdown select,#profile-dropdown .profile-btn,#profile-dropdown #btn-dropdown-switch-user{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;border-radius:14px!important}
 #profile-dropdown select.glass-control{width:calc(100% - 8px)!important;margin-inline:4px!important}
+#profile-dropdown .profile-choices{display:grid;gap:7px;margin:4px 0 10px;min-width:0}
+#profile-dropdown .profile-choice{display:flex!important;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:10px 12px!important;border-radius:14px!important;border:1px solid rgba(255,255,255,.18)!important;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04))!important;color:#eef5fa!important;font-size:13px!important;line-height:1.4;text-align:left;white-space:normal;cursor:pointer}
+#profile-dropdown .profile-choice[aria-pressed="true"]{border-color:#69d8bd!important;background:rgba(52,168,143,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+#profile-dropdown .profile-choice:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}
+#profile-dropdown .profile-card-tile{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;padding:14px!important}
+#profile-dropdown .profile-card-tile>div:last-child{flex-wrap:wrap!important;min-width:0;gap:8px!important}
+#profile-dropdown .profile-card-tile .profile-btn{min-height:40px;padding:9px 14px!important;flex:1 1 auto}
 #profile-dropdown .user-badge{border-radius:10px!important}
 .argus-profile-dialog-layer.is-closed{display:none!important;visibility:hidden;pointer-events:none}
 .argus-profile-dialog-layer.is-opening,.argus-profile-dialog-layer.is-open{pointer-events:auto}
@@ -39,7 +46,7 @@ const STYLES = `
 @keyframes argusProfileBounceOut{0%{opacity:1;transform:scale(1)}22%{opacity:1;transform:scale(1.018)}65%{opacity:.25;transform:scale(.38)}85%,100%{opacity:0;transform:scale(.06)}}
 @keyframes argusProfileBackdropIn{0%{opacity:0}100%{opacity:1}}
 @keyframes argusProfileBackdropOut{0%{opacity:1}100%{opacity:0}}
-@media(max-width:600px) and (orientation:portrait){
+@media(max-width:600px),(max-width:900px) and (orientation:portrait){
  .argus-profile-dialog-layer{position:fixed;inset:0;display:grid;place-items:center;box-sizing:border-box;width:auto;max-width:none;padding:max(16px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));isolation:isolate}
  .argus-profile-dialog-layer.is-opening,.argus-profile-dialog-layer.is-open{pointer-events:auto}
  .argus-profile-dialog-layer::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(2,6,14,.65)}
@@ -47,6 +54,21 @@ const STYLES = `
 }
 @media(prefers-reduced-motion:reduce){.argus-profile-dialog-layer #profile-dropdown{animation:none!important;transition:none!important}.argus-profile-dialog-layer.is-closed #profile-dropdown{transform:none!important}}
 `;
+
+type ChoiceProps = { nativeProps: Record<string, unknown>; children: React.ReactNode[]; choices: Array<{value: string; label: string}>; initial: string };
+function ProfileChoices({nativeProps, children, choices, initial}: ChoiceProps) {
+  const [selected, setSelected] = React.useState(initial);
+  const select = React.useRef<HTMLSelectElement>(null);
+  return <div className="profile-choices" role="group" aria-label={String(nativeProps['aria-label'] || 'Preferencia')}>
+    <select {...nativeProps} ref={select} defaultValue={initial} style={{display: 'none'}} aria-hidden="true" tabIndex={-1}>{children}</select>
+    {choices.map(choice => <button key={choice.value} type="button" className="profile-choice" aria-pressed={selected === choice.value} onClick={() => {
+      if (!select.current || select.current.disabled) return;
+      select.current.value = choice.value;
+      setSelected(choice.value);
+      select.current.dispatchEvent(new Event('change', {bubbles: true}));
+    }}><span>{choice.label}</span><span aria-hidden="true">{selected === choice.value ? '✓' : ''}</span></button>)}
+  </div>;
+}
 
 const BOOLEAN_ATTRIBUTES = new Set(['allowfullscreen', 'autofocus', 'checked', 'disabled', 'hidden', 'multiple', 'readonly', 'required', 'selected']);
 const REACT_ATTRIBUTE_NAMES: Record<string, string> = { tabindex: 'tabIndex', maxlength: 'maxLength', minlength: 'minLength', colspan: 'colSpan', rowspan: 'rowSpan', autofocus: 'autoFocus', readonly: 'readOnly', allowfullscreen: 'allowFullScreen' };
@@ -81,6 +103,10 @@ function renderSettingsMarkup(markup: string): React.ReactNode {
       else props[REACT_ATTRIBUTE_NAMES[attribute.name] || attribute.name] = attribute.value;
     }
     const children = Array.from(node.childNodes).map(renderNode);
+    if (node.tagName === 'SELECT' && ['dropdown-shield-select', 'dropdown-contrast-select', 'dropdown-gesture-select', 'dropdown-clock-select'].includes(node.id)) {
+      const select = node as HTMLSelectElement;
+      return <ProfileChoices key={key} nativeProps={props} initial={select.value} choices={Array.from(select.options).map(option => ({value: option.value, label: option.text}))}>{children}</ProfileChoices>;
+    }
     return React.createElement(node.tagName.toLowerCase(), props, ...children);
   };
 
@@ -98,7 +124,7 @@ function installStyles(shadow: ShadowRoot): void {
 }
 
 function DialogView({ html, phase, onClose, onClosed, top, right }: { html: string; phase: Phase; onClose: () => void; onClosed: () => void; top: number; right: number }) {
-  const mobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
+  const mobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 600px), (max-width: 900px) and (orientation: portrait)').matches;
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const settings = React.useMemo(() => renderSettingsMarkup(html), [html]);
   React.useEffect(() => {
@@ -214,7 +240,8 @@ export function mountProfileDialog(source: HTMLElement): ProfileDialogController
     if (phase !== 'closing') return;
     window.clearTimeout(timer);
     render('closed');
-    trigger?.focus({ preventScroll: true });
+    const active = shadow.activeElement;
+    if (!active || active === trigger || element?.contains(active)) trigger?.focus({ preventScroll: true });
   };
 
   const controller: ProfileDialogController = {

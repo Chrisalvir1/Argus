@@ -6,7 +6,7 @@ import { MODE_PALETTE } from './mode-palette';
 import { crystalHalfSpan, createCrystalGeometry, updateCrystalGeometry } from './crystal-layout';
 
 
-export type EmblemProps = { state: string; label: string; variant?: string; pulse?: string; pulseKey?: string; onSelectZone?: (id: string) => void; zones?: Array<{id:string; name:string; area?:string; number:number; open:boolean}> };
+export type EmblemProps = { state: string; label: string; variant?: string; pulse?: string; pulseKey?: string; onSelectZone?: (id: string) => void; zonesEnabled?: boolean; zones?: Array<{id:string; name:string; area?:string; number:number; open:boolean}> };
 const colors: Record<string, number> = {
   disarmed: MODE_PALETTE.disarmed.three,
   armed_home: MODE_PALETTE.home.three,
@@ -28,7 +28,7 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
   const wakeFrame = useRef<() => void>(() => {});
   useEffect(() => { wakeFrame.current(); }, [props.state, props.pulse, props.pulseKey, props.zones]);
   // One crystal per active zone, retaining the approved open-sector shape.
-  const zoneCount = props.zones?.length ?? 0;
+  const zoneCount = props.zonesEnabled === false ? 7 : (props.zones?.length ?? 0);
   useEffect(() => {
     const el = container.current;
     if (!el) return;
@@ -93,7 +93,7 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     const inscriptions: Array<{ object: THREE.Object3D; group: SVGGElement; title: SVGTextElement; area: SVGTextElement; width: number; key: string }> = [];
     const updateInscription = (index: number) => {
       const inscription = inscriptions[index];
-      const zone = latest.current.zones?.[index];
+      const zone = latest.current.zonesEnabled === false ? undefined : latest.current.zones?.[index];
       if (!inscription) return;
       inscription.group.style.display = zone ? '' : 'none';
       if (!zone) return;
@@ -240,6 +240,7 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     const key = new THREE.DirectionalLight(0xe9f4ff, 2); key.position.set(-3, 4, 5); scene.add(key);
     const rim = new THREE.PointLight(accent, 18, 12); rim.position.set(2, -1, 3); scene.add(rim);
     let width = 0, height = 0, emblemDiameter = 0, visible = true, disposed = false, lost = false, frame = 0, last = 0, previousState = '', previousPulse = '', transitionAt = 0, disarmReleaseAt = -10, pulseAt = -10, deployAt = -10, previousPatrolling = false, interactionUntil = 0, cornerRadius = 28;
+    let offscreenTimer = 0, qualityHoldUntil = 0;
     const adaptive = new AdaptiveFrames(qualityLimit);
     const targetAccent = new THREE.Color();
     const pointer = new THREE.Vector2();
@@ -247,7 +248,10 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const host = el.getRootNode() instanceof ShadowRoot ? (el.getRootNode() as ShadowRoot).host : el.closest('argus-panel');
     const essential = () => motion.matches || !!host?.classList.contains('argus-perf-essential');
-    const updateResolution = () => {
+    let appliedWidth = -1, appliedHeight = -1, appliedRatio = -1;
+    let resolutionDirty = true;
+    const updateResolution = () => { resolutionDirty = true; };
+    const applyResolution = () => {
       const ceiling = host?.classList.contains('argus-perf-light') ? .75 : 1;
       const quality = essential() ? .6 : Math.min(ceiling, adaptive.quality);
       const lightGraphics = quality <= .7;
@@ -264,8 +268,15 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       const requestedRatio = Math.max(minimumRatio, nativeRatio * quality);
       // setPixelRatio itself calls setSize. Applying both separately allocated
       // the WebGL drawing buffer twice on each sidebar/fullscreen resize.
-      renderer.setDrawingBufferSize(width, height,
-        Math.min(requestedRatio, Math.sqrt(budget / (width * height))));
+      const ratio = Math.min(requestedRatio, Math.sqrt(budget / (width * height)));
+      // Adaptive quality can change while the effective ratio remains clamped.
+      // Three.js writes canvas.width/height unconditionally, resetting the buffer
+      // even for identical values. Preserve it until its effective inputs change.
+      if (width > 0 && height > 0 &&
+          (width !== appliedWidth || height !== appliedHeight || ratio !== appliedRatio)) {
+        renderer.setDrawingBufferSize(width, height, ratio);
+        appliedWidth = width; appliedHeight = height; appliedRatio = ratio;
+      }
     };
     const schedule = () => { if (!disposed && !lost && visible && !document.hidden && !frame) frame = window.requestAnimationFrame(tick); };
     wakeFrame.current = schedule;
@@ -324,6 +335,9 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     const labelDown = new THREE.Vector3();
     const animate = (now: number) => {
       if (lost || document.hidden || !visible || width <= 0 || height <= 0) return;
+      // Resizing clears WebGL: apply it before drawing, never after presenting a frame.
+      // Coalesce observer/adaptation notifications into this existing animation frame.
+      if (resolutionDirty) { applyResolution(); resolutionDirty = false; }
       const t = now / 1000, p = latest.current, reduced = essential();
       const changed = p.state !== previousState || `${p.pulse}:${p.pulseKey}` !== previousPulse;
       const dt = last ? now - last : 1000 / 60;
@@ -550,18 +564,35 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       const start = performance.now();
       animate(now);
       if (!essential() && visible && !document.hidden && width > 0 && height > 0) {
-        const quality = adaptive.quality;
-        const snapshot = adaptive.sample(now, performance.now() - start);
-        if (snapshot) {
-          renderer.domElement.dataset.argusFrames = JSON.stringify(snapshot);
-          renderer.domElement.dataset.argusColorSpace = renderer.outputColorSpace;
-          if (quality !== adaptive.quality) updateResolution();
+        if (now >= qualityHoldUntil) {
+          const quality = adaptive.quality;
+          const snapshot = adaptive.sample(now, performance.now() - start);
+          if (snapshot) {
+            renderer.domElement.dataset.argusFrames = JSON.stringify(snapshot);
+            renderer.domElement.dataset.argusColorSpace = renderer.outputColorSpace;
+            if (quality !== adaptive.quality) updateResolution();
+          }
         }
         schedule();
       }
     };
     const suspend = () => { window.cancelAnimationFrame(frame); frame = 0; last = 0; adaptive.reset(); };
     const onVisibility = () => { if (document.hidden) suspend(); else schedule(); };
+    // Scrolling temporarily disrupts rAF cadence and can make the adaptive
+    // controller misdiagnose compositor work as a slow GPU. Changing the
+    // WebGL drawing-buffer size during that interval clears/reallocates the
+    // canvas and appears as a flash in Safari. Keep rendering the same orbit,
+    // but discard scroll-contaminated samples and adapt only after scrolling
+    // has settled.
+    const onScrollActivity = () => {
+      const now = performance.now();
+      if (now >= qualityHoldUntil) adaptive.reset();
+      qualityHoldUntil = now + 1200;
+    };
+    const scrollListenerOptions: AddEventListenerOptions = { capture: true, passive: true };
+    window.addEventListener('scroll', onScrollActivity, scrollListenerOptions);
+    window.addEventListener('wheel', onScrollActivity, scrollListenerOptions);
+    window.addEventListener('touchmove', onScrollActivity, scrollListenerOptions);
     const onMotion = () => { suspend(); updateResolution(); schedule(); };
     // Fullscreen and login classes do not change the graphics profile. Resetting
     // adaptation/reallocating the drawing buffer on every host class mutation
@@ -575,17 +606,38 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       onMotion();
     });
     if (host) profileObserver.observe(host, { attributes: true, attributeFilter: ['class', 'data-argus-perf'] });
+    // Keep the renderer warm across brief viewport exits. Safari can report
+    // repeated intersection changes during fast scrolling and scroll-boundary
+    // bounce; immediately suspending here resets frame history and causes a
+    // visible stop/restart in the orbit. Only pause after the canvas stays away.
     const intersection = new IntersectionObserver(entries => {
-      visible = entries.some(entry => entry.isIntersecting);
-      if (visible) schedule(); else suspend();
-    });
+      const intersects = entries.some(entry => entry.isIntersecting);
+      if (intersects) {
+        window.clearTimeout(offscreenTimer);
+        offscreenTimer = 0;
+        visible = true;
+        schedule();
+        return;
+      }
+      window.clearTimeout(offscreenTimer);
+      offscreenTimer = window.setTimeout(() => {
+        offscreenTimer = 0;
+        visible = false;
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+        last = 0;
+      }, 900);
+    }, { rootMargin: '160px 0px' });
     intersection.observe(surface);
     document.addEventListener('visibilitychange', onVisibility);
     motion.addEventListener('change', onMotion);
     schedule();
     return () => {
-      disposed = true; wakeFrame.current = () => {}; suspend(); resize.disconnect(); intersection.disconnect(); profileObserver.disconnect();
+      disposed = true; wakeFrame.current = () => {}; window.clearTimeout(offscreenTimer); offscreenTimer = 0; suspend(); resize.disconnect(); intersection.disconnect(); profileObserver.disconnect();
       delete surface.dataset.argusRenderQuality;
+      window.removeEventListener('scroll', onScrollActivity, scrollListenerOptions);
+      window.removeEventListener('wheel', onScrollActivity, scrollListenerOptions);
+      window.removeEventListener('touchmove', onScrollActivity, scrollListenerOptions);
       document.removeEventListener('visibilitychange', onVisibility); motion.removeEventListener('change', onMotion);
       interactionSurface.removeEventListener('click', selectZone);
       interactionSurface.removeEventListener('pointermove', move); interactionSurface.removeEventListener('pointerdown', wake); interactionSurface.removeEventListener('pointerleave', leave); renderer.domElement.removeEventListener('webglcontextlost', contextLost);
@@ -593,7 +645,7 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       geometries.forEach(g => g.dispose()); scene.traverse(object => { if (object instanceof THREE.Line) (object.material as THREE.Material).dispose(); });
       glass.dispose(); dark.dispose(); light.dispose(); lensMaterial.dispose(); guardAway.dispose(); guardAlarm.dispose(); guardGlow.dispose(); zoneMaterials.forEach(material => material.dispose()); glintTexture.dispose(); glintMaterial.dispose(); glintSmallMaterial.dispose(); waveMaterials.forEach(material => material.dispose()); environment.dispose(); renderer.dispose(); renderer.domElement.remove();
     };
-  }, [props.variant, zoneCount]);
+  }, [props.variant, zoneCount, props.zonesEnabled]);
   return <div className="console-emblem-3d" role="img" aria-label={[props.label, ...(props.zones || []).map(zone => `Zona ${zone.number}: ${zone.area?.trim() || 'Sin área'}`)].join('. ')} data-variant={props.variant || 'core'}>
     {failed ? props.fallback : <div ref={container} className="console-emblem-canvas-host" aria-hidden="true" />}
   </div>;

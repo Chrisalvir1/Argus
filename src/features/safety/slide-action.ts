@@ -320,7 +320,7 @@ function injectStyles(panel) {
 .argus-sta-wrap.sta-mode-touch .argus-sta-track {
   height: 56px !important;
   min-height: 56px !important;
-  border-radius: 16px !important;
+  border-radius: 999px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -362,8 +362,8 @@ function injectStyles(panel) {
 
 /* Red SOS Normal Touch Button */
 .argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.035)), #171d23 !important;
+  border: 1.5px solid var(--sta-border,rgba(255,255,255,.35)) !important;
   box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 .argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {
@@ -389,15 +389,15 @@ function injectStyles(panel) {
     text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);
   }
   50% {
-    opacity: 0.08;
+    opacity: 0.65;
     text-shadow: none;
   }
 }
 
 /* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */
 .argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.035)), #171d23 !important;
+  border: 1.5px solid var(--sta-border,rgba(255,255,255,.35)) !important;
   box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 .argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {
@@ -405,7 +405,7 @@ function injectStyles(panel) {
   box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 .argus-sta-wrap.sta-mode-touch .argus-sta-pin {
-  border-radius: 16px !important;
+  border-radius: 999px !important;
 }
 `;
   root.appendChild(s);

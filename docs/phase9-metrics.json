@@ -1,0 +1,178 @@
+{
+  "environment": "Chrome headless with SwiftShader software WebGL",
+  "samples": [
+    {
+      "css": [
+        1292,
+        541.46875
+      ],
+      "buffer": [
+        2588,
+        1086
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 5,
+        "deliveredFps": 2,
+        "p95Ms": 3666.59,
+        "renderMs": 175.12,
+        "quality": 1
+      },
+      "canvases": 1,
+      "viewport": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "css": [
+        1292,
+        541.46875
+      ],
+      "buffer": [
+        2264,
+        951
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 6,
+        "deliveredFps": 4,
+        "p95Ms": 749.9,
+        "renderMs": 0.62,
+        "quality": 0.85
+      },
+      "canvases": 1,
+      "viewport": [
+        2560,
+        1440
+      ]
+    },
+    {
+      "css": [
+        660,
+        915.28125
+      ],
+      "buffer": [
+        926,
+        1284
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 15,
+        "deliveredFps": 14,
+        "p95Ms": 116.6,
+        "renderMs": 0.36,
+        "quality": 0.7
+      },
+      "canvases": 1,
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "css": [
+        516,
+        865.53125
+      ],
+      "buffer": [
+        569,
+        954
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 15,
+        "deliveredFps": 15,
+        "p95Ms": 83.4,
+        "renderMs": 0.35,
+        "quality": 0.55
+      },
+      "canvases": 1,
+      "viewport": [
+        880,
+        900
+      ]
+    },
+    {
+      "css": [
+        392,
+        863.53125
+      ],
+      "buffer": [
+        394,
+        865
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 60,
+        "deliveredFps": 37,
+        "p95Ms": 49.9,
+        "renderMs": 0.28,
+        "quality": 0.5
+      },
+      "canvases": 1,
+      "viewport": [
+        480,
+        320
+      ]
+    },
+    {
+      "css": [
+        232,
+        893.703125
+      ],
+      "buffer": [
+        234,
+        895
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 60,
+        "deliveredFps": 40,
+        "p95Ms": 33.4,
+        "renderMs": 0.3,
+        "quality": 0.5
+      },
+      "canvases": 1,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "css": [
+        302,
+        895.96875
+      ],
+      "buffer": [
+        304,
+        897
+      ],
+      "dpr": 2,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "frame": {
+        "cadenceHz": 30,
+        "deliveredFps": 23,
+        "p95Ms": 50.1,
+        "renderMs": 0.3,
+        "quality": 0.5
+      },
+      "canvases": 1,
+      "viewport": [
+        390,
+        844
+      ]
+    }
+  ],
+  "reduced": {
+    "canvas": true,
+    "label": "DESARMADO. Zona 1: Patio virtual. Zona 2: Sin área",
+    "frame": "{\"cadenceHz\":30,\"deliveredFps\":23,\"p95Ms\":50.1,\"renderMs\":0.3,\"quality\":0.5}"
+  }
+}

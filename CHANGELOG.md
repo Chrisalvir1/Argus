@@ -1,3 +1,28 @@
+## 2.9.159 — Corrección contextual local
+
+Selector contextual compartido, diagnóstico humanizado y actualización por cambios HA; compatibilidad previa para pruebas físicas. TypeScript, build y 81 pruebas frontend aprobados. Validación integral de navegador y laboratorio aún pendiente.
+
+## [2.9.160] - 2026-11-05
+
+### Fixed
+- Mostrar en el diagnóstico contextual el estado de contacto, el tiempo que sigue abierto, la disponibilidad y el estado/porcentaje de batería cuando Home Assistant lo proporciona.
+- Identificar claramente como no segura una entidad informativa como el próximo amanecer; no interpretarla como contacto abierto/cerrado.
+
+### Verified
+- Añadidos contratos backend para contacto abierto, disponibilidad, batería y entidades informativas.
+
+## [2.9.158] - 2026-11-05
+
+### Updated
+- Alinear el laboratorio local con Home Assistant Core 2026.11.0 estable, su frontend 20261028.4, Python 3.14 y las dependencias actuales de React/Three.js/Vite.
+- Recompilar el bundle y el ZIP local de Argus 2.9.158; añadir diagnósticos agregados de la integración sin exponer PIN ni IDs de entidades.
+- Conservar el diseño aprobado y la versión Argus existente; sin publicación, tag ni despliegue.
+
+### Verified
+- 80 pruebas frontend, TypeScript, build y smoke tests de compatibilidad con Core 2026.11.
+- Home Assistant inicia en `127.0.0.1:8123`; los recursos estáticos servidos coinciden byte por byte con los locales.
+- La suite backend amplia conserva fallos de contratos/fixtures pendientes, documentados en `docs/LOCAL_HA_2026.11_MIGRATION.md`.
+
 ## [2.9.152] - 2026-11-05
 
 ### Fixed

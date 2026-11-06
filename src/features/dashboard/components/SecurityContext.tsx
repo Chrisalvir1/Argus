@@ -1,9 +1,11 @@
 import { type CSSProperties, type ReactNode } from 'react';
 
-export function SecurityContext({ title, detail, navigation, children, overviewAttention, indicators, indicatorScope, accent, view, tone = "normal", online }: {
+export function SecurityContext({ title, detail, navigation, selection, focused, children, overviewAttention, indicators, indicatorScope, accent, view, tone = "normal", online }: {
   title: string;
   detail?: string;
   navigation?: ReactNode;
+  selection?: ReactNode;
+  focused?: boolean;
   children?: ReactNode;
   overviewAttention?: boolean;
   indicators?: { label: string; value: number | null }[];
@@ -25,7 +27,7 @@ export function SecurityContext({ title, detail, navigation, children, overviewA
         <strong>{title}</strong>
         {detail && <p>{detail}</p>}
       </header>
-      {indicators && <section aria-label={`Zonas habilitadas · ${indicatorScope || "global"}`}>
+      {!focused && indicators && <section aria-label={`Zonas habilitadas · ${indicatorScope || "global"}`}>
         <span className="context-eyebrow">Zonas habilitadas · {indicatorScope || "global"}</span>
         <dl className="context-indicators">
         {indicators.map(({ label, value }) => <div key={label}>
@@ -33,9 +35,10 @@ export function SecurityContext({ title, detail, navigation, children, overviewA
         </div>)}
         </dl>
       </section>}
-      {view && <strong className="context-view-title">{view}</strong>}
-      <div className="console-sensors">{children}</div>
-      {navigation}
+      {selection}
+      {!focused && view && <strong className="context-view-title">{view}</strong>}
+      {!focused && <div className="console-sensors">{children}</div>}
+      {!focused && navigation}
       <div className="context-pin-slot" />
     </aside>
   );

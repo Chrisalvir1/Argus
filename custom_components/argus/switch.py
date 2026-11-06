@@ -73,5 +73,5 @@ class ArgusPanicSwitch(SwitchEntity):
         panel = self._panel
         if panel is None:
             return
-        await panel.async_stop_panic()
+        await panel.async_stop_panic(code=kwargs.get("code"), context=self._context)
         self.async_write_ha_state()

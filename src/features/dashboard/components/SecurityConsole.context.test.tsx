@@ -2,6 +2,7 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, expect, it, vi } from 'vitest';
 import { SecurityConsole } from './SecurityConsole';
+import { SecurityContext } from './SecurityContext';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -68,3 +69,39 @@ it.each(['recording', 'active', 'abierto', 'activa', 'true', '1', 'tamper', 'vib
     expect(html).toContain('<dt>Pendientes</dt><dd>1</dd>');
   },
 );
+
+
+it('uses one accessible contextual zone selector without the diagnostic disclosure', () => {
+  const html = renderContext(true);
+  expect(html).toContain('aria-label="Zona contextual"');
+  expect(html).toContain('aria-pressed="false">Zona 1 · Patio');
+  expect(html).not.toContain('Zona para diagnóstico');
+  expect(html.indexOf('Zona contextual')).toBeLessThan(html.indexOf('console-sensors'));
+});
+
+
+it('keeps verification controls in a hidden panel-scoped section until opened', () => {
+  const html = renderContext(true);
+  const dialogStart = html.indexOf('<section hidden=');
+  const dialogEnd = html.indexOf('</section>', dialogStart);
+  expect(dialogStart).toBeGreaterThan(0);
+  const dialog = html.slice(dialogStart, dialogEnd);
+  expect(dialog).toContain('aria-label="Verificar zonas"');
+  expect(dialog).toContain('Todas las zonas');
+  expect(dialog).toContain('Diagnóstico automático');
+  expect(dialog).toContain('Prueba física');
+  expect(html).not.toContain('<dialog');
+  expect(html.slice(0, dialogStart)).not.toContain('Zona contextual');
+});
+
+
+it('replaces contextual results and navigation while verification is open', () => {
+  const html = renderToStaticMarkup(<SecurityContext title="Desarmado" focused
+    selection={<div>Verificación activa</div>} navigation={<button>Anterior</button>}
+    indicators={[{label: 'Zonas', value: 7}]} view="Patio"><div>Detalle anterior</div></SecurityContext>);
+  expect(html).toContain('Verificación activa');
+  expect(html).toContain('Desarmado');
+  expect(html).not.toContain('Detalle anterior');
+  expect(html).not.toContain('Anterior');
+  expect(html).not.toContain('context-indicators');
+});
