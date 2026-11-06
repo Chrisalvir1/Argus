@@ -1,3 +1,7 @@
+## [3.0.2] - 2026-11-06
+
+- Sincronizar el cargador frontend con la versión publicada; corrige las pruebas de versión que impedían crear la release 3.0.1.
+
 ## [3.0.1] - 2026-11-06
 
 - Mostrar sensores heredados de modos globales y permitir importarlos al borrador de una zona para revisar antes de guardar.
