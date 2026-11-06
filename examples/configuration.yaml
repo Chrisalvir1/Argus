@@ -1,20 +1,24 @@
-# Argus v3.0.0 — configuración YAML opcional compatible con HA 2026.11.
-# Cree la integración desde Ajustes → Dispositivos y servicios.
-# La configuración recomendada de voz está en Argus → Modos / SOS → Voz de Argus.
-# Sustituya estas entidades de ejemplo por entidades reales de su instalación.
+# Argus Home Hub 3.0.4 — bloque YAML opcional para configuration.yaml.
+# La integración debe estar instalada desde HACS y configurada en HA.
+# Reemplace los entity_id de ejemplo por los suyos. Puede omitir todo este bloque
+# si prefiere editar voz en Argus → Modos / SOS → Voz de Argus.
 argus:
   arming_voice:
     enabled: true
-    tts_entity: tts.motor_de_ejemplo
+    tts_entity: tts.motor_tts
     media_players:
-      - media_player.altavoz_de_ejemplo
-    # Vacío utiliza el mensaje predeterminado de cada acción.
-    message_start: ""
-    message_remaining: ""
-    message_last: ""
-    message_complete: ""
-    message_armed: ""
-    message_cancelled: ""
-    message_triggered: ""
-    message_additional_triggered: ""
-    message_alarm_sensor_closed: ""
+      - media_player.echo_show
+      - media_player.homepod_sala
+
+    # Deje cualquier texto vacío para usar la frase predeterminada de Argus.
+    # Variables disponibles: {sensor}, {sensors}, {count}, {mode}, {home},
+    # {source}, {triggered_by}, {sensor_entity_id}, {sensor_state}, {closed}.
+    message_start: "No puedo completar el armado en modo {mode}. Hay {count} sensores abiertos: {sensors}."
+    message_remaining: "{closed} se cerró. Faltan {count} sensores: {sensors}."
+    message_last: "Falta cerrar un sensor: {sensors}."
+    message_complete: "Todos los sensores están cerrados. Argus continuará el armado en modo {mode}."
+    message_armed: "Argus: sistema armado en modo {mode}."
+    message_cancelled: "El armado en modo {mode} fue cancelado."
+    message_triggered: "Alerta. La alarma fue activada por {sensors}. Modo {mode}."
+    message_additional_triggered: "Alerta adicional. También se activó {sensor}."
+    message_alarm_sensor_closed: "El sensor {sensor} se cerró. La alarma sigue activa hasta desarmar Argus."

@@ -2,8 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SecurityEmblem3D, type EmblemProps } from './SecurityEmblem3D';
 import { MODE_PALETTE } from './mode-palette';
 
-/** Three.js is the sole owner of the security emblem. */
+/** Lightweight SVG retains motion when the 3D renderer is unavailable. */
 function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: EmblemProps) {
+  const [reducedMotion, setReducedMotion] = useState(true);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReducedMotion(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  const alarmed = state === 'triggered' || pulse === 'sos';
   const count = zonesEnabled === false ? 7 : (zones?.length || 0);
   if (zonesEnabled === false) zones = [];
   const accent = state === 'triggered' || pulse === 'sos' ? MODE_PALETTE.alarm.css : state === 'armed_home' ? MODE_PALETTE.home.css
@@ -11,7 +20,11 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: Em
     : state === 'disarmed' ? MODE_PALETTE.disarmed.css : '#a4aab4';
   return <svg role="img" aria-label={[label, ...(zones || []).map(zone => `Zona ${zone.number}: ${zone.area || "Sin área"}`)].join(". ")} className="console-emblem-unavailable" viewBox="0 0 160 160"
     style={{ width: '90%', height: '90%', maxWidth: 380, maxHeight: 380 }}>
-    <circle className={state === 'disarmed' && !zones?.length ? 'console-core-light-orbit' : undefined} opacity={count ? 1 : 0} cx="80" cy="80" r="55" fill="none" stroke={accent} strokeWidth="15" strokeDasharray={count ? `${(2 * Math.PI * 55 / count) * .79} ${(2 * Math.PI * 55 / count) * .21}` : undefined}
+    <g>
+      {!reducedMotion && <animateTransform key={state + ':' + Boolean(alarmed)} attributeName="transform" type="rotate"
+        values={state === 'disarmed' || alarmed ? '0 80 80;360 80 80' : '-2 80 80;2 80 80;-2 80 80'}
+        dur={alarmed ? '4s' : state === 'disarmed' ? '25.13s' : '12s'} repeatCount="indefinite" />}
+    <circle opacity={count ? 1 : 0} cx="80" cy="80" r="55" fill="none" stroke={accent} strokeWidth="15" strokeDasharray={count ? `${(2 * Math.PI * 55 / count) * .79} ${(2 * Math.PI * 55 / count) * .21}` : undefined}
       strokeDashoffset={zones?.length ? (2 * Math.PI * 55 / zones.length) * .395 : undefined} />
     {zones?.map((zone, index) => {
       const angle = index * 2 * Math.PI / zones.length - Math.PI / 2;
@@ -24,6 +37,7 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: Em
         <text y="5">{name.length > 10 ? name.slice(0, 9) + '…' : name}</text>
       </g>;
     })}
+    </g>
     <circle cx="80" cy="80" r="34" fill="#090d12" stroke={accent} strokeWidth="3" />
     <circle cx="80" cy="80" r="23" fill="#010204" stroke="#83919f" strokeWidth="1" />
     <ellipse cx="73" cy="73" rx="6" ry="4" fill="#d6e3ef" opacity=".7" />

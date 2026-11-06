@@ -438,7 +438,12 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
         const insetX = width < 600 ? size*.6 : radiusX + size*.30;
         const insetY = width < 600 ? size*.6 : radiusY + size*.30;
         const targetX = sx*(viewWidth/2-insetX);
-        const targetY = sy*(viewHeight/2-insetY);
+        const bounds = surface.getBoundingClientRect();
+        const fullscreen = surface.closest('.ios-fullscreen');
+        const visibleTop = fullscreen ? Math.max(0, -bounds.top) : 0;
+        const visibleBottom = fullscreen ? Math.min(height, (window.visualViewport?.height || window.innerHeight) - bounds.top) : height;
+        const edgePixel = sy > 0 ? visibleTop : visibleBottom;
+        const targetY = viewHeight * (.5 - edgePixel / height) - sy * insetY;
         guard.position.set(THREE.MathUtils.lerp(anchor.x+sx*.72*emblemScale, targetX, deployment), THREE.MathUtils.lerp(anchor.y+sy*.72*emblemScale, targetY, deployment), 0);
         const guardScale = THREE.MathUtils.lerp(.6, size, deployment);
         guard.scale.set(-sx*guardScale, sy*guardScale, guardScale);

@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.0.3
+### Argus v3.0.4
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -27,6 +27,13 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 
 ---
 
+## Novedades de v3.0.4
+
+- Asignar sensores heredados de todos los modos directamente a zonas y conservar búsqueda, foco y posición al editar la selección.
+- Mantener el giro del emblema SVG en equipos sin WebGL, también cuando hay zonas.
+- Ajustar HUD y controles en horizontal/vertical y alinear las esquinas del emblema con la parte visible del panel.
+- Incluye correcciones de zonas desactivadas, voz, alto contraste y legibilidad introducidas en v3.0.3.
+
 ## Novedades de v3.0.3
 
 - Ocultar indicadores de zonas desactivadas, corregir error de carga TTS (`yaml`), aplicar contraste alto al historial y ajustar el núcleo vertical según el contenido.
@@ -45,6 +52,8 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 Lee las [notas de v3.0.1](docs/RELEASE_NOTES_3.0.1.md). La validación visual en iPhone, las luces físicas y el error TTS concreto siguen pendientes.
 
 ## Dependencias y entorno de desarrollo
+
+Config YAML opcional y detallado: [examples/configuration.yaml](examples/configuration.yaml). La voz se configura preferentemente en Argus → Modos / SOS → Voz de Argus. El YAML solo requiere `arming_voice` y permite definir motor, reproductores y textos predeterminados.
 
 Versiones fijadas por el lockfile: React/React DOM 19.3.1, Vite 8.3.6, TypeScript 7.0.2, Three.js 0.187.0 y react-grid-layout 2.3.0. El entorno declarado usa Node.js 26.13.0 y Python 3.14.10. La integración no instala paquetes Python adicionales y usa el Python proporcionado por Home Assistant. Estas versiones describen el entorno declarado; no sustituyen las pruebas en tu instalación.
 

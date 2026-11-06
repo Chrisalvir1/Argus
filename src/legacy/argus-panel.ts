@@ -7415,6 +7415,13 @@ class ArgusPanel extends HTMLElement {
 
   _renderZones(container: HTMLElement | null) {
     if (!container) return;
+    const scrollTargets = [container, ...Array.from(container.querySelectorAll<HTMLElement>('.zone-sensor-list'))];
+    const scrollPositions = scrollTargets.map(el => el.scrollTop);
+    const parentScroll: [HTMLElement, number][] = [];
+    for (let node = container.parentElement; node; node = node.parentElement) parentScroll.push([node, node.scrollTop]);
+    const previousSearch = container.querySelector<HTMLInputElement>('[data-zone-search]')?.value || '';
+    const focusedSensor = (this.shadowRoot.activeElement as HTMLElement)?.dataset?.zoneSensor;
+
     if (!this._zonesLoaded) {
       container.innerHTML = '<div class="mode-section-title">🛡️ Zonas</div><p class="small">Cargando zonas…</p>';
       this._loadZones();
@@ -7434,6 +7441,13 @@ class ArgusPanel extends HTMLElement {
     const activeEntityId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
     const modeConfigs = Object.values(this._ui?.modes?.__by_entity__?.[activeEntityId] || this._ui?.modes || {}) as any[];
     const legacySensors = [...new Set(modeConfigs.flatMap((config: any) => Array.isArray(config?.sensors) ? config.sensors : []))];
+    const modeEntries = Object.entries(this._ui?.modes?.__by_entity__?.[activeEntityId] || this._ui?.modes || {}).filter(([key]) => ['disarmed', 'home', 'away', 'night'].includes(key));
+    const sensorIds = [...new Set([...legacySensors, ...(draft?.entity_ids || []), ...(this._zoneEntities || []).map((entity: any) => entity.entity_id)])];
+    const zoneEntities = sensorIds.map(id => (this._zoneEntities || []).find((entity: any) => entity.entity_id === id) || {
+      entity_id: id, name: this._hass?.states?.[id]?.attributes?.friendly_name || id,
+      state: this._hass?.states?.[id]?.state || 'unavailable',
+      device_class: this._hass?.states?.[id]?.attributes?.device_class,
+    });
     const unassigned = legacySensors.filter((id: string) => !zones.some((zone: any) => zone.entity_ids?.includes(id)));
     container.innerHTML = `
       <div class="zone-editor-title">🛡️ Zonas</div>
@@ -7448,11 +7462,12 @@ class ArgusPanel extends HTMLElement {
           <label class="zone-field">Área personalizable<input data-zone-field="area" list="argus-zone-areas" value="${this._escapeHtml(draft.area || '')}" maxlength="80" placeholder="Ej. Cocina"></label>
           <datalist id="argus-zone-areas">${ownAreas.map((area: string) => `<option value="${this._escapeHtml(area)}"></option>`).join('')}</datalist>
           <fieldset class="zone-mode-fieldset"><legend>Activar zona en</legend><div class="zone-mode-options">${['disarmed','home','away','night'].map((mode: string) => `<label class="zone-mode-chip"><input type="checkbox" data-zone-mode="${mode}" ${draft.modes?.includes(mode) ? 'checked' : ''}> ${({disarmed:'Desarmado',home:'En Casa',away:'Ausente',night:'Noche'} as any)[mode]}</label>`).join('')}</div></fieldset>
-          <button type="button" class="ghost" data-zone-import-mode>Importar sensores del modo actual para revisar antes de guardar</button>
           <label class="zone-field">Sensores de esta zona<input class="zone-sensor-search" type="search" data-zone-search placeholder="Buscar por nombre o entidad"></label>
-          <div class="zone-sensor-list">${this._zoneEntities.map((entity: any) => {
+          <div class="zone-sensor-list">${zoneEntities.map((entity: any) => {
             const assignedElsewhere = zones.find((other: any) => other.id !== draft.id && other.entity_ids?.includes(entity.entity_id));
             const checked = draft.entity_ids?.includes(entity.entity_id);
+            const sourceModes = modeEntries.filter(([, config]: any) => (config?.sensors || []).includes(entity.entity_id));
+            const modeLabel = sourceModes.map(([key]) => ({disarmed:'Desarmado',home:'En Casa',away:'Ausente',night:'Noche'}[key] || key)).join(', ');
             const settings = draft.sensor_settings?.[entity.entity_id] || this._zoneSettingForSensor(entity.entity_id);
             const deviceClass = String(entity.device_class || '').toLowerCase();
             const canMotion = ['motion', 'occupancy', 'presence', 'moving'].includes(deviceClass);
@@ -7465,7 +7480,7 @@ class ArgusPanel extends HTMLElement {
             const unit = settings.delay_unit === 'minutes' ? 'minutes' : 'seconds';
             const waitingFor = settings.condition === 'close' ? 'cerrado' : 'abierto';
             const delayValue = settings.delay ? (unit === 'minutes' ? Math.max(1, Math.round(settings.delay / 60)) : settings.delay) : 0;
-            return `<div class="zone-sensor-row" data-zone-sensor-row="${this._escapeHtml((entity.name || entity.entity_id).toLowerCase())} ${this._escapeHtml(entity.entity_id.toLowerCase())}"><label class="zone-sensor-heading"><input type="checkbox" data-zone-sensor="${this._escapeHtml(entity.entity_id)}" ${checked ? 'checked' : ''} ${assignedElsewhere || !this._isAdmin ? 'disabled' : ''}> <span><strong>${this._escapeHtml(entity.name || entity.entity_id)}</strong><small>${this._escapeHtml(entity.entity_id)} · ${this._escapeHtml(entity.state || '')}</small></span></label>${assignedElsewhere ? `<small class="zone-assigned-note">Asignado a Zona ${assignedElsewhere.number}</small>` : ''}${checked ? `<div class="zone-sensor-settings">
+            return `<div class="zone-sensor-row" data-zone-sensor-row="${this._escapeHtml((entity.name || entity.entity_id).toLowerCase())} ${this._escapeHtml(entity.entity_id.toLowerCase())}"><label class="zone-sensor-heading"><input type="checkbox" data-zone-sensor="${this._escapeHtml(entity.entity_id)}" ${checked ? 'checked' : ''} ${assignedElsewhere || !this._isAdmin ? 'disabled' : ''}> <span><strong>${this._escapeHtml(entity.name || entity.entity_id)}</strong><small>${this._escapeHtml(entity.entity_id)} · ${this._escapeHtml(entity.state || '')}${modeLabel ? ' · Modos: ' + this._escapeHtml(modeLabel) : ''}</small></span></label>${assignedElsewhere ? `<small class="zone-assigned-note">Asignado a Zona ${assignedElsewhere.number}</small>` : ''}${checked ? `<div class="zone-sensor-settings">
               <div class="zone-config-group"><span class="zone-config-title">Disparar cuando</span><div class="zone-option-group">${conditions.map(([value, label]) => `<button type="button" class="zone-choice ${settings.condition === value ? 'is-selected' : ''}" data-zone-condition="${this._escapeHtml(entity.entity_id)}" data-zone-value="${value}" aria-pressed="${settings.condition === value}">${label}</button>`).join('')}</div></div>
               <div class="zone-config-group"><span class="zone-config-title">Tiempo de respuesta</span><div class="zone-option-group"><button type="button" class="zone-choice ${!settings.delay ? 'is-selected' : ''}" data-zone-delay-mode="instant" data-zone-delay-sensor="${this._escapeHtml(entity.entity_id)}" aria-pressed="${!settings.delay}">⚡ Instantáneo</button><button type="button" class="zone-choice ${settings.delay ? 'is-selected' : ''}" data-zone-delay-mode="wait" data-zone-delay-sensor="${this._escapeHtml(entity.entity_id)}" aria-pressed="${Boolean(settings.delay)}">⏱ Con espera de ${waitingFor}</button></div>
               ${settings.delay ? `<label class="zone-delay-field">Esperar con el sensor ${waitingFor} durante <input type="number" data-zone-delay="${this._escapeHtml(entity.entity_id)}" min="1" max="${unit === 'minutes' ? 60 : 3600}" value="${delayValue}" inputmode="numeric"><span class="zone-unit-group"><button type="button" class="zone-unit ${unit === 'seconds' ? 'is-selected' : ''}" data-zone-delay-unit="seconds" data-zone-delay-sensor="${this._escapeHtml(entity.entity_id)}">segundos</button><button type="button" class="zone-unit ${unit === 'minutes' ? 'is-selected' : ''}" data-zone-delay-unit="minutes" data-zone-delay-sensor="${this._escapeHtml(entity.entity_id)}">minutos</button></span></label>` : ''}</div>
@@ -7487,15 +7502,6 @@ class ArgusPanel extends HTMLElement {
       const number = Array.from({length:10}, (_, i) => i + 1).find(n => !zones.some((zone: any) => zone.number === n));
       const add = () => { this._zoneDraft = {id: crypto.randomUUID(), number, name: `Zona ${number}`, area:'', modes:[], entity_ids:[], device_ids:[], enabled:true, sensor_settings:{}}; this._zoneOpenId = this._zoneDraft.id; this._zoneDecision = null; this._renderZones(container); };
       if (this._guardZoneDraft(add)) add();
-    });
-    container.querySelector('[data-zone-import-mode]')?.addEventListener('click', () => {
-      const config = this._currentModeConfig();
-      const ids = (config.sensors || []).filter((id: string) => !zones.some((zone: any) => zone.id !== this._zoneDraft.id && zone.entity_ids?.includes(id)));
-      this._zoneDraft.entity_ids = [...new Set([...this._zoneDraft.entity_ids, ...ids])];
-      this._zoneDraft.modes = [...new Set([...this._zoneDraft.modes, this._mode])];
-      this._zoneDraft.sensor_settings ||= {};
-      for (const id of ids) this._zoneDraft.sensor_settings[id] ||= this._zoneSettingForSensor(id);
-      this._renderZones(container);
     });
     container.querySelectorAll<HTMLElement>('[data-zone-field]').forEach(input => input.addEventListener('input', () => {this._zoneDraft[input.dataset.zoneField] = (input as HTMLInputElement).value;}));
     container.querySelectorAll<HTMLInputElement>('[data-zone-mode]').forEach(input => input.addEventListener('change', () => {this._zoneDraft.modes = [...container.querySelectorAll<HTMLInputElement>('[data-zone-mode]:checked')].map(item => item.dataset.zoneMode);}));
@@ -7549,6 +7555,15 @@ class ArgusPanel extends HTMLElement {
       const next = this._zoneDecision; this._zoneDecision = null; this._zoneDraft = null; this._zoneOpenId = null;
       next?.();
     }));
+    const search = container.querySelector<HTMLInputElement>('[data-zone-search]');
+    if (search) {
+      search.value = previousSearch;
+      search.dispatchEvent(new Event('input'));
+    }
+    if (focusedSensor) Array.from(container.querySelectorAll<HTMLInputElement>('[data-zone-sensor]')).find(el => el.dataset.zoneSensor === focusedSensor)?.focus({preventScroll: true});
+    [container, ...Array.from(container.querySelectorAll<HTMLElement>('.zone-sensor-list'))].forEach((el, index) => { el.scrollTop = scrollPositions[index] || 0; });
+    parentScroll.forEach(([el, top]) => { el.scrollTop = top; });
+
   }
 
   _loadZones() {

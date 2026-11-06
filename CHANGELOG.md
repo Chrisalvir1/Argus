@@ -1,3 +1,10 @@
+## [3.0.4] - 2026-11-06
+
+- Mostrar sensores heredados de todos los modos directamente en el selector de zona; quitar sensores conserva el contexto del editor.
+- Mantener giro del núcleo SVG sin WebGL, haya zonas configuradas o no.
+- Separar hogar/estado/conexión, mejorar nombres de modos y adaptar el núcleo y esquinas a pantalla visible portrait/landscape.
+- Ver docs/RELEASE_NOTES_3.0.4.md y examples/configuration.yaml.
+
 ## [3.0.3] - 2026-11-06
 
 - Corregir zonas desactivadas que aparecían en el panel; arreglar `yaml` no definido en ajustes TTS.

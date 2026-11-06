@@ -1072,12 +1072,32 @@
   }
   :host .entry.entry .security-console.security-console .console-hud-loc { grid-column: 1 / -1 !important; white-space: normal !important; }
 }
-/* No WebGL required: only the unlabelled outer ring rotates. */
-.console-core-light-orbit {
-  transform-origin: 80px 80px;
-  animation: argus-light-core-orbit 28s linear infinite;
+/* Explicit areas prevent the home pill and connection pill sharing a cell. */
+:host .entry.entry .security-console.security-console .console-hud {
+  display: grid !important;
+  grid-template-areas: 'home online tools' !important;
+  grid-template-columns: minmax(0, 1fr) auto auto !important;
+  align-items: center !important;
 }
-@keyframes argus-light-core-orbit { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) {
-  .console-core-light-orbit { animation: none !important; }
+:host .entry.entry .security-console.security-console .console-hud-loc {
+  grid-area: home !important;
+  grid-column: auto !important;
+  width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: clamp(13px, 1.6cqw, 20px) !important;
+}
+:host .entry.entry .security-console.security-console .argus-connection-pill { grid-area: online !important; font-size: clamp(12px, 1.4cqw, 18px) !important; }
+:host .entry.entry .security-console.security-console .console-hud-right { grid-area: tools !important; }
+:host .entry.entry .security-console.security-console .console-mode-label { white-space: nowrap !important; text-overflow: clip !important; overflow: visible !important; font-size: clamp(14px, 1.6cqw, 20px) !important; }
+@media (orientation: landscape) and (max-height: 600px) {
+  :host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn { padding-inline: 6px !important; gap: 4px !important; }
+  :host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn .console-mode-label { font-size: 14px !important; white-space: nowrap !important; overflow: visible !important; }
+  :host .entry.entry .security-console.security-console .argus-sta-label { font-size: 15px !important; white-space: nowrap !important; }
+}
+@media (orientation: portrait) and (max-width: 760px) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon { height: clamp(300px, 45dvh, 500px) !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded="true"] .entry-icon { height: clamp(220px, 30dvh, 330px) !important; }
+  :host .entry.entry.ios-fullscreen .console-emblem-unavailable { width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; }
 }
