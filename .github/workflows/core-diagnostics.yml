@@ -29,4 +29,4 @@ jobs:
           uv pip install --system -r requirements.txt -r requirements_test.txt
           uv pip install --system -e . --no-deps
       - name: Test privacy-safe Argus diagnostics against Core
-        run: PYTHONPATH="$GITHUB_WORKSPACE" python -m pytest -q tests_core/test_argus_diagnostics.py
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python -c 'import homeassistant.core; import pytest; raise SystemExit(pytest.main(["-q", "tests_core/test_argus_diagnostics.py"]))'

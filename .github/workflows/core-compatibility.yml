@@ -29,7 +29,7 @@ jobs:
           uv pip install --system -r requirements.txt -r requirements_test.txt
           uv pip install --system -e . --no-deps
       - name: Test Argus diagnostics and Core contracts
-        run: PYTHONPATH="$GITHUB_WORKSPACE" python -m pytest -q tests_core
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python -c 'import homeassistant.core; import pytest; raise SystemExit(pytest.main(["-q", "tests_core"]))' 
 
       - name: Run isolated legacy backend regressions
         run: PYTHONPATH="$GITHUB_WORKSPACE" python scripts/test_backend.py
