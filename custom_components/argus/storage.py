@@ -35,9 +35,11 @@ def _store(hass: HomeAssistant, entry_id: str | None = None) -> Store:
 
 
 def _default_payload() -> dict:
+    from .zones import default_zones
     return {
         "first_run": True,
-        "zones": [], "modes": {"home": {}, "away": {}, "night": {}},
+        "zones": default_zones(), "zones_initialized": True,
+        "modes": {"home": {}, "away": {}, "night": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
         "advanced": {"guest_code": None, "guest_code_enabled": False, "duress_pin": None},
         "automations": [], "notif_targets": [],
@@ -56,7 +58,8 @@ def _merge_defaults(data: object) -> dict:
     result = _default_payload()
     if isinstance(data, dict):
         result.update(copy.deepcopy(data))
-    result.pop("tts_targets", None)
+    # Preserve legacy and unknown fields during upgrades; newer UI versions may
+    # no longer edit them, but loading configuration must not discard user data.
     if not isinstance(result.get("runtime"), dict):
         result["runtime"] = {"alarm_states": {}}
     result["runtime"].setdefault("alarm_states", {})
@@ -99,6 +102,11 @@ def _migrate_base64_file(hass: HomeAssistant, value: str, prefix: str) -> str:
 async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -> dict:
     store = _store(hass, entry_id)
     raw = await store.async_load()
+    # Keep track of whether an empty zone list was an explicit saved choice.
+    # Older releases store the legacy UI payload under ``argus.ui`` and do not
+    # have a ``zones_initialized`` marker, so the source payload itself is the
+    # only reliable signal that an empty list is intentional.
+    zones_explicitly_saved = isinstance(raw, dict) and isinstance(raw.get("zones"), list)
     if isinstance(raw, dict) and "first_run" not in raw:
         raw["first_run"] = False
     data = _merge_defaults(raw)
@@ -127,11 +135,32 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
                 # If current data for this key is exactly the default or empty, we can safely overwrite it
                 if key not in data or data.get(key) == default_payload.get(key) or (isinstance(data.get(key), (list, dict)) and not data.get(key)):
                     data[key] = copy.deepcopy(val)
+                    if key == "zones" and isinstance(val, list):
+                        zones_explicitly_saved = True
                     
             if "users" in data and isinstance(data["users"], list):
                 data["users"] = _sanitize_users(data["users"])
                 
         data["legacy_migration_complete"] = True
+        changed = True
+    # Fresh installs (or old stores that never had a zones field) receive the
+    # three empty crystals once. Preserve an explicit empty list during upgrade:
+    # an installation without zones must remain zone-free until its admin adds
+    # them, and loading an update must never silently change that configuration.
+    if not isinstance(raw, dict) or not raw.get("zones_initialized"):
+        if not zones_explicitly_saved and not data.get("zones"):
+            from .zones import default_zones
+            data["zones"] = default_zones()
+        data["zones_initialized"] = True
+        changed = True
+    if "zones_enabled" not in data:
+        # Existing assigned zones remain enabled; legacy/no-zone installs opt in.
+        configured = data.get("zones", [])
+        enabled = any(zone.get("entity_ids") and zone.get("modes") for zone in configured if isinstance(zone, dict))
+        data["zones_enabled"] = enabled
+        data["zones_saved"] = copy.deepcopy(configured)
+        if not enabled:
+            data["zones"] = []
         changed = True
     for field, prefix in (("panel_bg_file", "panel_bg"), ("hub_bg_file", "hub_bg")):
         value = data.get(field, "")
@@ -240,6 +269,11 @@ async def async_save_ui_data(
                 if isinstance(e_id, str) and "." in e_id and len(e_id.split(".")) == 2:
                     valid_outputs.append(e_id)
             safe_updates["panic_outputs"] = valid_outputs
+
+        if "zones" in safe_updates:
+            from .zones import sanitize_zones
+            safe_updates["zones"] = sanitize_zones(safe_updates["zones"])
+            safe_updates["zones_initialized"] = True
 
         if "clock_format" in safe_updates:
             if safe_updates["clock_format"] not in ["auto", "12h", "24h"]:
@@ -398,7 +432,8 @@ async def async_get_audit_log(hass: HomeAssistant, entry_id: str | None = None) 
 
 
 async def async_save_alarm_runtime_state(
-    hass: HomeAssistant, entry_id: str, state: str, *, source: str
+    hass: HomeAssistant, entry_id: str, state: str, *, source: str,
+    cycle_bypassed_sensors: list[str] | None = None,
 ) -> None:
     # Keep older persisted vacation states secure while exposing only the supported modes.
     if state == "armed_vacation":
@@ -411,6 +446,7 @@ async def async_save_alarm_runtime_state(
             "state": state,
             "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "source": str(source)[:64],
+            "cycle_bypassed_sensors": cycle_bypassed_sensors or [] if state != "disarmed" else [],
         }
         await _store(hass, entry_id).async_save(current)
 

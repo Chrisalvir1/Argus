@@ -1,0 +1,35 @@
+name: Home Assistant Core compatibility
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  core-2026-11:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: home-assistant/core
+          ref: 2026.11.0
+          path: home-assistant-core
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - name: Install Home Assistant Core 2026.11.0 test dependencies
+        run: |
+          python -m pip install uv==0.12.19
+          cd home-assistant-core
+          uv pip install --system -r requirements.txt -r requirements_test.txt
+          uv pip install --system -e . --no-deps
+      - name: Test Argus diagnostics and Core contracts
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python -c 'import homeassistant.core; import pytest; raise SystemExit(pytest.main(["-q", "tests_core"]))' 
+
+      - name: Run isolated legacy backend regressions
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python scripts/test_backend.py

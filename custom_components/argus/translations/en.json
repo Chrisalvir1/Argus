@@ -30,7 +30,8 @@
       "invalid_code": "Invalid alarm code."
     },
     "abort": {
-      "already_configured": "Argus is already configured."
+      "already_configured": "Argus is already configured.",
+      "voice_settings_in_panel": "Configure Argus voice announcements in Argus Home Hub → Modes / SOS → Voice of Argus. Existing settings will be imported there."
     }
   },
   "options": {

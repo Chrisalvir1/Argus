@@ -1,126 +1,969 @@
-/* Consistent console structure. All three sections share one content row. */
+/*
+ * Argus console layout owner.
+ * The card responds to its real available width; viewport-only breakpoints
+ * made split views and small HA screens inherit a desktop-sized composition.
+ */
+:host #entries {
+  container: argus-panel / inline-size;
+  width: 100%;
+  min-width: 0;
+}
+
+:host .entry.entry {
+  position: relative !important;
+  container: argus-console / inline-size;
+  box-sizing: border-box !important;
+  width: min(100%, 1440px) !important;
+  max-width: 1440px !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-inline: auto !important;
+  overflow: hidden !important;
+  border-radius: clamp(18px, 2.2cqw, 30px) !important;
+  /* OLED material: keep the console surface truly black on regular and fullscreen views. */
+  background: #000 !important;
+  background-color: #000 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+:host .entry.entry > canvas.console-emblem-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+
 :host .entry.entry .entry-content.security-console.security-console {
+  position: relative !important;
+  z-index: 3 !important;
   display: grid !important;
-  grid-template-columns: minmax(240px, 1fr) minmax(180px, .7fr) minmax(280px, 1fr) !important;
-  grid-template-rows: auto minmax(260px, auto) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, .72fr) minmax(0, 1fr) !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
   grid-template-areas: "header header header" "controls emblem sensors" !important;
-  gap: 28px 32px !important;
   align-items: center !important;
   align-content: center !important;
-  padding: 28px !important;
-  width: 100% !important;
-  max-width: 1440px !important;
-  min-height: 0 !important;
-  height: auto !important;
-  margin: auto !important;
+  gap: clamp(12px, 2cqw, 26px) !important;
   box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: clamp(14px, 2.2cqw, 32px) !important;
+  overflow: visible !important;
 }
+
+/* Symmetric tracks keep Home, online state and fullscreen in one ordered row. */
 :host .entry.entry .security-console.security-console .console-hud {
   grid-area: header !important;
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+  grid-template-areas: "home online actions" !important;
   align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 12px !important;
+  justify-items: stretch !important;
+  gap: 8px !important;
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
   height: auto !important;
-  min-height: 44px !important;
-  position: static !important;
+  min-height: 38px !important;
+  margin: 0 !important;
 }
 :host .entry.entry .security-console.security-console .console-hud-loc {
-  flex: 1 1 220px !important;
+  grid-area: home !important;
+  justify-self: start !important;
+  width: max-content !important;
   min-width: 0 !important;
-  width: auto !important;
-  max-width: none !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 38px !important;
   margin: 0 !important;
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  font-size: 15px !important;
-  letter-spacing: .01em !important;
-  padding: 0 !important;
-  white-space: normal !important;
+  padding: 6px 12px !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: clamp(11px, 1.2cqw, 16px) !important;
 }
 :host .entry.entry .security-console.security-console .argus-connection-pill {
+  grid-area: online !important;
+  justify-self: center !important;
   position: static !important;
-  transform: none !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 0 12px !important;
+  inset: auto !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 38px !important;
   margin: 0 !important;
-  font-size: 11px !important;
-  box-shadow: none !important;
+  padding: 0 10px !important;
+  box-sizing: border-box !important;
+  font-size: clamp(9px, 1.05cqw, 12px) !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
 }
 :host .entry.entry .security-console.security-console .console-hud-right {
+  grid-area: actions !important;
+  justify-self: end !important;
   display: flex !important;
   align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  margin: 0 !important;
-  width: auto !important;
   justify-content: flex-end !important;
-}
-:host .entry.entry .security-console.security-console .console-hud-right button {
-  height: 44px !important;
-  min-height: 44px !important;
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  height: auto !important;
   margin: 0 !important;
+}
+:host .entry.entry .security-console.security-console .console-hud-right .entry-fs {
+  display: inline-flex !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+}
+
+/* Compact liquid-glass mode pills with a colored status dot and inline label. */
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical {
+  grid-area: controls !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-content: center !important;
+  align-items: center !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: clamp(38px, 4.4cqw, 48px) !important;
   padding: 0 12px !important;
-  border-radius: 12px !important;
-  font-size: 12px !important;
-  background: rgba(255,255,255,.07) !important;
-  color: inherit !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  box-shadow: none !important;
+  border-radius: 999px !important;
+  box-sizing: border-box !important;
 }
-:host .entry.entry .security-console.security-console .liquid-stack { grid-area: controls !important; width:100% !important; max-width:none !important; align-self:center !important; gap:10px !important; }
-:host .entry.entry .security-console.security-console .liquid-btn {
-  min-height: 84px !important;
-  border-radius: 16px !important;
-  background: rgba(255,255,255,.08) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 4px 12px rgba(0,0,0,.12) !important;
-  backdrop-filter: blur(12px) !important;
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn .console-mode-dot {
+  display: inline-block !important;
+  width: 11px !important;
+  height: 11px !important;
+  min-width: 11px !important;
+  min-height: 11px !important;
+  border-radius: 50% !important;
+  background: var(--console-accent) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.22), 0 0 10px color-mix(in srgb, var(--console-accent) 38%, transparent) !important;
+  flex: 0 0 auto !important;
 }
-:host .entry.entry .security-console.security-console .liquid-btn.active { border-color: currentColor !important; background: rgba(255,255,255,.2) !important; }
-:host .entry.entry .security-console.security-console .argus-sta-wrap { min-width:0 !important; max-width:100% !important; }
-:host .entry.entry .security-console.security-console .entry-icon { grid-area:emblem !important; display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; width:100% !important; margin:0 !important; gap:16px !important; animation:none !important; }
-:host .entry.entry .security-console.security-console .entry-icon svg { width:clamp(160px,16vw,220px) !important; max-width:100% !important; filter:drop-shadow(0 8px 18px rgba(0,0,0,.22)) !important; }
-:host .entry.entry .security-console.security-console .console-system-badge { white-space:normal !important; text-align:center !important; font-size:12px !important; letter-spacing:.05em !important; padding:8px 12px !important; box-shadow:none !important; height:auto !important; }
-:host .entry.entry .security-console.security-console .console-sensors { grid-area:sensors !important; display:flex !important; flex-direction:column !important; align-items:stretch !important; width:100% !important; max-width:none !important; max-height:400px !important; overflow-y:auto !important; gap:8px !important; margin:0 !important; scrollbar-width:thin !important; }
-:host .entry.entry .security-console.security-console .console-sensor { display:grid !important; grid-template-columns:24px minmax(0,1fr) auto !important; align-items:center !important; gap:10px !important; width:100% !important; min-width:0 !important; min-height:48px !important; height:auto !important; padding:10px 12px !important; border-radius:14px !important; box-sizing:border-box !important; box-shadow:inset 0 1px 0 rgba(255,255,255,.12) !important; background:rgba(255,255,255,.05) !important; }
-:host .entry.entry .security-console.security-console .console-sensor-main { min-width:0 !important; width:auto !important; flex:initial !important; }
-:host .entry.entry .security-console.security-console .console-sensor-name { display:block !important; font-size:12px !important; font-weight:600 !important; letter-spacing:.01em !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
-:host .entry.entry .security-console.security-console .console-sensor-status-wrap { display:flex !important; flex-wrap:wrap !important; justify-content:flex-end !important; gap:5px !important; max-width:130px !important; }
-:host .entry.entry .security-console.security-console .console-sensor-state { font-size:11px !important; letter-spacing:.02em !important; }
-:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console { min-height:100dvh !important; padding:72px 32px 24px !important; }
-@container argus-console (max-width: 900px) {
-  :host .entry.entry .entry-content.security-console.security-console { grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important; grid-template-rows:auto auto auto !important; grid-template-areas:"header header" "controls emblem" "sensors sensors" !important; gap:24px !important; padding:24px !important; }
-  :host .entry.entry .security-console.security-console .console-sensors { max-height:none !important; }
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn .console-mode-label {
+  display: inline-block !important;
+  max-width: calc(100% - 20px) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: clamp(10px, 1.15cqw, 14px) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
 }
-@container argus-console (max-width: 520px) {
-  :host .entry.entry .entry-content.security-console.security-console { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"header" "emblem" "controls" "sensors" !important; grid-template-rows:auto auto auto auto !important; padding:20px 16px !important; gap:20px !important; }
-  :host .entry.entry .security-console.security-console .console-hud { flex-direction:column !important; align-items:center !important; justify-content:center !important; width:100% !important; gap:10px !important; }
-  :host .entry.entry .security-console.security-console .console-hud-loc { flex:0 0 auto !important; width:100% !important; max-width:100% !important; justify-content:center !important; text-align:center !important; box-sizing:border-box !important; }
-  :host .entry.entry .security-console.security-console .argus-connection-pill { align-self:center !important; justify-content:center !important; }
-  :host .entry.entry .security-console.security-console .console-hud-right { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; width:100% !important; justify-content:center !important; justify-items:stretch !important; }
-  :host .entry.entry .security-console.security-console .console-hud-right button { width:100% !important; min-width:0 !important; justify-content:center !important; text-align:center !important; }
-  :host .entry.entry .security-console.security-console .console-hud-right button:last-child { grid-column:1 / -1 !important; width:50% !important; justify-self:center !important; }
-  :host .entry.entry .security-console.security-console .entry-icon svg { width:160px !important; }
-  :host .entry.entry .security-console.security-console .console-sensor { grid-template-columns:20px minmax(0,1fr) !important; }
-  :host .entry.entry .security-console.security-console .console-sensor-status-wrap { grid-column:2 !important; justify-content:flex-start !important; max-width:none !important; }
-  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console { padding-top:72px !important; }
+:host .entry.entry .security-console.security-console .liquid-stack > .argus-sta-wrap {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
 }
+:host .entry.entry .security-console.security-console .argus-sta-wrap {
+  width: 100% !important;
+  max-width: min(100%, 520px) !important;
+  min-width: 0 !important;
+  justify-self: start !important;
+}
+:host .entry.entry .security-console.security-console .argus-sta-track {
+  width: 100% !important;
+  height: clamp(52px, 5.2cqw, 64px) !important;
+  min-height: 52px !important;
+  border-radius: 999px !important;
+}
+:host .entry.entry .security-console.security-console .argus-sta-thumb {
+  --sta-thumb-size: clamp(40px, 4.2cqw, 52px);
+  width: var(--sta-thumb-size) !important;
+  height: var(--sta-thumb-size) !important;
+  left: 4px !important;
+  top: 50% !important;
+  margin-top: calc(var(--sta-thumb-size) / -2) !important;
+}
+:host .entry.entry .security-console.security-console .argus-sta-thumb svg {
+  width: 60% !important;
+  height: 60% !important;
+  flex: 0 0 60% !important;
+}
+:host .entry.entry .security-console.security-console .argus-sta-label {
+  left: calc(var(--sta-thumb-size, 40px) + 16px) !important;
+  right: 12px !important;
+  max-width: calc(100% - var(--sta-thumb-size, 40px) - 28px) !important;
+  font-size: clamp(9px, 1.1cqw, 13px) !important;
+  letter-spacing: .02em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* The viewport, badge and canvas coordinate system now share the core size. */
+:host .entry.entry .security-console.security-console .entry-icon {
+  position: relative !important;
+  grid-area: emblem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 0 28px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  animation: none !important;
+  transform: none !important;
+}
+:host .entry.entry .security-console.security-console .console-emblem-viewport {
+  position: relative !important;
+  display: block !important;
+  flex: 0 1 auto !important;
+  width: min(100%, 22cqw, 280px) !important;
+  min-width: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  overflow: visible !important;
+}
+:host .entry.entry .security-console.security-console .console-emblem-3d {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+:host .entry.entry .security-console.security-console .console-emblem-3d .console-emblem-canvas-host { position:absolute;inset:0; }
+:host .entry.entry .security-console.security-console .console-emblem-3d canvas { display: block !important; width: 100% !important; height: 100% !important; }
+:host .entry.entry .security-console.security-console .console-emblem-unavailable {
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+}
+:host .entry.entry .security-console.security-console .argus-system-status {
+  position: absolute !important;
+  z-index: 3 !important;
+  left: 50% !important;
+  top: calc(100% + 12px) !important;
+  bottom: auto !important;
+  width: max-content !important;
+  max-width: min(100%, 260px) !important;
+  height: auto !important;
+  min-height: 30px !important;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  box-sizing: border-box !important;
+  transform: translateX(-50%) !important;
+  white-space: nowrap !important;
+  font-size: clamp(10px, 1.05cqw, 13px) !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+}
+:host .entry.entry .security-console.security-console .console-modes-vertical.sos-modes-locked > .liquid-btn,
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn:disabled {
+  opacity: .34 !important;
+  filter: grayscale(1) saturate(.15) !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* In stacked portrait layouts, reserve a clear band before the mode pills. */
+@container argus-console (max-width: 559px) {
+  :host .entry.entry .security-console.security-console .entry-icon {
+    padding-bottom: 34px !important;
+  }
+}
+
+/* Sensors are a compact row beneath the operating area, never over the core. */
+:host .entry.entry .security-console.security-console .console-sensors {
+  grid-area: sensors !important;
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  max-width: none !important;
+  max-height: 100px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow: auto !important;
+  scrollbar-width: thin !important;
+}
+:host .entry.entry .security-console.security-console .console-sensors:empty { display: none !important; }
+:host .entry.entry .security-console.security-console .console-sensor {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 32px !important;
+  padding: 4px 9px !important;
+  box-sizing: border-box !important;
+}
+:host .entry.entry .security-console.security-console .console-sensor-name {
+  max-width: 180px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Match the original panoramic console proportions on wide landscape panels.
+   The fixed height keeps the scene canvas and grid from forcing a tall card. */
+@media (orientation: landscape) {
+  @container argus-panel (min-width: 1100px) {
+    :host .entry.entry:not(.ios-fullscreen) {
+      aspect-ratio: 3 / 1 !important;
+      height: min(33.333cqw, 480px) !important;
+      min-height: 0 !important;
+    }
+    :host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console {
+      grid-template-columns: minmax(0, 1fr) minmax(220px, .72fr) minmax(0, 1fr) !important;
+      grid-template-rows: 42px minmax(0, 1fr) !important;
+      grid-template-areas: "header header header" "controls emblem sensors" !important;
+      height: 100% !important;
+      align-content: stretch !important;
+      gap: clamp(12px, 1.6cqw, 24px) !important;
+      padding: clamp(16px, 1.8cqw, 26px) !important;
+    }
+    :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport {
+      width: min(100%, 22cqw, 280px) !important;
+    }
+  }
+}
+
+/* Small vertical cards stay short and tidy rather than inheriting desktop widths. */
+@container argus-console (max-width: 559px) {
+  :host .entry.entry .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto !important;
+    grid-template-areas: "header" "emblem" "controls" "sensors" !important;
+    gap: 12px !important;
+    padding: 12px !important;
+  }
+  :host .entry.entry .security-console.security-console .console-emblem-viewport { width: min(62cqw, 250px) !important; }
+  :host .entry.entry .security-console.security-console .entry-icon { padding-bottom: 34px !important; }
+  :host .entry.entry .security-console.security-console .argus-system-status { top: calc(100% + 2px) !important; }
+  /* Reserve the four true panel corners for the L markers. */
+  :host .entry.entry .security-console.security-console .console-hud { padding-inline: 26px !important; }
+  :host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical {
+    width: calc(100% - 52px) !important;
+    margin-inline: 26px !important;
+  }
+  :host .entry.entry .security-console.security-console .liquid-stack > .argus-sta-wrap {
+    width: calc(100% - 52px) !important;
+    margin-inline: 26px !important;
+  }
+  :host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical { gap: 6px !important; }
+  :host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn { min-height: 48px !important; }
+  :host .entry.entry .security-console.security-console .console-hud { grid-template-columns: minmax(0,1fr) auto minmax(38px,1fr) !important; gap: 5px !important; }
+  :host .entry.entry .security-console.security-console .console-hud-loc { padding-inline: 8px !important; }
+  :host .entry.entry .security-console.security-console .argus-connection-pill { padding-inline: 7px !important; }
+  :host .entry.entry .security-console.security-console .console-hud-right .entry-fs { width: 34px !important; min-width: 34px !important; height: 34px !important; min-height: 34px !important; }
+  :host .entry.entry .security-console.security-console .argus-sta-track { height: 48px !important; }
+}
+
+/* Fullscreen is sized to the viewport. Container queries below use the entry,
+   the actual size container, so they work in HA and browser fullscreen alike. */
+:host .entry.entry.ios-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999999 !important;
+  width: 100vw !important;
+  width: 100dvw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  container: argus-fullscreen / size !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+:host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: 100% !important;
+  padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)) !important;
+}
+@container argus-fullscreen (min-width: 900px) and (min-height: 480px) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, .72fr) minmax(0, 1fr) !important;
+    grid-template-rows: 42px minmax(0, 1fr) !important;
+    grid-template-areas: "header header header" "controls emblem sensors" !important;
+    gap: clamp(14px, 2.2cqw, 30px) !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport { width: min(28cqw, 42cqh, 360px) !important; }
+}
+@container argus-fullscreen (max-width: 899px) and (min-height: 400px) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas: "header header" "controls emblem" "sensors sensors" !important;
+    gap: 12px !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport { width: min(38cqw, 48cqh, 360px) !important; }
+}
+@container argus-fullscreen (max-height: 399px) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+    grid-template-areas: "header header" "controls emblem" "sensors sensors" !important;
+    gap: 5px 12px !important;
+    padding: 8px max(12px, env(safe-area-inset-left)) 8px max(12px, env(safe-area-inset-right)) !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport { width: min(34cqw, 42cqh, 220px) !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon { padding-bottom: 20px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical > .liquid-btn { min-height: 36px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-track { height: 50px !important; min-height: 50px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-thumb { --sta-thumb-size: 40px; width: 40px !important; height: 40px !important; left: 4px !important; top: 50% !important; margin-top: -20px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .argus-sta-label { left: 56px !important; max-width: calc(100% - 68px) !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors { max-height: 38px !important; }
+}
+@container argus-fullscreen (max-width: 520px) and (min-height: 400px) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto !important;
+    grid-template-areas: "header" "emblem" "controls" "sensors" !important;
+    gap: 10px !important;
+    padding: max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom)) !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport { width: min(50cqw, 34cqh, 230px) !important; }
+}
+
+
 :host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,
 :host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,
-:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button { background:#000 !important; color:#fff !important; border:2px solid #fff !important; backdrop-filter:none !important; }
-:host .entry.entry .security-console.security-console button:focus-visible { outline:3px solid #7dd3fc !important; outline-offset:3px !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button { background: #000 !important; color: #fff !important; border: 2px solid #fff !important; backdrop-filter: none !important; }
+:host .entry.entry .security-console.security-console button:focus-visible,
+:host .entry.entry .security-console.security-console .argus-sta-track:focus-visible { outline: 3px solid #7dd3fc !important; outline-offset: 2px !important; }
 
-:host .entry.entry .security-console.security-console > .liquid-stack,
-:host .entry.entry .security-console.security-console > .entry-icon,
-:host .entry.entry .security-console.security-console > .console-sensors { position:static !important; inset:auto !important; transform:none !important; }
-:host .entry.entry .security-console.security-console .entry-icon svg [filter] { filter:none !important; }
-@container argus-console (max-width: 900px) {
-  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console { height:auto !important; min-height:100dvh !important; grid-auto-rows:max-content !important; }
-  :host .entry.entry .security-console.security-console { grid-template-rows:max-content max-content max-content !important; }
-  :host .entry.entry .security-console.security-console .console-sensors { align-self:start !important; height:auto !important; min-height:max-content !important; }
+@media (prefers-reduced-motion: reduce) {
+  :host .entry.entry .security-console.security-console *,
+  :host .entry.entry .security-console.security-console *::before,
+  :host .entry.entry .security-console.security-console *::after { scroll-behavior: auto !important; }
 }
-@container argus-console (max-width: 520px) {
-  :host .entry.entry .security-console.security-console { grid-template-rows:max-content max-content max-content max-content !important; }
+
+/* Give the action sliders breathing room beneath the mode row. The slider
+   keeps its safety color while its soft outer light follows the active mode. */
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .argus-sta-wrap {
+  margin-block-start: 8px !important;
+}
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .argus-sta-wrap--disarm {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--console-accent) 34%, transparent));
+}
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .argus-sta-wrap--sos {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--console-accent) 30%, transparent));
+}
+
+@container argus-console (max-width: 559px) {
+  :host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .argus-sta-wrap {
+    margin-block-start: 6px !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 480px) {
+  @container argus-console (min-width: 360px) {
+    :host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .argus-sta-wrap {
+      margin-block-start: 4px !important;
+    }
+  }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-hud {
+    position: absolute !important;
+    inset: max(12px, env(safe-area-inset-top)) 12px auto !important;
+    width: auto !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    gap: 6px !important;
+  }
+  :host .entry.entry.ios-fullscreen .console-hud-loc {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    font-size: 12px !important;
+  }
+  :host .entry.entry.ios-fullscreen .entry-exit-fs {
+    position: static !important;
+    padding: 6px 10px !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical {
+    margin-top: 18px !important;
+  }
+}
+
+:host .security-context {
+  grid-area: sensors;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid #ffffff20;
+  border-radius: 18px;
+  background: #171d26;
+}
+:host .security-context p {
+  margin: 6px 0;
+  font-size: .85rem;
+}
+:host .entry.entry .security-console.security-console .security-context .console-sensors {
+  justify-content: flex-start !important;
+  max-height: min(32vh, 240px) !important;
+}
+@media (min-width: 761px) {
+  :host .entry.entry .security-console.security-console .console-modes-vertical {
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 12px !important;
+    box-sizing: border-box;
+    border: 1px solid #ffffff20 !important;
+    border-radius: 18px;
+    background: #171d26 !important;
+  }
+}
+
+:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled {
+  opacity: 1 !important;
+  border-color: var(--console-accent) !important;
+  border-style: dashed !important;
+}
+
+:host .entry.entry .security-console.security-console .console-modes-vertical {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+:host .console-nav-caption {
+  grid-column: 1 / -1;
+  color: #a8b4c4;
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+:host .console-nav-sos {
+  border-top: 1px solid #ffffff19;
+  margin-top: 8px;
+  padding-top: 12px;
+}
+:host .security-context {
+  padding: clamp(16px, 2cqw, 28px);
+  border-color: #ffffff13;
+  background: #111820c9;
+}
+:host .security-context header strong { font-size: clamp(17px, 2cqw, 24px); }
+:host .security-context .context-tools { display: grid; gap: 8px; margin-top: 18px; }
+:host .security-context .context-tools small { color: #a8b4c4; text-transform: uppercase; letter-spacing: .09em; }
+:host .security-context button {
+  border: 1px solid #ffffff18;
+  border-radius: 14px;
+  background: #ffffff09;
+  color: #eef2f8;
+  padding: 9px 12px;
+}
+:host .security-context .context-tool { display: grid; gap: 4px; text-align: start; }
+:host .security-context .context-tool span { color: #a8b4c4; font-size: .8rem; }
+:host .security-context .context-back { margin: 8px 4px 4px 0; }
+@media (prefers-reduced-motion: no-preference) {
+  :host .security-context header { animation: argus-context-enter .24s ease-out both; }
+  @keyframes argus-context-enter {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+/* Use the card width, including when HA opens a sidebar on a wide display. */
+@container argus-console (560px <= width < 680px) {
+  :host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto !important;
+    grid-template-areas: "header" "emblem" "controls" "sensors" !important;
+  }
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport {
+    width: min(100%, 310px) !important;
+  }
+}
+@container argus-console (680px <= width < 900px) {
+  :host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-areas: "header header" "controls emblem" "sensors sensors" !important;
+  }
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport {
+    width: min(100%, 310px) !important;
+  }
+}
+@container argus-fullscreen (min-width: 1000px) and (min-height: 480px) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 1.65fr) minmax(0, 1.14fr) !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport {
+    width: min(100%, 38cqw, 440px) !important;
+  }
+}
+
+:host .entry.entry .security-console.security-console .security-context .console-sensors {
+  display: grid !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+  grid-template-columns: minmax(0, 1fr);
+}
+:host .security-context .context-sensor-row {
+  display: grid;
+  gap: 6px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ffffff13;
+}
+:host .security-context .context-primary,
+:host .security-context .context-call a {
+  color: #b8e9ff;
+  border-color: #38bdf855;
+}
+:host .security-context .context-call {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+@container argus-console (min-width: 900px) {
+  :host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical {
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-self: start !important;
+    max-width: 300px !important;
+  }
+  :host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .liquid-btn {
+    justify-content: flex-start !important;
+    padding-inline: 18px !important;
+  }
+}
+
+@container argus-console (min-width: 1000px) {
+  :host .entry.entry:not(.ios-fullscreen) .entry-content.security-console.security-console {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 1.65fr) minmax(0, 1.14fr) !important;
+  }
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport {
+    width: min(100%, 38cqw, 440px) !important;
+  }
+}
+
+@media (orientation: landscape) {
+  @container argus-panel (min-width: 1100px) {
+    :host .entry.entry:not(.ios-fullscreen) {
+      aspect-ratio: auto !important;
+      height: clamp(520px, 42cqw, 640px) !important;
+    }
+    :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .entry-icon {
+      padding-bottom: 48px !important;
+    }
+  }
+}
+
+:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled .console-mode-dot {
+  background: var(--console-accent) !important;
+  opacity: 1 !important;
+}
+:host .entry.entry .security-console.security-console .liquid-btn.mode-requested:disabled .console-mode-label {
+  color: #e8edf6 !important;
+}
+@container argus-console (max-width: 559px) {
+  :host .entry.entry .security-console.security-console .console-hud {
+    box-sizing: border-box !important;
+    padding-inline: 4px !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+  }
+}
+
+/* Paint the background below the WebGL canvas. */
+:host .entry.entry {
+  background: radial-gradient(ellipse at 48% 45%, #1430293b, transparent 64%),
+    radial-gradient(ellipse at 92% 30%, #23342e37, transparent 48%), #050807 !important;
+}
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  max-width: none !important;
+  gap: 6px !important;
+}
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .liquid-btn {
+  justify-content: center !important;
+  min-height: 38px !important;
+  padding-inline: 5px !important;
+}
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn .console-mode-label {
+  font-size: clamp(10px, 1cqw, 13px) !important;
+}
+:host .security-context {
+  --context-accent: #68d9b0;
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  min-width: 0;
+}
+:host .security-context[data-tone="warning"] { --context-accent: #e6bc75; }
+:host .security-context[data-tone="alarm"] { --context-accent: #ff847d; }
+:host .security-context .context-heading,
+:host .security-context .context-eyebrow {
+  color: #a5bcb4;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+:host .security-context .context-heading { display:flex; justify-content:space-between; gap:8px; }
+:host .security-context .context-live { color: #79c5a9; }
+:host .security-context .context-live::before { content: '●'; margin-inline-end: 5px; }
+:host .security-context header {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 16px 46px 16px 16px;
+  border: 1px solid #a9d4c222;
+  border-radius: 17px;
+  background: radial-gradient(ellipse at 96% 0%, color-mix(in srgb, var(--context-accent) 12%, transparent), transparent 72%), #121a18;
+}
+:host .security-context header strong { font-size: clamp(20px, 2cqw, 29px); line-height: 1.1; }
+:host .security-context header p { margin: 0; color: #b0c1bc; line-height: 1.45; }
+:host .security-context .context-shield { width: 22px; height: 22px; position:absolute; top: 16px; right: 15px; color:var(--context-accent); }
+:host .security-context[data-tone="alarm"] .context-shield path:last-child { display:none; }
+:host .security-context .context-tools { margin: 0; }
+:host .security-context .context-verification { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+:host .security-context .context-verification > small { grid-column: 1 / -1; }
+:host .security-context .context-tool { background: #151e1d; border-color: #a9d4c222; padding: 12px; }
+:host .security-context .context-tool strong { font-size: 12px; overflow-wrap: anywhere; }
+:host .security-context .context-tool span { font-size: 11px; line-height: 1.35; }
+:host .entry.entry .security-console.security-console .security-context .console-sensors:empty { display:none !important; }
+:host .security-context .context-sensor-row {
+  border: 1px solid #a9d4c222;
+  border-radius: 13px;
+  background: #151e1d;
+  padding: 8px;
+}
+:host .security-context button:hover { border-color: #a9d4c255; }
+:host .security-context button:focus-visible { outline: 2px solid #9ccfbe; outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  :host .security-context button { transition: background-color .22s, border-color .22s, transform .2s; }
+  :host .security-context button:active { transform: translateY(1px); }
+}
+
+:host .entry.entry .entry-content.security-console.security-console { background: transparent !important; }
+:host .entry.entry .security-console.security-console .liquid-stack.console-modes-vertical > .liquid-btn { gap: 4px !important; }
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn .console-mode-label {
+  max-width: none !important;
+  font-size: clamp(9px, .95cqw, 13px) !important;
+}
+:host .security-context .context-tool {
+  min-width: 0;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+
+.context-pin-slot:empty { display: none; }
+.security-context:has(.context-pin-slot > .open) > :not(.context-pin-slot) { display: none; }
+#pin-modal[data-disarm-presentation="context"].open {
+  position: relative;
+  inset: auto;
+  padding: 0;
+  background: none;
+  backdrop-filter: none;
+  z-index: 1;
+}
+#pin-modal[data-disarm-presentation="context"] .modal {
+  width: 100%;
+  max-height: min(70dvh, 100cqh);
+}
+#pin-modal[data-disarm-presentation="dialog"].open {
+  position: fixed;
+  padding: 16px;
+  box-sizing: border-box;
+  backdrop-filter: none;
+}
+#pin-modal[data-disarm-presentation] :focus-visible {
+  outline: 2px solid #9ccfbe;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #pin-modal[data-disarm-presentation="context"].open:not(.pin-closing) .modal:not(.pin-rejected) {
+    animation: argus-context-enter .24s ease-out both;
+  }
+  #pin-modal[data-disarm-presentation="context"].pin-closing .modal {
+    animation: argus-context-enter .22s ease-in reverse both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #pin-modal[data-disarm-presentation] .modal { animation: none !important; }
+  #pin-modal[data-disarm-presentation] .pin-btn-round { transition: none; }
+}
+
+:host .security-context .context-indicators {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+:host .security-context .context-indicators > div,
+:host .security-context .context-activity {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #a9d4c222;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #1b2825, #111918);
+}
+:host .security-context .context-indicators dt {
+  color: #abc0b9;
+  font-size: .65rem;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+:host .security-context .context-indicators dd {
+  margin: 3px 0 0;
+  color: #edf7f3;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+:host .security-context .context-activity ul { list-style: none; padding: 0; margin: 4px 0 0; }
+:host .security-context .context-activity li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 10px;
+  padding-block: 5px;
+  font-size: .75rem;
+}
+:host .security-context .context-activity time,
+:host .security-context .context-activity p { color: #abc0b9; }
+@media (prefers-reduced-motion: no-preference) {
+  :host .security-context .context-indicators,
+  :host .security-context .context-activity { animation: argus-context-enter .24s ease-out both; }
+}
+
+/* Phase 2: graphite cards, fine outlines and a shared pool of green light. */
+:host .entry.entry {
+  background: radial-gradient(ellipse at 50% 57%, #15342b66, transparent 58%),
+    radial-gradient(ellipse at 90% 18%, #17282238, transparent 42%), #060908 !important;
+}
+:host .security-context .context-heading { padding-inline: 3px; }
+:host .security-context header {
+  padding: 20px clamp(56px, 7cqw, 88px) 20px 18px;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 95% 12%, color-mix(in srgb, var(--context-accent) 15%, transparent), transparent 58%),
+    linear-gradient(145deg, #1b2322, #111715);
+  box-shadow: inset 0 1px #ffffff09, 0 8px 20px #0003;
+}
+:host .security-context .context-shield {
+  box-sizing: content-box;
+  padding: 9px;
+  border: 1px solid color-mix(in srgb, var(--context-accent) 38%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--context-accent) 9%, transparent);
+}
+:host .security-context .context-indicators { margin-top: 5px; gap: 8px; }
+:host .security-context .context-indicators > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: end;
+  min-height: 58px;
+  padding: 10px 11px;
+  border-radius: 15px;
+}
+:host .security-context .context-indicators dd {
+  margin: 0 0 3px;
+  font-size: clamp(1.45rem, 2.4cqw, 2.15rem);
+  font-weight: 750;
+  line-height: 1;
+}
+:host .security-context .context-indicators > div:nth-child(2) dd { color: #57dfb5; }
+:host .security-context[data-tone="warning"] .context-indicators > div:last-child dd { color: #e6bc75; }
+:host .security-context .context-tool,
+:host .security-context .context-indicators > div,
+:host .security-context .context-activity {
+  background: linear-gradient(145deg, #1a2321, #111715);
+  box-shadow: inset 0 1px #ffffff09;
+}
+:host .security-context .context-activity li + li { border-top: 1px solid #a9d4c222; }
+
+/* The official state is displayed in the context card. */
+:host .entry.entry .security-console.security-console .entry-icon,
+:host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon {
+  padding-bottom: 0 !important;
+}
+
+/* Compact embedded panels scroll vertically so the core and controls can keep
+   their usable dimensions even in a short landscape viewport. */
+@container argus-console (width < 560px) {
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-emblem-viewport {
+    width: min(100%, 250px) !important;
+  }
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .liquid-stack.console-modes-vertical,
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .liquid-stack > .argus-sta-wrap {
+    width: 100% !important;
+    margin-inline: 0 !important;
+  }
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-modes-vertical > .liquid-btn {
+    min-height: 44px !important;
+  }
+  :host .entry.entry:not(.ios-fullscreen) .security-console.security-console .console-mode-label {
+    font-size: 11px !important;
+  }
+}
+
+/* Context details share one track, even when a sensor reports long values. */
+:host .security-context {
+  grid-template-columns: minmax(0, 1fr);
+}
+:host .security-context .context-view-title,
+:host .security-context .context-sensor-row {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:host .security-context .context-sensor-row {
+  grid-template-columns: minmax(0, 1fr);
+}
+:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr);
+  justify-content: stretch !important;
+}
+:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor-name {
+  max-width: none !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+:host .security-context .context-sensor-row .console-sensor-status-wrap {
+  grid-column: 2;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+:host .entry.entry .security-console.security-console .security-context .context-sensor-row .console-sensor-state {
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+:host .entry.entry .security-console.security-console .security-context > .console-sensors {
+  grid-area: auto !important;
 }

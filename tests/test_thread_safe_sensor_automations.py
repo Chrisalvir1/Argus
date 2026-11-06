@@ -39,9 +39,9 @@ class TestThreadSafeSensorAutomations(unittest.TestCase):
             'self.hass.async_create_task(self._evaluate_automations("armed", target=target))',
             source,
         )
-        self.assertIn(
-            'self._evaluate_automations("armed", target=previous_state)',
-            source,
+        # Stopping SOS preserves the armed state and must not emit a new arm.
+        self.assertNotIn(
+            'self._evaluate_automations("armed", target=previous_state)', source,
         )
 
     def test_sensor_changed_dispatches_via_thread_safe_create_task(self):

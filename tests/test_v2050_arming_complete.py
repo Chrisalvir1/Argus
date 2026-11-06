@@ -1,6 +1,8 @@
 """v2.2.82 arming-wait completion and Aqara-safe open detection."""
 from pathlib import Path
 import unittest
+import json
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = (ROOT / "custom_components" / "argus" / "sensor_state_runtime.py").read_text(encoding="utf-8")
@@ -12,9 +14,9 @@ BOOTSTRAP = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js"
 
 class TestV2050ArmingComplete(unittest.TestCase):
     def test_version_contracts_match_release(self):
-        self.assertIn('VERSION = "2.6.8"', CONST)
-        self.assertIn('"version": "2.6.8"', MANIFEST)
-        self.assertIn("2.6.8", BOOTSTRAP)
+        version = re.search(r'^VERSION = "([^"]+)"$', CONST, re.MULTILINE).group(1)
+        self.assertEqual(json.loads(MANIFEST)["version"], version)
+        self.assertIn(f"v={version}", BOOTSTRAP)
 
     def test_runtime_unifies_open_detection(self):
         self.assertIn("def is_sensor_active(", RUNTIME)

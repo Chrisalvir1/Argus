@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import datetime
 from pathlib import Path
 import sys
 import time
@@ -26,6 +27,58 @@ walk_test_mod = load_module("argus.core.walk_test", COMPONENT / "core" / "walk_t
 WalkTestManager = walk_test_mod.WalkTestManager
 WalkTestSession = walk_test_mod.WalkTestSession
 async_get_walk_test_manager = walk_test_mod.async_get_walk_test_manager
+
+
+class TestSensorDiagnosisPayload(unittest.TestCase):
+    def test_contact_diagnosis_includes_live_status_battery_and_change_time(self):
+        changed = datetime.datetime(2026, 11, 5, 12, 30, tzinfo=datetime.timezone.utc)
+        state = SimpleNamespace(
+            entity_id="binary_sensor.patio_door",
+            state="on",
+            attributes={"device_class": "door", "battery": 18},
+            last_changed=changed,
+            last_updated=changed,
+        )
+
+        result = walk_test_mod.diagnose_sensor(state.entity_id, state)
+
+        self.assertEqual(result["state"], "on")
+        self.assertEqual(result["availability"], "available")
+        self.assertEqual(result["battery"], 18)
+        self.assertTrue(result["battery_low"])
+        self.assertEqual(result["last_changed"], changed.isoformat())
+        self.assertEqual(result["physical_test_kind"], "contact")
+
+    def test_informational_entity_does_not_masquerade_as_security_sensor(self):
+        changed = datetime.datetime(2026, 11, 5, 12, 30, tzinfo=datetime.timezone.utc)
+        state = SimpleNamespace(
+            entity_id="sensor.sun_next_dawn",
+            state="2026-11-06T11:01:00+00:00",
+            attributes={"device_class": "timestamp"},
+            last_changed=changed,
+            last_updated=changed,
+        )
+
+        result = walk_test_mod.diagnose_sensor(state.entity_id, state)
+
+        self.assertEqual(result["category"], "informational")
+        self.assertEqual(result["availability"], "available")
+        self.assertIsNone(result["battery"])
+        self.assertIsNone(result["physical_test_kind"])
+
+    def test_unavailable_sensor_reports_connection_failure(self):
+        state = SimpleNamespace(
+            entity_id="binary_sensor.patio_door",
+            state="unavailable",
+            attributes={"device_class": "door"},
+            last_changed=None,
+            last_updated=None,
+        )
+
+        result = walk_test_mod.diagnose_sensor(state.entity_id, state)
+
+        self.assertEqual(result["category"], "unverifiable")
+        self.assertEqual(result["availability"], "unavailable")
 
 
 class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
@@ -65,7 +118,9 @@ class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(session.is_expired)
         self.assertFalse(session.record_trigger("binary_sensor.door", "on"))
 
-    def test_walk_test_manager_start_and_stop(self):
+    @patch("homeassistant.helpers.event.async_track_state_change_event")
+    @patch("homeassistant.helpers.event.async_call_later")
+    def test_walk_test_manager_start_and_stop(self, timeout, observe):
         bus = SimpleNamespace(async_fire=Mock())
         hass = SimpleNamespace(data={}, bus=bus)
         mgr = async_get_walk_test_manager(hass)
@@ -74,7 +129,8 @@ class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
         session = mgr.start_walk_test("inst_1", sensors, timeout_seconds=600, started_by="Bob")
 
         self.assertTrue(mgr.is_active("inst_1"))
-        bus.async_fire.assert_called_with("argus_walk_test_started", session.to_dict())
+        bus.async_fire.assert_any_call("argus_walk_test_started", session.to_dict())
+        bus.async_fire.assert_called_with("argus_walk_test_updated", session.to_dict())
 
         session.record_trigger("binary_sensor.front_door", "on")
         report = mgr.stop_walk_test("inst_1")
@@ -82,7 +138,8 @@ class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(mgr.is_active("inst_1"))
         self.assertIsNotNone(report)
         self.assertEqual(report["tested_count"], 1)
-        bus.async_fire.assert_called_with("argus_walk_test_stopped", report)
+        bus.async_fire.assert_any_call("argus_walk_test_stopped", report)
+        bus.async_fire.assert_called_with("argus_walk_test_updated", report)
 
     def test_per_sensor_instant_and_custom_delays(self):
         """Verify per-sensor delay customization logic."""

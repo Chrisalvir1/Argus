@@ -9,6 +9,10 @@ MACHINE = (ARGUS / "arming_state_machine.py").read_text(encoding="utf-8")
 
 
 class TestV2049SensorStateRuntime(unittest.TestCase):
+    def test_sensor_reconciliation_callback_stays_on_home_assistant_event_loop(self):
+        self.assertIn("    @callback\n    def sensor_changed_with_reconciliation(", RUNTIME)
+        self.assertIn("ArgusAlarmPanel._async_sensor_changed = sensor_changed_with_reconciliation", RUNTIME)
+
     def test_pending_request_is_reconciled_from_event_and_watchdog(self):
         for token in (
             "_arm_request",

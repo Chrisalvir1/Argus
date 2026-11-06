@@ -1,16 +1,389 @@
-## [2.6.8] - 2026-11-05
+## [3.0.0] - 2026-11-06
 
-### HA 2026.11 Compatibility & Node 26 LTS Modernization
-- Upgraded Python runtime target to Python 3.14 (HA 2026.11 ADR-0020 compatibility) with support range `>=3.14,<3.16`.
-- Upgraded Node.js CI and runtime target to Node 26.13 LTS.
-- Updated frontend dependencies: `nanoid` 6.0.2, `react` 19.3.1, `react-dom` 19.3.1, `react-grid-layout` 2.3.0, `react-resizable` 4.0.2, `@vitejs/plugin-react` 6.2.1, `vite` 8.3.6, and `vitest` 5.1.0 with 0 vulnerabilities.
-- Recompiled production React dashboard bundle (`argus-frontend.js`) with cache-bust version `v=2.6.8`.
-- Updated version contracts and CI validation matrices across regression test suites.
+Detalles completos: [notas v3.0.0](docs/RELEASE_NOTES_3.0.0.md), [migración](docs/MIGRATION_3.0.0.md) y [YAML opcional](examples/configuration.yaml).
 
-## [2.6.7] - 2026-10-10
+- Integra el desarrollo local del dashboard, núcleo adaptativo, responsive, diagnóstico y seguridad de interacción.
+- Conserva funcionamiento sin zonas y configuración heredada de v2.6.8.
+- Preserva destinos TTS y etiquetas antiguas durante la migración.
+- Centraliza la voz en Modos / SOS y conserva opciones anteriores.
+- Prepara compatibilidad y pruebas con Home Assistant Core 2026.11.0.
+- Añade guía de actualización y notas de publicación.
 
-- Añadir un diagnóstico descargable de configuración con conteos agregados y estado básico de TTS. Omite IDs de entidades, PIN, destinos TTS y nombres de reproductores.
-- Mantener la suite compatible con Home Assistant Core 2026.10 y conservar el flujo de armado existente.
+## 2.9.159 — Corrección contextual local
+
+Selector contextual compartido, diagnóstico humanizado y actualización por cambios HA; compatibilidad previa para pruebas físicas. TypeScript, build y 81 pruebas frontend aprobados. Validación integral de navegador y laboratorio aún pendiente.
+
+## [2.9.160] - 2026-11-05
+
+### Fixed
+- Mostrar en el diagnóstico contextual el estado de contacto, el tiempo que sigue abierto, la disponibilidad y el estado/porcentaje de batería cuando Home Assistant lo proporciona.
+- Identificar claramente como no segura una entidad informativa como el próximo amanecer; no interpretarla como contacto abierto/cerrado.
+
+### Verified
+- Añadidos contratos backend para contacto abierto, disponibilidad, batería y entidades informativas.
+
+## [2.9.158] - 2026-11-05
+
+### Updated
+- Alinear el laboratorio local con Home Assistant Core 2026.11.0 estable, su frontend 20261028.4, Python 3.14 y las dependencias actuales de React/Three.js/Vite.
+- Recompilar el bundle y el ZIP local de Argus 2.9.158; añadir diagnósticos agregados de la integración sin exponer PIN ni IDs de entidades.
+- Conservar el diseño aprobado y la versión Argus existente; sin publicación, tag ni despliegue.
+
+### Verified
+- 80 pruebas frontend, TypeScript, build y smoke tests de compatibilidad con Core 2026.11.
+- Home Assistant inicia en `127.0.0.1:8123`; los recursos estáticos servidos coinciden byte por byte con los locales.
+- La suite backend amplia conserva fallos de contratos/fixtures pendientes, documentados en `docs/LOCAL_HA_2026.11_MIGRATION.md`.
+
+## [2.9.152] - 2026-11-05
+
+### Fixed
+- Evitar reasignaciones redundantes del buffer Three.js ante cambios de clase ajenos al perfil gráfico y ante notificaciones de tamaño sin cambio real.
+- Reducir a una sola operación el ajuste de tamaño y densidad del buffer WebGL durante redimensionados.
+- Distinguir el PIN de armado del PIN de perfil en el teclado compartido, manteniendo el flujo de autenticación existente.
+- Conservar estados activos de sensores contextuales como `recording`, `active`, `abierto`, `activa`, `tamper` y `vibration`.
+
+### Validated
+- Recorridos de scroll, pantalla completa, barra lateral de Home Assistant y cambio de perfil ejecutados en Safari nativo sobre el bundle 2.9.151.
+- Fluidez visual de esos recorridos sigue pendiente de verificación sostenida; las métricas de rAF estuvieron contaminadas por Inspector/automatización y no atribuyen causalidad.
+- Documentada evidencia Safari, limitaciones y procedimiento manual en `docs/SAFARI_UX_2.9.151.md`.
+
+## [2.9.151] - 2026-11-04
+- Consolidación local del backend, frontend, pruebas y bundle de las Fases 1–8.
+- Fase 8 completada con validación disponible. PIN, SOS y confirmaciones comprobados en laboratorio aislado.
+- Pendientes específicos de Safari nativo, tacto y lectores de pantalla físicos conservados en documentación.
+
+## [2.9.150] - 2026-11-04
+- Cierre local de Fase 7: diagnóstico contextual y pruebas guiadas y libres por zona.
+- Recuperar progreso y último informe confirmado tras reconexión WebSocket. Incorporar selección de zona por teclado y foco visible.
+- Validar en Chrome y Home Assistant aislado con entidades virtuales. Las verificaciones físicas quedan pendientes.
+
+## [2.9.149] - 2026-11-04
+- Cerrar la Fase 6 tras validar en el navegador, conectado únicamente al laboratorio aislado, el flujo de armado en espera, bypass temporal, recuperación, reincorporación manual, alarma enclavada y desarmado con PIN de prueba.
+- Confirmar que las omisiones permanecen durante la recuperación del sensor y no desaparecen hasta que el backend acepta la reincorporación; las solicitudes rechazadas no alteran la interfaz de forma optimista.
+- Corregir la reconciliación del estado optimista de armado para que una confirmación tardía del backend no deje el panel mostrando un estado de transición obsoleto.
+- Conservar el diseño aprobado. No se crearon release ni tag y no hubo despliegue de producción.
+
+## [2.9.148] - 2026-11-04
+- Cierre local de la implementación de la Fase 5, con el diseño contextual y responsive aprobados.
+- Documentar la prueba en Home Assistant aislado: WebSocket emitió los cambios del contacto virtual, pero el refresco automático del dashboard sigue pendiente.
+
+## [2.9.137] - 2026-11-02
+- Acelerar el registro del panel Argus: serializar setup YAML/entrada para evitar dobles registros y dejar branding, medios y recursos Lovelace como tareas opcionales en segundo plano.
+- Registrar el panel y los archivos estáticos antes de inicializar servicios multimedia, para que un bloqueo secundario no esconda Argus durante el arranque.
+
+## [2.9.136] - 2026-10-27
+- Reparar y guardar colisiones de widgets en el servidor cuando entrega el dashboard, sin depender del bundle o caché del navegador.
+- Conservar las columnas existentes y desplazar únicamente las tarjetas que se solapan debajo de los widgets que bloquean su espacio.
+
+## [2.9.135] - 2026-10-27
+- Auditar el layout persistido: el perfil actual tenía `access-control` solapado con `alarm-configuration` en el breakpoint web `lg`.
+- Reparar automáticamente layouts v5 ya guardados al cargarlos, conservar sus columnas y guardar de vuelta la geometría corregida; prevenir nuevas colisiones al finalizar arrastre o resize.
+
+## [2.9.134] - 2026-10-27
+- Aplicar el reacomodo también al finalizar un redimensionado, no solo al arrastrar.
+- Reparar colisiones existentes empujando los widgets vecinos debajo del área redimensionada antes de compactar; no guardar tarjetas solapadas.
+
+## [2.9.133] - 2026-10-27
+- Corregir la integración del compactor: la envoltura heredada de React Grid Layout ignoraba la propiedad `compactor` personalizada.
+- Mantener libre la posición durante el arrastre (`compactType=null`) y reacomodar alrededor del widget soltado en el callback compatible de liberación.
+
+## [2.9.132] - 2026-10-27
+- Auditar el arrastre descendente: la compactación vertical estándar subía el widget arrastrado al primer hueco disponible al soltar.
+- Anclar el widget movido en la posición elegida y compactar los demás alrededor, conservando un layout sin colisiones.
+
+## [2.9.131] - 2026-10-27
+- Suavizar el reacomodo del tablero: los widgets vecinos siguen el arrastre sin transiciones que se reinicien en cada celda, y al soltar terminan con una animación breve y estable.
+- Quitar el rebote excesivo y reducir la transición de tamaño para que la compactación automática no se sienta tosca.
+
+## [2.9.130] - 2026-10-27
+- Activar compactación vertical del tablero para que al mover o redimensionar widgets se cierren los huecos y los demás contenedores se acomoden automáticamente.
+- Conservar las columnas elegidas y la distribución independiente por tamaño de pantalla; no modificar el núcleo de seguridad.
+
+## [2.9.129] - 2026-10-23
+- Detectar reproductores de Home Assistant desde sus entidades activas y desde el registro de entidades habilitadas, incluidos los que estén temporalmente sin estado.
+- Añadir actualización manual de la lista de reproductores TTS y conservar selecciones anteriores cuando una entidad deja de estar disponible.
+- Aclarar que Cast, Alexa Media, AirPlay y JACK se pueden elegir cuando HA los publique como entidades `media_player`.
+
+## [2.9.128] - 2026-10-23
+- Enrutar cada cuadro TTS al evento que le corresponde; cuando un cierre deja un único sensor pendiente, usar el mensaje «último sensor» y nombrar tanto el sensor cerrado como el pendiente.
+- Mantener separados los avisos de inicio, cierre, último pendiente, zonas cerradas, armado, cancelación, alarma, sensor adicional y cierre durante alarma; cada acción envía solo su mensaje.
+- Mantener el mensaje personalizado de cierre durante alarma y añadir el estado de sensores pendientes en español o inglés, según el idioma configurado en Argus.
+- Actualizar el ejemplo del último sensor y cachear el panel con la versión nueva.
+
+## [2.9.127] - 2026-10-23
+- Si escribes una frase propia para un aviso de zonas o sensores, Argus agrega automáticamente el conteo y los nombres del área y de los sensores asignados a ese modo; no necesitas escribirlos ni usar variables.
+- En los avisos con varios sensores, enlazar los nombres con comas y “y” antes del último para que suenen como una lista natural.
+- Mostrar esta indicación en el editor TTS y mantener cada aviso asociado solo a su evento y modo.
+
+## [2.9.126] - 2026-10-23
+- Corregir la concordancia de los avisos TTS: “1 sensor abierto” y “3 sensores abiertos”.
+- Mantener conteos dinámicos de zonas y sensores tanto en el armado en espera como en las alertas, y mostrarlos en ejemplos con los nombres reales asignados al modo.
+- Al personalizar avisos de zonas, agregar automáticamente el conteo y los nombres del área y del sensor cuando la frase no los incluye; enlazar listas con “y” antes del último elemento.
+- Aclarar en el editor que no es necesario escribir las zonas ni los nombres: Argus usa las asignaciones del modo seleccionado.
+
+## [2.9.125] - 2026-10-23
+- Afinar las frases TTS en español para contar con claridad las zonas y los sensores abiertos, nombrando área y sensor sin vocabulario técnico redundante.
+- Separar cada aviso por la situación que lo activa y mostrar a qué modo pertenece; las vistas previas ahora son ejemplos completos con áreas, sensores, conteos y el modo seleccionado.
+- Aclarar el conteo después de cada cierre durante el armado en espera y durante una alarma, sin anunciar “ninguno” cuando todos los sensores ya cerraron.
+
+## [2.9.124] - 2026-10-23
+- Reescribir los mensajes de voz predeterminados en español con frases cotidianas y propias de cada evento: inicio, cierre, última zona pendiente, armado, cancelación y alarma.
+- En el editor, nombrar cada aviso según cuándo ocurre, indicar que la voz corresponde al modo seleccionado y explicar en lenguaje simple que personalizar el texto no cambia el funcionamiento.
+- Al cerrar un sensor durante una alarma, decir si todavía quedan sensores abiertos; si ya no quedan, aclararlo sin decir “ninguno”. La alarma y las sirenas siguen activas hasta el desarmado manual.
+
+## [2.9.123] - 2026-10-23
+- Simplificar los avisos TTS en español para que indiquen con palabras claras qué ocurre en cada etapa y evitar mensajes que anuncien un fallo antes de terminar la revisión.
+- Mostrar debajo de Voz de Argus el estado real de cada sensor de las zonas del modo seleccionado, sincronizado con Home Assistant: verde abierto y rojo cerrado.
+- Actualizar esos estados en vivo sin reconstruir el editor TTS ni cerrar los controles mientras se escribe.
+- Aclarar que editar una frase solo cambia lo que se dice; no cambia zonas verificadas ni la lógica o el momento del armado.
+
+## [2.9.122] - 2026-10-23
+- Hacer explícito que los textos TTS de cada modo guían el armado en espera: verificación, conteo por zonas/sensores, cierres, finalización y cancelación.
+- Decir en cada cierre qué zona/área y sensor se cerró; volver a contar las zonas y sensores que siguen pendientes, usando solo asignaciones del modo seleccionado.
+- Al llegar el conteo a cero, decir “Todas las zonas están cerradas. Argus procede a armarse en modo X”; luego confirmar que el armado terminó.
+- Al dispararse la alarma, nombrar las zonas y sensores abiertos y repetir el aviso cada 30 segundos mientras sigan abiertos. Al cerrar, anunciar el cierre sin desarmar Argus ni apagar sirenas; solo el desarmado manual termina la alarma.
+- Añadir mensaje personalizable para el cierre de sensor durante la alarma; no modificar el diseño congelado del núcleo.
+
+## [2.9.121] - 2026-10-23
+- Dar contraste azul de vidrio y texto claro a las zonas asignadas en cada modo, sin tratarlas como un estado vacío.
+- Importar en Voz de Argus la configuración heredada de Options/YAML, conservarla y dejar esa pantalla como lugar único de edición.
+- Leer cada sensor pendiente como “Zona de [área], sensor [nombre] por cerrar”, sin decir el número interno; anunciar también cuando se cierra el último sensor.
+- Comparar la espera de armado con la copia disponible 2.9.82: la política y la revisión inmediata por cambio de sensor se mantienen. La casilla es independiente por modo y debe estar marcada para esperar.
+- Mantener intactos el núcleo de seguridad y su diseño.
+
+## [2.9.120] - 2026-10-23
+- Auditoría en navegador: la sección interna seguía calculando `backdrop-filter: blur(28px) saturate(1.5)` aunque el reset CSS marcaba transparencia; el fondo heredado de Liquid Glass quedaba como otra capa sobre el widget.
+- Aplicar el reset de superficie directamente al panel nativo en vertical y retirarlo al pasar a horizontal/escritorio. Se mantiene el contenedor exterior y no se modifica el layout, la visibilidad ni la configuración guardada.
+- Añadir contrato para comprobar el reset del filtro WebKit y su actualización al rotar el dispositivo.
+
+## [2.9.119] - 2026-10-23
+- La captura confirmó que la superficie Liquid Glass del panel nativo seguía superpuesta a la tarjeta React; la opacidad exterior por sí sola no eliminó las bandas ni el repintado al pasar el puntero.
+- En vertical, hacer transparente el panel interno y quitarle borde, sombra, blur y transiciones para dejar una sola superficie estable en Historial, Automatizaciones y los demás widgets, conservando las filas y controles internos.
+- Añadir una prueba de contrato para impedir que vuelva la doble capa.
+
+## [2.9.118] - 2026-10-23
+- Auditar la franja azul de Historial y Automatizaciones en vertical: la superficie común aún dejaba pasar el fondo animado con rellenos de 94–96 %.
+- Mantener el degradado Liquid Glass, quitar esa transparencia en la tarjeta y las filas del Historial, y aislar el repintado para que no aparezcan bandas azules/verdes.
+
+## [2.9.117] - 2026-10-18
+- Auditar la respuesta del núcleo al puntero: el listener de `pointermove` estaba activo sobre toda la tarjeta de seguridad y despertaba el render WebGL incluso al recorrer zonas ajenas al núcleo.
+- Limitar parallax y despertar interactivo al visor circular; estabilizar la tarjeta de Historial vertical ante transformaciones y cambios de filtro.
+- Mantener el diseño y las animaciones propias del núcleo.
+
+## [2.9.116] - 2026-10-18
+- Extender la corrección de franjas al contenedor común de los widgets en vertical: Automatizaciones y los demás paneles también heredaban una capa `backdrop-filter` sobre el fondo animado.
+- Usar una superficie Liquid Glass uniforme y estable para los widgets verticales y desactivar solo la transición de posición fuera del editor; mantener scroll y gestos de edición.
+- La versión 2.9.115 solo había estabilizado Historial y no eliminaba la capa compartida que producía el reflejo azul/verde en otros widgets.
+
+## [2.9.115] - 2026-10-18
+- Corregir las franjas visibles que atravesaban Historial vertical: el fondo animado se filtraba a través del vidrio de baja opacidad y del brillo interior superior.
+- Usar en esta tarjeta un degradado de vidrio más opaco y estable, sin desenfoque, mezcla ni sombra de borde; mantener filas y scroll táctil sin cambios funcionales.
+
+## [2.9.114] - 2026-10-18
+- Reducir el parpadeo de líneas en Historial vertical: eliminar el gutter fijo del scrollbar y las sombras externas de las filas dentro del scroll de Safari móvil.
+- Mantener el vidrio y borde de la tarjeta, el desplazamiento táctil nativo y el núcleo de seguridad sin cambios.
+
+## [2.9.113] - 2026-10-18
+- Corregir el teclado de desbloqueo: PIN erróneo conserva el diálogo abierto y muestra el error; cancelar funciona con X, fondo o Escape y el diálogo entra/sale con rebote adaptable al núcleo.
+- Mantener el PIN maestro como único PIN de desbloqueo de pantalla porque es el validador que usa esa ruta; no pedir un PIN personal que el endpoint no acepta.
+- Eliminar el doble scroll de Historial, reconciliar las filas por clave y permitir que el gesto continúe desplazando la página al llegar al borde.
+- Sin cambios al diseño, geometría o animación del núcleo de seguridad.
+
+## [2.9.112] - 2026-10-15
+- Mantener el mismo acomodo del tablero web al abrir u ocultar la barra lateral de Home Assistant; solo cambia entre diseños web y móvil al cambiar el ancho de la ventana.
+- Mostrar en Voz de Argus las zonas y sensores asignados al modo abierto, junto con cada texto predeterminado y una opción clara para personalizarlo o volver al predeterminado.
+- Permitir personalizar también el aviso de modo armado y aclarar el inicio de espera: Argus está armando y verificando zonas, no declarando fallido el armado.
+
+## [2.9.111] - 2026-10-15
+- Simplificar la configuración TTS: no se requieren variables para los mensajes; los campos personalizados vacíos conservan los avisos automáticos.
+- Anunciar zona, área, sensor y modo durante la espera de armado, usando las zonas seleccionadas para ese modo.
+- Permitir seleccionar hasta cinco reproductores y enviar el aviso en paralelo a todos; los motores TTS se siguen descubriendo desde Home Assistant.
+
+## [2.9.110] - 2026-10-15
+- Hacer que Zonas asignadas y Armado ocupen el mismo alto en la fila superior.
+- Mostrar desplazamiento vertical dentro de Zonas asignadas cuando hay varias zonas, y expandir Sirenas a todo el ancho para quitar el espacio vacío.
+- Mantener TTS en su fila independiente y apilar las tarjetas en contenedores estrechos.
+
+## [2.9.109] - 2026-10-15
+- Corregir la sincronización de recursos Lovelace: cargar la colección antes de leerla, actualizar el bundle registrado y eliminar entradas Argus duplicadas.
+- Forzar un URL de frontend nuevo para que Home Assistant vuelva a cargar la ubicación independiente de TTS publicada en 2.9.108.
+
+## [2.9.108] - 2026-10-15
+- Separar Voz de Argus (TTS) de la tarjeta Armado para que al desplegarla no cambie el alto de Zonas asignadas.
+- Mantener cada tarjeta interna alineada por su propio contenido y dar al panel TTS un scroll propio; al ampliar Modos, el viewport muestra más contenido.
+- No se modificaron el núcleo de seguridad, los cristales ni sus animaciones.
+
+## [2.9.107] - 2026-10-15
+- Mantener Voz de Argus dentro de Armado y confirmar el guardado del modo; antes de cambiar de modo, ofrecer guardar, descartar o seguir editando.
+- Hacer determinista la salida del editor de widgets al tocar fuera, mostrar el estado del guardado automático y conservar widgets ocultos con un acceso para restaurarlos.
+- Guardar y modificar únicamente la distribución del breakpoint activo, para que ordenar el tablero en móvil no altere web o tableta.
+- Sin cambios al núcleo de seguridad, cristales ni sus animaciones.
+
+## [2.9.106] - 2026-10-15
+- Permitir que el impulso de la rueda y del gesto táctil pase del scroll interno de cada widget al scroll principal al alcanzar sus bordes.
+- Corregir el bloqueo aparente al desplazarse rápidamente sobre Historial, Modos/SOS y Acceso; no cambia el diseño ni la animación del núcleo.
+
+## [2.9.105] - 2026-10-14
+- Hacer que el contenido de Historial, Automatizaciones, Respaldo, Acceso, Modos/SOS y Soporte se reorganice según el ancho de su propio widget.
+- Mantener las seis pestañas de Modos/SOS en una sola fila compacta y hacer que tarjetas, acciones y resúmenes se adapten al redimensionar.
+- Sin cambios al núcleo de seguridad, cristales ni sus animaciones.
+
+## [2.9.104] - 2026-10-14
+- Corregir el parpadeo del Historial en móvil vertical y evitar que el blur del widget provoque repintados inestables en Safari.
+- Dejar una única superficie de scroll en la lista de eventos y conservar la fila visible cuando llega una actualización nueva.
+
+## [2.9.103] - 2026-10-14
+- Mantener la pulsación larga del editor dentro del Shadow DOM de Home Assistant y detectar desde el documento solo los toques realmente externos.
+- Conservar el guardado automático al finalizar cada gesto y la salida al tocar fuera.
+
+## [2.9.102] - 2026-10-14
+- Iniciar la edición del tablero al mantener presionada una tarjeta con mouse o tacto; guardar cada movimiento/redimensionado y terminar al tocar fuera del tablero. Eliminar «Editar tablero» y «Listo».
+- Mantener las seis pestañas de Modos/SOS en una fila en móvil y reservar el verde para Desarmado; Ausente usa morado y SOS rojo.
+
+## [2.9.100] - 2026-10-14
+- Evitar reconstruir las filas del historial cuando solo se actualizan sensores, hora o clima sin cambiar los eventos.
+- Quitar la animación de entrada repetida del historial dentro de su widget para eliminar el parpadeo móvil.
+- Mantener el editor adaptable de widgets 2.9.99 y su layout persistente.
+
+## [2.9.99] - 2026-10-14
+- Corregir el wrapping de Respaldo en tarjetas móviles: los botones se ordenan en columnas y sus etiquetas ya no crean desbordamiento horizontal.
+- Completar la persistencia atómica de layouts y visibilidad y la migración de `sm` desde versiones que solo almacenaban escritorio/tableta/móvil.
+- Publicar el editor adaptable y sus gestos en un bundle con nueva clave de cache.
+
+## [2.9.98] - 2026-10-14
+- Reconstruir el editor de widgets en tres fases: conservar las cinco distribuciones por pantalla, guardar layout y visibilidad en una secuencia y migrar posiciones antiguas sin pérdida repetida.
+- Mantener huecos deliberados y el layout que realmente calcula el grid al mover/redimensionar; añadir resolución vertical más fina, autodesplazamiento y asas en ocho direcciones.
+- Adaptar Historial, Automatizaciones, Respaldo, Acceso, Modos/SOS y Soporte al tamaño individual de cada tarjeta, sin cambiar el núcleo de seguridad aprobado.
+- Hacer que la tarjeta siga al puntero durante el gesto y reservar el rebote para el acomodo final, respetando movimiento reducido.
+
+## [2.9.97] - 2026-10-14
+- Separate the mode buttons from the disarm and SOS sliders with spacing adapted to mobile and compact fullscreen layouts.
+- Restore a soft mode-colored glow around both sliders while preserving green disarm and red SOS control colors.
+
+## [2.9.96] - 2026-10-14
+- Reflect arm/disarm mode changes immediately in the security console while Home Assistant processes the action.
+- Reconcile the immediate UI state with the alarm entity's confirmed state and roll it back on errors.
+- Return the committed alarm state with the websocket action response and keep non-critical follow-up work outside the response path.
+
+## [2.9.95] - 2026-10-14
+- Restore the original slow disarmed crystal orbit without altering the approved geometry.
+- Render zone/area typography through the native CSS3D layer, sharing crystal transforms independently of adaptive WebGL resolution.
+
+## [2.9.94] - 2026-10-14
+- Show one approved curved crystal per zone and expand only its angular coverage while arming to form the circular ring.
+- Enlarge the zone/area inscriptions on the 3D surfaces and fit their font sizes independently.
+
+## [2.9.93] - 2026-10-14
+- Preserve the approved six curved crystal sectors and reserve empty slots without creating zones.
+- Print zone and area inscriptions on the crystal surfaces in 3D with fitted text.
+
+## [2.9.92] - 2026-10-14
+- Project zone captions from each curved crystal's rendered centroid instead of a fixed circular approximation.
+
+## [2.9.91] - 2026-10-14
+- Keep the 2.9.81 rounded zone-ring shape stationary so its black labels stay centered inside the crystals.
+
+## [2.9.90] - 2026-10-14
+- Align each zone caption with the center of the restored curved crystal surface.
+
+## [2.9.89] - 2026-10-14
+- Restore the rounded curved zone crystals from the 2.9.81 design.
+- Place black zone numbers and area subtitles directly inside each crystal, without floating label cards.
+
+## [2.9.88] - 2026-10-14
+- Rebuild the zone crystal geometry and keep the three default zones visible while disarmed.
+
+## [2.9.87] - 2026-10-14
+- Replaced curved zone arcs with faceted glass crystals and shortened visual arming transitions.
+- Reworked per-sensor event and delay choices, added seconds/minutes units, and cancel open-delay countdowns when the sensor closes.
+- Kept zone names fixed and improved the zone sensor editor's Liquid Glass controls.
+
+## [2.9.86] - 2026-10-14
+
+- Corregir el guardado de zonas: Home Assistant entrega las entradas del registro de dispositivos como objetos no hashables; ahora se valida por ID estable.
+- Crear tres zonas vacías por defecto, numeradas y activas para el núcleo; las instalaciones existentes reciben esta base una sola vez.
+- Fijar el nombre Zona N y dejar solo el área como personalizable; permitir guardar zonas todavía sin área, modo o sensor.
+- Aplicar Liquid Glass al editor y mostrar en cada cristal la zona y el área como subtítulo.
+
+## [2.9.85] - 2026-10-14
+
+- Quitar las zonas de la configuración SOS; SOS conserva únicamente sus salidas de emergencia.
+- Reutilizar en SOS el selector de dispositivos y paneles compatibles de Sirenas, manteniendo su lista de activación SOS independiente.
+- Migrar asignaciones antiguas de zona a SOS fuera de la cobertura y aclarar que cada modo guarda su propia selección de sirenas.
+
+## [2.9.84] - 2026-10-14
+
+- Mover el editor de zonas a una pestaña global independiente de los modos; cada modo muestra solo sus zonas asignadas.
+- Unificar sirenas, actuadores HA/MQTT y paneles compatibles en un selector y listado por modo, conservando el servicio específico de cada tipo.
+- Quitar el control MQTT redundante de Sirenas y mantener que las salidas configuradas se apaguen al desarmar.
+
+## [2.9.83] - 2026-10-14
+
+- Sustituir sensores de intrusión y sus ajustes redundantes por un editor de hasta diez zonas con área, modos y eventos por sensor.
+- Mantener los sensores y retardos anteriores activos mientras el usuario los migra; conservar el retardo heredado al añadir un sensor a una zona.
+- Agregar configuración de TTS, reproductores y mensajes de armado dentro de Modos, con persistencia por instancia y prioridad para los valores YAML.
+- Añadir pruebas aisladas de límites, asignaciones, transiciones y compatibilidad con sensores existentes.
+
+## [2.9.82] - 2026-10-14
+
+- Retirar el prototipo visual de zonas, componente, controles, estilos y posiciones de dashboard, incluidas las disposiciones guardadas anteriormente.
+- Documentar auditoría y propuesta del editor de diez zonas, áreas, condiciones de sensores y asignación a varios modos.
+
+## [2.9.81] - 2026-10-14
+
+- Corregir el desbordamiento horizontal de fullscreen y sincronizar flecha y cuadro de llamada en una sola animación.
+- Mostrar automáticamente la llamada solo durante SOS; para intrusión, mostrar toasts del sensor y ofrecer apertura manual de emergencias.
+- Mostrar Cerrado durante 1,8 segundos y retirar el toast al cerrar el sensor, conservando la alarma activa.
+
+## [2.9.80] - 2026-10-14
+
+- Avisos de seguridad en el espacio derecho en escritorio, centrados en el núcleo en vertical, con apertura elástica y flecha para contraer y reabrir.
+- Vincular los cristales a las zonas configuradas y su apertura física; mostrar número, nombre y sensor en el aviso.
+- Mantener alarma y SOS hasta detención manual; cerrar sensores solo modifica su representación visual.
+
+## [2.9.79] - 2026-10-14
+
+- Mantener el canvas de seguridad en sRGB para igualar sus colores con los controles HTML y evitar SOS naranja en la salida Display P3 de WebKit.
+
+## [2.9.78] - 2026-10-14
+
+- Unificar el renderizado WebGL del núcleo y las protecciones de esquina: SOS/alarma ahora aplica rojo directo (#FF1810), sin reflejos físicos cálidos que lo conviertan en amarillo o naranja.
+
+## [2.9.77] - 2026-10-14
+
+- Eliminar la confirmación al soltar parcialmente un deslizador: Desarmar y SOS ahora solo se ejecutan cuando el pulgar llega físicamente al extremo final.
+
+## [2.9.76] - 2026-10-14
+
+- Hacer que React sea dueño del DOM y del gesto de ambos deslizadores para conservar el arrastre completo con mouse, tacto y pantalla completa.
+- Unificar el color de cada modo entre controles, núcleo 3D y cristales; aplicar el color desde el primer cuadro para evitar que aparezcan grises durante la carga.
+- Versionar el bundle para que Home Assistant descarte la copia anterior en caché.
+
+## [2.9.75] - 2026-10-14
+
+- Completar el desarmado y SOS al llegar al extremo del deslizador, incluso si el navegador pierde el evento de liberación del puntero.
+- Versionar los recursos del panel para impedir que Home Assistant siga cargando el bundle anterior desde caché.
+
+## [2.9.74] - 2026-10-14
+
+- Corregir la deriva azulada del morado de Ausente en la capa WebGL de Safari, para igualarlo visualmente con el control CSS sin alterar la paleta roja de SOS.
+
+## [2.9.73] - 2026-10-14
+
+- Saturar directamente en morado (#A855F7) los cristales del núcleo y las protecciones L en modo Ausente, evitando reflejos azulados o blanqueados.
+- Acercar las L a las esquinas visibles del panel en modo vertical móvil.
+
+## [2.9.72] - 2026-10-14
+
+- Reforzar en móvil el morado de Ausente en el núcleo 3D y las esquinas L, reduciendo la transparencia que lo aclaraba.
+- Separar los controles de cabecera, modos y deslizadores de las esquinas reales del panel en vertical móvil.
+- Subir ligeramente el distintivo «Sistema armado» para despejar el selector de modos.
+
+## [2.9.71] - 2026-10-14
+
+- Require disarming Argus before switching between Home, Away, or Night; enforce the rule in the panel and alarm entity.
+- Show unavailable mode choices in gray while armed or during SOS, preserving the selected mode's color.
+- Change Away's accent to purple across its mode control, status label, security core, and corner guards; keep red for active alarm/SOS alerts.
 
 ## [2.6.6] - 2026-10-08
 
@@ -1233,3 +1606,8 @@ Todos los cambios relevantes de Argus se documentan aquí. El historial anterior
 ---
 
 Consulta `docs/RELEASE_NOTES_*.md` y el historial Git para versiones anteriores.
+## [2.9.101] - 2026-10-14
+- Retirar tamaños S/M/L/XL y flechas de posición; permitir colocar y redimensionar cada widget con gestos directos en una cuadrícula de pasos finos.
+- Migrar los cinco layouts guardados a `react_layout_v5`, conservando proporciones y visibilidad.
+- Evitar renders React en cada movimiento y agregar un asa diagonal amplia inspirada en el redimensionado táctil de iOS.
+- Iniciar la edición manteniendo presionada una tarjeta; guardar automáticamente al soltar y terminar al tocar fuera. Eliminar los botones «Editar tablero» y «Listo» y conservar la corrección del parpadeo de Historial móvil.

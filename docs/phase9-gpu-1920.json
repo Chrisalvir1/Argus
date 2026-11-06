@@ -1,0 +1,28 @@
+{
+  "gpu": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+    "dpr": 2,
+    "css": [
+      1292,
+      541
+    ],
+    "buffer": [
+      2588,
+      1086
+    ]
+  },
+  "rAF": {
+    "count": 240,
+    "p50": 16.69999999999891,
+    "p95": 17.600000000000364
+  },
+  "normal": {
+    "cadenceHz": 61,
+    "deliveredFps": 60,
+    "p95Ms": 17.6,
+    "renderMs": 0.61,
+    "quality": 1
+  },
+  "reducedTelemetryStable": true,
+  "canvasCount": 1
+}

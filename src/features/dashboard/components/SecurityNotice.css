@@ -1,0 +1,54 @@
+/* One moving assembly owns both the handle and the call card. */
+:host .security-console.security-console > .security-notice {
+  position:absolute;right:18px;top:54%;width:min(29%,340px);z-index:30;
+  transform:translateY(-50%);display:grid;gap:12px;min-width:0;
+}
+:host .security-call-shell {overflow:hidden;overflow:clip;border-radius:22px;isolation:isolate;}
+:host .security-call-motion {
+  display:grid;grid-template-columns:44px minmax(0,1fr);box-sizing:border-box;
+  border:1px solid #ff5961;border-radius:22px;background:rgba(20,12,18,.96);color:#fff;
+  transform:translateX(0);transition:transform 600ms cubic-bezier(.22,1.2,.36,1),background-color 600ms,border-color 600ms;
+}
+:host .security-call-shell.is-collapsed .security-call-motion {transform:translateX(calc(100% - 44px));}
+:host .security-call-shell.is-collapsed .security-call-motion {background:transparent;border-color:transparent;}
+:host .security-notice-toggle {
+  border:0;border-right:1px solid #ff596144;border-radius:21px 0 0 21px;background:#ffffff08;
+  color:inherit;display:grid;place-items:center;cursor:pointer;touch-action:pan-y;padding:0;min-width:0;
+  width:42px;height:44px;align-self:center;border-radius:999px;
+  border:1px solid #ff596155;transition:border-color 600ms;
+}
+:host .security-call-shell.is-collapsed .security-notice-toggle{border-color:#ff5961;background:#211018;}
+:host .security-notice-card {box-sizing:border-box;padding:16px 14px;display:flex;flex-direction:column;gap:10px;text-align:center;min-width:0;}
+:host .security-notice-card strong{color:#ff8d94;}
+:host .security-notice-card span{font-size:13px;overflow-wrap:anywhere;}
+:host .security-notice-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+:host .security-notice-actions a,:host .security-notice-actions button,:host .security-emergency-open{
+  font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:10px 12px;
+  border:1px solid #ffffff44;color:#fff;background:#ffffff16;text-decoration:none;cursor:pointer;
+}
+:host .security-notice-actions a{background:#961d2a;}
+:host .security-sensor-toasts{display:grid;gap:10px;max-height:220px;overflow-y:auto;overflow-x:hidden;}
+:host .security-sensor-toast{
+  display:grid;gap:6px;text-align:left;width:100%;box-sizing:border-box;min-width:0;padding:14px;
+  border:1px solid #ff5961;border-radius:20px;background:#180e17f2;color:#fff;font:inherit;
+  cursor:pointer;animation:security-notice-enter 650ms both;
+}
+:host .security-sensor-toast span{overflow-wrap:anywhere;}
+:host .security-sensor-toast b{color:#ff7d86;font-size:13px;}
+:host .security-sensor-toast.is-closed{border-color:#35e7a1;}
+:host .security-sensor-toast.is-closed b{color:#35e7a1;}
+:host .security-emergency-open{width:100%;}
+:host .security-call-shell.is-open{animation:security-notice-enter 650ms both;}
+:host .security-console[data-alarm-state="triggered"] .console-sensors{visibility:hidden;}
+@keyframes security-notice-enter{0%{opacity:0;transform:translateX(60px) scale(.94)}65%{opacity:1;transform:translateX(-7px) scale(1.015)}82%{transform:translateX(2px)}100%{opacity:1;transform:none}}
+/* Animate an inner element so presentation cannot overwrite dock anchoring. */
+@container argus-console (max-width:699px){
+  :host .security-console.security-console > .security-notice{right:auto;left:50%;top:var(--notice-core-y,38%);width:calc(100% - 48px);max-width:400px;transform:translate(-50%,-50%);}
+}
+@container argus-fullscreen (max-width:699px){
+  :host .security-console.security-console > .security-notice{right:auto;left:50%;top:var(--notice-core-y,38%);width:calc(100% - 48px);max-width:400px;transform:translate(-50%,-50%);}
+}
+@media(max-width:699px){
+  :host .security-console.security-console > .security-notice{right:auto;left:50%;top:var(--notice-core-y,38%);width:calc(100% - 48px);max-width:400px;transform:translate(-50%,-50%);}
+}
+@media(prefers-reduced-motion:reduce){:host .security-call-motion{transition-duration:1ms;}:host .security-call-shell,:host .security-sensor-toast{animation-duration:1ms!important;}}

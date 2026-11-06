@@ -119,6 +119,8 @@ function injectStyles(panel) {
   box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
   transform: translate3d(0,0,0);
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 .argus-sta-track--disarm {
   border-color: rgba(52, 211, 153, 0.55);
@@ -166,6 +168,16 @@ function injectStyles(panel) {
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
 .argus-sta-thumb:active { cursor: grabbing; }
+
+/* While dragging, the thumb must follow the pointer on the current frame.
+   The spring transition is reserved for the release/snap-back animation. */
+.argus-sta-track.is-dragging .argus-sta-thumb {
+  transition: none !important;
+  cursor: grabbing;
+}
+.argus-sta-track.is-dragging .argus-sta-fill {
+  transition: none !important;
+}
 
 .argus-sta-track--disarm .argus-sta-thumb {
   background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));
@@ -308,7 +320,7 @@ function injectStyles(panel) {
 .argus-sta-wrap.sta-mode-touch .argus-sta-track {
   height: 56px !important;
   min-height: 56px !important;
-  border-radius: 16px !important;
+  border-radius: 999px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -350,8 +362,8 @@ function injectStyles(panel) {
 
 /* Red SOS Normal Touch Button */
 .argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.035)), #171d23 !important;
+  border: 1.5px solid var(--sta-border,rgba(255,255,255,.35)) !important;
   box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 .argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {
@@ -377,15 +389,15 @@ function injectStyles(panel) {
     text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);
   }
   50% {
-    opacity: 0.08;
+    opacity: 0.65;
     text-shadow: none;
   }
 }
 
 /* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */
 .argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.035)), #171d23 !important;
+  border: 1.5px solid var(--sta-border,rgba(255,255,255,.35)) !important;
   box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 .argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {
@@ -393,308 +405,16 @@ function injectStyles(panel) {
   box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 .argus-sta-wrap.sta-mode-touch .argus-sta-pin {
-  border-radius: 16px !important;
+  border-radius: 999px !important;
 }
 `;
   root.appendChild(s);
 }
 
-function buildTrack(kind, labelText, icon) {
-  const wrap = document.createElement('div');
-  wrap.className = `argus-sta-wrap argus-sta-wrap--${kind}`;
 
-  const track = document.createElement('div');
-  track.className = `argus-sta-track argus-sta-track--${kind}`;
-
-  const fill = document.createElement('div');
-  fill.className = 'argus-sta-fill';
-
-  const thumb = document.createElement('div');
-  thumb.className = 'argus-sta-thumb';
-  thumb.innerHTML = icon;
-
-  const label = document.createElement('span');
-  label.className = 'argus-sta-label';
-  label.textContent = labelText;
-
-  const pin = document.createElement('div');
-  pin.className = 'argus-sta-pin';
-  pin.innerHTML = `
-    <input type="password" inputmode="numeric" maxlength="12" autocomplete="off" placeholder="••••"/>
-    <div class="pin-err"></div>
-    <div class="pin-row">
-      <button class="pin-cancel" type="button">✕</button>
-      <button class="pin-ok" type="button">✓</button>
-    </div>`;
-
-  track.append(fill, thumb, label, pin);
-  wrap.appendChild(track);
-  return { wrap, track, fill, thumb, label, pin };
-}
-
-function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
-  const controller = new AbortController();
-  panel._staControllers ||= new Map();
-  panel._staControllers.set(track, controller);
-  const PAD = 4;
-  let dragging = false, startX = 0, curX = 0, maxX = 0;
-  let touchStartX = 0, touchStartY = 0, touchMoved = false;
-  let lastActionTime = 0;
-
-  track.setAttribute('role', 'button');
-  track.setAttribute('tabindex', '0');
-  track.setAttribute('aria-label', label.textContent || kind);
-
-  function executeAction() {
-    const now = Date.now();
-    if (now - lastActionTime < 450) return;
-    lastActionTime = now;
-    if (pin.classList.contains('open')) return;
-    onDone();
-  }
-
-  track.addEventListener('keydown', e => {
-    if (e.target !== track) return;
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      executeAction();
-    }
-  });
-
-  track.addEventListener('touchstart', e => {
-    if (isTouchMode(panel)) {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      touchMoved = false;
-    }
-  }, { passive: true });
-
-  track.addEventListener('touchmove', e => {
-    if (isTouchMode(panel)) {
-      const dx = Math.abs(e.touches[0].clientX - touchStartX);
-      const dy = Math.abs(e.touches[0].clientY - touchStartY);
-      if (dx > 10 || dy > 10) touchMoved = true;
-    }
-  }, { passive: true });
-
-  track.addEventListener('touchend', e => {
-    if (isTouchMode(panel)) {
-      if (touchMoved) return;
-      if (pin.classList.contains('open') || (e.target && (e.target as HTMLElement).closest?.('.argus-sta-pin'))) return;
-      e.preventDefault();
-      executeAction();
-    }
-  });
-
-  track.addEventListener('click', e => {
-    if (isTouchMode(panel)) {
-      if (pin.classList.contains('open') || (e.target && (e.target as HTMLElement).closest?.('.argus-sta-pin'))) return;
-      executeAction();
-    }
-  });
-
-  function getMax() { return Math.max(1, track.getBoundingClientRect().width - 56 - PAD * 2); }
-
-  function moveTo(x) {
-    maxX = getMax();
-    const c = Math.max(0, Math.min(x, maxX));
-    thumb.style.transform = `translateX(${c}px)`;
-    fill.style.width = `${c + 60}px`;
-    const progress = c / maxX;
-    label.style.opacity = String(Math.max(0, 1 - progress * 1.8));
-    return c;
-  }
-
-  function snapBack() {
-    thumb.classList.add('argus-sta-thumb--snap');
-    moveTo(0);
-    label.style.opacity = '1';
-    setTimeout(() => thumb.classList.remove('argus-sta-thumb--snap'), 520);
-  }
-
-  function start(clientX) {
-    if (pin.classList.contains('open')) return;
-    dragging = true;
-    maxX = getMax();
-    startX = clientX - curX;
-    thumb.style.cursor = 'grabbing';
-  }
-
-  function move(clientX) {
-    if (!dragging) return;
-    curX = moveTo(clientX - startX);
-  }
-
-  function end() {
-    if (!dragging) return;
-    dragging = false;
-    thumb.style.cursor = 'grab';
-    if (curX >= maxX * 0.80) {
-      executeAction();
-      snapBack();
-    } else if (isTouchMode(panel) && Math.abs(curX) < 6) {
-      executeAction();
-      snapBack();
-    } else {
-      snapBack();
-    }
-    curX = 0;
-  }
-
-  thumb.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX); });
-  window.addEventListener('mousemove', e => { if (dragging) move(e.clientX); }, { signal: controller.signal });
-  window.addEventListener('mouseup', () => { if (dragging) end(); }, { signal: controller.signal });
-  thumb.addEventListener('touchstart', e => { e.preventDefault(); start(e.touches[0].clientX); }, { passive: false });
-  window.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); move(e.touches[0].clientX); } }, { passive: false, signal: controller.signal });
-  window.addEventListener('touchend', () => { if (dragging) end(); }, { signal: controller.signal });
-  window.addEventListener('touchcancel', () => { dragging = false; curX = 0; snapBack(); }, { signal: controller.signal });
-
-}
-
-function mountOnEntry(panel, entry, idx) {
-  const existingWrap = entry.querySelector('.argus-sta-wrap');
-  if (existingWrap) {
-    entry._staRefresh?.();
-    return;
-  }
-  entry.dataset.staInstalled = '1';
-
-  const entityId = entry.dataset.entityId
-    || panel._dashboard?.entries?.[idx]?.entity_id
-    || '';
-
-  function getState() {
-    return String(panel._hass?.states?.[entityId]?.state || 'disarmed').toLowerCase();
-  }
-  function getPanic() {
-    const s = getState();
-    return Boolean(panel._hass?.states?.[entityId]?.attributes?.argus_panic_active) || s === 'triggered';
-  }
-
-  // ── DISARM SLIDER ──────────────────────────────────────────────────
-  const { wrap: dWrap, track: dTrack, fill: dFill, thumb: dThumb, label: dLabel, pin: dPin } =
-    buildTrack('disarm', t(panel, 'slide_disarm'), ICON_DISARM);
-
-  attachDrag(panel, 'disarm', dTrack, dFill, dThumb, dLabel, dPin, () => {
-    panel._handleAction?.(idx, 'disarm');
-  });
-
-  // ── SOS SLIDER ─────────────────────────────────────────────────────
-  const { wrap: sWrap, track: sTrack, fill: sFill, thumb: sThumb, label: sLabel, pin: sPin } =
-    buildTrack('sos', t(panel, 'slide_sos'), ICON_SOS);
-
-  attachDrag(panel, 'sos', sTrack, sFill, sThumb, sLabel, sPin, (pin) => {
-    const realEntryId = panel._dashboard?.entries?.[idx]?.entry_id || '';
-    const panic = getPanic();
-    if (panic) {
-      panel._handleAction?.(idx, 'disarm');
-    } else {
-      // Always use the same confirmation flow for SOS, including touch/slider
-      // activation. This prevents accidental calls and keeps the disarm path
-      // visible after the alarm enters panic state.
-      (panel as any)._sosEntryIdx = idx;
-      panel.shadowRoot?.getElementById('sos-modal')?.classList.add('open');
-      return;
-    }
-  });
-
-  const stack = entry.querySelector('.liquid-stack');
-  if (!stack) return;
-
-  stack.querySelectorAll('.btn-disarm, .btn-sos, .argus-disarm-btn').forEach(btn => btn.remove());
-  stack.appendChild(dWrap);
-  stack.appendChild(sWrap);
-
-  function refresh() {
-    const state = getState();
-    const panic = getPanic();
-    const isArmed = state !== 'disarmed' && state !== 'unavailable';
-    const touch = isTouchMode(panel);
-
-    // Disarm only appears when armed!
-    // Panic is an armed state too; keep the disarm control available while SOS
-    // is active instead of allowing the render refresh to hide it.
-    dWrap.classList.toggle('sta-armed', isArmed || panic);
-    dWrap.classList.toggle('sta-mode-touch', touch);
-    sWrap.classList.toggle('sta-mode-touch', touch);
-    sWrap.classList.toggle('sos-active', panic);
-    sTrack.classList.toggle('sos-pulsing', panic);
-
-    if (touch) {
-      // Accessible Normal Buttons
-      dLabel.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">🔓</span><span style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${t(panel, 'tap_disarm')}</span>`;
-      dTrack.setAttribute('aria-label', t(panel, 'tap_disarm'));
-
-      const sosText = panic ? t(panel, 'tap_sos_stop') : t(panel, 'tap_sos');
-      const sosIcon = panic ? '⏹️' : '🚨';
-      sLabel.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">${sosIcon}</span><span class="sta-sos-text" style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${sosText}</span>`;
-      sTrack.setAttribute('aria-label', sosText);
-    } else {
-      // Sliders
-      dLabel.textContent = t(panel, 'slide_disarm');
-      dTrack.setAttribute('aria-label', dLabel.textContent);
-      dThumb.style.transform = '';
-      dFill.style.width = '';
-
-      const sosText = panic ? t(panel, 'slide_sos_stop') : t(panel, 'slide_sos');
-      sLabel.textContent = sosText;
-      sTrack.setAttribute('aria-label', sLabel.textContent);
-      sThumb.innerHTML = panic ? ICON_SOS_STOP : ICON_SOS;
-      sThumb.style.transform = '';
-      sFill.style.width = '';
-    }
-  }
-
-  refresh();
-  entry._staRefresh = refresh;
-}
-
-export function applyToAllEntries(panel) {
-  for (const [track, controller] of panel._staControllers || []) {
-    if (!track.isConnected) { controller.abort(); panel._staControllers.delete(track); }
-  }
+/** Installs the shared slider skin; React owns all slider markup and pointer state. */
+export function installSlideActionStyles(panel) {
   injectStyles(panel);
-  const root = panel.shadowRoot;
-  if (!root) return;
-  root.querySelectorAll('.entry').forEach((entry, idx) => {
-    if (!entry.dataset.entityId) {
-      const eid = panel._dashboard?.entries?.[idx]?.entity_id;
-      if (eid) entry.dataset.entityId = eid;
-    }
-    const entryIdx = Number(entry.dataset.entryIndex ?? idx);
-    mountOnEntry(panel, entry, entryIdx);
-    entry._staRefresh?.();
-  });
 }
 
-export function applySlideToAction(ArgusPanel) {
-  if (!ArgusPanel || ArgusPanel.__argusSlideToAction) return;
-  ArgusPanel.__argusSlideToAction = true;
-  const proto = ArgusPanel.prototype;
-
-  const prevRender = proto._renderEntries;
-  proto._renderEntries = function (...a) {
-    const r = prevRender?.call(this, ...a);
-    requestAnimationFrame(() => {
-      applyToAllEntries(this);
-      setTimeout(() => applyToAllEntries(this), 100);
-    });
-    return r;
-  };
-
-  const prevRefresh = proto._refreshLocalizedUi;
-  proto._refreshLocalizedUi = function (...a) {
-    const r = prevRefresh?.call(this, ...a);
-    applyToAllEntries(this);
-    return r;
-  };
-
-  const prevHass = Object.getOwnPropertyDescriptor(proto, '_hass')?.set || proto.set_hass;
-  if (prevHass) {
-    const prevSet = proto.set_hass;
-    proto.set_hass = function (hass) {
-      prevSet?.call(this, hass);
-      this.shadowRoot?.querySelectorAll('.entry').forEach(entry => entry._staRefresh?.());
-    };
-  }
-}
+export { isTouchMode as isSlideTouchMode };

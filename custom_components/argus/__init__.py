@@ -7,20 +7,29 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from . import const, output_profiles, personalization, websocket_api
-from .const import DOMAIN,PLATFORMS,CONF_ARMING_VOICE_ENABLED,CONF_ARMING_VOICE_TTS,CONF_ARMING_VOICE_PLAYERS,CONF_ARMING_VOICE_MESSAGE_START,CONF_ARMING_VOICE_MESSAGE_REMAINING,CONF_ARMING_VOICE_MESSAGE_LAST,CONF_ARMING_VOICE_MESSAGE_COMPLETE,CONF_ARMING_VOICE_MESSAGE_CANCELLED,CONF_ARMING_VOICE_MESSAGE_TRIGGERED,CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED
+from .const import DOMAIN,PLATFORMS,CONF_ARMING_VOICE_ENABLED,CONF_ARMING_VOICE_TTS,CONF_ARMING_VOICE_PLAYERS,CONF_ARMING_VOICE_MESSAGE_START,CONF_ARMING_VOICE_MESSAGE_REMAINING,CONF_ARMING_VOICE_MESSAGE_LAST,CONF_ARMING_VOICE_MESSAGE_COMPLETE,CONF_ARMING_VOICE_MESSAGE_ARMED,CONF_ARMING_VOICE_MESSAGE_CANCELLED,CONF_ARMING_VOICE_MESSAGE_TRIGGERED,CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED
 from .homekit_runtime import install_homekit_runtime
 from .arming_transition_runtime import install_arming_transition_runtime
 from .media_websocket import install as install_media_websocket
 from .panel import async_register_panel
 from .safety_runtime import install_safety_runtime
 from .sensor_state_runtime import install_sensor_state_runtime
+from .storage import async_load_ui_data, async_save_ui_data
 from .trigger_voice import install_trigger_voice
 _LOGGER=logging.getLogger(__name__);_WS_REGISTERED_KEY=f"{DOMAIN}_ws_registered"
-_VOICE_KEYS={"enabled":CONF_ARMING_VOICE_ENABLED,"tts_entity":CONF_ARMING_VOICE_TTS,"media_players":CONF_ARMING_VOICE_PLAYERS,"message_start":CONF_ARMING_VOICE_MESSAGE_START,"message_remaining":CONF_ARMING_VOICE_MESSAGE_REMAINING,"message_last":CONF_ARMING_VOICE_MESSAGE_LAST,"message_complete":CONF_ARMING_VOICE_MESSAGE_COMPLETE,"message_cancelled":CONF_ARMING_VOICE_MESSAGE_CANCELLED,"message_triggered":CONF_ARMING_VOICE_MESSAGE_TRIGGERED,"message_additional_triggered":CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED}
-_VOICE_SCHEMA=vol.Schema({vol.Optional("enabled"):bool,vol.Optional("tts_entity"):str,vol.Optional("media_players"):[str],vol.Optional("message_start"):str,vol.Optional("message_remaining"):str,vol.Optional("message_last"):str,vol.Optional("message_complete"):str,vol.Optional("message_cancelled"):str,vol.Optional("message_triggered"):str,vol.Optional("message_additional_triggered"):str},extra=vol.ALLOW_EXTRA)
+_VOICE_KEYS={"enabled":CONF_ARMING_VOICE_ENABLED,"tts_entity":CONF_ARMING_VOICE_TTS,"media_players":CONF_ARMING_VOICE_PLAYERS,"message_start":CONF_ARMING_VOICE_MESSAGE_START,"message_remaining":CONF_ARMING_VOICE_MESSAGE_REMAINING,"message_last":CONF_ARMING_VOICE_MESSAGE_LAST,"message_complete":CONF_ARMING_VOICE_MESSAGE_COMPLETE,"message_armed":CONF_ARMING_VOICE_MESSAGE_ARMED,"message_cancelled":CONF_ARMING_VOICE_MESSAGE_CANCELLED,"message_triggered":CONF_ARMING_VOICE_MESSAGE_TRIGGERED,"message_additional_triggered":CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,"message_alarm_sensor_closed":CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED}
+_VOICE_SCHEMA=vol.Schema({vol.Optional("enabled"):bool,vol.Optional("tts_entity"):str,vol.Optional("media_players"):[str],vol.Optional("message_start"):str,vol.Optional("message_remaining"):str,vol.Optional("message_last"):str,vol.Optional("message_complete"):str,vol.Optional("message_armed"):str,vol.Optional("message_cancelled"):str,vol.Optional("message_triggered"):str,vol.Optional("message_additional_triggered"):str,vol.Optional("message_alarm_sensor_closed"):str},extra=vol.ALLOW_EXTRA)
 CONFIG_SCHEMA=vol.Schema({vol.Optional(DOMAIN):vol.Schema({vol.Optional("arming_voice"):_VOICE_SCHEMA},extra=vol.ALLOW_EXTRA)},extra=vol.ALLOW_EXTRA)
+_BRAND_SETUP_KEY = f"{DOMAIN}_brand_setup_started"
 def _load_yaml_voice(hass,config):
  raw=(config.get(DOMAIN) or {}).get("arming_voice") or {};hass.data.setdefault(DOMAIN,{})["arming_voice_yaml"]={_VOICE_KEYS[key]:value for key,value in raw.items() if key in _VOICE_KEYS}
+
+def _schedule_brand_assets(hass: HomeAssistant) -> None:
+    """Prepare optional branding cache without delaying panel registration."""
+    data = hass.data.setdefault(DOMAIN, {})
+    if not data.get(_BRAND_SETUP_KEY):
+        data[_BRAND_SETUP_KEY] = True
+        hass.async_create_task(_ensure_brand_assets_and_cache(hass))
 async def _ensure_brand_assets_and_cache(hass: HomeAssistant) -> None:
     """Ensure brand assets are present and clear any stale 404 cache."""
     try:
@@ -58,13 +67,20 @@ async def _ensure_brand_assets_and_cache(hass: HomeAssistant) -> None:
         _LOGGER.debug("Brand assets setup check: %s", err)
 
 async def async_setup(hass:HomeAssistant,config:dict)->bool:
-    hass.data.setdefault(DOMAIN,{});_load_yaml_voice(hass,config);install_homekit_runtime(hass);install_safety_runtime();install_arming_transition_runtime();install_trigger_voice();install_sensor_state_runtime();await _ensure_brand_assets_and_cache(hass);await async_register_panel(hass);_async_register_websocket_once(hass);return True
+    hass.data.setdefault(DOMAIN,{});_load_yaml_voice(hass,config);install_homekit_runtime(hass);install_safety_runtime();install_arming_transition_runtime();install_trigger_voice();install_sensor_state_runtime();_schedule_brand_assets(hass);await async_register_panel(hass);_async_register_websocket_once(hass);return True
 def _async_register_websocket_once(hass):
     if hass.data[DOMAIN].get(_WS_REGISTERED_KEY):return
     install_media_websocket(websocket_api);websocket_api.async_register_websocket_api(hass);personalization.async_register_personalization_api(hass);output_profiles.async_register_output_profiles_api(hass);output_profiles.install_output_profile_runtime();hass.data[DOMAIN][_WS_REGISTERED_KEY]=True
 from .presence import PresenceManager
 async def async_setup_entry(hass:HomeAssistant,entry:ConfigEntry)->bool:
-    hass.data.setdefault(DOMAIN,{});install_homekit_runtime(hass);install_safety_runtime();install_arming_transition_runtime();install_trigger_voice();install_sensor_state_runtime();await _ensure_brand_assets_and_cache(hass);pm=PresenceManager(hass,entry.entry_id);await pm.async_setup();hass.data[DOMAIN][entry.entry_id]={"config":entry.data,"presence_manager":pm};await async_register_panel(hass);_async_register_websocket_once(hass);entry.async_on_unload(entry.add_update_listener(async_reload_entry));await hass.config_entries.async_forward_entry_setups(entry,PLATFORMS);_LOGGER.info("Argus integration starting (version %s)",const.VERSION);return True
+    from .voice_settings import resolve_voice_settings
+    voice_ui = await async_load_ui_data(hass, entry.entry_id)
+    voice, missing, _ = resolve_voice_settings(
+        websocket_api._VOICE_FIELDS, entry.data, entry.options,
+        hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}), voice_ui.get("arming_voice", {}))
+    if missing:
+        await async_save_ui_data(hass, {"arming_voice": voice}, entry.entry_id)
+    hass.data.setdefault(DOMAIN,{});install_homekit_runtime(hass);install_safety_runtime();install_arming_transition_runtime();install_trigger_voice();install_sensor_state_runtime();_schedule_brand_assets(hass);await async_register_panel(hass);pm=PresenceManager(hass,entry.entry_id);await pm.async_setup();ui_data=await async_load_ui_data(hass,entry.entry_id);hass.data[DOMAIN].setdefault("arming_voice_ui",{})[entry.entry_id]=ui_data.get("arming_voice",{});hass.data[DOMAIN][entry.entry_id]={"config":entry.data,"presence_manager":pm};_async_register_websocket_once(hass);entry.async_on_unload(entry.add_update_listener(async_reload_entry));await hass.config_entries.async_forward_entry_setups(entry,PLATFORMS);_LOGGER.info("Argus integration starting (version %s)",const.VERSION);return True
 async def async_reload_entry(hass,entry):await hass.config_entries.async_reload(entry.entry_id)
 async def async_unload_entry(hass,entry):
  ok=await hass.config_entries.async_unload_platforms(entry,PLATFORMS)

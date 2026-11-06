@@ -1,6 +1,8 @@
 """Argus frontend registration."""
 from __future__ import annotations
 
+import asyncio
+from hashlib import sha256
 import logging
 from pathlib import Path
 
@@ -14,89 +16,117 @@ from .media import async_register_media_views
 _LOGGER = logging.getLogger(__name__)
 _PANEL_REGISTERED_KEY = f"{DOMAIN}_panel_registered"
 _STATIC_REGISTERED_KEY = f"{DOMAIN}_static_registered"
+_PANEL_LOCK_KEY = f"{DOMAIN}_panel_setup_lock"
+_OPTIONAL_SETUP_KEY = f"{DOMAIN}_panel_optional_setup_started"
+
+
+def _frontend_revision() -> str:
+    """Invalidate the entry module whenever the bootstrap or bundle changes."""
+    www = Path(__file__).parent / "www"
+    digest = sha256()
+    for filename in ("argus-bootstrap.js", "react-dist/argus-frontend.js"):
+        digest.update((www / filename).read_bytes())
+    return digest.hexdigest()[:16]
 
 
 async def async_register_panel(hass: HomeAssistant) -> None:
-    """Register isolated media API, static assets and sidebar panel once."""
-    hass.data.setdefault(DOMAIN, {})
-    await async_register_media_views(hass)
+    """Register Argus assets/panel promptly and defer optional resource APIs."""
+    revision = await hass.async_add_executor_job(_frontend_revision)
+    data = hass.data.setdefault(DOMAIN, {})
+    lock = data.setdefault(_PANEL_LOCK_KEY, asyncio.Lock())
+    async with lock:
+        if not data.get(_STATIC_REGISTERED_KEY):
+            www_path = Path(__file__).parent / "www"
+            await hass.http.async_register_static_paths([
+                StaticPathConfig(f"/api/{DOMAIN}_static", str(www_path), cache_headers=False)
+            ])
+            data[_STATIC_REGISTERED_KEY] = True
 
-    if not hass.data[DOMAIN].get(_STATIC_REGISTERED_KEY):
-        www_path = Path(__file__).parent / "www"
-        await hass.http.async_register_static_paths([
-            StaticPathConfig(f"/api/{DOMAIN}_static", str(www_path), cache_headers=False)
-        ])
-        hass.data[DOMAIN][_STATIC_REGISTERED_KEY] = True
+        try:
+            from homeassistant.components.frontend import add_extra_js_url
+            # Register as ES5 (non-module) so HA injects it as a regular <script> tag
+            # before any ES module, including HACS frontend.
+            add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}", es5=True)
+            add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}", es5=False)
+        except Exception as err:
+            _LOGGER.debug("Argus: non-fatal extra js registration note: %s", err)
 
+        if not data.get(_PANEL_REGISTERED_KEY):
+            await panel_custom.async_register_panel(
+                hass,
+                # Version the element name as well as the module URL. Browsers
+                # cannot redefine a custom element that an older panel registered.
+                webcomponent_name="argus-panel-v2018",
+                frontend_url_path=DOMAIN,
+                module_url=f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}&rev={revision}",
+                sidebar_title="Argus Home Hub",
+                sidebar_icon="mdi:shield-lock-outline",
+                require_admin=False,
+                config={
+                    "domain": DOMAIN,
+                    "card_url": f"/api/{DOMAIN}_static/argus-card.js?v={VERSION}",
+                },
+            )
+            data[_PANEL_REGISTERED_KEY] = True
+            _LOGGER.info("Argus: architectural frontend registered")
+
+        if not data.get(_OPTIONAL_SETUP_KEY):
+            data[_OPTIONAL_SETUP_KEY] = True
+            hass.async_create_task(_async_setup_optional_panel_resources(hass))
+
+
+async def _async_setup_optional_panel_resources(hass: HomeAssistant) -> None:
+    """Initialize nonessential media/Lovelace APIs without blocking the panel."""
     try:
-        from homeassistant.components.frontend import add_extra_js_url
-        # Register as ES5 (non-module) so HA injects it as a regular <script> tag
-        # that runs synchronously *before* any ES module (including HACS frontend).
-        # If we register as a module (es5=False), HA uses dynamic import() which
-        # defers execution until after all Lit/HACS components have already rendered
-        # their brand icons — too late for our prototype patch to intercept.
-        add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}", es5=True)
-        add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}", es5=False)
-    except Exception as err:
-        _LOGGER.debug("Argus: non-fatal extra js registration note: %s", err)
-
-    if not hass.data[DOMAIN].get(_PANEL_REGISTERED_KEY):
-        await panel_custom.async_register_panel(
-            hass,
-            # Version the element name as well as the module URL. Browsers
-            # cannot redefine a custom element that an older panel registered.
-            webcomponent_name="argus-panel-v2018",
-            frontend_url_path=DOMAIN,
-            module_url=f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}",
-            sidebar_title="Argus Home Hub",
-            sidebar_icon="mdi:shield-lock-outline",
-            # Standard HA users must be able to open Argus and select their
-            # own profile. Sensitive operations remain protected by the
-            # WebSocket permission checks; first-run still requires HA admin.
-            require_admin=False,
-            config={
-                "domain": DOMAIN,
-                "card_url": f"/api/{DOMAIN}_static/argus-card.js?v={VERSION}",
-            },
-        )
-        hass.data[DOMAIN][_PANEL_REGISTERED_KEY] = True
-        _LOGGER.info("Argus: architectural frontend registered")
-
-    await _async_register_lovelace_resources(hass)
+        await async_register_media_views(hass)
+        await _async_register_lovelace_resources(hass)
+    except Exception:
+        _LOGGER.exception("Argus optional panel resources could not be initialized")
 
 
 async def _async_register_lovelace_resources(hass: HomeAssistant) -> None:
     """Auto-register argus-bootstrap as a Lovelace resource so custom cards load on all dashboards."""
-    url = f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}"
     try:
         ll_data = hass.data.get("lovelace")
         if ll_data and hasattr(ll_data, "resources"):
             resources = ll_data.resources
-            items = []
-            if hasattr(resources, "async_get_items"):
-                items = resources.async_get_items()
-            elif hasattr(resources, "async_items"):
-                items = resources.async_items()
+            # Storage collections load lazily. Calling async_items() before
+            # async_get_info() returns no data, which made every Argus setup
+            # append another copy of each resource. It also hid old URLs from
+            # the version updater. Load first, then update one canonical item
+            # and remove duplicate Argus entries while preserving their IDs.
+            if hasattr(resources, "async_get_info"):
+                await resources.async_get_info()
 
-            prefix = f"/api/{DOMAIN}_static/argus-bootstrap.js"
-            existing = [item for item in items if isinstance(item, dict) and item.get("url", "").startswith(prefix)]
+            items = resources.async_items() if hasattr(resources, "async_items") else []
+            if hasattr(items, "__await__"):
+                items = await items
+            items = items or []
 
-            if not existing and hasattr(resources, "async_create_item"):
-                await resources.async_create_item({"res_type": "module", "url": url})
-            elif existing and hasattr(resources, "async_update_item"):
-                for item in existing:
-                    if item.get("url") != url and "id" in item:
-                        await resources.async_update_item(item["id"], {"res_type": "module", "url": url})
+            async def ensure_resource(filename: str) -> None:
+                url = f"/api/{DOMAIN}_static/{filename}?v={VERSION}"
+                if filename == "argus-bootstrap.js":
+                    revision = await hass.async_add_executor_job(_frontend_revision)
+                    url += f"&rev={revision}"
+                prefix = f"/api/{DOMAIN}_static/{filename}"
+                existing = [
+                    item for item in items
+                    if isinstance(item, dict) and item.get("url", "").split("?", 1)[0] == prefix
+                ]
+                if not existing:
+                    if hasattr(resources, "async_create_item"):
+                        await resources.async_create_item({"res_type": "module", "url": url})
+                    return
 
-            patch_url = f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}"
-            patch_prefix = f"/api/{DOMAIN}_static/argus-brand-patch.js"
-            existing_patch = [item for item in items if isinstance(item, dict) and item.get("url", "").startswith(patch_prefix)]
-            if not existing_patch and hasattr(resources, "async_create_item"):
-                await resources.async_create_item({"res_type": "module", "url": patch_url})
-            elif existing_patch and hasattr(resources, "async_update_item"):
-                for item in existing_patch:
-                    if item.get("url") != patch_url and "id" in item:
-                        await resources.async_update_item(item["id"], {"res_type": "module", "url": patch_url})
+                canonical = existing[0]
+                if canonical.get("url") != url and hasattr(resources, "async_update_item"):
+                    await resources.async_update_item(canonical["id"], {"res_type": "module", "url": url})
+                if hasattr(resources, "async_delete_item"):
+                    for duplicate in existing[1:]:
+                        await resources.async_delete_item(duplicate["id"])
+
+            await ensure_resource("argus-bootstrap.js")
+            await ensure_resource("argus-brand-patch.js")
     except Exception as err:
         _LOGGER.debug("Argus: non-fatal Lovelace resource note: %s", err)
 

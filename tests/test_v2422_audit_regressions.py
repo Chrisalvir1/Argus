@@ -109,7 +109,8 @@ class AuditRegressions(unittest.IsolatedAsyncioTestCase):
             'HomeAssistantError': ValueError,
             'persistent_notification': SimpleNamespace(async_dismiss=Mock())}
         endpoint = function('alarm_control_panel.py', 'async_alarm_disarm', namespace)
-        hass = SimpleNamespace(data={}, bus=SimpleNamespace(async_fire=Mock()), async_create_task=Mock())
+        tasks = []
+        hass = SimpleNamespace(data={}, bus=SimpleNamespace(async_fire=Mock()), async_create_task=Mock(side_effect=tasks.append))
         panel = SimpleNamespace(hass=hass, _alarm_state='armed_away', _code='840275',
             _ui_config={'users': [], 'advanced': {'duress_pin':'918273'}},
             _config_entry=SimpleNamespace(entry_id='e'), entity_id='alarm_control_panel.argus',
@@ -118,14 +119,20 @@ class AuditRegressions(unittest.IsolatedAsyncioTestCase):
             async_write_ha_state=Mock(), _async_mqtt_publish=AsyncMock(),
             _async_persist_stable_state=AsyncMock(), _evaluate_automations=Mock(return_value=None),
             _async_notify_configured=AsyncMock(), _matching_disarm_user=lambda c: None)
+        panel._get_siren_entities = lambda: []
+        panel._cycle_bypassed = set()
+        panel._require_alarm_actor_permission = AsyncMock()
+        panel._async_finish_disarm = AsyncMock()
         with self.assertRaisesRegex(ValueError, 'Invalid or missing'):
             await endpoint(panel, '0000')
         panel._async_siren.assert_not_called()
         await endpoint(panel, '918273')
         self.assertEqual(panel._alarm_state, 'disarmed')
-        panel._async_siren.assert_called_once_with(False)
-        self.assertTrue(any(c.args[0] == 'argus_duress_activated' for c in hass.bus.async_fire.call_args_list))
-        self.assertEqual(panel._async_notify_configured.call_args.args[0], 'ARGUS — Coacción / Duress')
+        await tasks[-1]
+        panel._async_finish_disarm.assert_awaited_once_with(None, 'default', True, [])
+        panel._async_siren.assert_not_called()
+        self.assertFalse(any(c.args[0] == 'argus_duress_activated' for c in hass.bus.async_fire.call_args_list))
+        self.assertFalse(panel._async_notify_configured.called)
         self.assertFalse(any('alarm.caf' in str(c) for c in panel._async_notify_configured.call_args_list))
 
     def test_legacy_fallback_hash_verifies_on_scrypt_capable_host(self):

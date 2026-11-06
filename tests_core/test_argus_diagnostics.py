@@ -1,10 +1,11 @@
+"""Privacy contract for the Home Assistant config-entry diagnostics endpoint."""
+
 from __future__ import annotations
 
 import asyncio
 from types import SimpleNamespace
 from unittest.mock import patch
 
-import homeassistant.core
 from custom_components.argus.diagnostics import async_get_config_entry_diagnostics
 
 
@@ -31,7 +32,9 @@ def test_diagnostics_are_aggregate_and_do_not_disclose_codes_or_entity_ids():
             "arming_voice_players": ["media_player.private"],
         },
     )
-    with patch("custom_components.argus.diagnostics.er.async_get", return_value=registry), patch(
+    with patch(
+        "custom_components.argus.diagnostics.er.async_get", return_value=registry
+    ), patch(
         "custom_components.argus.diagnostics.er.async_entries_for_config_entry",
         return_value=entities,
     ):

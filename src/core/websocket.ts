@@ -1,4 +1,5 @@
 import type {HomeAssistant} from './home-assistant';
+import type { ArgusZone } from '../engine/types';
 
 export type AlarmAction='arm_home'|'arm_away'|'arm_night'|'disarm'|'sos';
 export type ArgusMode='disarmed'|'home'|'away'|'night';
@@ -39,6 +40,10 @@ export interface ArgusRequestMap{
  'argus/get_advanced_config':EntryScoped;
  'argus/save_automations':EntryScoped&{automations:unknown[]};
  'argus/get_automations':EntryScoped;
+ 'argus/get_zones':EntryScoped;
+ 'argus/save_zones':EntryScoped&{zones:ArgusZone[]};
+ 'argus/get_voice_config':EntryScoped;
+ 'argus/save_voice_config':EntryScoped&{config:JsonObject};
  'argus/get_media_players':Record<never,never>;
  'argus/update_master_pin':{entry_id:string;pin:string;current_pin?:string};
  'argus/update_incident':EntryScoped&{incident_id:string;action:IncidentAction;reason?:string};
@@ -56,6 +61,10 @@ export interface ArgusResponseMap{
  'argus/export_config':{config:JsonObject};
  'argus/get_advanced_config':JsonObject;
  'argus/get_automations':unknown[];
+ 'argus/get_zones':{zones:ArgusZone[];available_entities:unknown[];available_devices:unknown[]};
+ 'argus/save_zones':{success:true;zones:ArgusZone[];modes?:Record<string,JsonObject>};
+ 'argus/get_voice_config':{values:JsonObject;yaml_keys:string[];default_messages:Record<string,string>;mode:string;imported_existing_settings:boolean;assigned_zones:Array<{number:number|string;area:string;sensors:Array<{entity_id:string;name:string;state:string}>}>;tts_entities:Array<{entity_id:string;name:string}>;media_players:Array<{entity_id:string;name:string}>};
+ 'argus/save_voice_config':{success:true};
  'argus/get_media_players':Array<{entity_id:string;name:string}>;
  'argus/get_health':{readiness_score:number;status:string;issues:unknown[];recommendations:unknown[]};
  'argus/save_ui':{saved:true;ui:JsonObject};

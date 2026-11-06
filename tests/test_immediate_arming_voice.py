@@ -10,13 +10,41 @@ TREE = ast.parse(SOURCE.read_text())
 METHOD = next(n for n in TREE.body if isinstance(n, ast.AsyncFunctionDef) and n.name == 'async_announce_arming_wait_update')
 
 class TestImmediateArmingVoice(IsolatedAsyncioTestCase):
+    async def test_last_sensor_closing_announces_completion_before_arm_confirmation(self):
+        speak = AsyncMock()
+        namespace = {'_get_language': AsyncMock(return_value='es'), '_options': lambda *a: {},
+                     'async_load_ui_data': AsyncMock(return_value={'zones': []}),
+                     '_sensor_identity': lambda _hass, entity_id: {'entity_id': entity_id, 'name': 'Puerta'},
+                     '_join_spoken_list': lambda items, _lang: ' y '.join(items),
+                     '_format_voice_template': lambda template, values: template.format_map(values) if isinstance(template, str) else template,
+                     '_count_labels': lambda _lang, zones, sensors: {'zone_count_label': f'{zones} zonas', 'sensor_count_label': f'{sensors} sensores'},
+                     '_async_speak': speak, 'translate': lambda lang, key: {
+                         'msg_complete': 'Todas cerradas; Argus procede en modo {mode}.',
+                         'armed_night': 'Noche',
+                     }.get(key, key),
+                     'CONF_ARMING_VOICE_MESSAGE_COMPLETE': 'complete',
+                     'CONF_ARMING_VOICE_MESSAGE_ARMED': 'armed'}
+        exec(compile(ast.Module(body=[METHOD], type_ignores=[]), str(SOURCE), 'exec'), namespace)
+        hass = SimpleNamespace(bus=SimpleNamespace(async_fire=lambda *_a: None))
+        entry = SimpleNamespace(entry_id='argus', title='Casa')
+        await namespace[METHOD.name](hass, entry, alarm_entity_id='alarm_control_panel.argus',
+                                     target='armed_night', previous_open=['binary_sensor.puerta'],
+                                     current_open=[])
+        speak.assert_awaited_once()
+        self.assertIn('modo Noche', speak.await_args.args[2])
+
     async def test_committed_empty_modes_announce_selected_mode(self):
         speak = AsyncMock()
         events = []
         mode_names = {'armed_home': 'En casa', 'armed_away': 'Ausente', 'armed_night': 'Noche'}
         namespace = {'_get_language': AsyncMock(return_value='es'), '_options': lambda *a: {},
+                     'async_load_ui_data': AsyncMock(return_value={'zones': []}),
+                     '_join_spoken_list': lambda items, _lang: ' y '.join(items),
+                     '_format_voice_template': lambda template, values: template.format_map(values) if isinstance(template, str) else template,
+                     '_count_labels': lambda _lang, zones, sensors: {'zone_count_label': f'{zones} zonas', 'sensor_count_label': f'{sensors} sensores'},
                      '_async_speak': speak, 'translate': lambda lang, key: {**mode_names, 'msg_armed': 'Argus: sistema armado en modo {mode}.'}.get(key, key),
-                     'CONF_ARMING_VOICE_MESSAGE_COMPLETE': 'complete'}
+                     'CONF_ARMING_VOICE_MESSAGE_COMPLETE': 'complete',
+                     'CONF_ARMING_VOICE_MESSAGE_ARMED': 'armed'}
         exec(compile(ast.Module(body=[METHOD], type_ignores=[]), str(SOURCE), 'exec'), namespace)
         hass = SimpleNamespace(bus=SimpleNamespace(async_fire=lambda *a: events.append(a)))
         entry = SimpleNamespace(entry_id='argus', title='Casa')

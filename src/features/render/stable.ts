@@ -14,6 +14,7 @@ type StablePanel = ArgusPanelHost & {
   _kioskEntryId?: string;
   _requestKioskUnlock?: () => void;
   _sosEntryIdx?: number;
+  _triggerSOS?: () => void;
   _stopSOS?: (idx: number) => void;
   _toggleFullscreen?: (entry: Element | null) => void;
   _exitFullscreenView?: () => void;
@@ -33,6 +34,7 @@ type StablePanel = ArgusPanelHost & {
   _manualLang?: boolean;
   _refreshLocalizedUi?: () => void;
   _updateTheme?: () => void;
+  _reconcileOptimisticAlarmStates?: () => void;
   _renderActivityLog?: () => void;
   _formatTime?: (date: Date) => string;
   _formatDateTime?: (date: Date) => string;
@@ -78,7 +80,11 @@ function installDelegation(panel: StablePanel, el: Element | null) {
     const unlock = t.closest?.('button[data-action="unlock-kiosk"]');
     if (unlock) { panel._requestKioskUnlock?.(); return; }
     const sos = t.closest?.('button[data-action="sos"]') as HTMLElement | null;
-    if (sos) { panel._sosEntryIdx = Number(sos.dataset.idx); panel.shadowRoot?.getElementById('sos-modal')?.classList.add('open'); return; }
+    if (sos) {
+      panel._sosEntryIdx = Number(sos.dataset.idx);
+      panel._triggerSOS?.();
+      return;
+    }
     const stop = t.closest?.('button[data-action="stop-sos"]') as HTMLElement | null;
     if (stop) { panel._stopSOS?.(Number(stop.dataset.idx)); return; }
     const fs = t.closest?.('button[data-fullscreen]');
@@ -235,6 +241,9 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
             Object.values(v).forEach(c => { if (c && typeof c === 'object') collect(c); });
           };
           collect(this._ui?.modes);
+          for (const zone of this._ui?.zones || []) {
+            if (zone.enabled !== false) for (const id of zone.entity_ids || []) configured.add(id);
+          }
           
           const languageChanged = (oldHass as any).language !== (hass as any).language;
           if (languageChanged && !this._manualLang) this._refreshLocalizedUi?.();
@@ -245,12 +254,8 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
             const after = hass.states[e.entity_id];
             return before?.state !== after?.state || JSON.stringify(before?.attributes || {}) !== JSON.stringify(after?.attributes || {});
           });
-          const sensorChanged = [...configured].some(id => 
-            oldHass.states[id]?.state !== hass.states[id]?.state ||
-            oldHass.states[id]?.attributes?.battery_level !== hass.states[id]?.attributes?.battery_level ||
-            oldHass.states[id]?.attributes?.battery_percentage !== hass.states[id]?.attributes?.battery_percentage
-          );
-          
+          const sensorChanged = [...configured].some(id => oldHass.states[id] !== hass.states[id]);
+
           const tempEntity = this._temperatureSource === 'auto' ? null : this._temperatureSource;
           const tempChanged = tempEntity && oldHass.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
           
@@ -263,10 +268,13 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
           const connectionChanged = (oldHass as any).connected !== (hass as any).connected;
           const relevant = alarmChanged || sensorChanged || tempChanged || weatherChanged || languageChanged || connectionChanged;
           this._hass = hass;
+          this._reconcileOptimisticAlarmStates?.();
           this._updateTheme?.();
           if (relevant) {
             this._renderEntries?.(languageChanged || connectionChanged);
             this._renderActivityLog?.();
+            // React reads the latest snapshot when the bridge receives this event.
+            this.dispatchEvent(new CustomEvent('argus-state-update'));
           } else {
             updateClocks(this);
           }

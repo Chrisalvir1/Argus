@@ -1,0 +1,16 @@
+{
+  "rAF": {
+    "count": 21,
+    "p50": 183.29999999999927,
+    "p95": 183.40000000000146
+  },
+  "normal": {
+    "cadenceHz": 5,
+    "deliveredFps": 5,
+    "p95Ms": 200,
+    "renderMs": 0.55,
+    "quality": 1
+  },
+  "reducedTelemetryStable": true,
+  "canvasCount": 1
+}

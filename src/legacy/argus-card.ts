@@ -106,7 +106,9 @@ class ArgusCardEditor extends HTMLElement {
     }));
   }
 }
-customElements.define('argus-panel-card-editor', ArgusCardEditor);
+if (!customElements.get('argus-panel-card-editor')) {
+  customElements.define('argus-panel-card-editor', ArgusCardEditor);
+}
 
 // ── Unified Argus Panel & Alarm Card ───────────────────────────────────────
 class ArgusPanelCard extends HTMLElement {

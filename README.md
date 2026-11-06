@@ -7,10 +7,13 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Novedades de la versión 2.6.7
+### Argus v3.0.0
 
-- Añade un diagnóstico descargable con conteos agregados y estado básico de TTS, sin exponer IDs de entidades, PIN, destinos ni nombres de reproductores.
-- Mantiene la lógica de armado y las reglas de acceso existentes; incluye compatibilidad comprobada con Home Assistant Core 2026.10.
+Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
+
+**Actualización desde v2.6.8:** conserva la integración existente y sus entidades. Lee la [guía de migración](docs/MIGRATION_3.0.0.md) y las [notas de versión](docs/RELEASE_NOTES_3.0.0.md) antes de actualizar. Las novedades se configuran voluntariamente; no es obligatorio activar Zonas.
+
+Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
 
 <br>
 
@@ -30,14 +33,9 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 Construido sobre una arquitectura ultra-ligera de última generación con **TypeScript 7 + Vite 8.3 + React 19.3 + react-grid-layout 2.2**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones móviles inteligentes y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
 
-### ⚡ Arquitectura Ultra-Ligera y Alto Rendimiento (v2.6.8)
-- **Tecnología de Vanguardia:** Impulsado por **React 19.3.0**, **Vite 8.3.2** (Rolldown engine), **react-grid-layout 2.2.4**, **react-resizable 4.0.2**, **Vitest 5.0.3**, **TypeScript 7.0.2** y **Nanoid 6.0.1**.
-- **Activos de Marca Oficiales (HA 2026.3+):** Cumplimiento total con el nuevo Brands Proxy API de Home Assistant, sirviendo localmente los iconos y logos oficiales en alta resolución.
-- **Transición Líquida (iOS/macOS Fluid Spring):** Selector de Modos / SOS con física de resorte elástico, gradientes multicapa y deslizamiento continuo de cristal líquido.
-- **50% Más Ligero:** Reducción drástica a la mitad de los paquetes en desarrollo (de 118 a 59 dependencias, eliminando 67 módulos heredados obsoletos de Babel).
-- **Velocidad Extrema:** Compilación del bundle en ~120 ms (5x más rápido) y suite de pruebas de frontend en ~140 ms.
-- **Zero-Bloat y Cero Vulnerabilidades:** 0 dependencias externas de pip en Python (100% nativo y local en Home Assistant) y 0 vulnerabilidades de seguridad auditadas en producción.
-- **Transparencia en Ejecución:** El servidor de Home Assistant corre 100% en Python nativo (compatible con Python 3.14 y 3.15, alineado con Home Assistant 2026.11). **El usuario final NO necesita tener instalado Node.js** en su servidor ni en su Raspberry Pi.
+### Arquitectura
+
+React, TypeScript y Vite para la interfaz; núcleo original Three.js con calidad adaptativa. Integración Python local con Home Assistant y actualizaciones por WebSocket. Las versiones exactas de desarrollo están en `package-lock.json`, `.python-version` y `pyproject.toml`.
 
 > [!IMPORTANT]
 > **Aviso de Responsabilidad:** Argus es un sistema de automatización y seguridad residencial local de código abierto para Home Assistant. No sustituye una central receptora de alarmas certificada ni garantiza conexión directa con servicios de policía o bomberos. Asegúrate de probar periódicamente sensores, sirenas, avisos sonoros y respaldos.
@@ -62,7 +60,7 @@ Construido sobre una arquitectura ultra-ligera de última generación con **Type
 - **Protección para Niños y Mascotas:** Impide desarmes o alertas de pánico involuntarias causadas por roces en tablets de pared o pantallas táctiles.
 
 ### 🧩 Dashboard Modular Interactivo (React 19)
-- **Widgets Arrastrables y Redimensionables:** Basado en `react-grid-layout`, organiza tus tarjetas de seguridad, historial, automatizaciones y control de acceso a tu gusto con tamaños inteligentes (S, M, L, XL).
+- **Widgets Arrastrables y Redimensionables:** Basado en `react-grid-layout`, organiza tus tarjetas de seguridad, historial, automatizaciones y control de acceso a tu gusto mediante arrastre y cambio de tamaño.
 - **Persistencia por Dispositivo:** El diseño y la distribución de widgets se memorizan localmente según el tamaño de la pantalla (teléfono, tablet de pared, monitor de escritorio o pantalla en formato Kiosk).
 
 ### 🗣️ Asistente de Voz Inteligente (TTS Dinámico)
@@ -85,7 +83,7 @@ Construido sobre una arquitectura ultra-ligera de última generación con **Type
 ### 📲 Notificaciones Móviles Inteligentes y Alertas Críticas (iOS y Android)
 Argus se integra de forma directa y nativa con la aplicación Home Assistant Companion para alertarte de cualquier evento de seguridad en tu móvil:
 - **Alertas Críticas de Máxima Prioridad:** Notificaciones push de emergencia con sonido de sirena estridente que ignoran automáticamente el modo silencioso o No Molestar del dispositivo.
-- **Acciones Rápidas desde el Mensaje:** Botones interactivos directamente en la notificación (*Desarmar*, *Ver Cámaras*, *Silenciar Sirena*, *Activar Luces*) para actuar de inmediato sin perder tiempo abriendo la aplicación.
+- **Destinos configurables:** Selecciona los servicios móviles disponibles en Home Assistant. La entrega depende de la aplicación Companion y de la configuración del dispositivo.
 
 ### 📦 Copias de Seguridad Cifradas (.argus)
 - **Exportación e Importación Completa:** Descarga y restaura perfiles, sensores, configuraciones de modos y ajustes de seguridad en archivos protegidos con cifrado AES-GCM.
@@ -126,18 +124,11 @@ Si por temas de caché tu catálogo local de HACS no muestra la integración en 
 
 ---
 
-## 🔊 Configuración del Asistente de Voz (TTS)
+## 🔊 Configuración del Asistente de Voz
 
-Para que Argus hable a través de los altavoces de tu hogar anunciando cambios de estado y sensores abiertos, añade lo siguiente en tu archivo `configuration.yaml` de Home Assistant:
+Abre **Argus → Modos / SOS → Voz de Argus**. Elige un motor TTS y los reproductores descubiertos por Home Assistant. Los ajustes antiguos se importan cuando todavía no existe una personalización en el panel.
 
-```yaml
-argus:
-  arming_voice:
-    media_player: media_player.altavoces_salon
-    tts_service: tts.google_translate_say
-```
-
-El idioma de las locuciones se sincronizará automáticamente con el idioma que tengas configurado en el panel de Argus (Español o Inglés).
+La voz identifica el modo y los sensores correspondientes a cada acción. No es necesario escribir manualmente sus nombres. La configuración de armado en espera se conserva por modo. Consulta la [guía de migración](docs/MIGRATION_3.0.0.md) para conocer la prioridad de ajustes heredados.
 
 ---
 
@@ -165,14 +156,14 @@ Argus cuenta con una suite completa de pruebas unitarias y verificación de cont
 
 ```bash
 # Compilar el frontend en React 19
-npm install
+npm ci
 npm run build
 
 # Ejecutar pruebas unitarias de frontend
 npm test
 
 # Ejecutar suite de pruebas unitarias de backend Python
-python3 -m unittest discover tests
+python3 scripts/test_backend.py
 ```
 
 ---
@@ -195,3 +186,10 @@ python3 -m unittest discover tests
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más información.
+
+## Documentación de v3.0.0
+
+- [Novedades y funcionamiento](docs/RELEASE_NOTES_3.0.0.md)
+- [Migración desde v2.6.8](docs/MIGRATION_3.0.0.md)
+- [Validación y limitaciones](docs/RELEASE_VALIDATION_3.0.0.md)
+- [YAML opcional de voz](examples/configuration.yaml)

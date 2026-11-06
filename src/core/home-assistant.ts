@@ -36,4 +36,5 @@ export interface HomeAssistant {
     service: string,
     data?: Readonly<Record<string, unknown>>,
   ): Promise<unknown>;
+  subscribeEvents?(callback: (event: unknown) => void, eventType?: string): () => void;
 }

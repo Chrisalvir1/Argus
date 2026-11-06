@@ -18,6 +18,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import (
@@ -57,6 +58,7 @@ from .const import (
     MQTT_COMMAND_ARM_AWAY,
     MQTT_COMMAND_ARM_NIGHT,
 )
+from .mode_policy import mode_change_block_reason
 from .storage import (
     async_load_ui_data, async_append_audit_log,
     async_get_alarm_runtime_state, async_save_alarm_runtime_state,
@@ -89,17 +91,9 @@ _MODE_LABELS = {
     'armed_night': 'Noche',
 }
 
-_LANGUAGE_NAMES = {
-    "es": "Spanish", "en": "English", "pt": "Portuguese",
-    "zh": "Chinese", "ru": "Russian",
-}
-
 _SOS_TEXT = {
     "es": ("ARGUS — SOS / PÁNICO", "🚨 Botón SOS activado desde {home}. Revisa el estado de la alarma de inmediato.", "Llamar al {number}"),
     "en": ("ARGUS — SOS / PANIC", "🚨 SOS button activated from {home}. Check the alarm status immediately.", "Call {number}"),
-    "pt": ("ARGUS — SOS / PÂNICO", "🚨 Botão SOS ativado em {home}. Verifique o estado do alarme imediatamente.", "Ligar para {number}"),
-    "zh": ("ARGUS — SOS / 紧急", "🚨 SOS 按钮已从 {home} 激活。请立即检查警报状态。", "呼叫 {number}"),
-    "ru": ("ARGUS — SOS / ТРЕВОГА", "🚨 Кнопка SOS активирована из {home}. Немедленно проверьте состояние сигнализации.", "Позвонить {number}"),
 }
 
 ARMED_STATES = {
@@ -161,10 +155,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._trigger_listener = None
         self._arming_target = None
         self._arm_request: dict | None = None
+        self._cycle_bypassed: set[str] = set()
+        self._cycle_reincluded_at: dict[str, datetime] = {}
         self._arm_generation = 0
         self._triggered_mode: str | None = None  # modo activo al momento del disparo
+        self._zone_disarmed_trigger = False
+        self._zone_pending_sensor: str | None = None
+        self._zone_pending_condition: str | None = None
+        self._zone_pending_previous_state: AlarmControlPanelState | None = None
         self._panic_active = False
-        self._panic_previous_state: AlarmControlPanelState | None = None
+        self._active_panic_outputs: tuple[str, ...] = ()
+        self._siren_lock = asyncio.Lock()
 
         # Tracking
         self._unsub_sensors = None
@@ -330,10 +331,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             attrs["triggered_mode"] = self._triggered_mode
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
+        attrs["arming_generation"] = self._arm_generation
+        if self._cycle_bypassed:
+            attrs["cycle_bypassed_sensors"] = sorted(self._cycle_bypassed)
         if self._panic_active:
             attrs["argus_panic_active"] = True
-            if self._panic_previous_state:
-                attrs["panic_previous_state"] = self._panic_previous_state.value
         if self._alarm_state in (
             AlarmControlPanelState.ARMING,
             AlarmControlPanelState.PENDING,
@@ -348,6 +350,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             attrs["arming_target"] = self._arm_request["target"].value
             attrs["arming_origin"] = self._arm_request["origin"]
             attrs["arming_blocking_sensors"] = list(self._arm_request["blocking_sensors"])
+            attrs["arming_bypass_eligible_sensors"] = [
+                sensor for sensor in self._arm_request["blocking_sensors"]
+                if self._arm_request["wait_for_sensors"] and self._can_omit_blocker(sensor)
+            ]
             attrs["arming_waiting_for_sensors"] = bool(self._arm_request["wait_for_sensors"])
             attrs["argus_arming_transition"] = (
                 self._alarm_state == AlarmControlPanelState.ARMING
@@ -484,10 +490,58 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return config if isinstance(config, dict) else {}
 
     def _open_blocking_sensors(self, target: AlarmControlPanelState) -> list[str]:
-        config = self._mode_config(target.value.replace("armed_", ""))
-        sensors = config.get("sensors") if "sensors" in config else self._sensors_for_state(target)
-        bypassed = config.get("bypassed_sensors") or config.get("bypassedSensors") or []
-        return [sensor for sensor in sensors if sensor not in bypassed and (state := self.hass.states.get(sensor)) and state.state in _INTRUSION_ACTIVE_STATES]
+        return [
+            sensor for sensor in self._sensors_for_state(target)
+            if sensor not in self._cycle_bypassed and (
+                (state := self.hass.states.get(sensor)) is None
+                or state.state in _INTRUSION_ACTIVE_STATES
+                or state.state in {"unknown", "unavailable", "offline"}
+            )
+        ]
+
+    def _can_omit_blocker(self, entity_id: str) -> bool:
+        state = self.hass.states.get(entity_id)
+        registry_entry = er.async_get(self.hass).async_get(entity_id)
+        original_class = registry_entry.original_device_class if registry_entry else None
+        if original_class in {"smoke", "gas", "carbon_monoxide", "safety", "tamper", "heat"}:
+            return False
+        return not self._requires_immediate_trigger(entity_id) and (
+            state is None or state.attributes.get("device_class") != "heat"
+        ) and (
+            state is None
+            or state.state in {"unknown", "unavailable", "offline"}
+            or state.attributes.get("device_class") in {"door", "window", "garage_door", "opening"}
+        )
+
+    async def async_set_cycle_bypass(self, entity_id: str, bypass: bool, generation: int | None = None) -> None:
+        """Change protection for one sensor during the current cycle."""
+        if generation is not None and generation != self._arm_generation:
+            raise HomeAssistantError("El ciclo de armado cambió. Revisa el estado antes de continuar")
+        request = self._arm_request
+        if bypass:
+            if (not request or not request["wait_for_sensors"]
+                    or entity_id not in self._open_blocking_sensors(request["target"])):
+                raise HomeAssistantError("El sensor no bloquea el armado en espera")
+            if not self._can_omit_blocker(entity_id):
+                raise HomeAssistantError("La política no permite omitir este sensor")
+            self._cycle_bypassed.add(entity_id)
+        else:
+            if (self._alarm_state not in ARMED_STATES or entity_id not in self._cycle_bypassed
+                    or entity_id not in self._sensors_for_state(self._alarm_state)):
+                raise HomeAssistantError("El sensor no puede reincorporarse a este armado")
+            state = self.hass.states.get(entity_id)
+            if (state is None or state.state not in {"off", "closed", "locked", "clear", "idle"}
+                    or any(state.attributes.get(key) is False for key in ("available", "online", "connected", "is_online"))):
+                raise HomeAssistantError("El sensor debe estar disponible y en reposo")
+            # Validate and commit in one event-loop turn. Ignore any queued
+            # events that occurred while this sensor was still excluded.
+            self._cycle_reincluded_at[entity_id] = dt_util.utcnow()
+            self._cycle_bypassed.remove(entity_id)
+        self.async_write_ha_state()
+        if request:
+            await self._async_recheck_arm_request()
+        else:
+            await self._async_persist_stable_state("sensor_reincluded")
 
     def _open_sensor_policy(self, mode_key: str) -> str:
         config = self._mode_config(mode_key)
@@ -542,9 +596,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         "state": restored.value,
                         "updated_at": last.last_updated.isoformat(),
                         "source": "restore_entity",
+                        "cycle_bypassed_sensors": last.attributes.get("cycle_bypassed_sensors", []),
                     }
             except ValueError:
                 self._alarm_state = AlarmControlPanelState.DISARMED
+
+        if self._alarm_state in ARMED_STATES:
+            # Restore only omissions belonging to the recovered armed mode.
+            saved_bypass = runtime_state.get("cycle_bypassed_sensors", [])
+            if isinstance(saved_bypass, list):
+                self._cycle_bypassed.update(
+                    sensor for sensor in self._sensors_for_state(self._alarm_state)
+                    if sensor in saved_bypass
+                )
 
         if restored_from_runtime:
             await async_append_audit_log(
@@ -666,8 +730,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 persistent_notification.async_dismiss(self.hass, "argus_triggered")
                 self._triggered_by = None
                 self._triggered_mode = None
-                self._panic_active = False
-                self._panic_previous_state = None
+            if scheduled_state == AlarmControlPanelState.DISARMED:
+                self._cycle_bypassed.clear()
+                getattr(self, "_cycle_reincluded_at", {}).clear()
             self._alarm_state = scheduled_state
             self.async_write_ha_state()
             await self._async_mqtt_publish()
@@ -825,12 +890,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._arming_target = None
         self._arm_request = None
         self._confirmation_events.clear()
+        self._zone_pending_sensor = None
+        self._zone_pending_condition = None
+        self._zone_pending_previous_state = None
 
     async def _async_cancel_arming_request(self, reason: str, *, disarm: bool = False) -> None:
         had_request = self._arm_request is not None
         if not had_request and self._alarm_state != AlarmControlPanelState.ARMING:
             return
         self._cancel_timers()
+        self._cycle_bypassed.clear()
+        getattr(self, "_cycle_reincluded_at", {}).clear()
         if disarm and (had_request or self._alarm_state == AlarmControlPanelState.ARMING):
             self._alarm_state = AlarmControlPanelState.DISARMED
             self.async_write_ha_state()
@@ -842,7 +912,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """Record the state after a real transition, never during a timer."""
         await async_save_alarm_runtime_state(
             self.hass, self._config_entry.entry_id, self._alarm_state.value,
-            source=source,
+            source=source, cycle_bypassed_sensors=sorted(self._cycle_bypassed),
         )
 
     def _requires_immediate_trigger(self, entity_id: str) -> bool:
@@ -898,37 +968,85 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._triggered_by = None
 
     # ── Sensor monitoring ───────────────────────────────────────────
+    def _async_zone_sensor_trigger(self, entity_id: str, mode_key: str) -> None:
+        """Latch a configured zone event using the sensor's own delay."""
+        mode_config = self._mode_config(mode_key)
+        settings = mode_config.get("sensor_settings", {})
+        setting = settings.get(entity_id, {}) if isinstance(settings, dict) else {}
+        try:
+            delay = max(0, int(setting.get("delay", 0)))
+        except (TypeError, ValueError):
+            delay = 0
+        self._triggered_by = entity_id
+        self._triggered_mode = mode_key
+        self._zone_disarmed_trigger = self._alarm_state == AlarmControlPanelState.DISARMED
+        if delay:
+            self._zone_pending_sensor = entity_id
+            self._zone_pending_condition = str(setting.get("condition", "open"))
+            self._zone_pending_previous_state = self._alarm_state
+            self._alarm_state = AlarmControlPanelState.PENDING
+            self.async_write_ha_state()
+            if self._entry_listener:
+                self._entry_listener()
+            self._entry_listener = async_call_later(self.hass, delay, self._async_trigger_now)
+        elif not self._request_intelligent_confirmation(entity_id):
+            self.hass.async_create_task(self._async_trigger())
+
     @callback
     def _async_sensor_changed(self, event):
         """React when a monitored sensor changes state."""
         new_state = event.data.get("new_state")
         entity_id = event.data.get("entity_id")
 
+        old_state = event.data.get("old_state")
+        if entity_id and getattr(old_state, "state", None) != getattr(new_state, "state", None):
+            from .zones import zone_event_payloads
+            for payload in zone_event_payloads(self._ui_config.get("zones", []), entity_id, self.hass.states):
+                self.hass.bus.async_fire("argus_zone_changed", {
+                    **payload, "alarm_entity_id": self.entity_id,
+                    "entry_id": self._config_entry.entry_id,
+                })
+
         if entity_id and self._arm_request:
             self.hass.async_create_task(self._async_recheck_arm_request())
 
-        if new_state is None or new_state.state not in _INTRUSION_ACTIVE_STATES:
+        if new_state is None or entity_id in self._cycle_bypassed:
             return
-
-        # Check if Walk Test is active for this instance
-        from .core.walk_test import async_get_walk_test_manager
-        wt_mgr = async_get_walk_test_manager(self.hass)
-        if wt_mgr.is_active(self._config_entry.entry_id):
-            session = wt_mgr.get_session(self._config_entry.entry_id)
-            if session:
-                friendly_name = new_state.attributes.get("friendly_name") if new_state else None
-                is_new = session.record_trigger(entity_id, new_state.state, friendly_name)
-                self.hass.bus.async_fire("argus_walk_test_sensor_tested", {
-                    "entry_id": self._config_entry.entry_id,
-                    "entity_id": entity_id,
-                    "state": new_state.state,
-                    "name": friendly_name or entity_id,
-                    "is_new": is_new,
-                    "tested_count": len(session.tested_sensors),
-                    "total_sensors": len(session.all_sensors),
-                })
-                _LOGGER.info("Argus Walk Test: sensor %s tested (%s)", entity_id, new_state.state)
+        reincluded_at = getattr(self, "_cycle_reincluded_at", {}).get(entity_id)
+        if reincluded_at and event.time_fired <= reincluded_at:
+            return
+        if new_state.state not in _INTRUSION_ACTIVE_STATES:
+            old_state = event.data.get("old_state")
+            if (self._zone_pending_sensor == entity_id
+                    and self._zone_pending_condition == "open"
+                    and self._entry_listener):
+                # An "espera de abierto" is a hold-to-trigger condition. If
+                # the contact closes before the timer expires, cancel only
+                # this pending zone event; a latched alarm is never silenced.
+                self._entry_listener()
+                self._entry_listener = None
+                self._zone_pending_sensor = None
+                self._zone_pending_condition = None
+                self._triggered_by = None
+                self._triggered_mode = None
+                self._zone_disarmed_trigger = False
+                if self._alarm_state == AlarmControlPanelState.PENDING:
+                    self._alarm_state = self._zone_pending_previous_state or AlarmControlPanelState.DISARMED
+                    self._zone_pending_previous_state = None
+                    self.async_write_ha_state()
                 return
+            if old_state and (self._alarm_state in ARMED_STATES or self._alarm_state == AlarmControlPanelState.DISARMED):
+                mode_key = "disarmed" if self._alarm_state == AlarmControlPanelState.DISARMED else self._alarm_state.value.replace("armed_", "")
+                mode_config = self._mode_config(mode_key)
+                settings = mode_config.get("sensor_settings", {})
+                setting = settings.get(entity_id, {}) if isinstance(settings, dict) else {}
+                if (entity_id in self._sensors_for_state(self._alarm_state)
+                        and setting.get("condition") == "close"):
+                    from .zones import condition_matches
+                    if condition_matches("close", old_state.state, new_state.state,
+                                         new_state.attributes.get("device_class")):
+                        self._async_zone_sensor_trigger(entity_id, mode_key)
+            return
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
         self.hass.create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
@@ -950,12 +1068,43 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         inc_event = IncidentEvent(sensor_id=entity_id, area_id="main_house", state_value=new_state.state, device_class=dev_cls)
         inc = self._incident_engine.process_sensor_event(inc_event, mode=str(self._alarm_state))
 
+        if self._alarm_state == AlarmControlPanelState.DISARMED:
+            mode_config = self._mode_config("disarmed")
+            if entity_id not in mode_config.get("sensors", []):
+                return
+            settings = mode_config.get("sensor_settings", {})
+            setting = settings.get(entity_id, {}) if isinstance(settings, dict) else {}
+            condition = setting.get("condition", "open")
+            if condition == "close":
+                return
+            if condition in {"motion", "detected"}:
+                from .zones import condition_matches
+                if not condition_matches(condition,
+                                         event.data.get("old_state").state if event.data.get("old_state") else None,
+                                         new_state.state,
+                                         new_state.attributes.get("device_class")):
+                    return
+            self._async_zone_sensor_trigger(entity_id, "disarmed")
+            return
         if self._alarm_state not in ARMED_STATES:
             return
 
         active = self._sensors_for_state(self._alarm_state)
         if entity_id not in active:
             return
+
+        mode_cfg = self._mode_config(self._alarm_state.value.replace("armed_", ""))
+        sensor_settings = mode_cfg.get("sensor_settings", {})
+        sensor_setting = sensor_settings.get(entity_id, {}) if isinstance(sensor_settings, dict) else {}
+        if sensor_setting.get("condition") == "close":
+            return
+        if sensor_setting.get("condition") in {"motion", "detected"}:
+            from .zones import condition_matches
+            if not condition_matches(sensor_setting["condition"],
+                                     event.data.get("old_state").state if event.data.get("old_state") else None,
+                                     new_state.state,
+                                     new_state.attributes.get("device_class")):
+                return
 
         _LOGGER.warning("Argus: Sensor %s tripped while %s", entity_id, self._alarm_state)
         self._triggered_by = entity_id
@@ -974,8 +1123,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             entry_list = []
 
         # Per-sensor delay configuration or global entry delay
-        sensor_settings = mode_cfg.get("sensor_settings", {})
-        sensor_setting = sensor_settings.get(entity_id, {}) if isinstance(sensor_settings, dict) else {}
         custom_delay = sensor_setting.get("delay")
         is_instant = sensor_setting.get("type") == "instant" or custom_delay == 0
 
@@ -1013,6 +1160,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @callback
     def _async_trigger_now(self, _now):
         """Entry delay expired — trigger immediately."""
+        self._zone_pending_sensor = None
+        self._zone_pending_condition = None
+        self._zone_pending_previous_state = None
         if self._alarm_state == AlarmControlPanelState.PENDING:
             self.hass.async_create_task(self._async_trigger())
 
@@ -1020,7 +1170,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """Activate the alarm."""
         if self._alarm_state == AlarmControlPanelState.ARMING and self._arm_request:
             await self._async_cancel_arming_request("triggered", disarm=True)
-        if not self._panic_active and self._alarm_state not in ARMED_STATES and self._alarm_state != AlarmControlPanelState.PENDING:
+        if self._alarm_state not in ARMED_STATES and self._alarm_state != AlarmControlPanelState.PENDING and not self._zone_disarmed_trigger:
             return
 
         self._cancel_timers()
@@ -1033,51 +1183,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._triggered_mode = "away" # Fallback universal para pánico/SOS
             
         self._alarm_state = AlarmControlPanelState.TRIGGERED
+        self._zone_disarmed_trigger = False
         self.async_write_ha_state()
         _LOGGER.warning("Argus: ALARM TRIGGERED by %s", self._triggered_by)
 
         await self._async_siren(True)
-        await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
-        await self._async_sync_panels(AlarmControlPanelState.TRIGGERED)
 
-        if self._panic_active:
-            emergency_number = self._ui_config.get("emergency_number", "911")
-            loc = self._ui_config.get("home_name", "Mi Casa") or "Mi Casa"
-            sos_title, sos_message, call_title = _SOS_TEXT[self._language()]
-            sos_message = sos_message.format(home=loc)
-            await self._async_notify_configured(
-                sos_title,
-                sos_message,
-                {
-                    "push": {"sound": "alarm.caf", "badge": 1},
-                    "priority": "high",
-                    "ttl": 0,
-                    "actions": [
-                        {
-                            "action": "URI",
-                            "title": call_title.format(number=emergency_number),
-                            "uri": f"tel:{emergency_number}",
-                        }
-                    ],
-                },
-            )
-        # Persistent notification in HA
-        if self._panic_active:
-            sos_title, sos_message, _ = _SOS_TEXT[self._language()]
-            persistent_notification.async_create(
-                self.hass,
-                sos_message.format(home=self._ui_config.get("home_name") or self._name),
-                title=f"🚨 {sos_title}",
-                notification_id="argus_triggered",
-            )
-        else:
-            persistent_notification.async_create(
-                self.hass,
-                f"⚠️ Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
-                title="🚨 ARGUS — ALARMA DISPARADA",
-                notification_id="argus_triggered",
-            )
+        persistent_notification.async_create(
+            self.hass,
+            f"⚠️ Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
+            title="🚨 ARGUS — ALARMA DISPARADA",
+            notification_id="argus_triggered",
+        )
         sensor_name = "desconocido"
         if self._triggered_by:
             state_obj = self.hass.states.get(self._triggered_by)
@@ -1086,36 +1204,40 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             else:
                 sensor_name = self._triggered_by
 
-        if not self._panic_active:
-            await self._async_notify_configured(
-                "🚨 ARGUS — ALARMA DISPARADA",
-                f"Sensor: {sensor_name}\nModo activo: {self._triggered_mode or 'desconocido'}",
-                {"priority": "high", "ttl": 0},
-            )
-        
+        await self._async_notify_configured(
+            "🚨 ARGUS — ALARMA DISPARADA",
+            f"Sensor: {sensor_name}\nModo activo: {self._triggered_mode or 'desconocido'}",
+            {"priority": "high", "ttl": 0},
+        )
+
         mode_label = self._alarm_state.value.replace("armed_", "").capitalize()
         # If triggered by a rule, mention it
         trigger_detail = f"Sensor: {sensor_name} (Modo: {mode_label})"
         if "Regla" in str(self._triggered_by):
             trigger_detail = f"Disparado por {self._triggered_by} ({mode_label})"
 
-        await async_append_audit_log(
-            self.hass, "triggered",
-            trigger_detail,
-            user="Argus",
-            entry_id=self._config_entry.entry_id,
-        )
+        self.hass.async_create_task(self._async_finish_trigger(trigger_detail))
 
-        await self._async_sync_panels(AlarmControlPanelState.TRIGGERED)
-        await self._async_persist_stable_state("trigger")
+        # Intrusion and SOS remain latched until an explicit stop/disarm.
+        # Neither sensor closure nor trigger_time may silently end an incident.
 
-        # An SOS is ended deliberately by the user.  It must never silently
-        # disarm or return the system to normal because a timer expired.
-        _tt = self._trigger_time if isinstance(self._trigger_time, int) else 0
-        if _tt > 0 and not self._panic_active:
-            self._trigger_listener = async_call_later(
-                self.hass, _tt, self._async_reset_triggered
+    async def _async_finish_trigger(self, trigger_detail: str) -> None:
+        """Persist and synchronize a latched alarm after publishing TRIGGERED."""
+        try:
+            await self._async_sync_panels(AlarmControlPanelState.TRIGGERED)
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to dispatch triggered state to linked panels")
+        try:
+            await self._async_persist_stable_state("trigger")
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to persist triggered state")
+        try:
+            await async_append_audit_log(
+                self.hass, "triggered", trigger_detail, user="Argus",
+                entry_id=self._config_entry.entry_id,
             )
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to record triggered event")
 
     async def _async_sync_external_panels(self, action: str) -> None:
         """Trigger or disarm linked external alarm panels (like camera sirens)."""
@@ -1164,13 +1286,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """
         modes = self._ui_config.get("modes", {})
 
-        # SOS can have its own output profile, independent from the active
-        # armed mode. This also makes panic useful while Argus is disarmed.
-        if self._panic_active:
-            panic_outputs = self._ui_config.get("panic_outputs", [])
-            if isinstance(panic_outputs, list) and panic_outputs:
-                return panic_outputs
-
         # Resolver mode_key según estado actual
         if self._alarm_state in ARMED_STATES:
             mode_key = self._alarm_state.value.replace("armed_", "")
@@ -1204,7 +1319,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             return [self._siren_entity]
         return []
 
-    async def _async_siren(self, activate: bool):
+    async def _async_siren(self, activate: bool, outputs=None):
         """Activate or deactivate all configured siren entities.
 
         FIX (v0.9.30): usa homeassistant.turn_on/turn_off como servicio universal
@@ -1213,7 +1328,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
           1. Dominio nativo (light con brightness, siren/switch/fan/input_boolean)
           2. Si falla → homeassistant.turn_on / homeassistant.turn_off (universal)
         """
-        sirens = self._get_siren_entities()
+        async with self._siren_lock:
+            sirens = self._get_siren_entities() if outputs is None else outputs
+            if not activate:
+                required = set(self._active_panic_outputs)
+                if self._alarm_state == AlarmControlPanelState.TRIGGERED:
+                    required.update(self._get_siren_entities())
+                sirens = [entity for entity in sirens if entity not in required]
+            await self._async_dispatch_sirens(activate, sirens)
+
+    async def _async_dispatch_sirens(self, activate, sirens):
         if not sirens:
             _LOGGER.warning("Argus: _async_siren(%s) — sin sirenas configuradas (estado=%s, modo=%s)",
                             activate, self._alarm_state, self._triggered_mode)
@@ -1377,12 +1501,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return self._matching_disarm_user(code) is not None
 
     async def async_alarm_disarm(self, code=None) -> None:
+        await self._require_alarm_actor_permission("disarm")
         # Off cancels a pending request without a PIN; the alarm is not armed yet.
         if getattr(self, "_arm_request", None) and self._alarm_state in (AlarmControlPanelState.DISARMED, AlarmControlPanelState.ARMING):
             if not self._code:
                 await self._async_cancel_arming_request("cancelled_from_off", disarm=True)
                 return
-        user_id = await self._get_context_user()
+        context_user_id = getattr(getattr(self, "_context", None), "user_id", None)
+        user_id = str(context_user_id or "default")
         limiter_key = f"{DOMAIN}_pin_limiter_{self._config_entry.entry_id}"
         limiter = self.hass.data.setdefault(limiter_key, PinAttemptLimiter())
 
@@ -1425,34 +1551,50 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     if matched_user:
                         caller_name = matched_user.get("name")
 
-        if not caller_name:
-            caller_name = user_id
-
+        # Commit the canonical state before dispatching any external output.
+        # The panel must not wait for a siren, linked alarm, storage or notify
+        # integration to acknowledge the user's disarm action.
+        sirens = [entity for entity in self._get_siren_entities() if entity not in getattr(self, "_active_panic_outputs", ())]
         self._cancel_timers()
-        await self._async_siren(False)
         persistent_notification.async_dismiss(self.hass, "argus_triggered")
-        
-        await self._async_sync_panels(AlarmControlPanelState.DISARMED)
-
-        self._panic_active = False
-        self._panic_previous_state = None
+        self._zone_disarmed_trigger = False
         self._triggered_mode = None
         self._arm_lock_until = 0.0
+        self._cycle_bypassed.clear()
+        getattr(self, "_cycle_reincluded_at", {}).clear()
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._triggered_by = None
         self.async_write_ha_state()
-        await self._async_mqtt_publish()
-        await self._async_persist_stable_state("disarm")
+        self.hass.async_create_task(self._async_finish_disarm(
+            caller_name, user_id, is_duress, sirens
+        ))
+
+    async def _async_finish_disarm(self, caller_name, user_id, is_duress, sirens=None) -> None:
+        """Dispatch disarm effects after the state has reached the UI."""
+        if not caller_name:
+            caller_name = await self._get_context_user()
+        try:
+            await self._async_siren(False, sirens)
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to switch off configured sirens")
+        try:
+            await self._async_sync_panels(AlarmControlPanelState.DISARMED)
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to dispatch disarm to linked panels")
+        try:
+            await self._async_persist_stable_state("disarm")
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to persist disarmed state")
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
         self.hass.bus.async_fire("argus_state_changed", {
-            "entity_id": self.entity_id, "state": "disarmed", "user": caller_name, "entry_id": self._config_entry.entry_id
+            "entity_id": self.entity_id, "state": "disarmed", "user": caller_name,
+            "entry_id": self._config_entry.entry_id,
         })
         self.hass.bus.async_fire("argus_disarmed", {
-            "entity_id": self.entity_id, "user": caller_name, "entry_id": self._config_entry.entry_id
+            "entity_id": self.entity_id, "user": caller_name,
+            "entry_id": self._config_entry.entry_id,
         })
         if is_duress:
-            # Keep the ordinary disarmed state and never invoke audible SOS.
-            # Integrators can route this explicit event to their silent response.
             await async_append_audit_log(
                 self.hass, "duress_pin_triggered", "Coercion PIN entered",
                 user=user_id, severity="critical", entry_id=self._config_entry.entry_id,
@@ -1470,16 +1612,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 "🔓 ARGUS — Desarmado",
                 f"El sistema fue desarmado por {caller_name or 'Argus'}.",
             )
-        await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name, entry_id=self._config_entry.entry_id)
+        await async_append_audit_log(
+            self.hass, "disarmed", f"Sistema desarmado por {caller_name}",
+            user=caller_name, entry_id=self._config_entry.entry_id,
+        )
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
-        await self._async_sync_panels(AlarmControlPanelState.DISARMED)
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None, *, origin: str = "service") -> None:
         import time as _time
-        restoring_panic = (
-            self._panic_active and target == self._panic_previous_state
-        )
-
         # ── ARM-LOCK v2 (Anti-Rebote HomeKit) ──────────────────────────
         # Cuando Argus está en Away/Night y algo externo (HomeKit
         # sincronizando con Aqara) intenta forzarlo a Home dentro de los
@@ -1510,17 +1650,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._alarm_state == target:
             return
 
-        # STRICT AWAY LOCK:
-        # Prevent automations or accidental clicks from lowering the security state from Away.
-        # To exit Away, the user MUST disarm first.
-        if self._alarm_state == AlarmControlPanelState.ARMED_AWAY and target in ARMED_STATES:
+        # Enforce the disarm-before-switch rule at the entity boundary so
+        # service, HomeKit, MQTT, and automation callers share the same policy.
+        blocked_reason = mode_change_block_reason(
+            self._alarm_state,
+            target,
+            alarm_active=False,
+        )
+        if blocked_reason:
             _LOGGER.warning(
-                "Argus: Blocked transition from %s to %s. System must be disarmed first.",
-                self._alarm_state, target
+                "Argus: Blocked mode request from %s to %s: %s",
+                self._alarm_state, target, blocked_reason
             )
-            return
+            raise HomeAssistantError(blocked_reason)
 
-        if self._code_arm_required and not restoring_panic and not self._validate_code(code):
+        if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus", entry_id=self._config_entry.entry_id)
             raise HomeAssistantError("Invalid or missing alarm PIN")
@@ -1537,7 +1681,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         open_sensors = self._open_blocking_sensors(target) if mode_key else []
         _LOGGER.info("Argus arm request: entity=%s target=%s origin=%s policy=%s sensors=%s blockers=%s",
                      self.entity_id, target.value, origin, policy, self._sensors_for_state(target), open_sensors)
-        if open_sensors and policy == "block" and not restoring_panic:
+        if open_sensors and policy == "block":
             open_names = [
                 self.hass.states.get(eid).attributes.get("friendly_name", eid)
                 if self.hass.states.get(eid) else eid
@@ -1560,11 +1704,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 ),
                 notification_id="argus_arm_blocked",
             )
-            await self._async_notify_configured(
-                "🔒 ARGUS — No se pudo armar",
-                "El sistema no se armó porque estos sensores están abiertos o activos:\n"
-                + "\n".join(f"• {name}" for name in open_names),
-            )
             self.hass.bus.async_fire(
                 "argus_arm_blocked",
                 {
@@ -1581,16 +1720,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         self._cancel_timers()
 
-        # Restoring an armed state from the Panic stop action must turn off the
-        # selected sirens/lights, then preserve the user's prior armed mode.
-        if self._panic_active:
-            await self._async_siren(False)
-            self._panic_active = False
-            self._panic_previous_state = None
-            self._triggered_by = None
-            self._triggered_mode = None
-
-        arming_delay = 0 if restoring_panic else self._get_mode_val(
+        arming_delay = self._get_mode_val(
             mode_key, "arming_time", self._arming_time
         )
         try:
@@ -1606,18 +1736,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             # disarmed, which is how Apple Home represents “Armando…”.
             self._alarm_state = AlarmControlPanelState.ARMING
             self.async_write_ha_state()
-            await self._async_mqtt_publish()
             if open_sensors and policy == "pending":
                 # Voice feedback is helpful, never a prerequisite for the
                 # security state machine.  A temporary TTS/storage failure
                 # must not leave the request half-created in ARMING.
-                try:
-                    await async_announce_arming_wait_update(
-                        self.hass, self._config_entry, alarm_entity_id=self.entity_id,
-                        target=target.value, previous_open=[], current_open=open_sensors,
-                    )
-                except Exception:  # noqa: BLE001
-                    _LOGGER.exception("Argus initial arming voice update failed")
+                self.hass.async_create_task(async_announce_arming_wait_update(
+                    self.hass, self._config_entry, alarm_entity_id=self.entity_id,
+                    target=target.value, previous_open=[], current_open=open_sensors,
+                ))
             if arming_delay:
                 self._arming_listener = async_call_later(self.hass, arming_delay, lambda now, generation=self._arm_generation: self._async_finish_arming(now, generation))
             _LOGGER.info("Argus: HomeKit-safe arming request %s in %s seconds", target, arming_delay)
@@ -1654,7 +1780,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self.hass, self._config_entry, alarm_entity_id=self.entity_id,
                 target=request["target"].value, previous_open=previous_open, current_open=open_sensors,
             )
-        if open_sensors or not request["delay_elapsed"]:
+        if open_sensors or not request["delay_elapsed"] or (
+            request["wait_for_sensors"] and self._open_blocking_sensors(request["target"])
+        ):
             return
         # A stale callback must never complete a replacement/cancelled request.
         if request is not self._arm_request or request["generation"] != self._arm_generation:
@@ -1677,89 +1805,151 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         else:
             self._arm_lock_until = 0.0
 
-        await self._async_mqtt_publish()
-        await self._async_persist_stable_state("arm")
+        self.hass.async_create_task(self._async_finish_arm(target))
 
+    async def _async_finish_arm(self, target: AlarmControlPanelState) -> None:
+        """Run persistence, integrations and notifications after arming commits."""
+        mode = target.value if hasattr(target, "value") else str(target)
+        try:
+            await self._async_persist_stable_state("arm")
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to persist armed state %s", mode)
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         user_name = await self._get_context_user()
         self.hass.bus.async_fire("argus_state_changed", {
-            "entity_id": self.entity_id, "state": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
+            "entity_id": self.entity_id, "state": mode, "user": user_name,
+            "entry_id": self._config_entry.entry_id,
         })
         self.hass.bus.async_fire("argus_armed", {
-            "entity_id": self.entity_id, "mode": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
+            "entity_id": self.entity_id, "mode": mode, "user": user_name,
+            "entry_id": self._config_entry.entry_id,
         })
-        mode = target.value if hasattr(target, "value") else str(target)
         await self._async_notify_configured(
             "🔒 ARGUS — Armado",
             f"El sistema se armó en modo {_MODE_LABELS.get(mode, mode)}.",
         )
-        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value if hasattr(target, 'value') else str(target), target)}", user=user_name, entry_id=self._config_entry.entry_id)
+        await async_append_audit_log(
+            self.hass, "armed", f"Modo: {_MODE_LABELS.get(mode, mode)}",
+            user=user_name, entry_id=self._config_entry.entry_id,
+        )
         self.hass.async_create_task(async_announce_arming_wait_update(
             self.hass, self._config_entry, alarm_entity_id=self.entity_id,
-            target=target.value, previous_open=[], current_open=[], committed=True,
+            target=mode, previous_open=[], current_open=[], committed=True,
         ))
         _LOGGER.info("Argus: Armado → %s", target)
-        await self._async_sync_panels(target)
+        try:
+            await self._async_sync_panels(target)
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Argus: failed to dispatch armed mode %s", mode)
+
+    async def _require_alarm_actor_permission(self, permission: str, context=None) -> None:
+        """Enforce Argus permissions on HA calls attributed to a standard user."""
+        from homeassistant.exceptions import HomeAssistantError
+        from .auth import _get_argus_profile
+        from .session import async_get_session_manager
+
+        actor_id = getattr(context or getattr(self, "_context", None), "user_id", None)
+        if not actor_id:
+            return
+        actor = await self.hass.auth.async_get_user(actor_id)
+        if actor and actor.is_active and actor.is_admin:
+            return
+        entry_id = self._config_entry.entry_id
+        session = async_get_session_manager(self.hass).get_session(actor_id, entry_id)
+        profile = await _get_argus_profile(self.hass, entry_id, session.argus_user_id) if session else None
+        if (not actor or not actor.is_active or not profile
+                or not profile.get("enabled", True)
+                or not profile.get("permissions", {}).get(permission, False)):
+            raise HomeAssistantError(f"Argus permission required: {permission}")
 
     async def async_alarm_arm_home(self, code=None) -> None:
+        await self._require_alarm_actor_permission("arm")
         await self._async_arm(AlarmControlPanelState.ARMED_HOME, code)
 
     async def async_alarm_arm_away(self, code=None) -> None:
+        await self._require_alarm_actor_permission("arm")
         await self._async_arm(AlarmControlPanelState.ARMED_AWAY, code)
 
     async def async_alarm_arm_night(self, code=None) -> None:
+        await self._require_alarm_actor_permission("arm")
         await self._async_arm(AlarmControlPanelState.ARMED_NIGHT, code)
 
     async def async_alarm_trigger(self, code=None) -> None:
         """Trigger the alarm from an explicit SOS/manual panic action."""
-        if not self._panic_active:
-            if self._alarm_state in ARMED_STATES or self._alarm_state == AlarmControlPanelState.DISARMED:
-                self._panic_previous_state = self._alarm_state
-            elif self._triggered_mode:
-                mode_map = {
-                    "home": AlarmControlPanelState.ARMED_HOME,
-                    "away": AlarmControlPanelState.ARMED_AWAY,
-                    "night": AlarmControlPanelState.ARMED_NIGHT,
-                }
-                self._panic_previous_state = mode_map.get(self._triggered_mode, AlarmControlPanelState.DISARMED)
-            else:
-                self._panic_previous_state = AlarmControlPanelState.DISARMED
-            self._panic_active = True
-        self._triggered_by = "SOS / manual panic"
-        self.hass.bus.async_fire("argus_panic_activated", {
-            "entity_id": self.entity_id, "user": await self._get_context_user(), "entry_id": self._config_entry.entry_id
-        })
-        await self._async_trigger()
+        await self._require_alarm_actor_permission("sos")
+        if self._panic_active:
+            return
+        self._active_panic_outputs = tuple(dict.fromkeys(
+            self._ui_config.get("panic_outputs") or self._get_siren_entities()
+        ))
+        self._panic_active = True
+        self.async_write_ha_state()
+        self.hass.async_create_task(self._async_fire_panic_activated())
+        await self._async_siren(True, self._active_panic_outputs)
+        emergency_number = self._ui_config.get("emergency_number", "911")
+        loc = self._ui_config.get("home_name", "Mi Casa") or "Mi Casa"
+        sos_title, sos_message, call_title = _SOS_TEXT[self._language()]
+        sos_message = sos_message.format(home=loc)
+        await self._async_notify_configured(
+            sos_title,
+            sos_message,
+            {
+                "push": {"sound": "alarm.caf", "badge": 1},
+                "priority": "high",
+                "ttl": 0,
+                "actions": [
+                    {
+                        "action": "URI",
+                        "title": call_title.format(number=emergency_number),
+                        "uri": f"tel:{emergency_number}",
+                    }
+                ],
+            },
+        )
+        if self._panic_active:
+            sos_title, sos_message, _ = _SOS_TEXT[self._language()]
+            persistent_notification.async_create(
+                self.hass,
+                sos_message.format(home=self._ui_config.get("home_name") or self._name),
+                title=f"🚨 {sos_title}",
+                notification_id=f"argus_sos_{self._config_entry.entry_id}",
+            )
 
-    async def async_stop_panic(self) -> None:
-        """Stop an active SOS and restore the state captured before it started."""
+    async def _async_fire_panic_activated(self) -> None:
+        """Resolve the actor name without delaying the SOS state transition."""
+        self.hass.bus.async_fire("argus_panic_activated", {
+            "entity_id": self.entity_id,
+            "user": await self._get_context_user(),
+            "entry_id": self._config_entry.entry_id,
+        })
+
+    async def async_stop_panic(self, code=None, context=None) -> None:
+        """Stop the manual emergency while preserving the intrusion state."""
         if not self._panic_active:
             return
-        previous_state = self._panic_previous_state or AlarmControlPanelState.DISARMED
-        self._cancel_timers()
-        await self._async_siren(False)
-        persistent_notification.async_dismiss(self.hass, "argus_triggered")
-        
-        await self._async_sync_panels(AlarmControlPanelState.DISARMED)
-
+        await self._require_alarm_actor_permission("sos", context=context)
+        personal_pin = any(user.get("enabled", True) and user.get("permissions", {}).get("disarm", False)
+                           and (user.get("master_pin_hash") or user.get("pin") or user.get("access_pin_hash"))
+                           for user in self._ui_config.get("users", []))
+        if self._code or personal_pin:
+            actor_id = str(getattr(context or getattr(self, "_context", None), "user_id", None) or "default")
+            limiter = self.hass.data.setdefault(f"{DOMAIN}_pin_limiter_{self._config_entry.entry_id}", PinAttemptLimiter())
+            if limiter.is_blocked(actor_id):
+                raise HomeAssistantError("Too many failed PIN attempts; try again later")
+            if not self._validate_code(code):
+                limiter.record_failure(actor_id)
+                raise HomeAssistantError("Invalid or missing alarm PIN; stop SOS from Argus with your PIN")
+            limiter.reset(actor_id)
+        intrusion_outputs = self._get_siren_entities() if self._alarm_state == AlarmControlPanelState.TRIGGERED else ()
+        outputs = [entity for entity in self._active_panic_outputs if entity not in intrusion_outputs]
         self._panic_active = False
-        self._panic_previous_state = None
-        self._triggered_mode = None
-        self._triggered_by = None
-        self._alarm_state = previous_state
+        self._active_panic_outputs = ()
         self.async_write_ha_state()
-        await self._async_mqtt_publish()
-        await self._async_persist_stable_state("panic_restore")
-        if previous_state in ARMED_STATES:
-            self.hass.async_create_task(
-                self._evaluate_automations("armed", target=previous_state)
-            )
+        persistent_notification.async_dismiss(self.hass, f"argus_sos_{self._config_entry.entry_id}")
+        await self._async_siren(False, outputs)
         await async_append_audit_log(
-            self.hass,
-            "panic_stopped",
-            f"Pánico detenido; restaurado a {_MODE_LABELS.get(previous_state.value, previous_state.value)}",
-            user=await self._get_context_user(),
-            entry_id=self._config_entry.entry_id,
+            self.hass, "panic_stopped", "SOS detenido",
+            user=await self._get_context_user(), entry_id=self._config_entry.entry_id,
         )
 
     @callback

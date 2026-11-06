@@ -19,6 +19,7 @@ def load_module(name: str, file_path: Path):
     return mod
 
 
+load_module("state_machine", COMPONENT / "core" / "state_machine.py")
 spatial = load_module("argus.core.spatial", COMPONENT / "core" / "spatial.py")
 
 

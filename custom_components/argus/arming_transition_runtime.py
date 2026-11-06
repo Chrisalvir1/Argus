@@ -11,6 +11,7 @@ consume the same event and apply its protocol-specific target-state mapping.
 from __future__ import annotations
 
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+from homeassistant.core import callback
 from homeassistant.helpers.event import async_call_later
 
 _INTERVAL_SECONDS = 15
@@ -40,6 +41,7 @@ def install_arming_transition_runtime() -> None:
     def schedule_transition_refresh(self) -> None:
         cancel_transition_refresh(self)
 
+        @callback
         def pulse(_now) -> None:
             self._argus_transition_refresh_unsub = None
             if (

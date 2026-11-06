@@ -60,11 +60,11 @@ class TestV251AuditAndCleanup(unittest.TestCase):
 
     def test_sensor_state_and_battery_detection_in_console(self):
         """SecurityConsole must handle battery_percentage, companion lookups, and multi-state intrusion."""
-        self.assertIn("battery_percentage", CONSOLE_SRC)
+        self.assertIn("battery_percentage", PANEL_SRC)
         self.assertIn("_getSensorBattery", CONSOLE_SRC)
-        self.assertIn("intrusionStates", CONSOLE_SRC)
-        self.assertIn("unlocked", CONSOLE_SRC)
-        self.assertIn("recording", CONSOLE_SRC)
+        self.assertIn("bridge.isSensorActive(sState)", CONSOLE_SRC)
+        self.assertIn("unlocked", (ROOT / "src/features/dashboard/argus-panel-bridge.ts").read_text())
+        self.assertIn("recording", (ROOT / "src/features/dashboard/argus-panel-bridge.ts").read_text())
 
     def test_pdf_export_logo_and_local_date_contract(self):
         """PDF export must fetch real logo and use local date without UTC offset."""

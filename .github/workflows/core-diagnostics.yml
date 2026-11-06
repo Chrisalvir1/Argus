@@ -17,16 +17,16 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: home-assistant/core
-          ref: 2026.10.0
+          ref: 2026.11.0
           path: home-assistant-core
       - uses: actions/setup-python@v7
         with:
           python-version: '3.14'
-      - name: Install Home Assistant Core 2026.10.0 test dependencies
+      - name: Install Home Assistant Core 2026.11.0 test dependencies
         run: |
           python -m pip install uv==0.12.19
           cd home-assistant-core
           uv pip install --system -r requirements.txt -r requirements_test.txt
           uv pip install --system -e . --no-deps
       - name: Test privacy-safe Argus diagnostics against Core
-        run: PYTHONPATH="$GITHUB_WORKSPACE" python -m pytest -q tests_core/test_argus_diagnostics.py
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python -c 'import homeassistant.core; import pytest; raise SystemExit(pytest.main(["-q", "tests_core/test_argus_diagnostics.py"]))'

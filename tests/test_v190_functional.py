@@ -200,6 +200,11 @@ class TestV190Functional(unittest.IsolatedAsyncioTestCase):
     async def test_perform_alarm_action(self, mock_audit, mock_resolve_alarm, mock_require_perm, mock_require_session):
         from custom_components.argus.websocket_api import ws_argus_perform_alarm_action
         hass = AsyncMock()
+        import asyncio
+        hass.async_create_task = lambda coroutine: asyncio.create_task(coroutine)
+        hass.data = {}
+        hass.states = MagicMock()
+        hass.states.get.return_value = type("State", (), {"state": "armed_away"})()
         connection = MagicMock()
         
         mock_require_session.return_value = ({"name": "Admin"}, "user1")
@@ -214,8 +219,9 @@ class TestV190Functional(unittest.IsolatedAsyncioTestCase):
         hass.services.async_call.assert_called_once()
         kwargs = hass.services.async_call.call_args[1]
         self.assertTrue(kwargs.get("blocking"))
-        mock_audit.assert_called_once()
-        connection.send_result.assert_called_with(20, {"success": True})
+        await asyncio.sleep(0)
+        mock_audit.assert_awaited_once()
+        connection.send_result.assert_called_with(20, {"success": True, "state": "armed_away"})
         
         # Test 2: Service fails
         hass.services.async_call.reset_mock()

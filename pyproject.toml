@@ -5,7 +5,7 @@ requires-python = ">=3.14,<3.16"
 dependencies = []
 
 [tool.argus.runtime]
-python = "3.14"
-node = "26.13-lts"
+python = "3.14.10"
+node = "26.13.0-lts"
 typescript = "7.0.2"
 ecmascript = "ES2025"
