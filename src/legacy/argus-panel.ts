@@ -7244,7 +7244,7 @@ class ArgusPanel extends HTMLElement {
             const rgb = Array.isArray(setting.rgb_color) ? setting.rgb_color : [255, 0, 0];
             const hex = '#' + rgb.map(v => Number(v).toString(16).padStart(2, '0')).join('');
             const flash = setting.flash_mode || (setting.gentle_flash ? 'gentle' : 'none');
-            return `<details class="light-siren-settings" data-light-output="${this._escapeHtml(x)}"><summary>⚙ ${this._escapeHtml(attrs.friendly_name || x)}</summary>${rgbSupported ? `<label>Color de alarma <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}" ${readonly ? 'disabled' : ''}></label>` : '<p class="small">Esta luz no anuncia control de color RGB.</p>'}<label>Efecto de alarma<select data-light-siren-mode="${this._escapeHtml(x)}" ${readonly ? 'disabled' : ''}><option value="none" ${flash === 'none' ? 'selected' : ''}>Color fijo</option>${breathing ? `<option value="breathing" ${flash === 'breathing' ? 'selected' : ''}>Respiración media · conserva el color</option>` : ''}<option value="gentle" ${flash === 'gentle' ? 'selected' : ''}>Destello suave</option></select></label><p class="small">Al desarmar, Argus restaura el estado anterior que Home Assistant haya proporcionado.</p></details>`;
+            return `<details class="light-siren-settings" data-light-output="${this._escapeHtml(x)}"><summary><strong>${this._escapeHtml(attrs.friendly_name || x)}</strong><span class="small">Color y animación de esta luz</span></summary>${rgbSupported ? `<label>Color de alarma <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}" ${readonly ? 'disabled' : ''}></label>` : '<p class="small">Esta luz no anuncia control de color RGB.</p>'}<label>Efecto de alarma<select data-light-siren-mode="${this._escapeHtml(x)}" ${readonly ? 'disabled' : ''}><option value="none" ${flash === 'none' ? 'selected' : ''}>Color fijo</option>${breathing ? `<option value="breathing" ${flash === 'breathing' ? 'selected' : ''}>Respiración media</option><option value="breathing_slow" ${flash === 'breathing_slow' ? 'selected' : ''}>Respiración lenta</option><option value="breathing_fast" ${flash === 'breathing_fast' ? 'selected' : ''}>Respiración rápida</option>` : ''}<option value="gentle" ${flash === 'gentle' ? 'selected' : ''}>Destello suave</option></select></label><p class="small">Al desarmar, Argus restaura el estado anterior que Home Assistant haya proporcionado.</p></details>`;
           }).join('')}
           ${sirens.map(id => {
             const attrs = this._hass?.states?.[id]?.attributes || {};
@@ -7324,9 +7324,11 @@ class ArgusPanel extends HTMLElement {
       return;
     }
     const assigned = (this._zonesEnabled ? this._zoneList : []).filter((zone: any) => zone.enabled !== false && (zone.modes || []).includes(this._mode));
+    const orphanSensors = (this._currentModeConfig().sensors || []).filter((id: string) => !this._zoneList.some((zone: any) => zone.entity_ids?.includes(id)));
     container.innerHTML = `<div class="mode-section-title">🛡️ Zonas asignadas a este modo</div>${assigned.length
       ? `<div class="mode-zone-summary-items${assigned.length > 1 ? ' is-scrollable' : ''}">${assigned.map((zone: any) => `<div class="mode-zone-assigned"><strong>Zona ${this._escapeHtml(zone.number)}</strong><span>${this._escapeHtml(zone.area || zone.name)} · ${(zone.entity_ids || []).length} sensor${(zone.entity_ids || []).length === 1 ? '' : 'es'}</span></div>`).join('')}</div>`
       : `<p class="small">${this._zonesEnabled ? 'No hay zonas asignadas a este modo. Configúralas en la pestaña Zonas.' : 'Zonas desactivadas. Se conservan los sensores configurados por modo. Puedes activarlas en la pestaña Zonas.'}</p>`}`;
+    if (orphanSensors.length) container.insertAdjacentHTML('beforeend', `<div class="mode-section-title">Sensores activos sin zona</div><p class="small">Se mantienen protegidos. Abre una zona e importa los sensores del modo actual para revisar su asignación.</p><div class="mode-sensor-grid">${orphanSensors.map((id: string) => this._chip(id, 'sensor')).join('')}</div>`);
   }
 
   _guardZoneDraft(continueTo: () => void): boolean {
@@ -7430,7 +7432,7 @@ class ArgusPanel extends HTMLElement {
     const draft = this._zoneDraft;
     const dirty = draft && JSON.stringify(draft) !== JSON.stringify(this._zoneList.find((zone: any) => zone.id === draft.id));
     const activeEntityId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
-    const modeConfigs = Object.values(this._ui?.modes?.__by_entity__?.[activeEntityId] || {}) as any[];
+    const modeConfigs = Object.values(this._ui?.modes?.__by_entity__?.[activeEntityId] || this._ui?.modes || {}) as any[];
     const legacySensors = [...new Set(modeConfigs.flatMap((config: any) => Array.isArray(config?.sensors) ? config.sensors : []))];
     const unassigned = legacySensors.filter((id: string) => !zones.some((zone: any) => zone.entity_ids?.includes(id)));
     container.innerHTML = `
@@ -7446,6 +7448,7 @@ class ArgusPanel extends HTMLElement {
           <label class="zone-field">Área personalizable<input data-zone-field="area" list="argus-zone-areas" value="${this._escapeHtml(draft.area || '')}" maxlength="80" placeholder="Ej. Cocina"></label>
           <datalist id="argus-zone-areas">${ownAreas.map((area: string) => `<option value="${this._escapeHtml(area)}"></option>`).join('')}</datalist>
           <fieldset class="zone-mode-fieldset"><legend>Activar zona en</legend><div class="zone-mode-options">${['disarmed','home','away','night'].map((mode: string) => `<label class="zone-mode-chip"><input type="checkbox" data-zone-mode="${mode}" ${draft.modes?.includes(mode) ? 'checked' : ''}> ${({disarmed:'Desarmado',home:'En Casa',away:'Ausente',night:'Noche'} as any)[mode]}</label>`).join('')}</div></fieldset>
+          <button type="button" class="ghost" data-zone-import-mode>Importar sensores del modo actual para revisar antes de guardar</button>
           <label class="zone-field">Sensores de esta zona<input class="zone-sensor-search" type="search" data-zone-search placeholder="Buscar por nombre o entidad"></label>
           <div class="zone-sensor-list">${this._zoneEntities.map((entity: any) => {
             const assignedElsewhere = zones.find((other: any) => other.id !== draft.id && other.entity_ids?.includes(entity.entity_id));
@@ -7484,6 +7487,15 @@ class ArgusPanel extends HTMLElement {
       const number = Array.from({length:10}, (_, i) => i + 1).find(n => !zones.some((zone: any) => zone.number === n));
       const add = () => { this._zoneDraft = {id: crypto.randomUUID(), number, name: `Zona ${number}`, area:'', modes:[], entity_ids:[], device_ids:[], enabled:true, sensor_settings:{}}; this._zoneOpenId = this._zoneDraft.id; this._zoneDecision = null; this._renderZones(container); };
       if (this._guardZoneDraft(add)) add();
+    });
+    container.querySelector('[data-zone-import-mode]')?.addEventListener('click', () => {
+      const config = this._currentModeConfig();
+      const ids = (config.sensors || []).filter((id: string) => !zones.some((zone: any) => zone.id !== this._zoneDraft.id && zone.entity_ids?.includes(id)));
+      this._zoneDraft.entity_ids = [...new Set([...this._zoneDraft.entity_ids, ...ids])];
+      this._zoneDraft.modes = [...new Set([...this._zoneDraft.modes, this._mode])];
+      this._zoneDraft.sensor_settings ||= {};
+      for (const id of ids) this._zoneDraft.sensor_settings[id] ||= this._zoneSettingForSensor(id);
+      this._renderZones(container);
     });
     container.querySelectorAll<HTMLElement>('[data-zone-field]').forEach(input => input.addEventListener('input', () => {this._zoneDraft[input.dataset.zoneField] = (input as HTMLInputElement).value;}));
     container.querySelectorAll<HTMLInputElement>('[data-zone-mode]').forEach(input => input.addEventListener('change', () => {this._zoneDraft.modes = [...container.querySelectorAll<HTMLInputElement>('[data-zone-mode]:checked')].map(item => item.dataset.zoneMode);}));
@@ -7563,6 +7575,7 @@ class ArgusPanel extends HTMLElement {
   _renderVoiceSettings(container: HTMLElement) {
     const details = document.createElement('details');
     details.className = 'mode-section-card argus-mode-voice-card';
+    details.open = true;
     details.style.cssText = 'border-radius:18px;padding:16px;box-sizing:border-box';
     details.innerHTML = `<summary style="cursor:pointer;font-weight:800">🔊 Voz de Argus · Configuración general</summary><div class="argus-voice-body small" style="padding-top:12px">Configura la voz una sola vez para todos los modos.</div>`;
     const voiceSlot = container.querySelector('#mode-voice-slot');
@@ -7572,7 +7585,7 @@ class ArgusPanel extends HTMLElement {
       const body = details.querySelector('.argus-voice-body') as HTMLElement;
       body.textContent = 'Cargando…';
       try {
-        const data = await this._send('argus/get_voice_config', {entry_id: this._dashboard?.entry_id});
+        const data = await this._send('argus/get_voice_config', {entry_id: this._zoneEntryId()});
         if (!details.isConnected) return;
         (details as any).__voiceLoaded = true;
         const values = data.values || {};
@@ -10097,13 +10110,14 @@ class ArgusPanel extends HTMLElement {
     const profId = this._currentProfile?.id || 'default';
     try {
       const stored = localStorage.getItem(`argus_shield_${profId}`);
-      if (stored === 'crystal' || stored === 'argus') return stored;
+      if (stored === 'argus') return stored;
+      if (stored === 'crystal') localStorage.setItem(`argus_shield_${profId}`, 'core');
     } catch (_) {}
     return 'core';
   }
 
   _setProfileShieldStyle(style: string): void {
-    if (!['core', 'crystal', 'argus'].includes(style)) return;
+    if (!['core', 'argus'].includes(style)) return;
     const profId = this._currentProfile?.id || 'default';
     try { localStorage.setItem(`argus_shield_${profId}`, style); } catch (_) {}
     this.dispatchEvent(new CustomEvent('argus-state-update'));
@@ -10353,7 +10367,6 @@ class ArgusPanel extends HTMLElement {
           <label for="dropdown-shield-select" style="font-size:11.5px;font-weight:700;opacity:.85;">✧ Emblema de seguridad</label>
           <select id="dropdown-shield-select" class="glass-control" aria-label="Emblema de seguridad" style="width:100%;height:38px;border-radius:10px;padding:0 12px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid var(--v2066-border);color:var(--v2066-text);outline:none;cursor:pointer;">
             <option value="core" ${this._getProfileShieldStyle() === 'core' ? 'selected' : ''}>Núcleo de seguridad · Predeterminado</option>
-            <option value="crystal" ${this._getProfileShieldStyle() === 'crystal' ? 'selected' : ''}>Escudo de cristal</option>
             <option value="argus" ${this._getProfileShieldStyle() === 'argus' ? 'selected' : ''}>Emblema Argus</option>
           </select>
         </div>

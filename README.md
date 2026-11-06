@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.0.0
+### Argus v3.0.1
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -27,11 +27,26 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 
 ---
 
+## Novedades de v3.0.1
+
+- Zonas opcionales: los sensores heredados siguen visibles y pueden importarse al borrador de una zona antes de guardar. Revisa las condiciones si un sensor tenía reglas diferentes por modo.
+- Cabecera y núcleo separados en pantalla completa vertical; verificación en una vista desplazable y oculta cuando zonas están desactivadas.
+- Núcleo de seguridad y Emblema Argus disponibles en el perfil; las preferencias antiguas de Escudo de cristal vuelven al Núcleo.
+- Configuración de voz desplegada y vinculada a la alarma seleccionada. Los mensajes son generales y usan el contexto de modos, zonas y sensores.
+- Color y efecto por luz compatible, con respiración lenta, media o rápida cuando Home Assistant declara soporte de transiciones.
+- Historial adaptado a alto contraste, incluida la fecha y el usuario.
+
+Lee las [notas de v3.0.1](docs/RELEASE_NOTES_3.0.1.md). La validación visual en iPhone, las luces físicas y el error TTS concreto siguen pendientes.
+
+## Dependencias y entorno de desarrollo
+
+Versiones fijadas por el lockfile: React/React DOM 19.3.1, Vite 8.3.6, TypeScript 7.0.2, Three.js 0.187.0 y react-grid-layout 2.3.0. El entorno declarado usa Node.js 26.13.0 y Python 3.14.10. La integración no instala paquetes Python adicionales y usa el Python proporcionado por Home Assistant. Estas versiones describen el entorno declarado; no sustituyen las pruebas en tu instalación.
+
 ## 📖 ¿Qué es Argus Home Hub?
 
 **Argus Home Hub** es un centro de seguridad residencial avanzado, local e independiente para Home Assistant, diseñado para proteger tu hogar con total privacidad, sin suscripciones mensuales y sin depender de servicios externos en la nube. 
 
-Construido sobre una arquitectura ultra-ligera de última generación con **TypeScript 7 + Vite 8.3 + React 19.3 + react-grid-layout 2.2**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones móviles inteligentes y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
+Construido sobre una arquitectura ultra-ligera de última generación con **TypeScript 7 + Vite 8.3 + React 19.3 + react-grid-layout 2.3**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones móviles inteligentes y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
 
 ### Arquitectura
 

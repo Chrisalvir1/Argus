@@ -967,3 +967,62 @@
 :host .entry.entry .security-console.security-console .security-context > .console-sensors {
   grid-area: auto !important;
 }
+
+/* Portrait fullscreen keeps the header and emblem in independent flow rows. */
+@media (max-width: 760px) and (orientation: portrait) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    height: auto !important;
+    min-height: 100%;
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+    overflow: visible !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-hud {
+    position: relative !important;
+    inset: auto !important;
+    flex: 0 0 auto;
+    order: -2;
+    width: 100% !important;
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon {
+    position: relative !important;
+    inset: auto !important;
+    flex: 0 0 auto;
+    min-height: 240px;
+    order: -1;
+  }
+  :host .entry.entry.ios-fullscreen .context-verification-dialog {
+    position: fixed !important;
+    inset: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) !important;
+    z-index: 100001;
+    overflow-y: auto;
+    background: #111a22;
+    padding: 18px;
+    border-radius: 20px;
+  }
+}
+.context-verify-entry[data-pending="true"] {
+  border-color: #ffb340;
+  box-shadow: inset 0 0 0 1px #ffb340;
+}
+
+:host .light-siren-settings {
+  margin-block: 10px;
+  padding: 14px;
+  border: 1px solid var(--argus-border, #ffffff40);
+  border-radius: 16px;
+  background: var(--argus-card-bg, #18212b);
+}
+:host .light-siren-settings summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+:host .light-siren-settings label { display: grid; grid-template-columns: minmax(0,1fr) minmax(80px,1fr); align-items: center; gap: 12px; margin-block: 14px; }
+:host .light-siren-settings select { min-width: 0; width: 100%; padding: 10px; border-radius: 12px; background: #111a22; color: white; border: 1px solid #ffffff70; }
+:host([argus-contrast="high"]) .log-item,
+:host(.argus-contrast-high) .log-item { background: #000 !important; color: #fff !important; border: 2px solid #fff !important; backdrop-filter: none !important; }
+:host([argus-contrast="high"]) .log-item *,
+:host(.argus-contrast-high) .log-item * { color: #fff !important; opacity: 1 !important; text-shadow: none !important; }
+:host([argus-contrast="high"]) .log-meta,
+:host(.argus-contrast-high) .log-meta { color: #fff !important; }
