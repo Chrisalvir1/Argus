@@ -190,7 +190,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   }).map((sensor: any) => sensor.id);
   const pulse = alarmActive ? 'sos' : openSensorIds.length ? 'sensor' : '';
   const pulseKey = pulse === 'sos' ? `sos:${entry.entity_id}` : openSensorIds.join('|');
-  const configuredZones = (panel._ui?.zones || []).filter((zone: any) => zone.enabled !== false);
+  const configuredZones = (panel._ui?.zones_enabled !== false ? panel._ui?.zones || [] : []).filter((zone: any) => zone.enabled !== false);
   const triggeredSensorId = hass?.states?.[entry.entity_id]?.attributes?.triggered_by;
   const zones = configuredZones.map((zone: any, index: number) => ({
     id: zone.id, name: `Zona ${zone.number || index + 1}`, area: zone.area || '', number: zone.number || index + 1,
@@ -203,7 +203,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   }));
   const walk = panel._walkTestEntryId === entry.entry_id ? panel._walkTestSession : null;
   const testing = Boolean(walk?.active);
-  const selectContextZone = (id: string | null) => { setSelectedZoneId(id); setDiagnosticOpen(false); setChooseTest(false); setIncidentOpen(false); };
+  const selectContextZone = (id: string | null) => { setSelectedZoneId(id); setVerificationOpen(Boolean(id)); setDiagnosticOpen(false); setChooseTest(false); setIncidentOpen(false); };
   const selectedZone = configuredZones.find((zone: any) => zone.id === selectedZoneId);
   const incidentZone = zones.find((zone: any) => zone.triggered);
   const incidentSensor = triggeredSensorId && hass?.states?.[triggeredSensorId];
@@ -304,7 +304,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
         <div className={`entry-icon ${alarmActive ? 'sos-core-active' : ''}`}>
             <div className="console-emblem-viewport">
-            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} variant={panel._getProfileShieldStyle?.() || 'core'} pulse={panicActive ? 'sos' : pulse} pulseKey={pulseKey} zones={zones} zonesEnabled={panel._ui?.zones_enabled !== false} onSelectZone={selectContextZone} />
+            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} variant={panel._getProfileShieldStyle?.() || 'core'} pulse={panicActive ? 'sos' : pulse} pulseKey={pulseKey} zones={zones} zonesEnabled={configuredZones.length > 0} onSelectZone={selectContextZone} />
             </div>
           </div>
 
@@ -352,7 +352,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               { label: 'Pendientes', value: pendingZones },
             ]}
             selection={<>
-              <button hidden={verificationOpen} ref={verificationOrigin} className="context-tool context-verify-entry" type="button"
+              <button hidden={verificationOpen || !configuredZones.length} ref={verificationOrigin} className="context-tool context-verify-entry" data-pending={pendingZones > 0 ? "true" : "false"} type="button"
                 onClick={() => setVerificationOpen(true)}>
                 <strong>Verificar zonas</strong><span>Revisar todas las zonas o una individualmente.</span>
               </button>
@@ -461,7 +461,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 : state === 'disarmed' && !isPending
                   ? Array.from(new Set<string>(configuredZones.flatMap((zone: any) => zone.entity_ids || []).concat(sortedSensors.map((sensor: any) => sensor.id))))
                     .map(id => sortedSensors.find((sensor: any) => sensor.id === id) || { id })
-                  : isWaiting ? blockingSensors.map((id: string) => ({ id })) : sortedSensors).map((sensor: any) => {
+                  : configuredZones.length && !selectedZone && isWaiting ? [] : isWaiting ? blockingSensors.map((id: string) => ({ id })) : sortedSensors).map((sensor: any) => {
                 const normalizedId = String(sensor.id || '').trim();
                 // Always read from panel._hass which is updated on every hass change
                 const sState = readEntity(normalizedId);

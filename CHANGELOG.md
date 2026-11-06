@@ -1,3 +1,13 @@
+## [3.0.1] - 2026-11-06
+
+- Mostrar sensores heredados de modos globales y permitir importarlos al borrador de una zona para revisar antes de guardar.
+- Separar cabecera y núcleo en pantalla completa vertical y abrir verificación en una capa desplazable.
+- Ocultar verificación sin zonas activas y destacar zonas pendientes.
+- Retirar Escudo de cristal del perfil; preferencias antiguas vuelven a Núcleo.
+- Abrir la configuración TTS desplegada y consultar la alarma seleccionada.
+- Color por luz y respiración lenta/media/rápida con soporte de transición; historial con alto contraste.
+- Validación física y diagnóstico de errores TTS concretos pendientes; ver docs/audits/V3_ZONES_PORTRAIT.md.
+
 ## [3.0.0] - 2026-11-06
 
 Detalles completos: [notas v3.0.0](docs/RELEASE_NOTES_3.0.0.md), [migración](docs/MIGRATION_3.0.0.md) y [YAML opcional](examples/configuration.yaml).

@@ -20,7 +20,7 @@ from .storage import async_save_ui_data
 
 _LOGGER = logging.getLogger(__name__)
 _ALLOWED_OUTPUT_DOMAINS = {"alarm_control_panel", "fan", "input_boolean", "light", "script", "siren", "switch"}
-_FLASH_MODES = {"none", "gentle", "rapid", "breathing"}
+_FLASH_MODES = {"none", "gentle", "rapid", "breathing", "breathing_slow", "breathing_fast"}
 _COLOR_MODES = {"hs", "xy", "rgb", "rgbw", "rgbww"}
 _NATIVE_EFFECT_NAMES = {"flash", "slow flash", "slow_flash", "blink", "strobe", "police"}
 
@@ -120,11 +120,12 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, st
         data["brightness_pct"] = 100
 
     flash_mode = str(settings.get("flash_mode") or ("gentle" if settings.get("gentle_flash") else "none"))
-    if flash_mode == "breathing":
+    if flash_mode in {"breathing", "breathing_slow", "breathing_fast"}:
         # HA LightEntityFeature.TRANSITION = 32; never invent native effects.
         if supports_brightness and int(attrs.get("supported_features") or 0) & 32:
-            data["transition"] = 1.2
-            return data, "brightness_pulse", 1.5
+            duration = {"breathing_slow": 2.5, "breathing": 1.2, "breathing_fast": 0.6}[flash_mode]
+            data["transition"] = duration
+            return data, "brightness_pulse", duration + 0.3
         return data, "steady_safe", 0.0
     if flash_mode == "none":
         return data, "steady", 0.0

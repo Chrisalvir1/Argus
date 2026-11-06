@@ -6,7 +6,7 @@ import { SecurityContext } from './SecurityContext';
 
 afterEach(() => vi.unstubAllGlobals());
 
-function renderContext(admin: boolean, doorState = 'off') {
+function renderContext(admin: boolean, doorState = 'off', zonesEnabled = true) {
   vi.stubGlobal('document', {});
   const alarm = 'alarm_control_panel.fixture';
   const door = 'binary_sensor.door';
@@ -15,6 +15,7 @@ function renderContext(admin: boolean, doorState = 'off') {
     classList: { contains: () => false },
     _dashboard: { entries: [{ entity_id: alarm, entry_id: 'fixture' }] },
     _ui: {
+      zones_enabled: zonesEnabled,
       zones: [{ id: 'patio', area: 'Patio', entity_ids: [door, window] }],
       modes: { away: { sensors: [door, window] } },
     },
@@ -104,4 +105,14 @@ it('replaces contextual results and navigation while verification is open', () =
   expect(html).not.toContain('Detalle anterior');
   expect(html).not.toContain('Anterior');
   expect(html).not.toContain('context-indicators');
+});
+
+it('hides zone verification when zones are explicitly disabled', () => {
+  const html = renderContext(true, 'off', false);
+  expect(html).toMatch(/<button hidden=""[^>]*context-verify-entry/);
+});
+
+it('keeps zone verification available when zones are enabled', () => {
+  const html = renderContext(true);
+  expect(html).not.toMatch(/<button hidden=""[^>]*context-verify-entry/);
 });
