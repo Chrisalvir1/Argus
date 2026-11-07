@@ -51,8 +51,8 @@ it('keeps partial protection visible but hides the administrative action for a s
 it('classifies a live open HA contact without an optional panel helper', () => {
   const html = renderContext(false, 'on');
   expect(html).toContain('Zonas que requieren atención: 1.');
-  expect(html).toContain('<dt>Listas</dt><dd>0</dd>');
-  expect(html).toContain('<dt>Pendientes</dt><dd>1</dd>');
+  expect(html).toContain('<dt><button type="button" aria-label="Ver listas">Listas</button></dt><dd>0</dd>');
+  expect(html).toContain('<dt><button type="button" aria-label="Ver pendientes">Pendientes</button></dt><dd>1</dd>');
 });
 
 it('shows that a recovered sensor remains omitted even for a standard profile', () => {
@@ -66,8 +66,8 @@ it.each(['recording', 'active', 'abierto', 'activa', 'true', '1', 'tamper', 'vib
   'preserves contextual pending status for the active HA value %s', state => {
     const html = renderContext(false, state);
     expect(html).toContain('Zonas que requieren atención: 1.');
-    expect(html).toContain('<dt>Listas</dt><dd>0</dd>');
-    expect(html).toContain('<dt>Pendientes</dt><dd>1</dd>');
+    expect(html).toContain('<dt><button type="button" aria-label="Ver listas">Listas</button></dt><dd>0</dd>');
+    expect(html).toContain('<dt><button type="button" aria-label="Ver pendientes">Pendientes</button></dt><dd>1</dd>');
   },
 );
 

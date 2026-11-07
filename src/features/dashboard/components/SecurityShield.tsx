@@ -4,6 +4,7 @@ import { MODE_PALETTE } from './mode-palette';
 
 /** Lightweight SVG retains motion when the 3D renderer is unavailable. */
 function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled, onSelectZone }: EmblemProps) {
+  const rotor = useRef<SVGGElement>(null);
   const [reducedMotion, setReducedMotion] = useState(true);
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -12,6 +13,20 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled, onSe
     query.addEventListener('change', update);
     return () => query.removeEventListener('change', update);
   }, []);
+  useEffect(() => {
+    if (reducedMotion) { rotor.current?.removeAttribute('transform'); return; }
+    let frame = 0;
+    let previous = 0;
+    let angle = 0;
+    const animate = (now: number) => {
+      if (previous && !document.hidden) angle = (angle + Math.min(now - previous, 100) * .0143) % 360;
+      previous = now;
+      rotor.current?.setAttribute('transform', `rotate(${angle} 80 80)`);
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [reducedMotion]);
   const alarmed = state === 'triggered' || pulse === 'sos';
   const count = zonesEnabled === false ? 7 : (zones?.length || 0);
   if (zonesEnabled === false) zones = [];
@@ -20,12 +35,13 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled, onSe
     : state === 'disarmed' ? MODE_PALETTE.disarmed.css : '#a4aab4';
   return <svg role="img" aria-label={[label, ...(zones || []).map(zone => `Zona ${zone.number}: ${zone.area || "Sin área"}`)].join(". ")} className="console-emblem-unavailable" viewBox="0 0 160 160"
     style={{ width: '90%', height: '90%', maxWidth: 380, maxHeight: 380 }}>
-    <g>
-      {!reducedMotion && <animateTransform key={state + ':' + Boolean(alarmed)} attributeName="transform" type="rotate"
-        values={state === 'disarmed' || alarmed ? '0 80 80;360 80 80' : '-2 80 80;2 80 80;-2 80 80'}
-        dur={alarmed ? '4s' : state === 'disarmed' ? '25.13s' : '12s'} repeatCount="indefinite" />}
-    <circle opacity={count ? 1 : 0} cx="80" cy="80" r="55" fill="none" stroke={accent} strokeWidth="15" strokeDasharray={count ? `${(2 * Math.PI * 55 / count) * .79} ${(2 * Math.PI * 55 / count) * .21}` : undefined}
+    <g ref={rotor}>
+    <circle opacity={count && !zones?.length ? 1 : 0} cx="80" cy="80" r="55" fill="none" stroke={accent} strokeWidth="15" strokeDasharray={count ? `${(2 * Math.PI * 55 / count) * .79} ${(2 * Math.PI * 55 / count) * .21}` : undefined}
       strokeDashoffset={zones?.length ? (2 * Math.PI * 55 / zones.length) * .395 : undefined} />
+    {zones?.map((zone, index) => <circle key={`arc-${zone.id}`} cx="80" cy="80" r="55" fill="none"
+      stroke={zone.open ? '#ff302b' : '#21dba0'} strokeWidth="15"
+      strokeDasharray={`${(2 * Math.PI * 55 / zones.length) * .79} ${2 * Math.PI * 55}`}
+      transform={`rotate(${index * 360 / zones.length - 90 - (360 / zones.length) * .395} 80 80)`} />)}
     {zones?.map((zone, index) => {
       const angle = index * 2 * Math.PI / zones.length - Math.PI / 2;
       const tangent = angle * 180 / Math.PI + 90;
@@ -55,11 +71,13 @@ export function SecurityShield(props: EmblemProps) {
   useEffect(() => {
     const host = (anchor.current?.getRootNode() as ShadowRoot)?.host;
     if (!host) return;
-    const update = () => setLightweight(host.classList.contains('argus-perf-essential'));
+    const compactTouch = window.matchMedia('(pointer: coarse) and (max-height: 600px)');
+    const update = () => setLightweight(host.classList.contains('argus-perf-essential') || compactTouch.matches);
+    compactTouch.addEventListener('change', update);
     update();
     const observer = new MutationObserver(update);
     observer.observe(host, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); compactTouch.removeEventListener('change', update); };
   }, []);
   const fallback = <SecurityShieldFallback {...props} />;
   return <span ref={anchor} style={{display: 'contents'}}>

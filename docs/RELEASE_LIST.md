@@ -2,6 +2,7 @@
 
 | Versión | Descripción | Notas |
 |---|---|---|
+| 3.7.2 | Panel de zonas y voz contextual con editor sencillo | [Notas](RELEASE_NOTES_3.7.2.md) |
 | 3.7.1 | Fullscreen horizontal bajo | [Notas](RELEASE_NOTES_3.7.1.md) |
 | 3.7.0 | Verificación fullscreen y contexto de zonas | [Notas](RELEASE_NOTES_3.7.0.md) |
 | 3.0.6 | TTS directo, selectores y ajustes responsive | [Notas](RELEASE_NOTES_3.0.6.md) |

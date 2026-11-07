@@ -105,3 +105,22 @@ class TestHomeKitTransitionRuntime(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HomeKitVoiceSourceTests(unittest.TestCase):
+    def test_tracks_context_and_entity_and_expires_without_leaking(self):
+        runtime = load_runtime()
+        listeners, expirations = {}, []
+        hass = types.SimpleNamespace(data={}, bus=types.SimpleNamespace(async_listen=lambda name, fn: listeners.setdefault(name, fn)), loop=types.SimpleNamespace(call_later=lambda delay, fn: expirations.append(fn)))
+        core = types.ModuleType('homeassistant.core')
+        core.callback = lambda fn: fn
+        with patch.dict(sys.modules, {'homeassistant.core': core}):
+            runtime._install_voice_source_listener(hass)
+            runtime._install_voice_source_listener(hass)
+        self.assertEqual(len(listeners), 1)
+        event = types.SimpleNamespace(data={'entity_id': 'alarm_control_panel.argus'}, context=types.SimpleNamespace(id='hk'))
+        listeners['homekit_state_change'](event)
+        sources = hass.data['argus']['voice_action_contexts']
+        self.assertEqual(sources['hk'], {'source': 'HomeKit', 'entity_id': 'alarm_control_panel.argus'})
+        expirations[0]()
+        self.assertNotIn('hk', sources)

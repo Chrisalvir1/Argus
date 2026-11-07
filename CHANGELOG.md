@@ -1,3 +1,12 @@
+## [3.7.2] - 2026-11-06
+
+- Limitar diagnóstico y listas de zonas a sus sensores; conteos Listas/Pendientes accionables, cristales con acceso directo al diagnóstico y cierre coherente.
+- Corregir el área de contexto en fullscreen bajo y acotar listas de sensores.
+- Giro SVG mediante JavaScript en el fallback y pantallas táctiles bajas, con color por zona y respeto a movimiento reducido.
+- Editor TTS sencillo por aviso: frase, zonas y estados; conteos calculados con datos HA y conservación de textos anteriores.
+- Añadir modo real y sensor/zona causante a avisos personalizados; desarmado con perfil Argus autenticado o fuente HomeKit sin inventar la persona.
+- Documentación: docs/VOICE_EDITOR.md y docs/RELEASE_NOTES_3.7.2.md. Pruebas físicas de panel/audio pendientes.
+
 ## [3.7.1] - 2026-11-06
 
 - Distribución acotada para fullscreen horizontal de poca altura: cabecera, controles/núcleo y sensores desplazables.

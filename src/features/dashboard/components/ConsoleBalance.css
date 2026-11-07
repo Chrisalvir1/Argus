@@ -1287,7 +1287,7 @@
     max-width: none !important;
     overflow-y: auto !important;
   }
-  :host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors {
+  :host .entry.entry.ios-fullscreen .security-console.security-console > .security-context {
     grid-area: sensors !important;
     min-height: 0 !important;
     max-height: 100% !important;
@@ -1299,3 +1299,12 @@
     overflow-y: auto !important;
   }
 }
+
+/* Keep verification inside the active console and bound detailed results. */
+:host .entry.entry .security-console.security-console .context-verification-dialog:not([hidden]) {
+  position: static !important; inset: auto !important; width: 100% !important;
+  max-height: min(65vh, 600px) !important; overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+:host .entry.entry .security-console.security-console .context-indicators button { color: inherit; font: inherit; cursor: pointer; }
+:host .entry.entry .security-console.security-console .context-sensor-row { padding: 8px !important; margin-block: 4px !important; }

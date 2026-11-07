@@ -96,9 +96,35 @@ def _patch_homekit_security_system() -> bool:
     return True
 
 
+def _install_voice_source_listener(hass):
+    """Correlate the official HomeKit event with its service-call context."""
+    if not hasattr(hass, 'data'):
+        return
+    data = hass.data.setdefault('argus', {})
+    if data.get('voice_homekit_source_unsub'):
+        return
+    from homeassistant.core import callback
+
+    @callback
+    def remember(event):
+        entity_id = event.data.get('entity_id', '')
+        context_id = getattr(getattr(event, 'context', None), 'id', None)
+        if not context_id or not str(entity_id).startswith('alarm_control_panel.'):
+            return
+        sources = data.setdefault('voice_action_contexts', {})
+        record = {'source': 'HomeKit', 'entity_id': entity_id}
+        sources[context_id] = record
+        def expire():
+            if sources.get(context_id) is record:
+                sources.pop(context_id, None)
+        hass.loop.call_later(30, expire)
+    data['voice_homekit_source_unsub'] = hass.bus.async_listen('homekit_state_change', remember)
+
+
 def install_homekit_runtime(hass) -> bool:
     """Install now, or immediately after HomeKit becomes available."""
     global _LISTENER_UNSUB
+    _install_voice_source_listener(hass)
     if _patch_homekit_security_system():
         return True
     if _LISTENER_UNSUB is not None:

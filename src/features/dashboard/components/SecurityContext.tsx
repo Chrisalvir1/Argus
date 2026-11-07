@@ -8,7 +8,7 @@ export function SecurityContext({ title, detail, navigation, selection, focused,
   focused?: boolean;
   children?: ReactNode;
   overviewAttention?: boolean;
-  indicators?: { label: string; value: number | null }[];
+  indicators?: { label: string; value: number | null; onClick?: () => void }[];
   indicatorScope?: string;
   accent?: string;
   view?: string;
@@ -30,8 +30,8 @@ export function SecurityContext({ title, detail, navigation, selection, focused,
       {!focused && indicators && <section aria-label={`Zonas habilitadas · ${indicatorScope || "global"}`}>
         <span className="context-eyebrow">Zonas habilitadas · {indicatorScope || "global"}</span>
         <dl className="context-indicators">
-        {indicators.map(({ label, value }) => <div key={label}>
-          <dt>{label}</dt><dd>{value ?? <abbr title="No disponible">—</abbr>}</dd>
+        {indicators.map(({ label, value, onClick }) => <div key={label}>
+          <dt>{onClick ? <button type="button" onClick={onClick} aria-label={`Ver ${label.toLowerCase()}`}>{label}</button> : label}</dt><dd>{value ?? <abbr title="No disponible">—</abbr>}</dd>
         </div>)}
         </dl>
       </section>}

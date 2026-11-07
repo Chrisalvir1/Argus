@@ -119,7 +119,8 @@ export function ContextSensorChecks({ panel, entryId, zones, zone, online, state
 
   if (!visible || (!diagnostic && !choose && !(admin && session))) return null;
   const entity = (id: string) => (states || panel._hass?.states)?.[id];
-  const scopedRows = rows && (zone ? rows.filter(row => zone.entity_ids?.includes(row.entity_id)) : rows);
+  const allowedIds = new Set((zone ? [zone] : zones).flatMap(item => item.entity_ids || []));
+  const scopedRows = rows && rows.filter(row => allowedIds.has(row.entity_id));
   const compatible = scopedRows?.filter(row => row.physical_test_kind).length;
   const stateLabel = (row: Diagnosis) => {
     const current = entity(row.entity_id);
@@ -136,7 +137,7 @@ export function ContextSensorChecks({ panel, entryId, zones, zone, online, state
     return row.state || "Estado desconocido";
   };
   const name = (id: string) => entity(id)?.attributes?.friendly_name || id;
-  const zoneName = (item?: typeof zone) => item?.area || (item ? `Zona ${item.number ?? ''}` : 'Todas las zonas');
+  const zoneName = (item?: typeof zone) => item ? `Zona ${item.number ?? ''}${item.area ? ' · ' + item.area : ''}` : 'Zonas seleccionadas';
   const unavailable = (id: string) => !entity(id) || ['unknown', 'unavailable', 'offline'].includes(entity(id).state);
   const connectionLabel = (row: Diagnosis) => unavailable(row.entity_id) || row.availability === 'unavailable' ? 'Sin conexión' : 'Disponible';
   const batteryLabel = (row: Diagnosis) => {

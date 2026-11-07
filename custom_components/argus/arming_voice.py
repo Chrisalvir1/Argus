@@ -114,6 +114,37 @@ def _format_voice_template(template, values):
             return template
     return template
 
+async def _apply_message_rule(hass, entry, key, message, options, lang, *, mode='', alarm_entity_id='', closed=(), opened=(), event_sensor=None):
+    ui = await async_load_ui_data(hass, entry.entry_id)
+    rule = ui.get('voice_message_rules', {}).get(key)
+    if rule is None:
+        return message
+    from .voice_message_rules import build_rule_message
+    mode = str(mode or '').replace('armed_', '')
+    modes = ui.get('modes', {})
+    scoped = modes.get('__by_entity__', {}).get(alarm_entity_id, modes)
+    cfg = scoped.get(mode, {})
+    eligible = None
+    if 'sensors' in cfg:
+        excluded = set(cfg.get('bypassed_sensors', cfg.get('bypassedSensors', [])))
+        eligible = set(cfg.get('sensors', [])) - excluded
+    elif f'sensors_{mode}' in options:
+        eligible = set(options.get(f'sensors_{mode}', []) or [])
+    zones = ui.get('zones', []) if ui.get('zones_enabled', True) else []
+    if not zones and rule.get('zone_ids') is None:
+        if eligible is None:
+            eligible = set(options.get(f'sensors_{mode}', []) or []) if mode else set()
+        zones = [{'id': '__mode_sensors__', 'area': '', 'modes': [mode], 'entity_ids': sorted(eligible)}]
+    entities = {entity_id: hass.states.get(entity_id) for zone in zones for entity_id in zone.get('entity_ids', [])}
+    # Structured edits are plain text; old templates remain on the legacy path.
+    result = build_rule_message(options.get(key, ''), rule, zones, entities, mode=mode,
+                                eligible=eligible, closed=closed, opened=opened, lang=lang)
+    if mode in {'home', 'away', 'night'}:
+        result = _append_voice_sentence(result, ('Modo: ' if lang == 'es' else 'Mode: ') + translate(lang, 'armed_' + mode))
+    if event_sensor:
+        result = _append_voice_sentence(result, ('Sensor que activó la alarma: ' if lang == 'es' else 'Alarm trigger sensor: ') + event_sensor)
+    return result
+
 async def _async_speak(hass, options, message, lang):
   if not options.get(CONF_ARMING_VOICE_ENABLED, False): return
   tts = str(options.get(CONF_ARMING_VOICE_TTS, "") or "")
@@ -245,6 +276,7 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
           if current and not _has_voice_placeholder(custom_template, "sensors"):
               message = _append_voice_sentence(message, _auto_open_summary(lang, values["zone_count"], len(current), names, remaining=True))
 
+  message = await _apply_message_rule(hass, config_entry, message_key, message, options, lang, mode=target, alarm_entity_id=alarm_entity_id, closed=[i["entity_id"] for i in closed], opened=[i["entity_id"] for i in opened])
   hass.bus.async_fire("argus_arming_wait_update", {
       "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id, "mode": target, "mode_name": mode,
       "open_count": len(current), "open_sensors": current_info, "open_sensor_names": names,
@@ -269,6 +301,7 @@ async def async_announce_arming_cancelled(hass, config_entry, *, alarm_entity_id
   else:
       message = translate(lang, "msg_cancelled", mode=mode, home=config_entry.title, source=source)
 
+  message = await _apply_message_rule(hass, config_entry, CONF_ARMING_VOICE_MESSAGE_CANCELLED, message, options, lang, mode=target, alarm_entity_id=alarm_entity_id)
   hass.bus.async_fire("argus_arming_wait_cancelled", {
       "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id, "mode": target,
       "mode_name": mode, "source": source, "message": message
@@ -342,6 +375,7 @@ async def async_announce_alarm_triggered(hass, config_entry, *, alarm_entity_id,
   else:
       message = translate(lang, msg_key, **values)
 
+  message = await _apply_message_rule(hass, config_entry, key, message, options, lang, mode=mode, alarm_entity_id=alarm_entity_id, opened=[sensor_entity_id], event_sensor=sensor["spoken_name"])
   hass.bus.async_fire("argus_alarm_triggered", {
       "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id, "mode": mode, "mode_name": mode_name,
       "sensor":sensor, "sensor_name":sensor["spoken_name"], "sensor_entity_id": sensor_entity_id,
@@ -415,6 +449,7 @@ async def async_announce_alarm_sensor_closed(hass, config_entry, *, alarm_entity
           message = _append_voice_sentence(message, values["open_status"])
       elif not open_names and not _has_voice_placeholder(custom_template, "open_status", "sensors"):
           message = _append_voice_sentence(message, "Ya no quedan sensores abiertos." if lang == "es" else "No sensors remain open.")
+  message = await _apply_message_rule(hass, config_entry, CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED, message, options, lang, mode=mode, alarm_entity_id=alarm_entity_id, closed=[sensor_entity_id])
   hass.bus.async_fire("argus_alarm_sensor_closed", {
       "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id,
       "sensor_entity_id": sensor_entity_id, "closed_sensor": closed,
@@ -425,7 +460,7 @@ async def async_announce_alarm_sensor_closed(hass, config_entry, *, alarm_entity
 def install_cancel_announcement():return None
 
 
-async def async_announce_disarmed(hass, config_entry):
+async def async_announce_disarmed(hass, config_entry, *, actor_user_id=None, actor_profile_name=None, actor_source=None, previous_mode=None):
     """Announce only a server-confirmed transition to disarmed."""
     lang = await _get_language(hass, config_entry)
     options = _options(hass, config_entry)
@@ -435,4 +470,21 @@ async def async_announce_disarmed(hass, config_entry):
         message = message.format(mode=translate(lang, "disarmed"), home=config_entry.title)
     except (KeyError, ValueError):
         pass
+    message = await _apply_message_rule(hass, config_entry, "arming_voice_message_disarmed", message, options, lang, mode="disarmed")
+    actor_name = actor_profile_name if actor_source == 'Argus' else None
+    if not actor_name and actor_user_id and actor_source != 'HomeKit':
+        user = await hass.auth.async_get_user(actor_user_id)
+        if user and user.is_active:
+            # A service account is not proof of a person controlling HomeKit.
+            actor_name = ('cuenta de Home Assistant ' if lang == 'es' else 'Home Assistant account ') + str(user.name)
+    previous = str(getattr(previous_mode, 'value', previous_mode) or '')
+    if previous in {'home', 'away', 'night'}:
+        previous = 'armed_' + previous
+    if previous in {'armed_home', 'armed_away', 'armed_night'}:
+        message = _append_voice_sentence(message, ('Modo anterior: ' if lang == 'es' else 'Previous mode: ') + translate(lang, previous))
+    if actor_source == 'HomeKit':
+        message = _append_voice_sentence(message, 'Desarmado desde HomeKit. Persona no identificada por Apple Casa' if lang == 'es' else 'Disarmed from HomeKit. Apple Home did not identify the person')
+        await _async_speak(hass, options, message, lang)
+        return
+    message = _append_voice_sentence(message, (f'Desarmado por {actor_name}' if actor_name else 'Autor del desarmado no identificado') if lang == 'es' else (f'Disarmed by {actor_name}' if actor_name else 'Disarm actor not identified'))
     await _async_speak(hass, options, message, lang)

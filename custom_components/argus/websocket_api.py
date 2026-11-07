@@ -1042,6 +1042,7 @@ async def ws_argus_get_voice_config(hass, connection, msg) -> None:
                     "state": state.state if state else "unknown",
                 })
             assigned_zones.append({
+                "id": zone.get("id"),
                 "number": zone.get("number"),
                 "area": str(zone.get("area") or ""),
                 "sensors": sensors,
@@ -1052,6 +1053,7 @@ async def ws_argus_get_voice_config(hass, connection, msg) -> None:
         "yaml_keys": [],
         "imported_existing_settings": imported_settings,
         "default_messages": default_messages,
+        "message_rules": ui_data.get("voice_message_rules", {}),
         "mode": mode,
         "assigned_zones": assigned_zones,
         "tts_entities": [{"entity_id": state.entity_id, "name": state.name} for state in hass.states.async_all("tts")],
@@ -1076,11 +1078,20 @@ async def ws_argus_save_voice_config(hass, connection, msg) -> None:
     if entry is None:
         connection.send_error(msg["id"], "not_found", "Argus config entry not found")
         return
-    config = msg["config"]
+    config = dict(msg["config"])
+    rules_input = config.pop("message_rules", None)
     if set(config) - set(_VOICE_FIELDS):
         connection.send_error(msg["id"], "invalid_voice_config", "Unknown voice setting")
         return
     ui_data = await async_load_ui_data(hass, entry_id)
+    rules = None
+    if rules_input is not None:
+        from .voice_message_rules import validate_rules
+        try:
+            rules = validate_rules(rules_input, _VOICE_FIELDS[3:], {z.get("id") for z in ui_data.get("zones", [])})
+        except ValueError as err:
+            connection.send_error(msg["id"], "invalid_voice_config", str(err))
+            return
     existing, _, _ = resolve_voice_settings(
         _VOICE_FIELDS,
         entry.data,
@@ -1112,7 +1123,10 @@ async def ws_argus_save_voice_config(hass, connection, msg) -> None:
             return
     voice = {key: value for key, value in existing.items() if value is not None}
     voice.update(config)
-    saved = await async_save_ui_data(hass, {"arming_voice": voice}, entry_id)
+    updates = {"arming_voice": voice}
+    if rules is not None:
+        updates["voice_message_rules"] = rules
+    saved = await async_save_ui_data(hass, updates, entry_id)
     hass.data.setdefault(DOMAIN, {}).setdefault("arming_voice_ui", {})[entry_id] = saved.get("arming_voice", voice)
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     await async_append_audit_log(hass, "voice_config_updated", user=profile.get("name", "Unknown"), entry_id=entry_id)
@@ -1638,9 +1652,11 @@ async def ws_argus_perform_alarm_action(hass, connection, msg) -> None:
     from homeassistant.core import Context
     ctx = Context(user_id=ha_user_id)
 
+    voice_contexts = hass.data.setdefault(DOMAIN, {}).setdefault("voice_action_contexts", {})
+    voice_contexts[ctx.id] = {"profile_name": profile.get("name"), "source": "Argus", "entity_id": entity_id}
     try:
         if action == "stop_sos":
-            from .const import DOMAIN, DATA_PANELS
+            from .const import DATA_PANELS
 
             panel = hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).get(entry_id)
             if panel is None:
@@ -1654,6 +1670,8 @@ async def ws_argus_perform_alarm_action(hass, connection, msg) -> None:
     except Exception as err:
         connection.send_error(msg["id"], "service_failed", str(err))
         return
+    finally:
+        voice_contexts.pop(ctx.id, None)
 
     _LOGGER.info(
         "Argus panel action %s accepted in %.1f ms",

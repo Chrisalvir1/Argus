@@ -7605,9 +7605,10 @@ class ArgusPanel extends HTMLElement {
         const values = data.values || {};
         const yaml = new Set<string>(Array.isArray(data.yaml_keys) ? data.yaml_keys : []);
         const defaultMessages = data.default_messages || {};
+        const messageRules = data.message_rules || {};
         const assignedZones = Array.isArray(data.assigned_zones) ? data.assigned_zones : [];
         const modeNames: Record<string, string> = {disarmed: 'Desarmado', home: 'En Casa', away: 'Ausente', night: 'Noche', sos: 'SOS'};
-        const modeName = 'el modo seleccionado';
+        const modeName = 'En Casa (ejemplo)';
         const enabledKey = 'arming_voice_enabled';
         const ttsKey = 'arming_voice_tts';
         const playersKey = 'arming_voice_players';
@@ -7742,8 +7743,27 @@ class ArgusPanel extends HTMLElement {
           <details><summary style="cursor:pointer">Mensajes generales de voz</summary>
           <p class="small">Cada mensaje se usa solo en la situación que indica su título. En los avisos que mencionan sensores, escribe solo tu frase: Argus añade automáticamente el conteo y los nombres de las zonas, sus áreas y sus sensores según las zonas asignadas a ${this._escapeHtml(modeName)}. No hace falta escribir esos nombres. Los avisos de inicio, cierre y finalización se usan durante el armado en espera, si está activado; los avisos de alarma se usan cuando la alarma está activa. Cambiar el texto no modifica el funcionamiento del armado.</p>
             ${messageFields.map(([key, label, description]) => {
-              const hasCustom = Boolean(values[key]);
-              return `<article class="argus-voice-message-card"><strong>${label}</strong><p class="small argus-voice-message-description">${description}</p><div class="argus-voice-default-label">Mensaje predeterminado · ejemplo con tus zonas y sensores</div><p class="argus-voice-default-preview">${previewDefault(key)}</p><label class="argus-voice-default-toggle"><input type="checkbox" data-message-default="${key}" ${hasCustom ? '' : 'checked'} ${locked(key)}> Usar mensaje predeterminado</label><label data-message-editor="${key}" style="display:${hasCustom ? 'block' : 'none'};margin-top:8px">Escribe lo que quieres que diga<textarea data-voice="${key}" ${locked(key)} maxlength="500" rows="2" placeholder="Escribe la frase como la dirías normalmente" style="display:block;width:100%;box-sizing:border-box;border-radius:12px;background:#1e293b;color:white">${this._escapeHtml(values[key] || '')}</textarea></label></article>`;
+              const rule = messageRules[key];
+              const hasCustom = Boolean(values[key]) || Boolean(rule);
+              const states = rule?.states || [];
+              return `<article class="argus-voice-message-card"><strong>${label}</strong><p class="small">${description}</p>
+                <details><summary>Ver ejemplo predeterminado (simulado)</summary><p>${previewDefault(key)}</p></details>
+                <label><input type="checkbox" data-message-default="${key}" ${hasCustom ? '' : 'checked'}> Usar mensaje predeterminado</label>
+                <div data-message-editor="${key}" style="display:${hasCustom ? 'block' : 'none'}">
+                  <label>Tu frase<textarea data-voice="${key}" maxlength="500" rows="2" placeholder="Por ejemplo: Atención, revisa lo siguiente" style="display:block;width:100%;box-sizing:border-box">${this._escapeHtml(values[key] || '')}</textarea></label>
+                  <label><input type="checkbox" data-rule-enabled="${key}" ${rule ? 'checked' : ''}> Añadir información de sensores a mi frase</label>
+                  <p class="small">El título del aviso determina cuándo se reproduce. Esta selección decide qué información añade Argus en ese momento. No necesitas escribir nombres, cantidades ni códigos.</p>
+                  <fieldset data-rule-fields="${key}"><legend>Zonas que quieres revisar</legend>
+                    <label><input type="checkbox" data-rule-all="${key}" ${rule?.zone_ids == null ? 'checked' : ''}> Todas las zonas del modo</label>
+                    ${assignedZones.map((zone: any) => `<label style="display:block"><input type="checkbox" data-rule-zone="${key}" value="${this._escapeHtml(zone.id)}" ${rule?.zone_ids?.includes(zone.id) ? 'checked' : ''}> Zona ${this._escapeHtml(zone.number)} · ${this._escapeHtml(zone.area || 'Sin área')}</label>`).join('')}
+                    ${!assignedZones.length ? '<p>No hay zonas activas. Se revisarán los sensores configurados en el modo.</p>' : ''}
+                  </fieldset>
+                  <fieldset><legend>Qué información anunciar y contar</legend>
+                    ${[['open','Abiertos o activos ahora'],['closed','Cerrados o inactivos ahora'],['unavailable','Sin conexión o estado desconocido'],['battery_low','Batería baja (con porcentaje si HA lo informa)'],['recently_closed','Se acaban de cerrar en este evento'],['recently_opened','Se acaban de abrir en este evento']].map(([value, name]) => `<label style="display:block"><input type="checkbox" data-rule-state="${key}" value="${value}" ${states.includes(value) ? 'checked' : ''}> ${name}</label>`).join('')}
+                  </fieldset>
+                  <p class="small">Si marcas varios estados, cada sensor se cuenta una sola vez. Sin estados seleccionados no se añade una lista de sensores. El modo del evento, la causa de una alarma y el autor u origen confirmado del desarmado se informan automáticamente. Un sensor sin conexión nunca se considera cerrado. Estos filtros afectan únicamente la voz.</p>
+                  ${hasCustom && !rule ? '<p class="small">Tu mensaje anterior se conserva. Activa la información seleccionada para utilizar el editor sencillo; si contiene variables antiguas, reemplázalas por una frase normal.</p>' : ''}
+                </div></article>`;
             }).join('')}
           </details>
           ${this._isAdmin ? '<button type="button" class="primary" id="argus-save-voice" style="margin-top:12px">Guardar voz</button>' : ''}
@@ -7797,16 +7817,44 @@ class ArgusPanel extends HTMLElement {
             button.textContent = '↻ Actualizar reproductores de Home Assistant';
           }
         });
+        body.querySelectorAll<HTMLInputElement>('[data-rule-all]').forEach(input => {
+          const update = () => body.querySelectorAll<HTMLInputElement>(`[data-rule-zone="${input.dataset.ruleAll}"]`).forEach(zone => { zone.disabled = input.checked; });
+          input.addEventListener('change', update); update();
+        });
         body.querySelectorAll<HTMLInputElement>('[data-message-default]').forEach(toggle => toggle.addEventListener('change', () => {
           const key = toggle.dataset.messageDefault;
           if (!key) return;
           const editor = body.querySelector(`[data-message-editor="${key}"]`) as HTMLElement | null;
           const textarea = editor?.querySelector('textarea');
-          if (toggle.checked && textarea) textarea.value = '';
+          if (textarea) {
+            if (toggle.checked) textarea.value = '';
+            else {
+              const enabled = body.querySelector<HTMLInputElement>(`[data-rule-enabled="${key}"]`);
+              if (enabled) enabled.checked = true;
+            }
+          }
           if (editor) editor.style.display = toggle.checked ? 'none' : 'block';
         }));
         body.querySelector('#argus-save-voice')?.addEventListener('click', async () => {
           const config: Record<string, unknown> = {};
+          const rules: Record<string, unknown> = {};
+          for (const [key] of messageFields) {
+            const useDefault = body.querySelector<HTMLInputElement>(`[data-message-default="${key}"]`)?.checked;
+            const automatic = body.querySelector<HTMLInputElement>(`[data-rule-enabled="${key}"]`)?.checked;
+            const phrase = body.querySelector<HTMLTextAreaElement>(`textarea[data-voice="${key}"]`)?.value || '';
+            // Preserve untouched legacy templates; all new plain text uses explicit rules.
+            if (!useDefault && (automatic || !phrase.includes('{') || messageRules[key])) {
+              const all = body.querySelector<HTMLInputElement>(`[data-rule-all="${key}"]`)?.checked;
+              const zones = [...body.querySelectorAll<HTMLInputElement>(`[data-rule-zone="${key}"]:checked`)].map(input => input.value);
+              const states = automatic ? [...body.querySelectorAll<HTMLInputElement>(`[data-rule-state="${key}"]:checked`)].map(input => input.value) : [];
+              if (!all && !zones.length && states.length) {
+                (body.querySelector('.argus-voice-status') as HTMLElement).textContent = 'Selecciona al menos una zona o Todas las zonas.';
+                return;
+              }
+              rules[key] = {zone_ids: all ? null : zones, states};
+            }
+          }
+          config.message_rules = rules;
           body.querySelectorAll('[data-voice]').forEach((input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
             if (!yaml.has(input.dataset.voice)) config[input.dataset.voice] = input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value;
           });
@@ -7814,7 +7862,7 @@ class ArgusPanel extends HTMLElement {
           const status = body.querySelector('.argus-voice-status') as HTMLElement;
           status.textContent = 'Guardando…';
           try {
-            await this._send('argus/save_voice_config', {entry_id: this._dashboard?.entry_id, config});
+            await this._send('argus/save_voice_config', {entry_id: this._zoneEntryId(), config});
             status.textContent = 'Guardado';
           } catch (err) {
             status.textContent = `Error: ${err.message || err}`;
