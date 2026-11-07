@@ -27,3 +27,11 @@ Validación local: 11 pruebas nuevas de filtros/runtime y validación; 12 regres
 El perfil solo se atribuye cuando el comando Argus autenticado y la entidad coinciden con el contexto de la llamada. El registro temporal se elimina al finalizar el servicio. Para HomeKit se correlaciona el evento homekit_state_change de HA con ese mismo contexto y entidad; el registro caduca a los30segundos. HomeKit no entrega en este evento el nombre del miembro de Apple Casa: el aviso dice origen HomeKit y persona no identificada. Una cuenta externa de HA se presenta como cuenta de HA, sin asumir que identifica a una persona. Un origen desconocido se mantiene desconocido. El aviso solo se emite después de confirmar el desarmado, nunca si fue rechazado.
 
 Validación adicional local: 8 pruebas de identidad/desarmado, 3 de adaptador HomeKit/contexto, 11 de filtros/runtime y 12 de regresión de voz. La atribución real de HomeKit y la reproducción física requieren prueba en la instancia del usuario.
+
+## Separación de avisos y AirPlay — v3.7.3
+
+La aceptación de tts.speak no confirma que el audio haya terminado. La cola mantiene el bloqueo por reproductor durante una separación conservadora calculada según el mensaje; si detecta contenido nuevo y duración/posición de reproducción, amplía esa espera. La música que ya sonaba no aporta la duración del aviso. La espera tiene límite y no acredita entrega física. Los reproductores continúan recibiendo el aviso en paralelo.
+
+El timeout de síntesis/entrega al servicio pasa de15 a60segundos. Incluso si una llamada falla o agota el timeout, se respeta separación para evitar pisar una entrega parcial; la cancelación del trabajo permite liberar recursos. Este ajuste puede retrasar el aviso siguiente cuando el reproductor no proporciona buena información de reproducción.
+
+Pruebas con reloj virtual: dos avisos consecutivos no se envían juntos tras la aceptación del servicio; duración nueva amplía el intervalo; música previa no introduce una espera falsa; posición inválida no prolonga la espera indefinidamente. La reproducción física en AirPlay y otros altavoces continúa pendiente. Corrección incluida en v3.7.3.

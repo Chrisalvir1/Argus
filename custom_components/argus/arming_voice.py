@@ -2,6 +2,8 @@
 from __future__ import annotations
 import logging
 import asyncio
+import time
+from datetime import datetime
 from homeassistant.components import persistent_notification
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import *
@@ -145,6 +147,58 @@ async def _apply_message_rule(hass, entry, key, message, options, lang, *, mode=
         result = _append_voice_sentence(result, ('Sensor que activó la alarma: ' if lang == 'es' else 'Alarm trigger sensor: ') + event_sensor)
     return result
 
+def _estimated_speech_seconds(message):
+    """Conservative spacing when a speaker cannot report audio completion."""
+    return max(3.0, min(300.0, max(len(message.split()) / 1.7, len(message) / 12) + 3.0))
+
+
+async def _wait_for_voice_playback(hass, target, message, previous):
+    """Keep the speaker lock beyond service acceptance, without claiming delivery."""
+    started = time.monotonic()
+    minimum_end = started + _estimated_speech_seconds(message)
+    hard_end = started + 300.0
+    previous_id = getattr(previous, 'attributes', {}).get('media_content_id')
+    get_state = getattr(getattr(hass, 'states', None), 'get', lambda _id: None)
+    while True:
+        now = time.monotonic()
+        current = get_state(target)
+        attrs = getattr(current, 'attributes', {})
+        state = getattr(current, 'state', None)
+        content_id = attrs.get('media_content_id')
+        # Do not mistake the duration of music playing before this TTS for
+        # the duration of our announcement. Unknown telemetry uses spacing only.
+        ours = bool(content_id and content_id != previous_id)
+        if ours and state in {'playing', 'buffering'}:
+            duration = attrs.get('media_duration')
+            position = attrs.get('media_position')
+            updated_at = attrs.get('media_position_updated_at')
+            elapsed = 0.0
+            position_timestamp = None
+            if updated_at is not None:
+                try:
+                    if isinstance(updated_at, str):
+                        updated_at = datetime.fromisoformat(updated_at.replace('Z', '+00:00'))
+                    position_timestamp = updated_at.timestamp()
+                    elapsed = max(0.0, time.time() - position_timestamp)
+                except (AttributeError, TypeError, ValueError):
+                    pass
+            if type(duration) in (int, float) and 0 < duration <= 300:
+                remaining = duration - (position if type(position) in (int, float) else 0) - elapsed
+                # A stale position must not extend the deadline on every poll.
+                duration_end = now + max(0.0, remaining) + 2.0 if position_timestamp is not None else started + duration + 2.0
+                minimum_end = min(hard_end, max(minimum_end, duration_end))
+        if now >= hard_end:
+            _LOGGER.debug('Argus TTS spacing limit reached; playback completion unconfirmed')
+            return
+        if now >= minimum_end:
+            if not ours or state not in {'playing', 'buffering'}:
+                return
+            # Give a playing stream a bounded tail beyond the speech estimate.
+            if now >= min(hard_end, minimum_end + 15.0):
+                return
+        await asyncio.sleep(min(.5, max(.05, min(hard_end, minimum_end + 15) - now)))
+
+
 async def _async_speak(hass, options, message, lang):
   if not options.get(CONF_ARMING_VOICE_ENABLED, False): return
   tts = str(options.get(CONF_ARMING_VOICE_TTS, "") or "")
@@ -166,17 +220,25 @@ async def _async_speak(hass, options, message, lang):
           try:
               lock = _PLAYER_LOCKS.setdefault(target, asyncio.Lock())
               async with lock:
-                  await asyncio.wait_for(
-                      hass.services.async_call(
-                          "tts", "speak",
-                          {"entity_id": speak_tts, "media_player_entity_id": target, "message": speak_message, "cache": True},
-                          blocking=True,
-                      ),
-                      # Some TTS engines take several seconds to synthesize and
-                      # hand off audio. A short timeout cancels synthesis and
-                      # leaves the speaker playing a clipped announcement.
-                      timeout=15.0,
-                  )
+                  previous = getattr(getattr(hass, 'states', None), 'get', lambda _id: None)(target)
+                  cancelled = False
+                  try:
+                      await asyncio.wait_for(
+                          hass.services.async_call(
+                              "tts", "speak",
+                              {"entity_id": speak_tts, "media_player_entity_id": target, "message": speak_message, "cache": True},
+                              blocking=True,
+                          ),
+                          timeout=60.0,
+                      )
+                  except asyncio.CancelledError:
+                      cancelled = True
+                      raise
+                  finally:
+                      # Acceptance does not mean playback finished. Even after
+                      # timeout the speaker may have started a partial handoff.
+                      if not cancelled:
+                          await _wait_for_voice_playback(hass, target, speak_message, previous)
           except asyncio.TimeoutError:
               _LOGGER.warning("Argus voice announcement timed out for %s", target)
           except Exception as err:  # noqa: BLE001 — voice must not interrupt alarm state transitions.

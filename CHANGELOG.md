@@ -1,3 +1,10 @@
+## [3.7.3] - 2026-11-06
+
+- Mantener el bloqueo de cada reproductor tras aceptar tts.speak para evitar pisar el audio anterior.
+- Aplicar espera estimada por longitud y duración/posición de contenido nuevo, con límites y sin usar la duración de música previa.
+- Ampliar el timeout de síntesis/entrega a 60 segundos y liberar recursos al cancelar.
+- Añadir cuatro pruebas de cola con reloj virtual. Prueba audible física pendiente.
+
 ## [3.7.2] - 2026-11-06
 
 - Limitar diagnóstico y listas de zonas a sus sensores; conteos Listas/Pendientes accionables, cristales con acceso directo al diagnóstico y cierre coherente.

@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.2
+### Argus v3.7.3
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -26,6 +26,14 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Novedades de v3.7.3
+
+- Mantener separación por reproductor después de que HA acepte el TTS para reducir interrupciones entre avisos consecutivos.
+- Usar duración y posición del contenido nuevo cuando están disponibles y una espera estimada cuando el reproductor no informa la finalización.
+- Ampliar el timeout de síntesis/entrega de 15 a 60 segundos.
+
+[Notas de v3.7.3](docs/RELEASE_NOTES_3.7.3.md). La reproducción física en AirPlay y otros altavoces sigue pendiente de confirmación.
 
 ## Novedades de v3.7.2
 

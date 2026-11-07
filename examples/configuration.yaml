@@ -1,4 +1,4 @@
-# Argus Home Hub 3.7.2 — bloque YAML opcional para configuration.yaml.
+# Argus Home Hub 3.7.3 — bloque YAML opcional para configuration.yaml.
 # La integración debe estar instalada desde HACS y configurada en HA.
 # Reemplace los entity_id de ejemplo por los suyos. Puede omitir todo este bloque
 # si prefiere editar voz en Argus → Modos / SOS → Voz de Argus.

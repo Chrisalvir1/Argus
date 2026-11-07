@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 import types
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -115,6 +115,9 @@ def _load_voice_runtime():
     with patch.dict(sys.modules, modules):
         assert spec.loader is not None
         spec.loader.exec_module(module)
+    # This suite verifies routing/content. Playback timing has its own virtual
+    # clock suite so these tests do not wait for real speech-length intervals.
+    module._wait_for_voice_playback = AsyncMock()
     return module
 
 
