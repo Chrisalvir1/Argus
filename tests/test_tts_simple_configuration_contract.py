@@ -27,11 +27,12 @@ class TestTtsSimpleConfigurationContract(unittest.TestCase):
         self.assertIn(".argus-voice-sensor-row.is-open", source)
         self.assertIn(".argus-voice-sensor-row.is-closed", source)
         self.assertIn("Cambiar el texto no modifica el funcionamiento del armado", source)
-        self.assertIn("Mensaje predeterminado", source)
+        self.assertIn("Ver ejemplo predeterminado (simulado)", source)
         self.assertIn("Usar mensaje predeterminado", source)
         self.assertIn("Zonas configuradas · Todos los modos", source)
         self.assertIn("Mensajes generales de voz", source)
-        self.assertIn("Mensaje predeterminado · ejemplo con tus zonas y sensores", source)
+        self.assertIn("data-rule-zone", source)
+        self.assertIn("data-rule-state", source)
         self.assertIn("Argus añade automáticamente el conteo y los nombres de las zonas, sus áreas y sus sensores", source)
         self.assertIn("No hace falta escribir esos nombres", source)
         self.assertIn("const exampleRows = sampleZoneSensorRows", source)
@@ -129,7 +130,7 @@ class TestCustomTtsAutomaticContext(IsolatedAsyncioTestCase):
     async def test_custom_wait_intro_appends_only_the_selected_mode_sensors(self):
         source_path = ROOT / "custom_components/argus/arming_voice.py"
         tree = ast.parse(source_path.read_text(encoding="utf-8"))
-        helper_names = {"_count_labels", "_join_spoken_list", "_has_voice_placeholder", "_append_voice_sentence", "_auto_open_summary", "_format_voice_template"}
+        helper_names = {"_count_labels", "_join_spoken_list", "_has_voice_placeholder", "_append_voice_sentence", "_auto_open_summary", "_format_voice_template", "_apply_message_rule"}
         functions = [node for node in tree.body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and (node.name in helper_names or node.name == "async_announce_arming_wait_update")]
         namespace = {
             "_get_language": AsyncMock(return_value="es"),

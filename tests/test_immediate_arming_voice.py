@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock
 SOURCE = Path(__file__).resolve().parents[1] / 'custom_components/argus/arming_voice.py'
 TREE = ast.parse(SOURCE.read_text())
 METHOD = next(n for n in TREE.body if isinstance(n, ast.AsyncFunctionDef) and n.name == 'async_announce_arming_wait_update')
+RULE_METHOD = next(n for n in TREE.body if isinstance(n, ast.AsyncFunctionDef) and n.name == '_apply_message_rule')
 
 class TestImmediateArmingVoice(IsolatedAsyncioTestCase):
     async def test_last_sensor_closing_announces_completion_before_arm_confirmation(self):
@@ -24,7 +25,7 @@ class TestImmediateArmingVoice(IsolatedAsyncioTestCase):
                      }.get(key, key),
                      'CONF_ARMING_VOICE_MESSAGE_COMPLETE': 'complete',
                      'CONF_ARMING_VOICE_MESSAGE_ARMED': 'armed'}
-        exec(compile(ast.Module(body=[METHOD], type_ignores=[]), str(SOURCE), 'exec'), namespace)
+        exec(compile(ast.Module(body=[RULE_METHOD, METHOD], type_ignores=[]), str(SOURCE), 'exec'), namespace)
         hass = SimpleNamespace(bus=SimpleNamespace(async_fire=lambda *_a: None))
         entry = SimpleNamespace(entry_id='argus', title='Casa')
         await namespace[METHOD.name](hass, entry, alarm_entity_id='alarm_control_panel.argus',
@@ -45,7 +46,7 @@ class TestImmediateArmingVoice(IsolatedAsyncioTestCase):
                      '_async_speak': speak, 'translate': lambda lang, key: {**mode_names, 'msg_armed': 'Argus: sistema armado en modo {mode}.'}.get(key, key),
                      'CONF_ARMING_VOICE_MESSAGE_COMPLETE': 'complete',
                      'CONF_ARMING_VOICE_MESSAGE_ARMED': 'armed'}
-        exec(compile(ast.Module(body=[METHOD], type_ignores=[]), str(SOURCE), 'exec'), namespace)
+        exec(compile(ast.Module(body=[RULE_METHOD, METHOD], type_ignores=[]), str(SOURCE), 'exec'), namespace)
         hass = SimpleNamespace(bus=SimpleNamespace(async_fire=lambda *a: events.append(a)))
         entry = SimpleNamespace(entry_id='argus', title='Casa')
         await namespace[METHOD.name](hass, entry, alarm_entity_id='alarm_control_panel.argus', target='armed_home', previous_open=[], current_open=[])

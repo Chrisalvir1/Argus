@@ -27,3 +27,5 @@ La revisión visual en Safari/iPhone y Echo Show y la reproducción física en l
 ## Reversión
 
 Antes de actualizar, conservar una copia de seguridad HA que incluya la integración y su configuración. Las versiones anteriores desconocen voice_message_rules; podrían volver al comportamiento de voz anterior. Conservar los datos existentes y restaurar la versión previa de los archivos si fuera necesario, sin borrar la integración ni emparejamientos.
+
+Corrección de preparación de release: actualizar dos pruebas aisladas para incluir el nuevo helper y los textos/controles actuales del editor. Suite backend completa ejecutada con dependencias instaladas: cero módulos fallidos. Este entorno local usa HA2025.1.4/Python3.12; la compatibilidad objetivo se comprueba aparte en GitHub Actions. No se presenta como prueba física ni como validación local de Core2026.11.
