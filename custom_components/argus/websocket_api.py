@@ -1905,10 +1905,10 @@ async def ws_argus_start_walk_test(hass, connection, msg) -> None:
     if zone_id is not None and zone is None:
         connection.send_error(msg["id"], "not_found", "La zona ya no está disponible")
         return
-    sensors = zone.get("entity_ids", []) if zone else [
-        *(panel._all_sensors() if panel else []),
-        *(sensor for item in zones for sensor in item.get("entity_ids", [])),
-    ]
+    sensors = zone.get("entity_ids", []) if zone else (
+        [sensor for item in zones for sensor in item.get("entity_ids", [])]
+        if zones else (panel._all_sensors() if panel else [])
+    )
 
     if not panel or panel.state != "disarmed" or panel._arm_request:
         connection.send_error(msg["id"], "invalid_state", "Desarma Argus antes de iniciar la prueba")

@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.3
+### Argus v3.7.4
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -26,6 +26,15 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Novedades de v3.7.4
+
+- El detalle de zonas sustituye la vista principal dentro del mismo panel, conservando el estado confirmado y los conteos globales. No es necesario salir de fullscreen.
+- Sensores ocultos inicialmente en desarmado; Zonas cuenta las activas, Listas las verificables cerradas/inactivas y Pendientes las que tienen actividad. Estados sin verificar se indican aparte.
+- Conteos completos y selector compacto operables; lista de sensores con desplazamiento interior y cierre que restaura el resumen.
+- Corrección compartida por Argus Card y Home Hub. El diseño, los colores y la animación del núcleo se conservan.
+
+[Notas de v3.7.4](docs/RELEASE_NOTES_3.7.4.md). Verificación en Chromium local con datos simulados; Safari/iPhone y Echo Show físicos pendientes.
 
 ## Novedades de v3.7.3
 

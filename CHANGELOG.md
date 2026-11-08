@@ -1,3 +1,13 @@
+## [3.7.4] - 2026-11-06
+
+- Eliminar la regla heredada que ocultaba la verificación y los conteos en fullscreen.
+- Unificar navegación contextual; conservar banner y conteos fuera del cuerpo desplazable, ocultando e inhabilitando los controles de fondo mientras se consulta información.
+- Mantener la altura exterior del panel al abrir el detalle y recuperar el resumen/foco/scroll al cerrar.
+- Ocultar filas de sensores no solicitadas en desarmado y separar conteos globales de los requisitos de armado por modo.
+- Mostrar estados no verificables sin clasificarlos como cerrados; simplificar filas y selector de zona.
+- Limitar la prueba física de Todas las zonas a sensores de zonas activas; conservar alcance heredado cuando no hay zonas.
+- Preservar los archivos y recursos del núcleo de seguridad. Ver docs/audits/PANEL_CONTEXT_3.7.4.md.
+
 ## [3.7.3] - 2026-11-06
 
 - Mantener el bloqueo de cada reproductor tras aceptar tts.speak para evitar pisar el audio anterior.

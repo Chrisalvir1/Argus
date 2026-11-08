@@ -1308,3 +1308,94 @@
 }
 :host .entry.entry .security-console.security-console .context-indicators button { color: inherit; font: inherit; cursor: pointer; }
 :host .entry.entry .security-console.security-console .context-sensor-row { padding: 8px !important; margin-block: 4px !important; }
+
+/* One contextual view occupies the existing console; it never grows the card.
+   The emblem remains mounted and keeps its existing geometry and styling. */
+:host .context-view-body { display: contents; }
+:host .context-indicators > div { position: relative; }
+:host .context-indicators button::after { content: ''; position: absolute; inset: 0; }
+:host .context-indicators > div:focus-within { outline: 2px solid #76b7ff; outline-offset: 2px; }
+:host .entry.entry[data-context-view="details"] {
+  height: var(--context-entry-height) !important;
+  min-height: var(--context-entry-height) !important;
+  max-height: var(--context-entry-height) !important;
+  overflow: hidden !important;
+}
+:host .entry.entry[data-context-view="details"] .entry-content.security-console.security-console {
+  height: var(--context-console-height) !important;
+  min-height: var(--context-console-height) !important;
+  max-height: var(--context-console-height) !important;
+  overflow: hidden !important;
+}
+:host .entry.entry[data-context-view="details"] .security-console.security-console > :is(.console-hud,.entry-icon,.console-modes-vertical) {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+:host .entry.entry[data-context-view="details"] .security-console.security-console > .security-context {
+  position: absolute !important;
+  grid-area: auto !important;
+  inset: 0 !important;
+  z-index: 30 !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: min(100%, var(--context-view-height)) !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  display: grid !important;
+  grid-template-areas: "heading" "status" "counts" "body" !important;
+  grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+  align-content: stretch !important;
+  align-self: stretch !important;
+  gap: 8px !important;
+  overflow: hidden !important;
+  background: #07100f !important;
+  border-radius: inherit;
+}
+:host .entry.entry[data-context-view="details"] .security-console.security-console .context-view-body {
+  display: grid !important;
+  align-content: start !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+:host .entry.entry[data-context-view="details"] .security-console.security-console .context-verification-dialog:not([hidden]) {
+  position: static !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 10px !important;
+}
+:host .entry.entry[data-context-view="details"] .security-console.security-console .context-zone-picker > div {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+:host .context-heading-actions { display: inline-flex; align-items: center; gap: 12px; }
+:host .entry.entry[data-context-view="details"] .context-heading-actions > button { min-height: 40px; padding-inline: 14px; }
+
+:host .security-context .context-indicators dt { font-size: 14px !important; }
+:host .security-context .context-indicators button { transform: none !important; position: static !important; }
+
+:host .entry.entry[data-context-view="details"] .security-context > .context-heading { grid-area: heading; }
+:host .entry.entry[data-context-view="details"] .security-context > header { grid-area: status; }
+:host .entry.entry[data-context-view="details"] .security-context > .context-zone-summary { grid-area: counts; }
+:host .entry.entry[data-context-view="details"] .security-context > .context-view-body { grid-area: body; }
+@media (orientation: landscape) and (max-height: 500px) {
+  :host .entry.entry[data-context-view="details"] .security-context > header { padding: 10px 60px 10px 12px !important; min-height: 0 !important; }
+  :host .entry.entry[data-context-view="details"] .security-context header > .context-eyebrow { display: none; }
+  :host .entry.entry[data-context-view="details"] .security-context header > strong { font-size: 24px !important; }
+  :host .entry.entry[data-context-view="details"] .security-context header > p { font-size: 16px !important; }
+}
+/* Keep the full-tile hit area stable while the pointer is pressed. */
+:host .entry.entry .security-console.security-console .context-indicators button:not(:disabled):is(:hover,:active) { transform: none !important; }
+:host .entry.entry .security-console.security-console .context-indicators button { white-space: nowrap !important; padding: 6px !important; max-width: 100% !important; min-width: 0 !important; }
+:host .entry.entry[data-context-view="details"] .context-zone-picker { padding: 8px !important; }
+:host .entry.entry[data-context-view="details"] .context-zone-picker label { display: flex; align-items: center; gap: 10px; }
+:host .entry.entry[data-context-view="details"] .context-zone-picker select { min-width: 0; width: 100%; min-height: 40px; font: inherit; font-size: 16px; background: #111d1a; color: #eef4f5; border: 1px solid #819c94; border-radius: 10px; padding: 6px 10px; }
+:host .entry.entry[data-context-view="details"] .context-verification { display: flex !important; gap: 8px; margin-block: 8px !important; }
+:host .entry.entry[data-context-view="details"] .context-verification > button { min-height: 40px; padding: 8px 10px !important; }
+@media (orientation: landscape) and (max-height: 500px) {
+  :host .entry.entry[data-context-view="details"] .security-context .context-shield { width: 38px; height: 38px; top: 6px; right: 12px; }
+}

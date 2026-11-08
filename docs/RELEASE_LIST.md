@@ -2,6 +2,7 @@
 
 | Versión | Descripción | Notas |
 |---|---|---|
+| 3.7.4 | Panel contextual de zonas y fullscreen coherente | [Notas](RELEASE_NOTES_3.7.4.md) |
 | 3.7.3 | Separación de avisos TTS y timeout de síntesis | [Notas](RELEASE_NOTES_3.7.3.md) |
 | 3.7.2 | Panel de zonas y voz contextual con editor sencillo | [Notas](RELEASE_NOTES_3.7.2.md) |
 | 3.7.1 | Fullscreen horizontal bajo | [Notas](RELEASE_NOTES_3.7.1.md) |

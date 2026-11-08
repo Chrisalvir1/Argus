@@ -1185,7 +1185,6 @@ _tmpl.innerHTML = `
   :host(.fullscreen-active) #argus-dashboard-root-v3,
   :host(.fullscreen-active) .argus-dashboard,
   :host(.fullscreen-active) .panel-head,
-  :host(.fullscreen-active) section:not(#w-instances),
   :host(.fullscreen-active) .argus-widget:not(#w-instances),
   :host(.fullscreen-active) .personalize-section {
     display: none !important;

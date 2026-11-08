@@ -23,6 +23,8 @@ export function zoneReadiness(
   const entities = relevant.map(readEntity);
   if (!confirmedBlockers && entities.some(entity => entity && sensorAvailability(entity) === 'available' && isActive(entity))) return 'pending';
   if (entities.some(entity => sensorAvailability(entity) !== 'available' || entity?.attributes?.device_class === 'timestamp')) return 'unknown';
+  const resting = new Set(['off', 'closed', 'locked', 'clear', 'idle', 'standby', 'false', '0', 'cerrado', 'inactivo', 'inactive']);
+  if (entities.some(entity => !resting.has(String(entity?.state || '').toLowerCase()))) return 'unknown';
   return 'ready';
 }
 

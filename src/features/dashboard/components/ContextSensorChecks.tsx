@@ -40,7 +40,7 @@ const diagnosisLabels = {
 const CONTACT_CLASSES = ['door', 'window', 'garage_door', 'opening'];
 const ACTIVITY_CLASSES = ['motion', 'occupancy', 'vibration'];
 
-export function ContextSensorChecks({ panel, entryId, zones, zone, online, states, canStart, visible, diagnostic, choose }: {
+export function ContextSensorChecks({ panel, entryId, zones, zone, online, states, canStart, visible, diagnostic, choose, scopeLabel }: {
   panel: any;
   states?: Record<string, any>;
   entryId: string;
@@ -51,6 +51,7 @@ export function ContextSensorChecks({ panel, entryId, zones, zone, online, state
   visible: boolean;
   diagnostic: boolean;
   choose: boolean;
+  scopeLabel?: string;
 }) {
   const [mode, setMode] = useState<Mode | null>('guided');
   const [session, setSession] = useState<Session | null>(null);
@@ -137,7 +138,7 @@ export function ContextSensorChecks({ panel, entryId, zones, zone, online, state
     return row.state || "Estado desconocido";
   };
   const name = (id: string) => entity(id)?.attributes?.friendly_name || id;
-  const zoneName = (item?: typeof zone) => item ? `Zona ${item.number ?? ''}${item.area ? ' · ' + item.area : ''}` : 'Zonas seleccionadas';
+  const zoneName = (item?: typeof zone) => item ? `Zona ${item.number ?? ''}${item.area ? ' · ' + item.area : ''}` : 'Todas las zonas';
   const unavailable = (id: string) => !entity(id) || ['unknown', 'unavailable', 'offline'].includes(entity(id).state);
   const connectionLabel = (row: Diagnosis) => unavailable(row.entity_id) || row.availability === 'unavailable' ? 'Sin conexión' : 'Disponible';
   const batteryLabel = (row: Diagnosis) => {
@@ -166,9 +167,9 @@ export function ContextSensorChecks({ panel, entryId, zones, zone, online, state
     {error && <small role="alert">{error}</small>}
     {choose && connectionError && <small role="alert">No se pudo conectar la sesión de prueba: {connectionError}</small>}
     {diagnostic && <div aria-live="polite">
-      <strong>Diagnóstico automático · {zoneName(zone)}</strong>
-      <p>Estado actual confirmado por Home Assistant. Esta consulta no acredita una prueba física.</p>
-      {rows && <p role="status">Consulta completada: {scopedRows?.length || 0} entidades. Los cambios recibidos de Home Assistant actualizan estos resultados.</p>}
+      <strong>Sensores · {scopeLabel || zoneName(zone)}</strong>
+      <p className="small">Estados recibidos de Home Assistant.</p>
+      {rows && <small role="status">{scopedRows?.length || 0} sensores en esta selección.</small>}
       {!rows && !error && online && <div>Consultando sensores…</div>}
       {rows && scopedRows?.length === 0 && <p role="status">No hay entidades configuradas en esta zona.</p>}
       {rows && scopedRows?.length !== 0 && scopedRows?.every(row => row.category === 'informational') && <p role="status">Solo hay datos informativos en esta selección. No hay contactos ni detectores de seguridad que permitan confirmar abierto o cerrado.</p>}
@@ -176,11 +177,9 @@ export function ContextSensorChecks({ panel, entryId, zones, zone, online, state
         <div className="context-sensor-row" key={row.entity_id}>
           <strong>{name(row.entity_id)}</strong>
           <small>{zones.filter(item => item.entity_ids?.includes(row.entity_id)).map(zoneName).join(', ')}</small>
-          <small>{diagnosisLabels[row.category]}</small>
-          <small>Conexión: {connectionLabel(row)}</small>
-          <small>Estado: {stateLabel(row)}</small>
-          {openedSince(row) && <small>{openedSince(row)}</small>}
+          <small className="context-sensor-status">{stateLabel(row)} · {connectionLabel(row)}</small>
           <small>{batteryLabel(row)}</small>
+          {openedSince(row) && <details><summary>Más información</summary><small>{openedSince(row)}</small></details>}
           {row.category === 'informational' && <small>Esta entidad no es un contacto ni un detector; su estado no indica si la zona está abierta o cerrada.</small>}
           {row.category === 'attention' && <small>Revisar batería.</small>}
 

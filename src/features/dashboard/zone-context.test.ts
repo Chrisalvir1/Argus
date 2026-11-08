@@ -37,3 +37,10 @@ it('keeps a configured timestamp visible but never uses it as proof of readiness
   expect(zoneReadiness(['sun'], read, () => false)).toBe('unknown');
   expect(zoneReadiness(['sun'], read, () => false, new Set(['sun']), new Set(['sun']))).toBe('pending');
 });
+
+
+it('does not count an informational value as a closed contact merely because it is not active', () => {
+  expect(zoneReadiness(['temperature'], () => ({state:'22.4'}), () => false)).toBe('unknown');
+  expect(zoneReadiness(['lock'], () => ({state:'jammed'}), () => false)).toBe('unknown');
+  expect(zoneReadiness(['lock'], () => ({state:'locked'}), () => false)).toBe('ready');
+});
