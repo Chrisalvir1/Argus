@@ -31,3 +31,5 @@ Safari/iPhone, Echo Show y HA reales pendientes de comprobación. La batería de
 Resultados finales locales:75pruebas frontend aprobadas; suite backend290pruebas contabilizadas con13omisiones heredadas y0módulos fallidos; TypeScript, build, sintaxis Python y git diff --check correctos. Backend local con HA2025.1.4/Python3.12; compatibilidad del entorno objetivo declarada se verifica en Actions. Los cambios no abarcan una prueba física del hardware.
 
 El contenedor del detalle respeta safe-area-inset en los cuatro bordes para la vista fullscreen en dispositivos con notch o indicador de inicio. La comprobación física iOS sigue pendiente.
+
+El ajuste adicional de safe-area se publica en3.7.5 porque3.7.4 ya había terminado su workflow. Se preserva la publicación3.7.4;3.7.5 incluye todos sus cambios.

@@ -1,3 +1,8 @@
+## [3.7.5] - 2026-11-06
+
+- Respetar los cuatro márgenes safe-area-inset en el detalle de zonas para que cierre y estado no invadan el notch ni el borde inferior.
+- Incluir las correcciones de panel y fullscreen de v3.7.4. Sin cambios al diseño del núcleo.
+
 ## [3.7.4] - 2026-11-06
 
 - Eliminar la regla heredada que ocultaba la verificación y los conteos en fullscreen.
