@@ -1256,7 +1256,7 @@
     min-height: 0 !important;
     max-height: 100dvh !important;
     box-sizing: border-box !important;
-    padding: 10px 16px !important;
+    padding: max(10px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)) !important;
     gap: 10px !important;
     align-content: stretch !important;
     overflow: hidden !important;
@@ -1398,4 +1398,38 @@
 :host .entry.entry[data-context-view="details"] .context-verification > button { min-height: 40px; padding: 8px 10px !important; }
 @media (orientation: landscape) and (max-height: 500px) {
   :host .entry.entry[data-context-view="details"] .security-context .context-shield { width: 38px; height: 38px; top: 6px; right: 12px; }
+}
+
+/* Counter labels are headings inside a clickable tile, not nested pills. */
+:host .entry.entry .security-console.security-console .context-indicators > div {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+}
+:host .entry.entry .security-console.security-console .context-indicators.context-indicators dt > button {
+  appearance: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font-size: 14px !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase !important;
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  /* Rounded scroll containers were clipping the first letters of captions. */
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical {
+    border-radius: 0 !important;
+    align-content: start !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console > .security-context[data-context-focused="false"] {
+    border-radius: 0 !important;
+    align-content: start !important;
+  }
 }

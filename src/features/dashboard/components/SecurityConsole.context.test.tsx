@@ -4,6 +4,7 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { SecurityConsole } from './SecurityConsole';
 import { SecurityContext } from './SecurityContext';
 import legacySource from '../../../legacy/argus-panel.ts?raw';
+import shieldSource from './SecurityShield.tsx?raw';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -151,4 +152,12 @@ it('keeps the connection warning when an open and an unavailable sensor share a 
   const html = renderContext(false, 'on', true, 'armed_away', ['binary_sensor.door','binary_sensor.window'], 'unavailable');
   expect(html).toContain('<dt><button type="button" aria-label="Ver pendientes">Pendientes</button></dt><dd>1</dd>');
   expect(html).toContain('1 zona(s) sin verificar: revisa conexión o configuración.');
+});
+
+
+it('does not substitute the original core renderer based on screen orientation or touch height', () => {
+  const selection = shieldSource.slice(shieldSource.indexOf('export function SecurityShield'));
+  expect(selection).not.toMatch(/max-height|orientation|pointer:\s*coarse/);
+  expect(selection).toContain("host.classList.contains('argus-perf-essential')");
+  expect(selection).toContain('<SecurityEmblem3D');
 });

@@ -1,3 +1,11 @@
+## [3.7.6] - 2026-11-08
+
+- Conservar el núcleo 3D original al cambiar orientación; el fallback SVG queda para modo esencial o fallo de WebGL.
+- Respetar las áreas seguras laterales y verticales del iPhone en fullscreen horizontal.
+- Mostrar Zonas, Listas y Pendientes como títulos sobre sus cantidades, sin cápsulas anidadas.
+- Evitar el recorte de encabezados dentro de los paneles desplazables en horizontal.
+- Añadir regresión automatizada para impedir que la orientación active el fallback.
+
 ## [3.7.5] - 2026-11-06
 
 - Respetar los cuatro márgenes safe-area-inset en el detalle de zonas para que cierre y estado no invadan el notch ni el borde inferior.

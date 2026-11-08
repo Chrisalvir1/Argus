@@ -71,13 +71,12 @@ export function SecurityShield(props: EmblemProps) {
   useEffect(() => {
     const host = (anchor.current?.getRootNode() as ShadowRoot)?.host;
     if (!host) return;
-    const compactTouch = window.matchMedia('(pointer: coarse) and (max-height: 600px)');
-    const update = () => setLightweight(host.classList.contains('argus-perf-essential') || compactTouch.matches);
-    compactTouch.addEventListener('change', update);
+    // Rotation must not substitute the original 3D design on capable devices.
+    const update = () => setLightweight(host.classList.contains('argus-perf-essential'));
     update();
     const observer = new MutationObserver(update);
     observer.observe(host, { attributes: true, attributeFilter: ['class'] });
-    return () => { observer.disconnect(); compactTouch.removeEventListener('change', update); };
+    return () => observer.disconnect();
   }, []);
   const fallback = <SecurityShieldFallback {...props} />;
   return <span ref={anchor} style={{display: 'contents'}}>

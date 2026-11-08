@@ -2,6 +2,7 @@
 
 | Versión | Descripción | Notas |
 |---|---|---|
+| 3.7.6 | Núcleo 3D y safe areas en fullscreen horizontal | [Notas](RELEASE_NOTES_3.7.6.md) |
 | 3.7.5 | Panel contextual con márgenes de área segura | [Notas](RELEASE_NOTES_3.7.5.md) |
 | 3.7.4 | Panel contextual de zonas y fullscreen coherente | [Notas](RELEASE_NOTES_3.7.4.md) |
 | 3.7.3 | Separación de avisos TTS y timeout de síntesis | [Notas](RELEASE_NOTES_3.7.3.md) |

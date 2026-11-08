@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.5
+### Argus v3.7.6
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -26,6 +26,10 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Novedades de v3.7.6
+
+Corrige la sustitución del núcleo 3D por el emblema SVG al girar el móvil a horizontal. Respeta las áreas seguras del iPhone en fullscreen y presenta Zonas, Listas y Pendientes como títulos claros. [Notas de v3.7.6](docs/RELEASE_NOTES_3.7.6.md).
 
 ## Novedades de v3.7.5
 
