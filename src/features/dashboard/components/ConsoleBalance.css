@@ -1341,7 +1341,7 @@
   height: min(100%, var(--context-view-height)) !important;
   max-height: 100% !important;
   margin: 0 !important;
-  padding: 12px !important;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
   display: grid !important;
   grid-template-areas: "heading" "status" "counts" "body" !important;
   grid-template-rows: auto auto auto minmax(0, 1fr) !important;

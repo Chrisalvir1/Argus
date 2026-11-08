@@ -29,3 +29,5 @@ La suite frontend añade regresiones de filas no solicitadas, conteos globales i
 Safari/iPhone, Echo Show y HA reales pendientes de comprobación. La batería del diagnóstico sigue dependiendo de atributos expuestos por HA; no se adivinan asociaciones con otras entidades de batería. La consulta de diagnóstico mantiene su endpoint general y la UI filtra el alcance de zonas; optimizar consultas es trabajo separado. Una zona desconocida no cuenta como Lista ni como abierta: Zonas puede ser mayor que Listas+Pendientes, con aviso explícito.
 
 Resultados finales locales:75pruebas frontend aprobadas; suite backend290pruebas contabilizadas con13omisiones heredadas y0módulos fallidos; TypeScript, build, sintaxis Python y git diff --check correctos. Backend local con HA2025.1.4/Python3.12; compatibilidad del entorno objetivo declarada se verifica en Actions. Los cambios no abarcan una prueba física del hardware.
+
+El contenedor del detalle respeta safe-area-inset en los cuatro bordes para la vista fullscreen en dispositivos con notch o indicador de inicio. La comprobación física iOS sigue pendiente.
