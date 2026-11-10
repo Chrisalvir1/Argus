@@ -29,12 +29,16 @@ async def _get_language(hass, config_entry):
     return "en" if ha_lang else "es"
 
 def _options(hass, entry):
+    hass_data = getattr(hass, "data", {})
     merged = dict(getattr(entry, "data", {}) or {})
     merged.update(getattr(entry, "options", {}) or {})
-    merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
+    merged.update(hass_data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
     # The Argus panel is the single editable source after importing legacy
     # Options/YAML values; these values must win at runtime too.
-    merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_ui", {}).get(entry.entry_id, {}))
+    merged.update(hass_data.get(DOMAIN, {}).get("arming_voice_ui", {}).get(entry.entry_id, {}))
+    merged["_voice_entry_id"] = entry.entry_id
+    merged["_voice_revision"] = hass_data.get(DOMAIN, {}).get("voice_revisions", {}).get(entry.entry_id, 0)
+    merged["_voice_created_at"] = time.monotonic()
     return merged
 
 def _sensor_identity(hass, entity_id):
@@ -220,6 +224,14 @@ async def _async_speak(hass, options, message, lang):
           try:
               lock = _PLAYER_LOCKS.setdefault(target, asyncio.Lock())
               async with lock:
+                  entry_id = options.get("_voice_entry_id")
+                  revision = getattr(hass, "data", {}).get("argus", {}).get("voice_revisions", {}).get(entry_id, 0)
+                  if entry_id and (revision != options.get("_voice_revision") or time.monotonic() - options.get("_voice_created_at", time.monotonic()) > 30):
+                      return
+                  alarm_entity_id = options.get("_voice_alarm_entity_id")
+                  alarm_state = getattr(getattr(hass, 'states', None), 'get', lambda _id: None)(alarm_entity_id) if alarm_entity_id else None
+                  if alarm_entity_id and alarm_state is not None and getattr(alarm_state, 'state', None) not in options.get("_voice_expected_states", set()):
+                      return
                   previous = getattr(getattr(hass, 'states', None), 'get', lambda _id: None)(target)
                   cancelled = False
                   try:
@@ -255,10 +267,14 @@ async def _async_speak(hass, options, message, lang):
       else:
           await deliver()
 
-async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_id, target, previous_open, current_open, committed=False):
+async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_id, target, previous_open, current_open, committed=False, event_revision=None):
   previous = list(dict.fromkeys(previous_open))
   current = list(dict.fromkeys(current_open))
   if previous == current and not committed: return
+  options = _options(hass, config_entry)
+  if event_revision is not None: options["_voice_revision"] = event_revision
+  options["_voice_alarm_entity_id"] = alarm_entity_id
+  options["_voice_expected_states"] = {target} if committed else {"arming", "disarmed"}
   lang = await _get_language(hass, config_entry)
   ui_data = await async_load_ui_data(hass, config_entry.entry_id)
   zones = ui_data.get("zones", [])
@@ -303,7 +319,6 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
         "zone_count": len({i.get("zone_number") or i["entity_id"] for i in current_info}),
       **_count_labels(lang, len({i.get("zone_number") or i["entity_id"] for i in current_info}), len(current)),
   }
-  options = _options(hass, config_entry)
   
   if committed:
       message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_ARMED, "msg_armed"
@@ -350,8 +365,8 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
       await _async_speak(hass, options, message, lang)
 
 async def async_announce_arming_cancelled(hass, config_entry, *, alarm_entity_id, target, source):
-  lang = await _get_language(hass, config_entry)
   options = _options(hass, config_entry)
+  lang = await _get_language(hass, config_entry)
   mode = translate(lang, target)
   
   template = options.get(CONF_ARMING_VOICE_MESSAGE_CANCELLED)
@@ -371,8 +386,10 @@ async def async_announce_arming_cancelled(hass, config_entry, *, alarm_entity_id
   await _async_speak(hass, options, message, lang)
 
 async def async_announce_alarm_triggered(hass, config_entry, *, alarm_entity_id, sensor_entity_id, triggered_sensor_ids, mode, source, additional=False):
-  lang = await _get_language(hass, config_entry)
   options = _options(hass, config_entry)
+  options["_voice_alarm_entity_id"] = alarm_entity_id
+  options["_voice_expected_states"] = {"triggered"}
+  lang = await _get_language(hass, config_entry)
   sensor = _sensor_identity(hass, sensor_entity_id)
   all_info = [_sensor_identity(hass, e) for e in dict.fromkeys(triggered_sensor_ids)]
   ui_data = await async_load_ui_data(hass, config_entry.entry_id)
@@ -448,8 +465,10 @@ async def async_announce_alarm_triggered(hass, config_entry, *, alarm_entity_id,
 
 async def async_announce_alarm_sensor_closed(hass, config_entry, *, alarm_entity_id, sensor_entity_id, open_sensor_ids, mode):
   """Announce a closed intrusion sensor without clearing the latched alarm."""
-  lang = await _get_language(hass, config_entry)
   options = _options(hass, config_entry)
+  options["_voice_alarm_entity_id"] = alarm_entity_id
+  options["_voice_expected_states"] = {"triggered"}
+  lang = await _get_language(hass, config_entry)
   ui_data = await async_load_ui_data(hass, config_entry.entry_id)
   mode_key = {"armed_home": "home", "armed_away": "away", "armed_night": "night"}.get(mode, mode)
   zone_by_sensor = {
@@ -522,10 +541,11 @@ async def async_announce_alarm_sensor_closed(hass, config_entry, *, alarm_entity
 def install_cancel_announcement():return None
 
 
-async def async_announce_disarmed(hass, config_entry, *, actor_user_id=None, actor_profile_name=None, actor_source=None, previous_mode=None):
+async def async_announce_disarmed(hass, config_entry, *, actor_user_id=None, actor_profile_name=None, actor_source=None, previous_mode=None, event_revision=None):
     """Announce only a server-confirmed transition to disarmed."""
-    lang = await _get_language(hass, config_entry)
     options = _options(hass, config_entry)
+    if event_revision is not None: options["_voice_revision"] = event_revision
+    lang = await _get_language(hass, config_entry)
     template = options.get("arming_voice_message_disarmed")
     message = template or ("Argus de seguridad desarmado." if lang == "es" else "Argus security disarmed.")
     try:

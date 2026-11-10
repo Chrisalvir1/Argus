@@ -7,13 +7,13 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.6
+### Argus v3.7.7
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
 **Actualización desde v2.6.8:** conserva la integración existente y sus entidades. Lee la [guía de migración](docs/MIGRATION_3.0.0.md) y las [notas de versión](docs/RELEASE_NOTES_3.0.0.md) antes de actualizar. Las novedades se configuran voluntariamente; no es obligatorio activar Zonas.
 
-Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
+Objetivo: Home Assistant Core 2026.11.1. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
 
 <br>
 
@@ -26,6 +26,12 @@ Objetivo: Home Assistant Core 2026.11.0. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Novedades de v3.7.7
+
+Evita avisos repetidos por órdenes duplicadas de desarmado y descarta notificaciones o mensajes TTS que quedaron pendientes de un estado anterior. Ignora comandos MQTT retenidos y cambios de presencia no confiables al recuperar dispositivos. Conserva el origen disponible en las notificaciones y señala los armados recuperados tras reiniciar. [Notas de v3.7.7](docs/RELEASE_NOTES_3.7.7.md).
+
+La validación automatizada pasó con Home Assistant Core 2026.11.1; la recepción física en móviles y altavoces requiere comprobarse en cada instalación.
 
 ## Novedades de v3.7.6
 

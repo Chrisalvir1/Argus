@@ -1,5 +1,5 @@
 """Exercise Argus alarm transitions with all external outputs isolated."""
-from types import SimpleNamespace
+from types import SimpleNamespace, MethodType
 import unittest
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -11,7 +11,7 @@ def close_task(coroutine):
 
 
 def fixture(state):
-    return SimpleNamespace(
+    panel = SimpleNamespace(
         hass=SimpleNamespace(data={}, states={}, async_create_task=close_task),
         _config_entry=SimpleNamespace(entry_id="fixture"),
         _alarm_state=state,
@@ -40,6 +40,9 @@ def fixture(state):
         _async_finish_disarm=AsyncMock(),
         async_write_ha_state=Mock(),
     )
+
+    panel._advance_output_revision = MethodType(alarm.ArgusAlarmPanel._advance_output_revision, panel)
+    return panel
 
 
 class CriticalAlarmRuntime(unittest.IsolatedAsyncioTestCase):

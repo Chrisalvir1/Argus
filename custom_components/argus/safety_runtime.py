@@ -167,6 +167,9 @@ def install_safety_runtime():
                 pending.get("target") if pending
                 else getattr(self, "_arming_target", None)
             )
+            await self._async_cancel_arming_request(
+                "cancelled_from_off", disarm=True
+            )
             try:
                 if target is not None:
                     await async_announce_arming_cancelled(
@@ -178,9 +181,6 @@ def install_safety_runtime():
                     )
             except Exception:
                 _LOGGER.exception("Argus cancellation announcement failed")
-            await self._async_cancel_arming_request(
-                "cancelled_from_off", disarm=True
-            )
             return
         return await original_disarm(self, code=code)
 

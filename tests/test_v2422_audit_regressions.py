@@ -120,6 +120,7 @@ class AuditRegressions(unittest.IsolatedAsyncioTestCase):
             _async_persist_stable_state=AsyncMock(), _evaluate_automations=Mock(return_value=None),
             _async_notify_configured=AsyncMock(), _matching_disarm_user=lambda c: None)
         panel._get_siren_entities = lambda: []
+        panel._advance_output_revision = Mock(return_value=1)
         panel._cycle_bypassed = set()
         panel._require_alarm_actor_permission = AsyncMock()
         panel._async_finish_disarm = AsyncMock()
@@ -129,7 +130,7 @@ class AuditRegressions(unittest.IsolatedAsyncioTestCase):
         await endpoint(panel, '918273')
         self.assertEqual(panel._alarm_state, 'disarmed')
         await tasks[-1]
-        panel._async_finish_disarm.assert_awaited_once_with(None, 'default', True, [])
+        panel._async_finish_disarm.assert_awaited_once_with('ha', 'default', True, [], 1)
         panel._async_siren.assert_not_called()
         self.assertFalse(any(c.args[0] == 'argus_duress_activated' for c in hass.bus.async_fire.call_args_list))
         self.assertFalse(panel._async_notify_configured.called)

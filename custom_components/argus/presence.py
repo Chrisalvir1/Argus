@@ -83,6 +83,11 @@ class PresenceManager:
         if not new_state or not old_state or new_state.state == old_state.state:
             return
 
+        # Recovery of a tracker is not evidence that someone arrived or left.
+        if old_state.state in (STATE_UNKNOWN, STATE_UNAVAILABLE) or new_state.state in (STATE_UNKNOWN, STATE_UNAVAILABLE):
+            for rule_id in list(self._pending_tasks):
+                self._cancel_pending_task(rule_id)
+            return
         ui_data = await async_load_ui_data(self.hass, self.entry_id)
         rules = ui_data.get("presence_rules", [])
         if not rules:

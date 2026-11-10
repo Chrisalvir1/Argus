@@ -1,3 +1,12 @@
+## [3.7.7] - 2026-11-10
+
+- Evitar notificaciones repetidas cuando llegan órdenes de desarmado duplicadas o concurrentes.
+- Invalidar notificaciones y TTS pendientes al cambiar de estado; descartar anuncios vencidos o que ya no correspondan al estado actual del panel.
+- Ignorar comandos de armado/desarmado MQTT retenidos y no interpretar la recuperación de presencia `unknown/unavailable` como llegada o salida.
+- Identificar el origen de horarios recuperados después de un reinicio. Conservar el aviso de coacción incluso si el estado cambia durante la entrega.
+- Capturar el perfil Argus y el contexto de usuario al iniciar la operación; identificar HomeKit sin atribuir una persona cuando Apple no la informa.
+- Validar transiciones y anuncios con Home Assistant Core 2026.11.1. No se han probado los altavoces físicos ni se pudo reconstruir retrospectivamente el origen de avisos anteriores.
+
 ## [3.7.6] - 2026-11-08
 
 - Conservar el núcleo 3D original al cambiar orientación; el fallback SVG queda para modo esencial o fallo de WebGL.

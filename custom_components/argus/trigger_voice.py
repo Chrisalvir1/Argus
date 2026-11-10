@@ -112,8 +112,8 @@ def install_trigger_voice() -> None:
   result=await original_disarm(self,*args,**kwargs)
   if self._alarm_state==AlarmControlPanelState.DISARMED:
    stop_repeat_alarm_voice(self);self._argus_triggered_sensors=[];self._argus_open_triggered_sensors=set();self.async_write_ha_state()
-   if not was_disarmed:
-    self.hass.async_create_task(async_announce_disarmed(self.hass, self._config_entry, actor_user_id=actor_user_id, actor_profile_name=actor_profile_name, actor_source=actor_source, previous_mode=previous_mode))
+   if not was_disarmed and result is not False:
+    self.hass.async_create_task(async_announce_disarmed(self.hass, self._config_entry, actor_user_id=actor_user_id, actor_profile_name=actor_profile_name, actor_source=actor_source, previous_mode=previous_mode, event_revision=getattr(self, "_output_revision", None)))
   return result
  def wrapped_attrs(self):
   attrs=original_attrs(self);sensor_ids=list(getattr(self,"_argus_triggered_sensors",[]) or []);attrs["triggered_sensors"]=sensor_ids;attrs["triggered_sensor_names"]=[self.hass.states.get(e).attributes.get("friendly_name",e) if self.hass.states.get(e) else e for e in sensor_ids];attrs["triggered_sensor_count"]=len(sensor_ids);return attrs
