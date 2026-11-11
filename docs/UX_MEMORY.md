@@ -1,3 +1,10 @@
+## 2026-11-11 — Edición de widgets sobre v3.7.8
+
+- Mantener presionado y mover en el mismo gesto. Calcular la vista previa desde el diseño inicial, devolver a su lugar los vecinos al pasar de largo y confirmar únicamente al soltar. Conservar las distribuciones guardadas de móvil y escritorio.
+- Redimensionar desde una esquina con respuesta elástica y ofrecer tamaños según el widget. Validado en Chrome con ratón y tacto emulado dentro de dos Shadow DOM: pulsación y arrastre, retorno de vecinos, cancelación, persistencia y tamaños. Pendiente validar en Safari de un iPhone o iPad físico.
+- Auditoría de elasticidad: resistencia progresiva al llegar al límite, retorno animado al soltar y oscilación leve mientras se edita. Respetar «Reducir movimiento». Medidos el estiramiento y el retorno en Chromium y WebKit de escritorio.
+- Usar Glisse como referencia puntual para «Listo» y el selector de tamaños. Antes de integrar el paquete, verificar su CSS y sus filtros SVG dentro del Shadow DOM de Home Assistant.
+
 ## 2026-11-06 — v3.7.0
 
 Versionado solicitado por el usuario. Incluye todos los cambios locales de verificación fullscreen y contexto. No confundir filtrado de zona seleccionada con detección incompleta. Validación visual de los últimos ajustes en hardware pendiente. No modificar configuración operativa durante las comprobaciones.

@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.8
+### Argus v3.7.9
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -26,6 +26,10 @@ Objetivo: Home Assistant Core 2026.11.1. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Novedades de v3.7.9
+
+Mantén presionado un widget y arrástralo con el mismo gesto. Los vecinos se reacomodan durante la vista previa y vuelven a su lugar si pasas de largo. Estira o encoge desde la esquina con resistencia elástica y un retorno animado al soltar. El menú ofrece tamaños Compacto, Mediano y Amplio según el espacio disponible. [Notas de v3.7.9](docs/RELEASE_NOTES_3.7.9.md).
 
 ## Novedades de v3.7.8
 
@@ -146,7 +150,7 @@ React, TypeScript y Vite para la interfaz; núcleo original Three.js con calidad
 - **Protección para Niños y Mascotas:** Impide desarmes o alertas de pánico involuntarias causadas por roces en tablets de pared o pantallas táctiles.
 
 ### 🧩 Dashboard Modular Interactivo (React 19)
-- **Widgets Arrastrables y Redimensionables:** Basado en `react-grid-layout`, organiza tus tarjetas de seguridad, historial, automatizaciones y control de acceso a tu gusto mediante arrastre y cambio de tamaño.
+- **Widgets arrastrables y redimensionables.** Mantén presionado para mover tus widgets de historial, automatizaciones o control de acceso. Ajusta el tamaño desde la esquina o elige un tamaño en el menú.
 - **Persistencia por Dispositivo:** El diseño y la distribución de widgets se memorizan localmente según el tamaño de la pantalla (teléfono, tablet de pared, monitor de escritorio o pantalla en formato Kiosk).
 
 ### 🗣️ Asistente de Voz Inteligente (TTS Dinámico)

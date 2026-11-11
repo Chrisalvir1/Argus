@@ -20,42 +20,132 @@ export const GRID_ROW_HEIGHT = 10;
 export const GRID_MARGIN = 2;
 const MAX_LAYOUT_ROWS = 480;
 
-/** Compact other widgets around the item the user just placed. */
-export function compactLayoutAroundAnchor(layout: readonly Layout[], anchorId: string | undefined): Layout[] {
-  const items = layout.map(value => ({ ...value, moved: false }));
-  const anchors = items.filter(value => value.static || value.i === anchorId);
-  const placed = [...anchors];
-  const movable = items.filter(value => !value.static && value.i !== anchorId)
-    .sort((a, b) => a.y - b.y || a.x - b.x);
+export const GRID_PADDING = 16;
+export const GRID_MAX_ROWS = MAX_LAYOUT_ROWS;
 
-  for (const item of movable) {
-    // A resize can leave an item already intersecting the anchored card. First
-    // move it below every collision, then compact it upward into the nearest
-    // free slot; only checking the previous row would preserve the overlap.
-    let collisions = placed.filter(other =>
-      item.x < other.x + other.w && item.x + item.w > other.x &&
-      item.y < other.y + other.h && item.y + item.h > other.y
-    );
-    while (collisions.length) {
-      item.y = Math.max(...collisions.map(other => other.y + other.h));
-      collisions = placed.filter(other =>
-        item.x < other.x + other.w && item.x + item.w > other.x &&
-        item.y < other.y + other.h && item.y + item.h > other.y
-      );
-    }
-    while (item.y > 0) {
-      const candidateY = item.y - 1;
-      const collision = placed.some(other =>
-        item.x < other.x + other.w && item.x + item.w > other.x &&
-        candidateY < other.y + other.h && candidateY + item.h > other.y
-      );
-      if (collision) break;
-      item.y = candidateY;
-    }
-    placed.push(item);
+/** Resolve a preview from the positions at pointer-down, never a previous preview. */
+export function placeWidget(
+  original: readonly Layout[], requested: Layout, cols: number, resizing = false,
+): readonly Layout[] {
+  const source = original.find(item => item.i === requested.i);
+  if (!source || source.static) return original;
+
+  const maxW = Math.min(cols - (resizing ? source.x : 0), source.maxW ?? cols);
+  const maxH = Math.min(GRID_MAX_ROWS - (resizing ? source.y : 0), source.maxH ?? GRID_MAX_ROWS);
+  const w = resizing ? clamp(requested.w, source.minW ?? 1, maxW) : source.w;
+  const h = resizing ? clamp(requested.h, source.minH ?? 1, maxH) : source.h;
+  const target = {
+    ...source, w, h,
+    x: resizing ? source.x : clamp(requested.x, 0, cols - w),
+    y: resizing ? source.y : clamp(requested.y, 0, GRID_MAX_ROWS - h),
+  };
+  if (target.x === source.x && target.y === source.y && w === source.w && h === source.h) return original;
+
+  const neighbors = original.filter(item => item.i !== source.i);
+  const displaced = neighbors.filter(item => hasCollision([target], item));
+  if (displaced.some(item => item.static)) return original;
+  if (!resizing && displaced.length && original.every(item => item.w === cols && !item.static)) {
+    return reorderColumn(original, source, target.y);
   }
+  const placed = [target, ...neighbors.filter(item => !displaced.includes(item))];
+  for (const item of displaced) {
+    const candidate = nearbyPosition(item, placed, cols, source);
+    if (!candidate) return resizing ? makeRoomBelow(neighbors, target, original) : original;
+    placed.push(candidate);
+  }
+  const byId = new Map(placed.map(item => [item.i, item]));
+  return original.map(item => byId.get(item.i)!);
+}
 
-  return items.map(item => ({ ...(placed.find(value => value.i === item.i) || item), moved: false }));
+function reorderColumn(original: readonly Layout[], source: Layout, y: number) {
+  const sorted = [...original].sort((a, b) => a.y - b.y);
+  const from = sorted.indexOf(source);
+  const center = y + source.h / 2;
+  const to = sorted.filter(item => {
+    if (item === source) return false;
+    const midpoint = item.y + item.h / 2;
+    return midpoint < center || (midpoint === center && y > source.y);
+  }).length;
+  if (from === to) return original;
+
+  const first = Math.min(from, to);
+  const last = Math.max(from, to);
+  const slots = sorted.slice(first, last + 1);
+  const order = slots.filter(item => item !== source);
+  order.splice(to - first, 0, source);
+  let top = slots[0].y;
+  const byId = new Map(order.map((item, index) => {
+    const next = { ...item, y: top };
+    const slot = slots[index];
+    const gap = index + 1 < slots.length ? slots[index + 1].y - slot.y - slot.h : 0;
+    top += item.h + gap;
+    return [item.i, next];
+  }));
+  return original.map(item => byId.get(item.i) ?? item);
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, Math.round(value)));
+}
+
+function nearbyPosition(item: Layout, placed: Layout[], cols: number, source: Layout) {
+  // A neighboring slot can start at the original coordinate or at the edge of
+  // an obstacle. Test those edges instead of searching every cell in the grid.
+  const xs = new Set([item.x, source.x, 0, cols - item.w]);
+  const ys = new Set([item.y, source.y, 0]);
+  for (const other of placed) {
+    xs.add(other.x + other.w);
+    xs.add(other.x - item.w);
+    ys.add(other.y + other.h);
+    ys.add(other.y - item.h);
+  }
+  let best: Layout | undefined;
+  let bestDistance = Infinity;
+  for (const x of xs) {
+    for (const y of ys) {
+      if (x < 0 || x + item.w > cols || y < 0 || y + item.h > GRID_MAX_ROWS) continue;
+      if (Math.abs(x - item.x) > item.w || Math.abs(y - item.y) > item.h) continue;
+      const distance = Math.abs(x - item.x) / cols + Math.abs(y - item.y) / item.h;
+      const candidate = { ...item, x, y };
+      if (distance >= bestDistance || hasCollision(placed, candidate)) continue;
+      best = candidate;
+      bestDistance = distance;
+    }
+  }
+  return best;
+}
+
+function makeRoomBelow(neighbors: Layout[], target: Layout, original: readonly Layout[]) {
+  // A full-width widget can grow in a filled column. Preserve the order and
+  // shift each blocking widget only as far as the preceding overlap requires.
+  const placed = [target, ...neighbors.filter(item => item.static)];
+  for (const item of neighbors.filter(item => !item.static).sort((a, b) => a.y - b.y)) {
+    const next = { ...item };
+    let blockers = placed.filter(other => hasCollision([other], next));
+    while (blockers.length) {
+      next.y = Math.max(...blockers.map(other => other.y + other.h));
+      blockers = placed.filter(other => hasCollision([other], next));
+    }
+    if (next.y + next.h > GRID_MAX_ROWS && next.y !== item.y) return original;
+    placed.push(next.y === item.y ? item : next);
+  }
+  const byId = new Map(placed.map(item => [item.i, item]));
+  return original.map(item => byId.get(item.i)!);
+}
+
+export function widgetSizeOptions(item: Layout, bp: ArgusBreakpoint) {
+  const base = defaultLayouts[bp]?.find(value => value.i === item.i) ?? item;
+  const maxW = Math.min(item.maxW ?? COLS[bp], COLS[bp] - item.x);
+  const maxH = Math.min(item.maxH ?? GRID_MAX_ROWS, GRID_MAX_ROWS - item.y);
+  const mobile = bp === 'xs' || bp === 'xxs';
+  const options = ([['compact', .72], ['medium', 1], ['large', 1.32]] as const).map(([size, scale]) => ({
+    size,
+    w: clamp(base.w * (mobile ? 1 : scale), item.minW ?? 1, maxW),
+    h: clamp(base.h * scale, item.minH ?? 1, maxH),
+  }));
+  return options.filter((option, index) => options.findIndex(other =>
+    other.w === option.w && other.h === option.h,
+  ) === index);
 }
 
 /** Replace only the layout explicitly edited at this viewport breakpoint. */

@@ -142,6 +142,11 @@ const TEXTS = {
     'edit_widgets': 'Config. Widgets',
 
     'edit_dashboard_done': '✓ Listo',
+    'widget_edit_hint': 'Arrastra un widget o ajusta su tamaño desde la esquina.',
+    'widget_size_compact': 'Compacto',
+    'widget_size_medium': 'Mediano',
+    'widget_size_large': 'Amplio',
+    'widget_size_saved': 'Tamaño guardado',
     'emergency_call_active': 'Llamada de emergencia en curso...',
     'emergency_help': 'Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.',
     'emergency_number_label': 'Número Local de Emergencia',
@@ -605,6 +610,11 @@ const TEXTS = {
     'edit_widgets': 'Widget Config',
 
     'edit_dashboard_done': '✓ Done',
+    'widget_edit_hint': 'Drag a widget or resize it from the corner.',
+    'widget_size_compact': 'Compact',
+    'widget_size_medium': 'Medium',
+    'widget_size_large': 'Large',
+    'widget_size_saved': 'Size saved',
     'emergency_call_active': 'Emergency call in progress...',
     'emergency_help': 'Set local emergency service number (e.g. 911 or 112). Included in SOS alerts.',
     'emergency_number_label': 'Local Emergency Number',

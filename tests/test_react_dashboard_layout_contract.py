@@ -11,6 +11,7 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
     def setUpClass(cls):
         cls.dashboard=(SRC/'ArgusDashboard.tsx').read_text(encoding='utf-8')
         cls.layout=(SRC/'layout.ts').read_text(encoding='utf-8')
+        cls.gesture=(SRC/'useWidgetGesture.ts').read_text(encoding='utf-8')
         cls.types=(SRC/'types.ts').read_text(encoding='utf-8')
         cls.style=(SRC/'style.css').read_text(encoding='utf-8')
         cls.legacy=(ROOT/'src'/'legacy'/'argus-panel.ts').read_text(encoding='utf-8')
@@ -19,11 +20,15 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
     def test_real_react_grid_layout_dependencies(self):
         self.assertEqual(self.package['dependencies']['react-grid-layout'],'^2.3.0')
         self.assertIn('react-resizable',self.package['dependencies'])
-    def test_collision_safe_auto_compacting_freeform_grid(self):
-        for token in ['allowOverlap={false}','isBounded={true}','compactType={null}','draggableHandle=".argus-widget__drag-handle"','resizeHandles={[\'e\', \'s\', \'se\']}','compactLayoutAroundAnchor(layout, item?.i)','Persist only the active breakpoint','}, 560);','document.addEventListener(\'pointerdown\'','Toca fuera para terminar.','hold_widget_to_edit']:
-            self.assertIn(token,self.dashboard)
-        self.assertNotIn('✓✓ Listo',self.dashboard)
-        self.assertNotIn('Editar tablero</button>',self.dashboard)
+    def test_grid_renders_gesture_previews_without_builtin_reordering(self):
+        for token in ['layouts={displayedLayouts}', 'compactType={null}', 'preventCollision',
+                      'isDraggable={false}', 'isResizable={false}', 'useWidgetGesture(containerRef',
+                      'argus-widget__resize-handle', 'hold_widget_to_edit']:
+            self.assertIn(token, self.dashboard)
+        self.assertIn('placeWidget(layout, requested, cols, resizing)', self.gesture)
+        self.assertIn("event.type === 'touchend'", self.gesture)
+        self.assertIn('if (commit && active.preview', self.gesture)
+        self.assertNotIn('onLayoutChange=', self.dashboard)
     def test_breakpoints_and_dense_freeform_geometry(self):
         for token in ['lg:1200','md:996','sm:768','xs:480','xxs:0','lg: 96, md: 80, sm: 64, xs: 40, xxs: 32','GRID_ROW_HEIGHT = 10','GRID_MARGIN = 2','export function migrateToV5']:
             self.assertIn(token,self.layout)
@@ -36,7 +41,8 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
     def test_editing_visibility_reset_and_accessibility(self):
         for token in ['Restablecer diseño','Ocultar widget',"getT('show', 'Mostrar')",'aria-live="polite"',"event.key==='Escape'",'saveVisibility']:
             self.assertIn(token,self.dashboard+self.layout)
-        self.assertIn('Toca fuera para terminar.',self.dashboard)
+        self.assertIn("getT('done', 'Listo')", self.dashboard)
+        self.assertIn("document.addEventListener('pointerdown', outsideDown, true)", self.dashboard)
     def test_persistence_is_scoped_and_versioned(self):
         self.assertIn('argus:dashboard-layout:${u}:${d}',self.layout)
         self.assertIn('layoutVersion:5',self.layout)
@@ -44,12 +50,12 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
         self.assertIn('private writes:Promise<void>=Promise.resolve()', (ROOT/'src'/'features'/'dashboard'/'index.tsx').read_text(encoding='utf-8'))
         self.assertIn('DashboardLayoutStorage',self.types)
     def test_mobile_and_web_layout_writes_are_breakpoint_scoped(self):
-        self.assertIn('replaceBreakpointLayout(lastValid.current, bpRef.current, layout)',self.dashboard)
-        self.assertIn('const active = all?.[bpRef.current]',self.dashboard)
+        self.assertIn('replaceBreakpointLayout(lastValid.current, bp, layout)', self.dashboard)
+        self.assertIn('const bp = layoutProfile', self.dashboard)
+        self.assertIn('gesture.current.bp !== editor.breakpoint', self.gesture)
         self.assertIn('breakpoint={layoutProfile}',self.dashboard)
         self.assertIn('window.innerWidth < BREAKPOINTS.sm',self.dashboard)
         self.assertIn('export function replaceBreakpointLayout',self.layout)
-        self.assertIn('never rewrites the web/tablet arrangement',self.dashboard)
     def test_hidden_widgets_have_a_restore_entry_outside_edit_mode(self):
         self.assertIn('Mostrar widgets ocultos',self.dashboard)
         self.assertIn('argus-dashboard__restore-entry',self.dashboard)

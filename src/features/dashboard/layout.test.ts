@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { COLS, compactLayoutAroundAnchor, GRID_ROW_HEIGHT, defaultLayouts, hasCollision, hasLayoutCollisions, mergeLayouts, migrateToV3, migrateToV5, replaceBreakpointLayout } from './layout';
+import { COLS, GRID_ROW_HEIGHT, defaultLayouts, hasCollision, hasLayoutCollisions, mergeLayouts, migrateToV3, migrateToV5, placeWidget, replaceBreakpointLayout, widgetSizeOptions } from './layout';
 import type { Layout } from './types';
 
 describe('Argus layout', () => {
@@ -9,26 +9,54 @@ describe('Argus layout', () => {
   });
   it('fusiona layouts incompletos', () => expect(mergeLayouts({ lg: [{ i: 'activity-history', x: 2, y: 2, w: 3, h: 4 } as Layout] }).lg?.length).toBe(defaultLayouts.lg?.length));
   it('bloquea colisión', () => expect(hasCollision([{ i: 'a', x: 0, y: 0, w: 3, h: 3 } as Layout], { i: 'b', x: 2, y: 1, w: 3, h: 3 } as Layout)).toBe(true));
-  it('mantiene abajo el widget arrastrado y compacta los demás alrededor', () => {
-    const result = compactLayoutAroundAnchor([
-      { i: 'top', x: 0, y: 0, w: 4, h: 2 },
-      { i: 'middle', x: 0, y: 4, w: 4, h: 2 },
-      { i: 'dragged', x: 0, y: 10, w: 4, h: 2, moved: true },
-    ] as Layout[], 'dragged');
-    expect(result.find(item => item.i === 'dragged')?.y).toBe(10);
-    expect(result.find(item => item.i === 'top')?.y).toBe(0);
-    expect(result.find(item => item.i === 'middle')?.y).toBe(2);
-    expect(result.every((item, index) => result.slice(index + 1).every(other => !hasCollision([item], other)))).toBe(true);
+  it('devuelve los vecinos a sus posiciones al pasar de largo o volver al origen', () => {
+    const layout: Layout[] = [
+      { i: 'dragged', x: 0, y: 0, w: 4, h: 3 },
+      { i: 'neighbor', x: 4, y: 0, w: 4, h: 3 },
+      { i: 'untouched', x: 4, y: 7, w: 4, h: 3 },
+    ];
+    const [dragged, neighbor, untouched] = layout;
+    const over = placeWidget(layout, { ...dragged, x: 4 }, 8);
+    expect(over[1]).toMatchObject({ x: 0, y: 0 });
+    expect(over[2]).toBe(untouched);
+    expect(placeWidget(layout, { ...dragged, y: 4 }, 8)[1]).toBe(neighbor);
+    expect(placeWidget(layout, dragged, 8)).toBe(layout);
+    expect(hasLayoutCollisions({ lg: over })).toBe(false);
   });
-  it('repara colisiones de widgets vecinos después de redimensionar', () => {
-    const result = compactLayoutAroundAnchor([
-      { i: 'resized', x: 0, y: 1, w: 4, h: 6 },
-      { i: 'neighbor', x: 0, y: 2, w: 4, h: 3 },
-      { i: 'next', x: 0, y: 10, w: 4, h: 2 },
-    ] as Layout[], 'resized');
-    expect(result.find(item => item.i === 'resized')?.y).toBe(1);
-    expect(result.find(item => item.i === 'neighbor')?.y).toBe(7);
-    expect(result.every((item, index) => result.slice(index + 1).every(other => !hasCollision([item], other)))).toBe(true);
+  it('reordena una columna entre el origen y el destino, incluso con diferentes alturas', () => {
+    const layout: Layout[] = [
+      { i: 'dragged', x: 0, y: 0, w: 40, h: 3 },
+      { i: 'one', x: 0, y: 3, w: 40, h: 5 },
+      { i: 'two', x: 0, y: 8, w: 40, h: 4 },
+      { i: 'untouched', x: 0, y: 12, w: 40, h: 3 },
+    ];
+    const over = placeWidget(layout, { ...layout[0], y: 9 }, 40);
+    expect(over.map(item => item.y)).toEqual([9, 0, 5, 12]);
+    expect(over[3]).toBe(layout[3]);
+    expect(hasLayoutCollisions({ xs: over })).toBe(false);
+    expect(placeWidget(layout, layout[0], 40)).toBe(layout);
+    const equal = [layout[0], { ...layout[1], h: 3 }];
+    expect(placeWidget(equal, { ...equal[0], y: 3 }, 40).map(item => item.y)).toEqual([3, 0]);
+  });
+  it('al crecer mueve solo la cadena de colisiones y al volver al tamaño inicial la restaura', () => {
+    const layout: Layout[] = [
+      { i: 'resized', x: 0, y: 0, w: 4, h: 4, minH: 3 },
+      { i: 'neighbor', x: 0, y: 4, w: 4, h: 3 },
+      { i: 'next', x: 0, y: 7, w: 4, h: 4 },
+      { i: 'other-column', x: 4, y: 0, w: 4, h: 10 },
+    ];
+    const expanded = placeWidget(layout, { ...layout[0], h: 6 }, 8, true);
+    expect(expanded.map(item => item.y)).toEqual([0, 6, 9, 0]);
+    expect(expanded[3]).toBe(layout[3]);
+    expect(hasLayoutCollisions({ lg: expanded })).toBe(false);
+    expect(placeWidget(layout, layout[0], 8, true)).toBe(layout);
+    expect(placeWidget(layout, { ...layout[0], h: 1 }, 8, true)[0].h).toBe(3);
+  });
+  it('limita los tamaños del menú a los límites de cada widget', () => {
+    const item = mergeLayouts(null).xs!.find(value => value.i === 'alarm-configuration')!;
+    const options = widgetSizeOptions(item, 'xs');
+    expect(options.map(value => value.size)).toEqual(['compact', 'medium', 'large']);
+    expect(options.every(value => value.w === 40 && value.h >= item.minH!)).toBe(true);
   });
   it('corrige layouts v5 guardados con widgets superpuestos sin cambiar columnas', () => {
     const saved = structuredClone(defaultLayouts);

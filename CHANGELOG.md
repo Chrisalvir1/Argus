@@ -1,3 +1,9 @@
+## [3.7.9] - 2026-11-11
+
+- Arrastrar widgets con el mismo gesto de pulsación larga y calcular cada vista previa desde el diseño inicial para que los vecinos vuelvan a su sitio al pasar de largo.
+- Confirmar la distribución al soltar, restaurarla al cancelar y conservar los perfiles de móvil y escritorio.
+- Redimensionar desde la esquina con resistencia elástica y retorno animado. Ofrecer tamaños por widget y respetar la preferencia de movimiento reducido.
+
 ## [3.7.8] - 2026-11-11
 
 - En el panel directo de Argus, ocultar el encabezado redundante y quitar el marco y relleno exterior de la consola para aprovechar el ancho disponible, como Argus Card.
