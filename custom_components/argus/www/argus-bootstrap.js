@@ -1,3 +1,3 @@
 import './argus-brand-patch.js';
-import { applyArgusFrontend } from './react-dist/argus-frontend.js?v=3.7.7&render=hud-mode-row-3';
+import { applyArgusFrontend } from './react-dist/argus-frontend.js?v=3.7.8&render=direct-console-no-shell';
 applyArgusFrontend();

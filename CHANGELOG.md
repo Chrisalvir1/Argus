@@ -1,3 +1,9 @@
+## [3.7.8] - 2026-11-11
+
+- En el panel directo de Argus, ocultar el encabezado redundante y quitar el marco y relleno exterior de la consola para aprovechar el ancho disponible, como Argus Card.
+- Mantener intactos el host y la navegación de Home Assistant, Argus Card (modo compacto y completo) y las reglas de pantalla completa.
+- Validar el layout en Chromium con anchos de móvil, tablet y escritorio; Safari/iPhone y una instalación real de Home Assistant quedan pendientes.
+
 ## [3.7.7] - 2026-11-10
 
 - Evitar notificaciones repetidas cuando llegan órdenes de desarmado duplicadas o concurrentes.

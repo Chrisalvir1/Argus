@@ -1433,3 +1433,34 @@
     align-content: start !important;
   }
 }
+/* The standalone Argus page already has a Home Assistant host around it.
+   Keep that host for navigation, but make the live console the only visual
+   card, matching the Argus Card presentation at the same available width. */
+:host(:not(.fullscreen-active):not(.argus-lovelace-card):not([compact]):not(.argus-compact)) .dashboard-instances > .panel-head {
+  display: none !important;
+}
+:host(:not(.fullscreen-active):not(.argus-lovelace-card):not([compact]):not(.argus-compact)) #w-instances {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+:host(:not(.fullscreen-active):not(.argus-lovelace-card):not([compact]):not(.argus-compact)) #entries {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}

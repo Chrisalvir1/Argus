@@ -4,6 +4,7 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { SecurityConsole } from './SecurityConsole';
 import { SecurityContext } from './SecurityContext';
 import legacySource from '../../../legacy/argus-panel.ts?raw';
+import cardSource from '../../../legacy/argus-card.ts?raw';
 import shieldSource from './SecurityShield.tsx?raw';
 
 afterEach(() => vi.unstubAllGlobals());
@@ -145,6 +146,10 @@ it('offers a persistent close control alongside the confirmed state', () => {
 
 it('does not globally hide nested sections when entering fullscreen', () => {
   expect(legacySource).not.toMatch(/:host\(\.fullscreen-active\)\s+section:not\(#w-instances\)/);
+});
+
+it('marks Lovelace hosted panels so standalone layout changes cannot affect them', () => {
+  expect(cardSource).toContain("this._panelEl.classList.add('argus-lovelace-card')");
 });
 
 

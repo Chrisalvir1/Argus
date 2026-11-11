@@ -249,6 +249,7 @@ class ArgusPanelCard extends HTMLElement {
     this._panelMounted = true;
     this._panelHost.innerHTML = '';
     this._panelEl = document.createElement('argus-panel-v2018');
+    this._panelEl.classList.add('argus-lovelace-card');
     // A Lovelace card must size to its content. The panel element itself
     // reserves viewport height for fullscreen, so explicitly constrain the
     // embedded card host while leaving fullscreen to its own class rules.
