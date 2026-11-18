@@ -1,0 +1,22 @@
+name: Hold Argus 3.7.10 pending dependency security fix
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/hold-release-3.7.10.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hold-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Retain the candidate as a draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit v3.7.10 --repo "$GITHUB_REPOSITORY" --draft --notes-file docs/RELEASE_NOTES_3.7.10.md
+          echo 'Argus 3.7.10 retained as draft: GHSA-fc5q-39xc-vjpf has no published stable fix.'

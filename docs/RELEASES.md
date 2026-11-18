@@ -1,6 +1,6 @@
 # Historial de versiones
 
-- [v3.7.10](https://github.com/Chrisalvir1/Argus/releases/tag/v3.7.10) — actualización de dependencias estables.
+- [v3.7.10](https://github.com/Chrisalvir1/Argus/releases/tag/v3.7.10) — candidata retenida en borrador por auditoría de compilación pendiente.
 
 | Versión | Fecha | Cambios | Verificación |
 |---|---|---|---|
