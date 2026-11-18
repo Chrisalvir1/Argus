@@ -7,13 +7,13 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.9
+### Argus v3.7.10
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
 **Actualización desde v2.6.8:** conserva la integración existente y sus entidades. Lee la [guía de migración](docs/MIGRATION_3.0.0.md) y las [notas de versión](docs/RELEASE_NOTES_3.0.0.md) antes de actualizar. Las novedades se configuran voluntariamente; no es obligatorio activar Zonas.
 
-Objetivo: Home Assistant Core 2026.11.1. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
+Objetivo: Home Assistant Core 2026.11.2. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
 
 <br>
 
@@ -26,6 +26,11 @@ Objetivo: Home Assistant Core 2026.11.1. El frontend compilado está incluido; N
 </div>
 
 ---
+
+## Actualización v3.7.10
+
+Actualiza Vite a 8.3.8 y el plugin React a 6.3.0, conservando TypeScript 7.0.2. Alinea compilación y CI con Node 26.13.1 LTS y Home Assistant 2026.11.2; actualiza uv y las acciones de GitHub. Regenera y verifica los lockfiles de dependencias. [Notas de versión](docs/RELEASE_NOTES_3.7.10.md).
+
 
 ## Novedades de v3.7.9
 
@@ -115,7 +120,7 @@ Lee las [notas de v3.0.1](docs/RELEASE_NOTES_3.0.1.md). La validación visual en
 
 Config YAML opcional y detallado: [examples/configuration.yaml](examples/configuration.yaml). La voz se configura preferentemente en Argus → Modos / SOS → Voz de Argus. El YAML solo requiere `arming_voice` y permite definir motor, reproductores y textos predeterminados.
 
-Versiones fijadas por el lockfile: React/React DOM 19.3.1, Vite 8.3.6, TypeScript 7.0.2, Three.js 0.187.0 y react-grid-layout 2.3.0. El entorno declarado usa Node.js 26.13.0 y Python 3.14.10. La integración no instala paquetes Python adicionales y usa el Python proporcionado por Home Assistant. Estas versiones describen el entorno declarado; no sustituyen las pruebas en tu instalación.
+Versiones fijadas por el lockfile: React/React DOM 19.3.1, Vite 8.3.6, TypeScript 7.0.2, Three.js 0.187.0 y react-grid-layout 2.3.0. El entorno declarado usa Node.js 26.13.1 y Python 3.14.10. La integración no instala paquetes Python adicionales y usa el Python proporcionado por Home Assistant. Estas versiones describen el entorno declarado; no sustituyen las pruebas en tu instalación.
 
 ## 📖 ¿Qué es Argus Home Hub?
 

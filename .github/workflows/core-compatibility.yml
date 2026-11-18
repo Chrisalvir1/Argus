@@ -13,18 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           repository: home-assistant/core
-          ref: 2026.11.0
+          ref: 2026.11.2
           path: home-assistant-core
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: '3.14'
-      - name: Install Home Assistant Core 2026.11.0 test dependencies
+      - name: Install Home Assistant Core 2026.11.2 test dependencies
         run: |
-          python -m pip install uv==0.12.19
+          python -m pip install uv==0.13.9
           cd home-assistant-core
           uv pip install --system -r requirements.txt -r requirements_test.txt
           uv pip install --system -e . --no-deps

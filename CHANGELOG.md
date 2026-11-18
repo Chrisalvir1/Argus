@@ -1,3 +1,9 @@
+## [3.7.10] - 2026-11-17
+
+- Actualiza Vite a 8.3.8 y el plugin React a 6.3.0, conservando TypeScript 7.0.2.
+- Alinea compilación y CI con Node 26.13.1 LTS y Home Assistant 2026.11.2; actualiza uv y las acciones de GitHub.
+- Regenera y verifica los lockfiles de dependencias.
+
 ## [3.7.9] - 2026-11-11
 
 - Arrastrar widgets con el mismo gesto de pulsación larga y calcular cada vista previa desde el diseño inicial para que los vecinos vuelvan a su sitio al pasar de largo.

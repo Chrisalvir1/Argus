@@ -1,5 +1,7 @@
 # Historial de versiones
 
+- [v3.7.10](https://github.com/Chrisalvir1/Argus/releases/tag/v3.7.10) — actualización de dependencias estables.
+
 | Versión | Fecha | Cambios | Verificación |
 |---|---|---|---|
 | [3.7.9](RELEASE_NOTES_3.7.9.md) | 2026-11-11 | Widgets con arrastre continuo, retorno de vecinos y redimensionado elástico | 79 pruebas frontend, TypeScript, build, Chromium y WebKit de escritorio |

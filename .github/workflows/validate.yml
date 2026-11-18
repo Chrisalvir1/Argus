@@ -25,27 +25,27 @@ jobs:
       matrix:
         python: ['3.14']
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: ${{ matrix.python }}
       - name: Verify Python runtime
         run: python -c 'import sys; assert (3, 14, 0) <= sys.version_info < (3, 16, 0); print(sys.version)'
       - run: python -m compileall -q custom_components/argus tests
-      - run: python -m pip install homeassistant==2026.11.0
+      - run: python -m pip install homeassistant==2026.11.2
       - run: python scripts/test_backend.py
 
   javascript-syntax:
-    name: JavaScript syntax checks (Node 26.13.0 LTS)
+    name: JavaScript syntax checks (Node 26.13.1 LTS)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '26.13.0'
+          node-version: '26.13.1'
       - name: Verify Node runtime
-        run: node -e "if (process.versions.node !== '26.13.0') process.exit(1); console.log(process.version)"
+        run: node -e "if (process.versions.node !== '26.13.1') process.exit(1); console.log(process.version)"
       - name: Validate residual JavaScript modules
         run: |
           set -euo pipefail
@@ -56,10 +56,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '26.13.0'
+          node-version: '26.13.1'
           cache: npm
       - run: npm ci
       - run: test "$(npx tsc --version)" = "Version 7.0.2"
@@ -76,10 +76,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '26.13.0'
+          node-version: '26.13.1'
           cache: npm
       - run: npm ci
       - run: npm run build
@@ -98,8 +98,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
-      - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
+      - uses: actions/checkout@v7.0.1
+      - uses: hacs/action@d556e736723344f83838d08488c983a15381059a
         with:
           category: integration
 
@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       - uses: home-assistant/actions/hassfest@f4ca6f671bd429efb108c0f2fa0ae8af0215986c
 
   dependency-audit:
@@ -116,10 +116,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '26.13.0'
+          node-version: '26.13.1'
           cache: npm
       - run: npm ci
       - name: Report high-severity dependency findings

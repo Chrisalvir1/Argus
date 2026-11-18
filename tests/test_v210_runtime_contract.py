@@ -24,7 +24,7 @@ class TestV210RuntimeContract(unittest.TestCase):
             else:
                 self.assertIn("python-version: ${{ matrix.python }}", source)
                 self.assertIn("python: ['3.14']", source)
-                self.assertIn("homeassistant==2026.11.0", source)
+                self.assertIn("homeassistant==2026.11.2", source)
             self.assertIn("(3, 14, 0) <= sys.version_info < (3, 16, 0)", source)
 
     def test_node_26_and_typescript_702_are_enforced(self):
@@ -32,7 +32,7 @@ class TestV210RuntimeContract(unittest.TestCase):
         self.assertTrue('"typescript":"7.0.2"' in package or '"typescript": "7.0.2"' in package)
         for workflow in ("validate.yml", "release.yml"):
             source = (ROOT / ".github" / "workflows" / workflow).read_text()
-            self.assertIn("node-version: '26.13.0'", source)
+            self.assertIn("node-version: '26.13.1'", source)
             self.assertIn("Version 7.0.2", source)
 
     def test_ecmascript_2025_strict_contract(self):

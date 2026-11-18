@@ -6,6 +6,6 @@ dependencies = []
 
 [tool.argus.runtime]
 python = "3.14.10"
-node = "26.13.0-lts"
+node = "26.13.1-lts"
 typescript = "7.0.2"
 ecmascript = "ES2025"
