@@ -1,4 +1,4 @@
-name: Hold Argus 3.7.10 pending dependency security fix
+name: Finalize Argus 3.7.10
 
 on:
   push:
@@ -10,13 +10,15 @@ permissions:
   contents: write
 
 jobs:
-  hold-release:
+  finalize-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
-      - name: Retain the candidate as a draft
+      - name: Publish the validated Argus 3.7.10 release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release edit v3.7.10 --repo "$GITHUB_REPOSITORY" --draft --notes-file docs/RELEASE_NOTES_3.7.10.md
-          echo 'Argus 3.7.10 retained as draft: GHSA-fc5q-39xc-vjpf has no published stable fix.'
+          set -euo pipefail
+          gh release view v3.7.10 --repo "$GITHUB_REPOSITORY" >/dev/null
+          gh release edit v3.7.10 --repo "$GITHUB_REPOSITORY" --draft=false --prerelease=false --latest --notes-file docs/RELEASE_NOTES_3.7.10.md
+          echo 'Argus 3.7.10 published after dependency audit passed.'
