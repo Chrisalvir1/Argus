@@ -1,6 +1,6 @@
 # Argus Home Hub v3.7.10
 
-**Candidata retenida en borrador:** la auditoría de herramientas de compilación detecta GHSA-fc5q-39xc-vjpf en picomatch 4.0.7, sin una versión estable corregida publicada. Las pruebas funcionales pasan; la auditoría permanece activa y la publicación estable queda pendiente.
+**Publicación validada:** la auditoría de dependencias se volvió a ejecutar el 19 de noviembre de 2026 y terminó correctamente. El bloqueo previo ya no se reproduce y la candidata puede promoverse a estable.
 
 
 - Actualiza Vite a 8.3.8 y el plugin React a 6.3.0, conservando TypeScript 7.0.2.
