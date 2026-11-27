@@ -1,5 +1,7 @@
 # Historial de versiones
 
+[Candidato v3.7.12](RELEASE_NOTES_3.7.12.md) · Mantenimiento, seguridad de PIN y carga diferida de WebGL.
+
 [v3.7.11](RELEASE_NOTES_3.7.11.md) · Modernización de dependencias, compilación más liviana y validación de Core en ARM64. [Etiquetas](DEPENDENCY_TAGS.md)
 
 - [v3.7.10](https://github.com/Chrisalvir1/Argus/releases/tag/v3.7.10) — versión publicada.
