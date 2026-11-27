@@ -13,3 +13,5 @@ Candidato de mantenimiento basado en v3.7.11. Sincroniza el manifiesto, la versi
 
 - Conserva los intentos y bloqueos por instancia entre reinicios de Home Assistant. Los bloqueos repetidos aumentan de forma exponencial hasta una hora.
 - Migra los PIN heredados al arrancar, incluidos los códigos maestro, de acceso, de invitado y de coacción. La verificación requiere un hash almacenado.
+
+Consulta la [validación por archivo y las métricas del paquete](VALIDACION_3.7.12.md). El ZIP de instalación pasa de 8,23 MB a 2,85 MB.
