@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, expect, it, vi } from 'vitest';
 import { SecurityConsole } from './SecurityConsole';
 import { SecurityContext } from './SecurityContext';
-import legacySource from '../../../panel/argus-panel.ts?raw';
+import panelStyles from '../../../panel/panel.css?raw';
 import cardSource from '../../../panel/argus-card.ts?raw';
 import shieldSource from './SecurityShield.tsx?raw';
 
@@ -145,7 +145,7 @@ it('offers a persistent close control alongside the confirmed state', () => {
 
 
 it('does not globally hide nested sections when entering fullscreen', () => {
-  expect(legacySource).not.toMatch(/:host\(\.fullscreen-active\)\s+section:not\(#w-instances\)/);
+  expect(panelStyles).not.toMatch(/:host\(\.fullscreen-active\)\s+section:not\(#w-instances\)/);
 });
 
 it('marks Lovelace hosted panels so standalone layout changes cannot affect them', () => {

@@ -411,6 +411,8 @@ def install_sensor_state_runtime() -> None:
             if gate is not None:
                 for sensor in self._sensors_for_state(self._alarm_state):
                     reading = self.hass.states.get(sensor)
+                    if self._requires_immediate_trigger(sensor):
+                        continue
                     if not gate.allow(sensor, reading.state if reading else None, sensor in active):
                         active.discard(sensor)
             previous = set(

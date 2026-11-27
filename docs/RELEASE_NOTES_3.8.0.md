@@ -20,3 +20,7 @@ Candidato basado en 3.7.12. Las funciones de aviso interactivo, MQTT, PIN de ove
 - **MQTT.** Mediante `argus/save_ui`, guarda un objeto `mqtt` con `enabled`, `state_topic` y `command_topic`. Usa tópicos distintos por instancia y permisos de publicación restrictivos en tu bróker. Argus descarta comandos MQTT retenidos. Home Assistant debe tener MQTT configurado.
 
 Las verificaciones de la Companion App en dispositivos físicos y del bróker MQTT siguen pendientes antes de publicar.
+
+## Arranque y distribución
+
+Hereda el presupuesto de 400.000 bytes de v3.7.12. El candidato pesa 399.290 bytes de JavaScript sin comprimir hasta el selector de perfiles, incluidos el bootstrap, el script de marca y los imports estáticos. El tablero React y Three.js se cargan por separado. La primera lectura de los sensores críticos conserva prioridad aunque se hubiesen configurado para aceptar la apertura inicial.

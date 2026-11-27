@@ -1063,8 +1063,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if new_state is None or entity_id in self._cycle_bypassed:
             return
         gate = getattr(self, "_argus_recovery_gate", None)
-        if gate is not None and not gate.allow(
-            entity_id, new_state.state, new_state.state in _INTRUSION_ACTIVE_STATES
+        if (
+            gate is not None
+            and not self._requires_immediate_trigger(entity_id)
+            and not gate.allow(entity_id, new_state.state, new_state.state in _INTRUSION_ACTIVE_STATES)
         ):
             return
         reincluded_at = getattr(self, "_cycle_reincluded_at", {}).get(entity_id)
