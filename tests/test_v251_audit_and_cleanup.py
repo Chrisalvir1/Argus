@@ -14,6 +14,7 @@ import unittest
 
 ROOT = Path(__file__).parents[1]
 PANEL_SRC = (ROOT / "src" / "panel" / "argus-panel.ts").read_text(encoding="utf-8")
+PDF_SRC = (ROOT / "src/features/history/pdf.ts").read_text(encoding="utf-8")
 CARD_SRC = (ROOT / "src" / "panel" / "argus-card.ts").read_text(encoding="utf-8")
 ACP_SRC = (ROOT / "custom_components" / "argus" / "alarm_control_panel.py").read_text(encoding="utf-8")
 CONST_SRC = (ROOT / "custom_components" / "argus" / "const.py").read_text(encoding="utf-8")
@@ -73,8 +74,8 @@ class TestV251AuditAndCleanup(unittest.TestCase):
         self.assertIn("date.getFullYear()", PANEL_SRC)
         self.assertNotIn("toISOString().slice(0, 10)", PANEL_SRC)
         # High resolution 384x384 logo and left-positioned header
-        self.assertIn("const size = 384;", PANEL_SRC)
-        self.assertIn("MARGIN_LEFT + logoSize + 12", PANEL_SRC)
+        self.assertIn("const size = 384;", PDF_SRC)
+        self.assertIn("MARGIN_LEFT + logoSize + 12", PDF_SRC)
 
     def test_liquid_glass_clock_and_unavailable_sensor_consistency(self):
         """Sensor delay badges must render Liquid Glass clock and chips must accurately flag unavailable sensors."""

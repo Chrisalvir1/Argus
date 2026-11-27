@@ -2,7 +2,7 @@
 from pathlib import Path
 
 
-PANEL = (Path(__file__).resolve().parents[1] / "src" / "panel" / "argus-panel.ts").read_text()
+PANEL = (Path(__file__).resolve().parents[1] / "src" / "panel" / "argus-panel.ts").read_text() + (Path(__file__).resolve().parents[1] / "src" / "panel" / "panel.css").read_text()
 
 
 def test_sos_view_has_no_zone_summary_and_uses_shared_output_selector():

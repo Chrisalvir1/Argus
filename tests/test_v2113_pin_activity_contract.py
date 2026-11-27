@@ -3,7 +3,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 REACT_DASHBOARD = (ROOT / 'src/features/dashboard/ArgusDashboard.tsx').read_text(encoding='utf-8')
-LEGACY = (ROOT / 'src/panel/argus-panel.ts').read_text(encoding='utf-8')
+LEGACY = (ROOT / 'src/panel/argus-panel.ts').read_text(encoding='utf-8') + (ROOT / 'src/panel/panel.css').read_text(encoding='utf-8')
 STYLE = (ROOT / 'src/features/dashboard/style.css').read_text(encoding='utf-8')
 CONSOLE = (ROOT / 'src/features/dashboard/components/ConsoleBalance.css').read_text(encoding='utf-8')
 EMBLEM = (ROOT / 'src/features/dashboard/components/SecurityEmblem3D.tsx').read_text(encoding='utf-8')
