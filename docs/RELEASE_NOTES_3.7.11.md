@@ -1,6 +1,6 @@
 # Argus v3.7.11 · Modernización de dependencias
 
-Notas de la próxima publicación, documentadas en el [PR #63](https://github.com/Chrisalvir1/Argus/pull/63). Etiqueta de versión prevista: `v3.7.11`. Etiqueta técnica prevista: `deps/argus-2026-11-26`.
+Notas de la próxima publicación, documentadas en el [PR #63](https://github.com/Chrisalvir1/Argus/pull/63). Etiqueta de versión prevista: `v3.7.11`. [Etiqueta técnica publicada](https://github.com/Chrisalvir1/Argus/tree/deps/argus-2026-11-26).
 
 ## Qué mejora
 
