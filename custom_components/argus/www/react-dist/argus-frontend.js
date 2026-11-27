@@ -889,7 +889,7 @@ var p = /* @__PURE__ */ t(((e) => {
 		me++, pe[me] = e.current, e.current = t;
 	}
 	var ge = he(null), U = he(null), W = he(null), G = he(null);
-	function _e(e, t) {
+	function K(e, t) {
 		switch (H(W, t), H(U, e), H(ge, null), t.nodeType) {
 			case 9:
 			case 11:
@@ -908,16 +908,16 @@ var p = /* @__PURE__ */ t(((e) => {
 		}
 		V(ge), H(ge, e);
 	}
-	function ve() {
+	function _e() {
 		V(ge), V(U), V(W);
 	}
-	function ye(e) {
+	function ve(e) {
 		var t = e.memoizedState;
 		t !== null && (sh._currentValue = t.memoizedState, H(G, e)), t = ge.current;
 		var n = dp(t, e.type);
 		t !== n && (H(U, e), H(ge, n));
 	}
-	function K(e) {
+	function ye(e) {
 		U.current === e && (V(ge), V(U)), G.current === e && (V(G), sh._currentValue = fe);
 	}
 	var be, xe;
@@ -1025,7 +1025,7 @@ var p = /* @__PURE__ */ t(((e) => {
 			default: return "";
 		}
 	}
-	function q(e) {
+	function Ee(e) {
 		try {
 			var t = "", n = null;
 			do
@@ -1036,7 +1036,7 @@ var p = /* @__PURE__ */ t(((e) => {
 			return "\nError generating stack: " + e.message + "\n" + e.stack;
 		}
 	}
-	var Ee = Object.prototype.hasOwnProperty, De = t.unstable_scheduleCallback, Oe = t.unstable_cancelCallback, ke = t.unstable_shouldYield, Ae = t.unstable_requestPaint, je = t.unstable_now, Me = t.unstable_getCurrentPriorityLevel, Ne = t.unstable_ImmediatePriority, Pe = t.unstable_UserBlockingPriority, Fe = t.unstable_NormalPriority, Ie = t.unstable_LowPriority, Le = t.unstable_IdlePriority, Re = t.log, ze = t.unstable_setDisableYieldValue, Be = null, Ve = null;
+	var De = Object.prototype.hasOwnProperty, q = t.unstable_scheduleCallback, Oe = t.unstable_cancelCallback, ke = t.unstable_shouldYield, Ae = t.unstable_requestPaint, je = t.unstable_now, Me = t.unstable_getCurrentPriorityLevel, Ne = t.unstable_ImmediatePriority, Pe = t.unstable_UserBlockingPriority, Fe = t.unstable_NormalPriority, Ie = t.unstable_LowPriority, Le = t.unstable_IdlePriority, Re = t.log, ze = t.unstable_setDisableYieldValue, Be = null, Ve = null;
 	function He(e) {
 		if (typeof Re == "function" && ze(e), Ve && typeof Ve.setStrictMode == "function") try {
 			Ve.setStrictMode(Be, e);
@@ -1281,7 +1281,7 @@ var p = /* @__PURE__ */ t(((e) => {
 	}
 	var Nt = RegExp("^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"), Pt = {}, Ft = {};
 	function It(e) {
-		return Ee.call(Ft, e) ? !0 : Ee.call(Pt, e) ? !1 : Nt.test(e) ? Ft[e] = !0 : (Pt[e] = !0, !1);
+		return De.call(Ft, e) ? !0 : De.call(Pt, e) ? !1 : Nt.test(e) ? Ft[e] = !0 : (Pt[e] = !0, !1);
 	}
 	var Lt = !1;
 	function Rt() {
@@ -1972,7 +1972,7 @@ var p = /* @__PURE__ */ t(((e) => {
 		if (n.length !== r.length) return !1;
 		for (r = 0; r < n.length; r++) {
 			var i = n[r];
-			if (!Ee.call(t, i) || !Mr(e[i], t[i])) return !1;
+			if (!De.call(t, i) || !Mr(e[i], t[i])) return !1;
 		}
 		return !0;
 	}
@@ -2241,13 +2241,13 @@ var p = /* @__PURE__ */ t(((e) => {
 			return n === void 0 ? (t = {
 				value: e,
 				source: t,
-				stack: q(t)
+				stack: Ee(t)
 			}, Mi.set(e, t), t) : n;
 		}
 		return {
 			value: e,
 			source: t,
-			stack: q(t)
+			stack: Ee(t)
 		};
 	}
 	var Pi = [], Fi = 0, Ii = null, Li = 0, Ri = [], zi = 0, Bi = null, Vi = 1, Hi = "";
@@ -4349,14 +4349,14 @@ var p = /* @__PURE__ */ t(((e) => {
 	function il(e, t, n) {
 		switch (t.tag) {
 			case 3:
-				_e(t, t.stateNode.containerInfo), la(t, Sa, e.memoizedState.cache), ra();
+				K(t, t.stateNode.containerInfo), la(t, Sa, e.memoizedState.cache), ra();
 				break;
 			case 27:
 			case 5:
-				ye(t);
+				ve(t);
 				break;
 			case 4:
-				_e(t, t.stateNode.containerInfo);
+				K(t, t.stateNode.containerInfo);
 				break;
 			case 10:
 				la(t, t.type, t.memoizedProps.value);
@@ -4424,7 +4424,7 @@ var p = /* @__PURE__ */ t(((e) => {
 			case 1: return r = t.type, i = hc(r, t.pendingProps), Bc(e, t, r, i, n);
 			case 3:
 				e: {
-					if (_e(t, t.stateNode.containerInfo), e === null) throw Error(a(387));
+					if (K(t, t.stateNode.containerInfo), e === null) throw Error(a(387));
 					r = t.pendingProps;
 					var o = t.memoizedState;
 					i = o.element, oo(e, t), mo(t, r, null, n);
@@ -4454,11 +4454,11 @@ var p = /* @__PURE__ */ t(((e) => {
 				}
 				return t;
 			case 26: return Lc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : Y || (t.stateNode = fp(t.type, t.pendingProps, W.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
-			case 27: return ye(t), e === null && Y && (r = t.stateNode = hm(t.type, t.pendingProps, W.current), Ji = t, Zi = !0, i = Yi, Sp(t.type) ? (um = i, Yi = lm(r.firstChild)) : Yi = i), Dc(e, t, t.pendingProps.children, n), Lc(e, t), e === null && (t.flags |= 4194304), t.child;
-			case 5: return e === null && Y && ((i = r = Yi) && (r = rm(r, t.type, t.pendingProps, Zi), r === null ? i = !1 : (t.stateNode = r, Ji = t, Yi = lm(r.firstChild), Zi = !1, i = !0)), i || $i(t)), ye(t), i = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(i, o) ? r = null : s !== null && pp(i, s) && (t.flags |= 32), t.memoizedState !== null && (i = Go(e, t, Jo, null, null, n), sh._currentValue = i), Lc(e, t), Dc(e, t, r, n), t.child;
+			case 27: return ve(t), e === null && Y && (r = t.stateNode = hm(t.type, t.pendingProps, W.current), Ji = t, Zi = !0, i = Yi, Sp(t.type) ? (um = i, Yi = lm(r.firstChild)) : Yi = i), Dc(e, t, t.pendingProps.children, n), Lc(e, t), e === null && (t.flags |= 4194304), t.child;
+			case 5: return e === null && Y && ((i = r = Yi) && (r = rm(r, t.type, t.pendingProps, Zi), r === null ? i = !1 : (t.stateNode = r, Ji = t, Yi = lm(r.firstChild), Zi = !1, i = !0)), i || $i(t)), ve(t), i = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(i, o) ? r = null : s !== null && pp(i, s) && (t.flags |= 32), t.memoizedState !== null && (i = Go(e, t, Jo, null, null, n), sh._currentValue = i), Lc(e, t), Dc(e, t, r, n), t.child;
 			case 6: return e === null && Y && ((e = n = Yi) && (n = im(n, t.pendingProps, Zi), n === null ? e = !1 : (t.stateNode = n, Ji = t, Yi = null, e = !0)), e || $i(t)), null;
 			case 13: return Gc(e, t, n);
-			case 4: return _e(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = no(t, null, r, n) : Dc(e, t, r, n), t.child;
+			case 4: return K(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = no(t, null, r, n) : Dc(e, t, r, n), t.child;
 			case 11: return Oc(e, t, t.type, t.pendingProps, n);
 			case 7: return r = t.pendingProps, Lc(e, t), Dc(e, t, r, n), t.child;
 			case 8:
@@ -4541,12 +4541,12 @@ var p = /* @__PURE__ */ t(((e) => {
 			case 9:
 			case 14:
 			case 1: return dl(t), null;
-			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), ua(Sa), ve(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (na(t) ? ol(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ia())), dl(t), null;
+			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), ua(Sa), _e(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (na(t) ? ol(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ia())), dl(t), null;
 			case 26:
 				var i = t.type, o = t.memoizedState;
 				return e === null ? (ol(t), o === null ? (dl(t), sl(t, i, null, r, n)) : (dl(t), cl(t, o))) : o ? o === e.memoizedState ? (dl(t), t.flags &= -16777217) : (ol(t), dl(t), cl(t, o)) : (e = e.memoizedProps, e !== r && ol(t), dl(t), sl(t, i, e, r, n)), null;
 			case 27:
-				if (K(t), n = W.current, i = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && ol(t);
+				if (ye(t), n = W.current, i = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && ol(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(a(166));
@@ -4556,7 +4556,7 @@ var p = /* @__PURE__ */ t(((e) => {
 				}
 				return dl(t), t.subtreeFlags &= -33554433, null;
 			case 5:
-				if (K(t), i = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && ol(t);
+				if (ye(t), i = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && ol(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(a(166));
@@ -4658,7 +4658,7 @@ var p = /* @__PURE__ */ t(((e) => {
 					if (!i) return t.flags & 256 ? (Oo(t), t) : (Oo(t), null);
 				}
 				return Oo(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, i = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (i = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== i && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), ll(t, t.updateQueue), dl(t), null);
-			case 4: return ve(), e === null && Uf(t.stateNode.containerInfo), t.flags |= 67108864, dl(t), null;
+			case 4: return _e(), e === null && Uf(t.stateNode.containerInfo), t.flags |= 67108864, dl(t), null;
 			case 10: return ua(t.type), dl(t), null;
 			case 19:
 				if (jo(t), r = t.memoizedState, r === null) return dl(t), null;
@@ -4708,10 +4708,10 @@ var p = /* @__PURE__ */ t(((e) => {
 	function pl(e, t) {
 		switch (Ki(t), t.tag) {
 			case 1: return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 3: return ua(Sa), ve(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
+			case 3: return ua(Sa), _e(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
 			case 26:
 			case 27:
-			case 5: return K(t), null;
+			case 5: return ye(t), null;
 			case 31:
 				if (t.memoizedState !== null) {
 					if (Oo(t), t.alternate === null) throw Error(a(340));
@@ -4725,7 +4725,7 @@ var p = /* @__PURE__ */ t(((e) => {
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 19: return jo(t), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, e = t.memoizedState, e !== null && (e.rendering = null, e.tail = null), t.flags |= 4, t) : null;
-			case 4: return ve(), null;
+			case 4: return _e(), null;
 			case 10: return ua(t.type), null;
 			case 22:
 			case 23: return Oo(t), xo(), e !== null && V(Ia), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
@@ -4736,15 +4736,15 @@ var p = /* @__PURE__ */ t(((e) => {
 	function ml(e, t) {
 		switch (Ki(t), t.tag) {
 			case 3:
-				ua(Sa), ve();
+				ua(Sa), _e();
 				break;
 			case 26:
 			case 27:
 			case 5:
-				K(t);
+				ye(t);
 				break;
 			case 4:
-				ve();
+				_e();
 				break;
 			case 31:
 				t.memoizedState !== null && Oo(t);
@@ -6573,7 +6573,7 @@ var p = /* @__PURE__ */ t(((e) => {
 		r !== null && r.delete(t), hf(e, n);
 	}
 	function vf(e, t) {
-		return De(e, t);
+		return q(e, t);
 	}
 	var yf = null, bf = null, xf = !1, Sf = !1, Cf = !1, wf = 0;
 	function Tf(e) {
@@ -6635,7 +6635,7 @@ var p = /* @__PURE__ */ t(((e) => {
 					break;
 				default: n = Fe;
 			}
-			return r = Af.bind(null, e), n = De(n, r), e.callbackPriority = t, e.callbackNode = n, t;
+			return r = Af.bind(null, e), n = q(n, r), e.callbackPriority = t, e.callbackNode = n, t;
 		}
 		return r !== null && r !== null && Oe(r), e.callbackPriority = 2, e.callbackNode = null, 2;
 	}
@@ -6652,7 +6652,7 @@ var p = /* @__PURE__ */ t(((e) => {
 	}
 	function Mf() {
 		bp(function() {
-			Yu & 6 ? De(Ne, Df) : Of();
+			Yu & 6 ? q(Ne, Df) : Of();
 		});
 	}
 	function Nf() {
@@ -13271,13 +13271,16 @@ var ie = class extends HTMLElement {
 					let t = Number(e.dataset.userPerms), n = this._users[t];
 					if (!n) return;
 					let r = await this._showArgusPermissionsModal(n);
-					r !== null && this._runWithPin(async () => {
+					if (r === null) return;
+					let { permissions: i, overridePin: a } = r;
+					this._runWithPin(async () => {
 						let e = this._users.map((e, n) => n === t ? {
 							...e,
 							permissions: {
 								...e.permissions,
-								...r
-							}
+								...i
+							},
+							...a === void 0 ? {} : { override_pin_hash: a }
 						} : e);
 						try {
 							let t = await this._send("argus/save_ui", { users: e });
@@ -13859,6 +13862,14 @@ var ie = class extends HTMLElement {
               <input type="checkbox" id="chk-perm-arm" ${a.arm ? "checked" : ""} style="width:16px;height:16px;cursor:pointer;" />
               <span>🛡️ ${this._t("perm_arm") || "Armar Alarma"}</span>
             </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;">
+              <input type="checkbox" id="chk-perm-force-arm" ${a.force_arm ? "checked" : ""}>
+              <span>Permitir armado con bypass</span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#fff;">
+              PIN de override
+              <input id="override-pin" type="password" inputmode="numeric" maxlength="12" autocomplete="new-password" placeholder="${e.override_pin_configured ? "Conservar PIN actual" : "Configurar PIN de override"}">
+            </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-disarm" ${a.disarm ? "checked" : ""} style="width:16px;height:16px;cursor:pointer;" />
               <span>🔓 ${this._t("perm_disarm") || "Desarmar Alarma"}</span>
@@ -13888,11 +13899,15 @@ var ie = class extends HTMLElement {
 				let e = {
 					view_status: !0,
 					arm: n.querySelector("#chk-perm-arm").checked,
+					force_arm: n.querySelector("#chk-perm-force-arm").checked,
 					disarm: n.querySelector("#chk-perm-disarm").checked,
 					sos: n.querySelector("#chk-perm-sos").checked,
 					view_history: n.querySelector("#chk-perm-view-history").checked
-				};
-				c(e);
+				}, t = n.querySelector("#override-pin").value;
+				c({
+					permissions: e,
+					overridePin: e.force_arm ? t || void 0 : ""
+				});
 			}), s.focus(), n.addEventListener("keydown", (e) => {
 				e.key === "Escape" && c(null);
 			}), s.addEventListener("click", () => c(null)), n.addEventListener("click", (e) => {
@@ -15856,14 +15871,14 @@ var W = (e, t, n, r, i) => ({
 		W("alarm-configuration", 0, 144, 32, 45),
 		W("security-status", 0, 189, 32, 18)
 	]
-}, _e = {
+}, K = {
 	"activity-history": 12,
 	automations: 12,
 	"backup-restore": 12,
 	"access-control": 16,
 	"alarm-configuration": 18,
 	"security-status": 12
-}, ve = {
+}, _e = {
 	"activity-history": 20,
 	automations: 14,
 	"backup-restore": 14,
@@ -15871,8 +15886,8 @@ var W = (e, t, n, r, i) => ({
 	"alarm-configuration": 28,
 	"security-status": 12
 };
-function ye(e, t) {
-	let n = R[t], r = Math.min(n, _e[e.i] || 12), i = Math.min(n, Math.max(r, Math.round(e.w))), a = Math.min(B, Math.max(ve[e.i] || 2, Math.round(e.h)));
+function ve(e, t) {
+	let n = R[t], r = Math.min(n, K[e.i] || 12), i = Math.min(n, Math.max(r, Math.round(e.w))), a = Math.min(B, Math.max(_e[e.i] || 2, Math.round(e.h)));
 	return {
 		...e,
 		x: Math.max(0, Math.min(Math.round(e.x), n - i)),
@@ -15881,11 +15896,11 @@ function ye(e, t) {
 		h: a,
 		minW: r,
 		maxW: n,
-		minH: ve[e.i] || 2,
+		minH: _e[e.i] || 2,
 		maxH: B
 	};
 }
-function K(e, t = {}) {
+function ye(e, t = {}) {
 	let n = e && typeof e == "object" ? e : {}, r = n.layouts || {}, i = n.layoutVersion !== 5, a = {}, o = (e) => {
 		let t = r[e];
 		if (Array.isArray(t) && t.length) return t;
@@ -15897,7 +15912,7 @@ function K(e, t = {}) {
 	return Object.keys(R).forEach((e) => {
 		let t = o(e);
 		if (!i && t) {
-			a[e] = t.map((t) => ye(t, e));
+			a[e] = t.map((t) => ve(t, e));
 			return;
 		}
 		if (!t) {
@@ -15927,7 +15942,7 @@ function K(e, t = {}) {
 			};
 		})], d = [];
 		for (let t of u) {
-			let n = ye(t, e);
+			let n = ve(t, e);
 			d.push(be(d, n) ? xe(d, n, R[e]) : n);
 		}
 		a[e] = d;
@@ -15987,8 +16002,8 @@ function we(e) {
 			e.y,
 			e.w,
 			e.h
-		].every(Number.isFinite) && a.set(e.i, ye(e, n));
-		let o = (G[n] || []).map((e) => ye({
+		].every(Number.isFinite) && a.set(e.i, ve(e, n));
+		let o = (G[n] || []).map((e) => ve({
 			...e,
 			...a.get(e.i),
 			maxW: r
@@ -16019,13 +16034,13 @@ var Te = class {
 	}
 	async load(e, t) {
 		let n = this.read(e, t);
-		return n ? we(n.layoutVersion === 5 ? n.layouts : K(n).layouts) : null;
+		return n ? we(n.layoutVersion === 5 ? n.layouts : ye(n).layouts) : null;
 	}
 	async save(e, t, n, r) {
 		let i = this.read(e, t);
 		this.write(e, t, {
 			layoutVersion: 5,
-			layouts: K({
+			layouts: ye({
 				layoutVersion: 5,
 				layouts: n
 			}).layouts,
@@ -16040,7 +16055,7 @@ var Te = class {
 		let r = this.read(e, t);
 		this.write(e, t, {
 			layoutVersion: 5,
-			layouts: r ? K(r).layouts : we(null),
+			layouts: r ? ye(r).layouts : we(null),
 			visibility: n,
 			updatedAt: (/* @__PURE__ */ new Date()).toISOString()
 		});
@@ -16050,10 +16065,10 @@ var Te = class {
 			localStorage.removeItem(this.key(e, t));
 		} catch {}
 	}
-}, q = "button,input,select,textarea,a,summary,label,[contenteditable],[role=\"button\"],[role=\"switch\"],[role=\"slider\"],[role=\"checkbox\"]", Ee = (e) => ({
+}, Ee = "button,input,select,textarea,a,summary,label,[contenteditable],[role=\"button\"],[role=\"switch\"],[role=\"slider\"],[role=\"checkbox\"]", De = (e) => ({
 	x: e.clientX,
 	y: e.clientY
-}), De = (e) => {
+}), q = (e) => {
 	let t = e.getBoundingClientRect();
 	return {
 		x: t.left,
@@ -16073,7 +16088,7 @@ function Oe(e, t) {
 	t < 56 ? window.scrollBy(0, -12) : t > window.innerHeight - 56 && window.scrollBy(0, 12);
 }
 function ke(e) {
-	let { item: t, grid: n, origin: r, pointer: i, layout: a, resizing: o, bp: s } = e, c = R[s], l = (n.clientWidth - 32 + 2) / c, u = De(n), d = i.x - r.x + e.gridOrigin.x - u.x, f = i.y - r.y + e.gridOrigin.y - u.y, p = o ? {
+	let { item: t, grid: n, origin: r, pointer: i, layout: a, resizing: o, bp: s } = e, c = R[s], l = (n.clientWidth - 32 + 2) / c, u = q(n), d = i.x - r.x + e.gridOrigin.x - u.x, f = i.y - r.y + e.gridOrigin.y - u.y, p = o ? {
 		...t,
 		w: t.w + d / l,
 		h: t.h + f / 12
@@ -16129,7 +16144,7 @@ function Ae(e, t) {
 			if (r.current || !(e instanceof Element)) return;
 			s = void 0;
 			let c = e.closest(".argus-widget[data-widget-id]"), u = c?.closest(".argus-dashboard-grid"), { layout: d, breakpoint: f, editing: p, onEnter: h } = n.current, g = d.find((e) => e.i === c?.dataset.widgetId), _ = p && !!e.closest(".argus-widget__resize-handle");
-			if (!c || !u || !g || g.static || !_ && e.closest(q)) return;
+			if (!c || !u || !g || g.static || !_ && e.closest(Ee)) return;
 			let v = {
 				id: t,
 				touch: a,
@@ -16137,7 +16152,7 @@ function Ae(e, t) {
 				grid: u,
 				origin: o,
 				pointer: o,
-				gridOrigin: De(u),
+				gridOrigin: q(u),
 				layout: d,
 				item: g,
 				bp: f,
@@ -16150,7 +16165,7 @@ function Ae(e, t) {
 			});
 			let y = () => {
 				v.active = !0, p || h(), v.frame = window.requestAnimationFrame(() => {
-					v.gridOrigin = De(u), l();
+					v.gridOrigin = q(u), l();
 				});
 			};
 			p ? y() : v.timer = window.setTimeout(y, 500);
@@ -16166,14 +16181,14 @@ function Ae(e, t) {
 				return;
 			}
 			let t = e.changedTouches[0];
-			t && u(e.target, t.identifier, !0, Ee(t));
+			t && u(e.target, t.identifier, !0, De(t));
 		}, m = (e) => {
-			for (let t of e.changedTouches) d(t.identifier, !0, Ee(t), e);
+			for (let t of e.changedTouches) d(t.identifier, !0, De(t), e);
 		}, h = (e) => {
-			for (let t of e.changedTouches) f(t.identifier, !0, e.type === "touchend", Ee(t));
+			for (let t of e.changedTouches) f(t.identifier, !0, e.type === "touchend", De(t));
 		}, g = (e) => {
-			e.pointerType !== "touch" && e.button === 0 && u(e.target, e.pointerId, !1, Ee(e));
-		}, _ = (e) => d(e.pointerId, !1, Ee(e), e), v = (e) => f(e.pointerId, !1, e.type === "pointerup", Ee(e)), y = (e) => {
+			e.pointerType !== "touch" && e.button === 0 && u(e.target, e.pointerId, !1, De(e));
+		}, _ = (e) => d(e.pointerId, !1, De(e), e), v = (e) => f(e.pointerId, !1, e.type === "pointerup", De(e)), y = (e) => {
 			!s || performance.now() > s.until || !e.composedPath().includes(s.widget) || (s = void 0, e.preventDefault(), e.stopPropagation());
 		}, b = (e) => {
 			r.current && e.composedPath().includes(r.current.widget) && e.preventDefault();
@@ -17328,8 +17343,8 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 		enumerable: !0
 	}) : r, e)), f = (e) => u(i({}, "__esModule", { value: !0 }), e), p = {};
 	l(p, {
-		DraggableCore: () => ve,
-		default: () => ye
+		DraggableCore: () => _e,
+		default: () => ve
 	}), t.exports = f(p);
 	var m = d(r()), h = d(Ut()), _ = d(g()), v = Ln();
 	function y(e, t) {
@@ -17581,7 +17596,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 			move: "mousemove",
 			stop: "mouseup"
 		}
-	}, _e = G.mouse, ve = class extends ge.Component {
+	}, K = G.mouse, _e = class extends ge.Component {
 		constructor() {
 			super(...arguments), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, this.touchIdentifier = null, this.mounted = !1, this.handleDragStart = (e) => {
 				if (this.props.onMouseDown(e), !this.props.allowAnyClick && (typeof e.button == "number" && e.button !== 0 || e.ctrlKey)) return !1;
@@ -17595,7 +17610,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 				let i = pe(e, r, this);
 				if (i == null) return;
 				let { x: a, y: o } = i, s = me(this, a, o);
-				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && L(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, j(n, _e.move, this.handleDrag), j(n, _e.stop, this.handleDragStop));
+				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && L(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, j(n, K.move, this.handleDrag), j(n, K.stop, this.handleDragStop));
 			}, this.handleDrag = (e) => {
 				let t = pe(e, this.touchIdentifier, this);
 				if (t == null) return;
@@ -17625,8 +17640,8 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 				let i = me(this, n, r);
 				if (this.props.onStop(e, i) === !1 || this.mounted === !1) return !1;
 				let a = this.findDOMNode();
-				a && this.props.enableUserSelectHack && ce(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (M(a.ownerDocument, _e.move, this.handleDrag), M(a.ownerDocument, _e.stop, this.handleDragStop));
-			}, this.onMouseDown = (e) => (_e = G.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (_e = G.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (_e = G.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (_e = G.touch, this.handleDragStop(e));
+				a && this.props.enableUserSelectHack && ce(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (M(a.ownerDocument, K.move, this.handleDrag), M(a.ownerDocument, K.stop, this.handleDragStop));
+			}, this.onMouseDown = (e) => (K = G.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (K = G.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (K = G.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (K = G.touch, this.handleDragStop(e));
 		}
 		componentDidMount() {
 			this.mounted = !0;
@@ -17654,7 +17669,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 			});
 		}
 	};
-	ve.displayName = "DraggableCore", ve.propTypes = {
+	_e.displayName = "DraggableCore", _e.propTypes = {
 		allowAnyClick: U.default.bool,
 		allowMobileScroll: U.default.bool,
 		children: U.default.node.isRequired,
@@ -17676,7 +17691,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 		className: C,
 		style: C,
 		transform: C
-	}, ve.defaultProps = {
+	}, _e.defaultProps = {
 		allowAnyClick: !1,
 		allowMobileScroll: !1,
 		disabled: !1,
@@ -17687,7 +17702,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 		onMouseDown: function() {},
 		scale: 1
 	};
-	var ye = class extends m.Component {
+	var ve = class extends m.Component {
 		constructor(e) {
 			super(e), this.onDragStart = (e, t) => {
 				if (this.props.onStart(e, he(this, t)) === !1) return !1;
@@ -17762,7 +17777,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 				[a]: this.state.dragging,
 				[o]: this.state.dragged
 			});
-			return /* @__PURE__ */ m.createElement(ve, {
+			return /* @__PURE__ */ m.createElement(_e, {
 				...u,
 				onStart: this.onDragStart,
 				onDrag: this.onDrag,
@@ -17777,8 +17792,8 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 			}));
 		}
 	};
-	ye.displayName = "Draggable", ye.propTypes = {
-		...ve.propTypes,
+	ve.displayName = "Draggable", ve.propTypes = {
+		..._e.propTypes,
 		axis: h.default.oneOf([
 			"both",
 			"x",
@@ -17813,8 +17828,8 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 		className: C,
 		style: C,
 		transform: C
-	}, ye.defaultProps = {
-		...ve.defaultProps,
+	}, ve.defaultProps = {
+		..._e.defaultProps,
 		axis: "both",
 		bounds: !1,
 		defaultClassName: "react-draggable",
@@ -17825,7 +17840,7 @@ var Ln = /* @__PURE__ */ t(((e, t) => {
 			y: 0
 		},
 		scale: 1
-	}, 0 && (t.exports = { DraggableCore: ve });
+	}, 0 && (t.exports = { DraggableCore: _e });
 })), zn = /* @__PURE__ */ t(((e, t) => {
 	var n = Rn(), r = n.DraggableCore, i = n.default || n;
 	t.exports = i, t.exports.default = i, t.exports.DraggableCore = r;
@@ -18508,7 +18523,7 @@ function Qn(e) {
 		...W,
 		containerHeight: e ?? W.containerHeight,
 		layout: fe.current
-	}), [W]), _e = (0, y.useMemo)(() => re ?? {
+	}), [W]), K = (0, y.useMemo)(() => re ?? {
 		i: M,
 		x: T,
 		y: E,
@@ -18529,7 +18544,7 @@ function Qn(e) {
 		ee,
 		A,
 		j
-	]), ve = (0, y.useCallback)((e) => {
+	]), _e = (0, y.useCallback)((e) => {
 		if (g?.calcStyle) return g.calcStyle(e);
 		if (p) return at(e);
 		let t = ot(e);
@@ -18543,7 +18558,7 @@ function Qn(e) {
 		p,
 		m,
 		r
-	]), ye = (0, y.useCallback)((e, { node: t }) => {
+	]), ve = (0, y.useCallback)((e, { node: t }) => {
 		if (!ae) return;
 		let { offsetParent: n } = t;
 		if (!n) return;
@@ -18564,7 +18579,7 @@ function Qn(e) {
 			return;
 		}
 		ce(!0);
-		let u = Ie(U, l.top, l.left), { x: d, y: f } = rt(N, _e, u.x, u.y, G());
+		let u = Ie(U, l.top, l.left), { x: d, y: f } = rt(N, K, u.x, u.y, G());
 		ae(M, d, f, {
 			e,
 			node: t,
@@ -18577,17 +18592,17 @@ function Qn(e) {
 		g,
 		_,
 		N,
-		_e,
+		K,
 		G,
 		M
-	]), K = (0, y.useCallback)((e, { node: t, deltaX: n, deltaY: a }) => {
+	]), ye = (0, y.useCallback)((e, { node: t, deltaX: n, deltaY: a }) => {
 		if (!P || !L) return;
 		let s = e;
 		if (he.current && !H.current) {
 			let n = s.clientX - V.current.x, r = s.clientY - V.current.y;
 			if (Math.hypot(n, r) < _) return;
 			if (H.current = !0, he.current = !1, ae) {
-				let n = Ie(U, R.current.top, R.current.left), { x: r, y: i } = rt(N, _e, n.x, n.y, G());
+				let n = Ie(U, R.current.top, R.current.left), { x: r, y: i } = rt(N, K, n.x, n.y, G());
 				ae(M, r, i, {
 					e,
 					node: t,
@@ -18611,7 +18626,7 @@ function Qn(e) {
 			left: l
 		};
 		R.current = d;
-		let f = Ie(U, c, l), { x: p, y: m } = rt(N, _e, f.x, f.y, G());
+		let f = Ie(U, c, l), { x: p, y: m } = rt(N, K, f.x, f.y, G());
 		P(M, p, m, {
 			e,
 			node: t,
@@ -18631,7 +18646,7 @@ function Qn(e) {
 		D,
 		M,
 		N,
-		_e,
+		K,
 		G
 	]), be = (0, y.useCallback)((e, { node: t }) => {
 		if (!oe || !L) return;
@@ -18655,7 +18670,7 @@ function Qn(e) {
 			left: 0,
 			top: 0
 		};
-		let o = Ie(U, i, r), { x: s, y: c } = rt(N, _e, o.x, o.y, G());
+		let o = Ie(U, i, r), { x: s, y: c } = rt(N, K, o.x, o.y, G());
 		oe(M, s, c, {
 			e,
 			node: t,
@@ -18666,11 +18681,11 @@ function Qn(e) {
 		L,
 		U,
 		N,
-		_e,
+		K,
 		G,
 		M
 	]);
-	pe.current = ye, me.current = K;
+	pe.current = ve, me.current = ye;
 	let xe = (0, y.useCallback)((e, { node: t, size: n, handle: i }, a, o) => {
 		let s = o === "onResizeStart" ? F : o === "onResize" ? I : se;
 		if (!s) return;
@@ -18680,7 +18695,7 @@ function Qn(e) {
 			top: a.top,
 			left: a.left
 		}, z.current = c;
-		let l = t?.offsetParent?.clientHeight ?? 0, u = Le(U, c.width, c.height), { w: d, h: f } = it(N, _e, u.w, u.h, i, G(l));
+		let l = t?.offsetParent?.clientHeight ?? 0, u = Le(U, c.width, c.height), { w: d, h: f } = it(N, K, u.w, u.h, i, G(l));
 		s(M, d, f, {
 			e: e.nativeEvent ?? e,
 			node: t,
@@ -18695,7 +18710,7 @@ function Qn(e) {
 		U,
 		M,
 		N,
-		_e,
+		K,
 		G
 	]), Se = (0, y.useCallback)((e, t) => {
 		ue(!0);
@@ -18781,7 +18796,7 @@ function Qn(e) {
 		L,
 		M
 	]);
-	let Te = Pe(U, T, E, D, O, L ? R.current : null, le ? z.current : null), q = y.Children.only(t), Ee = Me(U), De = [Ne(k, Ee, i[0]), Ne(A, o, i[1])], Oe = [Ne(ee, Ee, i[0]), Ne(j, o, i[1])], ke = q.props, Ae = ke.className, je = ke.style, Fe = y.cloneElement(q, {
+	let Te = Pe(U, T, E, D, O, L ? R.current : null, le ? z.current : null), Ee = y.Children.only(t), De = Me(U), q = [Ne(k, De, i[0]), Ne(A, o, i[1])], Oe = [Ne(ee, De, i[0]), Ne(j, o, i[1])], ke = Ee.props, Ae = ke.className, je = ke.style, Fe = y.cloneElement(Ee, {
 		ref: de,
 		className: Gt("react-grid-item", Ae, b, {
 			static: f,
@@ -18794,7 +18809,7 @@ function Qn(e) {
 		style: {
 			...x,
 			...je,
-			...ve(Te)
+			..._e(Te)
 		}
 	}), ze = ne;
 	return Fe = /* @__PURE__ */ (0, S.jsx)(Kn.Resizable, {
@@ -18802,7 +18817,7 @@ function Qn(e) {
 		className: l ? void 0 : "react-resizable-hide",
 		width: Te.width,
 		height: Te.height,
-		minConstraints: De,
+		minConstraints: q,
 		maxConstraints: Oe,
 		onResizeStart: Se,
 		onResize: Ce,
@@ -18813,8 +18828,8 @@ function Qn(e) {
 		children: Fe
 	}), Fe = /* @__PURE__ */ (0, S.jsx)(Fn, {
 		disabled: !c,
-		onStart: ye,
-		onDrag: K,
+		onStart: ve,
+		onDrag: ye,
 		onStop: be,
 		handle: C,
 		cancel: ".react-resizable-handle" + (w ? "," + w : ""),
@@ -18910,10 +18925,10 @@ function or(e) {
 	}), [o]), { cols: A, rowHeight: j, maxRows: M, margin: te, containerPadding: ne } = D, { enabled: N, bounded: re, handle: ie, cancel: ae, threshold: P, allowMobileScroll: oe } = O, { enabled: F, handles: I, handleComponent: se } = k, { enabled: L, defaultItem: ce, onDragOver: le, touchEnabled: ue = !0, touchDragSource: de = "[data-rgl-draggable]" } = ee, R = c ?? Ft("vertical"), z = R.type, B = R.allowOverlap, fe = R.preventCollision ?? !1, pe = (0, y.useMemo)(() => d ?? {
 		i: "__dropping-elem__",
 		...ce
-	}, [d, ce]), me = s.type === "transform", he = s.scale, V = ne ?? te, [H, ge] = (0, y.useState)(!1), [U, W] = (0, y.useState)(() => ar(u, t, A, R)), [G, _e] = (0, y.useState)(null), [ve, ye] = (0, y.useState)(!1), [K, be] = (0, y.useState)(null), [xe, Se] = (0, y.useState)(), Ce = (0, y.useRef)(void 0);
+	}, [d, ce]), me = s.type === "transform", he = s.scale, V = ne ?? te, [H, ge] = (0, y.useState)(!1), [U, W] = (0, y.useState)(() => ar(u, t, A, R)), [G, K] = (0, y.useState)(null), [_e, ve] = (0, y.useState)(!1), [ye, be] = (0, y.useState)(null), [xe, Se] = (0, y.useState)(), Ce = (0, y.useRef)(void 0);
 	Ce.current = xe;
-	let we = (0, y.useRef)(null), Te = (0, y.useRef)(null), q = (0, y.useRef)(null), Ee = (0, y.useRef)(0), De = (0, y.useRef)(U), Oe = (0, y.useRef)(u), ke = (0, y.useRef)(t), Ae = (0, y.useRef)(z), je = (0, y.useRef)(null), Me = (0, y.useRef)(!1), Ne = (0, y.useRef)(null), Pe = (0, y.useRef)(null);
-	Pe.current = K;
+	let we = (0, y.useRef)(null), Te = (0, y.useRef)(null), Ee = (0, y.useRef)(null), De = (0, y.useRef)(0), q = (0, y.useRef)(U), Oe = (0, y.useRef)(u), ke = (0, y.useRef)(t), Ae = (0, y.useRef)(z), je = (0, y.useRef)(null), Me = (0, y.useRef)(!1), Ne = (0, y.useRef)(null), Pe = (0, y.useRef)(null);
+	Pe.current = ye;
 	let Fe = (0, y.useRef)(T);
 	(0, y.useLayoutEffect)(() => {
 		Fe.current = T;
@@ -18922,7 +18937,7 @@ function or(e) {
 	Ie.current = U, (0, y.useEffect)(() => {
 		ge(!0), (0, qn.deepEqual)(U, u) || g(U);
 	}, []), (0, y.useEffect)(() => {
-		if (G || K) return;
+		if (G || ye) return;
 		let e = !(0, qn.deepEqual)(u, Oe.current), n = !ir(t, ke.current), r = z !== Ae.current;
 		if (e || n || r) {
 			let n = ar(e ? u : U, t, A, R);
@@ -18936,18 +18951,18 @@ function or(e) {
 		z,
 		R,
 		G,
-		K,
+		ye,
 		U
 	]), (0, y.useEffect)(() => {
-		if (!G && !K && !(0, qn.deepEqual)(U, De.current)) {
-			De.current = U;
+		if (!G && !ye && !(0, qn.deepEqual)(U, q.current)) {
+			q.current = U;
 			let e = U.filter((e) => e.i !== pe.i);
 			g(e);
 		}
 	}, [
 		U,
 		G,
-		K,
+		ye,
 		g,
 		pe.i
 	]);
@@ -18971,7 +18986,7 @@ function or(e) {
 			y: a.y,
 			i: e
 		};
-		we.current = Je(a), q.current = i, _e(o), _(i, a, a, null, r.e, r.node);
+		we.current = Je(a), Ee.current = i, K(o), _(i, a, a, null, r.e, r.node);
 	}, [_]), ze = (0, y.useCallback)((e, t, n, r) => {
 		let i = Ie.current, a = we.current, o = Ke(i, e);
 		if (!o) return;
@@ -18982,7 +18997,7 @@ function or(e) {
 			y: o.y,
 			i: e
 		}, c = $e(i, o, t, n, !0, fe, z, A, B);
-		v(c, a, o, s, r.e, r.node), W(R.compact(c, A)), _e(s);
+		v(c, a, o, s, r.e, r.node), W(R.compact(c, A)), K(s);
 	}, [
 		fe,
 		z,
@@ -18996,8 +19011,8 @@ function or(e) {
 		if (!o) return;
 		let s = $e(i, o, t, n, !0, fe, z, A, B), c = R.compact(s, A);
 		b(c, a, o, null, r.e, r.node);
-		let l = q.current;
-		we.current = null, q.current = null, _e(null), W(c), l && !(0, qn.deepEqual)(l, c) && g(c);
+		let l = Ee.current;
+		we.current = null, Ee.current = null, K(null), W(c), l && !(0, qn.deepEqual)(l, c) && g(c);
 	}, [
 		fe,
 		z,
@@ -19008,7 +19023,7 @@ function or(e) {
 		g
 	]), He = (0, y.useCallback)((e, t, n, r) => {
 		let i = Ie.current, a = Ke(i, e);
-		a && (Te.current = Je(a), q.current = i, ye(!0), x(i, a, a, null, r.e, r.node));
+		a && (Te.current = Je(a), Ee.current = i, ve(!0), x(i, a, a, null, r.e, r.node));
 	}, [x]), Ue = (0, y.useCallback)((e, t, n, r) => {
 		let i = Ie.current, a = Te.current, { handle: o } = r, s = !1, c, l, [u, d] = Ze(i, e, (e) => (c = e.x, l = e.y, [
 			"sw",
@@ -19048,7 +19063,7 @@ function or(e) {
 			let t = m.find((t) => t.i === e);
 			t && (t.y = d.y);
 		}
-		W(m), _e(p);
+		W(m), K(p);
 	}, [
 		fe,
 		z,
@@ -19059,8 +19074,8 @@ function or(e) {
 	]), We = (0, y.useCallback)((e, t, n, r) => {
 		let i = Ie.current, a = Te.current, o = Ke(i, e), s = R.compact(i, A);
 		w(s, a, o ?? null, null, r.e, r.node);
-		let c = q.current;
-		Te.current = null, q.current = null, _e(null), ye(!1), W(s), c && !(0, qn.deepEqual)(c, s) && g(s);
+		let c = Ee.current;
+		Te.current = null, Ee.current = null, K(null), ve(!1), W(s), c && !(0, qn.deepEqual)(c, s) && g(s);
 	}, [
 		A,
 		R,
@@ -19114,11 +19129,11 @@ function or(e) {
 	]), Xe = (0, y.useCallback)(() => {
 		let e = Ie.current;
 		if (!e.some((e) => e.i === pe.i)) {
-			be(null), _e(null), Se(void 0);
+			be(null), K(null), Se(void 0);
 			return;
 		}
 		let t = R.compact(e.filter((e) => e.i !== pe.i), A);
-		W(t), be(null), _e(null), Se(void 0);
+		W(t), be(null), K(null), Se(void 0);
 	}, [
 		pe.i,
 		A,
@@ -19126,7 +19141,7 @@ function or(e) {
 	]), Qe = (0, y.useCallback)((e) => {
 		if (e.preventDefault(), e.stopPropagation(), rr && !e.nativeEvent.target?.classList.contains(nr)) return !1;
 		let t = le ? le(e.nativeEvent) : E(e);
-		if (t === !1) return K && Xe(), !1;
+		if (t === !1) return ye && Xe(), !1;
 		let { dragOffsetX: r = 0, dragOffsetY: i = 0, ...a } = t ?? {}, o = {
 			...pe,
 			...a
@@ -19146,9 +19161,9 @@ function or(e) {
 			width: n,
 			containerPadding: V
 		});
-		qe(o, s, c, !!K);
+		qe(o, s, c, !!ye);
 	}, [
-		K,
+		ye,
 		pe,
 		le,
 		E,
@@ -19162,14 +19177,14 @@ function or(e) {
 		n,
 		V
 	]), et = (0, y.useCallback)((e) => {
-		e.preventDefault(), e.stopPropagation(), Ee.current--, Ee.current < 0 && (Ee.current = 0), Ee.current === 0 && Xe();
+		e.preventDefault(), e.stopPropagation(), De.current--, De.current < 0 && (De.current = 0), De.current === 0 && Xe();
 	}, [Xe]), tt = (0, y.useCallback)((e) => {
-		e.preventDefault(), e.stopPropagation(), Ee.current++;
+		e.preventDefault(), e.stopPropagation(), De.current++;
 	}, []), rt = (0, y.useCallback)((e) => {
 		let t = Ie.current, n = t.find((e) => e.i === pe.i);
 		Xe(), Fe.current(t, n, e);
 	}, [pe.i, Xe]), it = (0, y.useCallback)((e) => {
-		e.preventDefault(), e.stopPropagation(), Ee.current = 0, rt(e.nativeEvent);
+		e.preventDefault(), e.stopPropagation(), De.current = 0, rt(e.nativeEvent);
 	}, [rt]);
 	(0, y.useEffect)(() => {
 		if (!L || !ue) return;
@@ -19298,7 +19313,7 @@ function or(e) {
 		x: G.x,
 		y: G.y,
 		i: G.i,
-		className: `react-grid-placeholder ${ve ? "placeholder-resizing" : ""}`,
+		className: `react-grid-placeholder ${_e ? "placeholder-resizing" : ""}`,
 		containerWidth: n,
 		cols: A,
 		margin: te,
@@ -19329,7 +19344,7 @@ function or(e) {
 		onDragOver: L ? Qe : void 0,
 		children: [
 			y.Children.map(t, (e) => y.isValidElement(e) ? at(e) : null),
-			L && K && at(K, !0),
+			L && ye && at(ye, !0),
 			ot()
 		]
 	});
@@ -21022,23 +21037,45 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		} finally {
 			o.current = !1, c(!1);
 		}
-	}, ge = _?.states?.[P.entity_id]?.attributes?.arming_bypass_eligible_sensors || [], U = _?.states?.[P.entity_id]?.attributes?.arming_blocking_sensors || [], W = {};
+	}, ge = _?.states?.[P.entity_id]?.attributes?.arming_bypass_eligible_sensors || [], U = _?.states?.[P.entity_id]?.attributes?.arming_blocking_sensors || [], W = de && U.length > 0 && U.every((e) => ge.includes(e)) && e._currentProfile?.permissions?.force_arm && e._currentProfile?.override_pin_configured, G = async () => {
+		if (o.current) return;
+		let t = _?.states?.[P.entity_id]?.attributes?.arming_generation;
+		o.current = !0, c(!0), u(null);
+		try {
+			let n = await e._showArgusInputModal({
+				title: "Armar con bypass",
+				label: "Los sensores pendientes quedarán omitidos durante este armado. Introduce el PIN de override.",
+				type: "password",
+				numeric: !0
+			});
+			n && await e._send("argus/perform_alarm_action", {
+				action: "force_arm",
+				code: n,
+				generation: t,
+				entry_id: P.entry_id
+			});
+		} catch (e) {
+			u(String(e.message || e));
+		} finally {
+			o.current = !1, c(!1);
+		}
+	}, K = {};
 	if (P.entity_id) {
 		let t = e._ui?.modes?.__by_entity__?.[P.entity_id] || e._ui?.modes || {}, n = _?.states?.[P.entity_id]?.attributes || {};
 		F.startsWith("armed_") && (m.current[P.entity_id] = F.slice(6));
 		let r = String(n.arming_target || n.triggered_mode || n.panic_previous_state || "").replace(/^armed_/, "");
-		W = t[F.startsWith("armed_") ? F.slice(6) : (B || L) && (r || m.current[P.entity_id]) || "disarmed"] || {};
-		let i = W.bypassed_sensors || [];
-		[.../* @__PURE__ */ new Set([...W.sensors || [], ...i])].forEach((e) => {
+		K = t[F.startsWith("armed_") ? F.slice(6) : (B || L) && (r || m.current[P.entity_id]) || "disarmed"] || {};
+		let i = K.bypassed_sensors || [];
+		[.../* @__PURE__ */ new Set([...K.sensors || [], ...i])].forEach((e) => {
 			he.push({
 				id: e,
 				isBypassed: i.includes(e)
 			});
 		});
 	}
-	let G = he;
-	G.length, he.map((e) => e.id);
-	let _e = G.filter((e) => {
+	let _e = he;
+	_e.length, he.map((e) => e.id);
+	let ve = _e.filter((e) => {
 		let t = _?.states?.[e.id];
 		return !t || [
 			"unknown",
@@ -21053,12 +21090,12 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			"triggered",
 			"unlocked"
 		].includes(String(t.state).toLowerCase());
-	}).map((e) => e.id), ve = le ? "sos" : _e.length ? "sensor" : "", ye = ve === "sos" ? `sos:${P.entity_id}` : _e.join("|"), K = (e._ui?.zones_enabled === !1 ? [] : e._ui?.zones || []).filter((e) => e.enabled !== !1), be = _?.states?.[P.entity_id]?.attributes?.triggered_by, xe = K.map((e, t) => ({
+	}).map((e) => e.id), ye = le ? "sos" : ve.length ? "sensor" : "", be = ye === "sos" ? `sos:${P.entity_id}` : ve.join("|"), xe = (e._ui?.zones_enabled === !1 ? [] : e._ui?.zones || []).filter((e) => e.enabled !== !1), Se = _?.states?.[P.entity_id]?.attributes?.triggered_by, Ce = xe.map((e, t) => ({
 		id: e.id,
 		name: `Zona ${e.number || t + 1}`,
 		area: e.area || "",
 		number: e.number || t + 1,
-		triggered: L && (e.entity_ids || []).includes(be),
+		triggered: L && (e.entity_ids || []).includes(Se),
 		open: (e.entity_ids || []).some((e) => {
 			let t = _?.states?.[e];
 			return !t || [
@@ -21072,7 +21109,7 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			].includes(t.state));
 		}),
 		sensors: (e.entity_ids || []).filter((e) => _?.states?.[e] && d.isSensorActive(_.states[e])).map((e) => _?.states?.[e]?.attributes?.friendly_name || e)
-	})), Se = e._walkTestEntryId === P.entry_id ? e._walkTestSession : null, Ce = !!Se?.active, we = (e, n = "all") => {
+	})), we = e._walkTestEntryId === P.entry_id ? e._walkTestSession : null, Te = !!we?.active, Ee = (e, n = "all") => {
 		if (!w && h.current) {
 			let e = h.current, n = e.closest(".entry"), r = [], i = n;
 			for (; i;) r.push({
@@ -21095,33 +21132,33 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			filter: n,
 			tab: "diagnostic"
 		}), re(!1);
-	}, Te = () => {
+	}, De = () => {
 		C({ kind: "summary" }), re(!1), requestAnimationFrame(() => {
 			ne.current?.focus({ preventScroll: !0 }), k.current.scroll.forEach(({ element: e, top: t, left: n }) => {
 				e.scrollTop = t, e.scrollLeft = n;
 			});
 		});
-	}, q = K.find((e) => e.id === T), Ee = xe.find((e) => e.triggered), De = be && _?.states?.[be], Oe = e._hass?.states?.[P.entity_id], ke = Oe?.state || "unknown", Ae = {
+	}, q = xe.find((e) => e.id === T), Oe = Ce.find((e) => e.triggered), ke = Se && _?.states?.[Se], Ae = e._hass?.states?.[P.entity_id], je = Ae?.state || "unknown", Me = {
 		home: "En Casa",
 		away: "Ausente",
 		night: "Noche"
-	}, je = e._ui?.modes?.__by_entity__?.[P.entity_id] || e._ui?.modes || {}, Me = String(Oe?.attributes?.arming_target || ke).replace(/^armed_/, ""), Ne = Ae[Me], Pe = !!Oe?.attributes?.arming_waiting_for_sensors, Fe = Ne && je[Me], Ie = Fe && new Set((Fe.sensors || []).filter((e) => !(Fe.bypassed_sensors || Fe.bypassedSensors || []).includes(e) && !V.includes(e))), Le = !Ce && !q && !D && !B && !le && (ke === "disarmed" || !!Ie), Re = (e) => ue ? d.getEntityState(e) : void 0, ze = (e) => wr(e, Re, d.isSensorActive), Be = K.map((e) => ze(e.entity_ids || [])).filter((e) => e !== "notApplicable"), Ve = q && ze(q.entity_ids || []), He = Be.filter((e) => e === "ready").length, Ue = Be.filter((e) => e === "pending").length, We = K.filter((e) => !e.entity_ids?.length || e.entity_ids.some((e) => ze([e]) === "unknown")).length, Ge = {
+	}, Ne = e._ui?.modes?.__by_entity__?.[P.entity_id] || e._ui?.modes || {}, Pe = String(Ae?.attributes?.arming_target || je).replace(/^armed_/, ""), Fe = Me[Pe], Ie = !!Ae?.attributes?.arming_waiting_for_sensors, Le = Fe && Ne[Pe], Re = Le && new Set((Le.sensors || []).filter((e) => !(Le.bypassed_sensors || Le.bypassedSensors || []).includes(e) && !V.includes(e))), ze = !Te && !q && !D && !B && !le && (je === "disarmed" || !!Re), Be = (e) => ue ? d.getEntityState(e) : void 0, Ve = (e) => wr(e, Be, d.isSensorActive), He = xe.map((e) => Ve(e.entity_ids || [])).filter((e) => e !== "notApplicable"), Ue = q && Ve(q.entity_ids || []), We = He.filter((e) => e === "ready").length, Ge = He.filter((e) => e === "pending").length, Ke = xe.filter((e) => !e.entity_ids?.length || e.entity_ids.some((e) => Ve([e]) === "unknown")).length, qe = {
 		home: "En Casa",
 		away: "Ausente",
 		night: "Noche"
-	}[String(_?.states?.[P.entity_id]?.attributes?.triggered_mode || "").replace(/^armed_/, "")], Ke = G.some((e) => !e.isBypassed && !V.includes(e.id) && (!_?.states?.[e.id] || [
+	}[String(_?.states?.[P.entity_id]?.attributes?.triggered_mode || "").replace(/^armed_/, "")], Je = _e.some((e) => !e.isBypassed && !V.includes(e.id) && (!_?.states?.[e.id] || [
 		"unknown",
 		"unavailable",
 		"offline"
-	].includes(_.states[e.id].state))), qe = Pe ? "Armado en espera" : ke === "triggered" ? "ALARMA ACTIVA" : ke.startsWith("armed_") && Ne ? `Armado · ${Ne}` : ke === "disarmed" ? "Desarmado" : ["arming", "pending"].includes(ke) ? "Armado en curso" : "Estado sin verificar", Je = K.filter((e) => e.entity_ids?.some((e) => V.includes(e))).map((e) => e.area || `Zona ${e.number}`), Ye = [
-		Ue ? `Zonas que requieren atención: ${Ue}.` : "",
-		We ? `${We} zona(s) sin verificar.` : "",
-		Be.length ? "" : "No hay zonas evaluables en este alcance."
-	].filter(Boolean).join(" "), Xe = e._ui?.emergency_number ? e._normaliseEmergencyNumber?.(e._ui.emergency_number) : "";
+	].includes(_.states[e.id].state))), Ye = Ie ? "Armado en espera" : je === "triggered" ? "ALARMA ACTIVA" : je.startsWith("armed_") && Fe ? `Armado · ${Fe}` : je === "disarmed" ? "Desarmado" : ["arming", "pending"].includes(je) ? "Armado en curso" : "Estado sin verificar", Xe = xe.filter((e) => e.entity_ids?.some((e) => V.includes(e))).map((e) => e.area || `Zona ${e.number}`), Ze = [
+		Ge ? `Zonas que requieren atención: ${Ge}.` : "",
+		Ke ? `${Ke} zona(s) sin verificar.` : "",
+		He.length ? "" : "No hay zonas evaluables en este alcance."
+	].filter(Boolean).join(" "), Qe = e._ui?.emergency_number ? e._normaliseEmergencyNumber?.(e._ui.emergency_number) : "";
 	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("style", { dangerouslySetInnerHTML: { __html: Ir + Pr + Fr } }), /* @__PURE__ */ (0, S.jsxs)("div", {
 		"data-entry-index": ae,
-		"data-alert-pulse": ve || void 0,
-		className: `entry ${t ? "ios-fullscreen" : ""} ${de ? "argus-waiting" : ""} ${ve ? "argus-alarm-attention" : ""}`,
+		"data-alert-pulse": ye || void 0,
+		className: `entry ${t ? "ios-fullscreen" : ""} ${de ? "argus-waiting" : ""} ${ye ? "argus-alarm-attention" : ""}`,
 		"data-context-view": w ? "details" : "summary",
 		style: {
 			position: "relative",
@@ -21259,11 +21296,11 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 								state: de ? "pending" : F,
 								label: pe(),
 								variant: e._getProfileShieldStyle?.() || "core",
-								pulse: ce ? "sos" : ve,
-								pulseKey: ye,
-								zones: xe,
-								zonesEnabled: K.length > 0,
-								onSelectZone: we
+								pulse: ce ? "sos" : ye,
+								pulseKey: be,
+								zones: Ce,
+								zonesEnabled: xe.length > 0,
+								onSelectZone: Ee
 							})
 						})
 					}),
@@ -21383,50 +21420,50 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 					/* @__PURE__ */ (0, S.jsxs)(Ar, {
 						online: ue,
 						focused: w,
-						onClose: Te,
+						onClose: De,
 						closeControl: /* @__PURE__ */ (0, S.jsx)("button", {
 							ref: te,
 							type: "button",
 							"aria-label": "Cerrar verificación",
-							onClick: Te,
+							onClick: De,
 							children: "Cerrar"
 						}),
 						tone: le ? "alarm" : B || V.length ? "warning" : "normal",
-						overviewAttention: Le && Ue > 0,
+						overviewAttention: ze && Ge > 0,
 						accent: F.startsWith("armed_") && !le ? me["--console-accent"] : void 0,
 						indicatorScope: "global",
-						notice: We ? `${We} zona(s) sin verificar: revisa conexión o configuración.` : void 0,
-						indicators: K.length ? [
+						notice: Ke ? `${Ke} zona(s) sin verificar: revisa conexión o configuración.` : void 0,
+						indicators: xe.length ? [
 							{
 								label: "Zonas",
-								value: Be.length,
-								onClick: () => we(null)
+								value: He.length,
+								onClick: () => Ee(null)
 							},
 							{
 								label: "Listas",
-								value: He,
-								onClick: () => we(null, "ready")
+								value: We,
+								onClick: () => Ee(null, "ready")
 							},
 							{
 								label: "Pendientes",
-								value: Ue,
-								onClick: () => we(null, "pending")
+								value: Ge,
+								onClick: () => Ee(null, "pending")
 							}
 						] : void 0,
 						selection: /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("button", {
-							hidden: w || !K.length,
+							hidden: w || !xe.length,
 							ref: ne,
 							className: "context-tool context-verify-entry",
-							"data-pending": Ue > 0 ? "true" : "false",
+							"data-pending": Ge > 0 ? "true" : "false",
 							type: "button",
-							onClick: () => we(null),
+							onClick: () => Ee(null),
 							children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: "Verificar zonas" }), /* @__PURE__ */ (0, S.jsx)("span", { children: "Revisar todas las zonas o una individualmente." })]
 						}), /* @__PURE__ */ (0, S.jsxs)("section", {
 							hidden: !w,
 							className: "context-verification-dialog",
 							"aria-label": "Verificar zonas",
 							onKeyDown: (e) => {
-								e.key === "Escape" && (e.stopPropagation(), Te());
+								e.key === "Escape" && (e.stopPropagation(), De());
 							},
 							children: [
 								/* @__PURE__ */ (0, S.jsx)("div", {
@@ -21438,11 +21475,11 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									children: /* @__PURE__ */ (0, S.jsxs)("label", { children: ["Zona", /* @__PURE__ */ (0, S.jsxs)("select", {
 										"aria-label": "Zona contextual",
 										value: T || "",
-										onChange: (e) => we(e.target.value || null),
+										onChange: (e) => Ee(e.target.value || null),
 										children: [/* @__PURE__ */ (0, S.jsx)("option", {
 											value: "",
 											children: "Todas las zonas"
-										}), xe.map((e) => /* @__PURE__ */ (0, S.jsxs)("option", {
+										}), Ce.map((e) => /* @__PURE__ */ (0, S.jsxs)("option", {
 											value: e.id,
 											children: [e.name, e.area ? " · " + e.area : ""]
 										}, e.id))]
@@ -21475,11 +21512,11 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 								/* @__PURE__ */ (0, S.jsx)(kr, {
 									panel: e,
 									entryId: P.entry_id,
-									zones: T && !q ? [] : E === "all" ? K : K.filter((e) => ze(e.entity_ids || []) === E),
+									zones: T && !q ? [] : E === "all" ? xe : xe.filter((e) => Ve(e.entity_ids || []) === E),
 									zone: q,
 									online: ue,
 									states: _?.states,
-									canStart: ke === "disarmed" && !le && !B,
+									canStart: je === "disarmed" && !le && !B,
 									scopeLabel: T && !q ? "Zona no disponible" : E === "pending" ? "Zonas pendientes" : E === "ready" ? "Zonas listas" : void 0,
 									visible: w,
 									diagnostic: D,
@@ -21488,12 +21525,12 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							]
 						})] }),
 						navigation: /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
-							Ce && /* @__PURE__ */ (0, S.jsx)("button", {
+							Te && /* @__PURE__ */ (0, S.jsx)("button", {
 								type: "button",
 								onClick: () => void e._stopWalkTest(),
 								children: "Finalizar prueba"
 							}),
-							(ce || L) && Xe && /* @__PURE__ */ (0, S.jsxs)("div", {
+							(ce || L) && Qe && /* @__PURE__ */ (0, S.jsxs)("div", {
 								className: "context-tools",
 								children: [/* @__PURE__ */ (0, S.jsx)("small", { children: "Llamada de emergencia" }), j ? /* @__PURE__ */ (0, S.jsxs)("div", {
 									className: "context-call",
@@ -21505,7 +21542,7 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									children: [
 										/* @__PURE__ */ (0, S.jsxs)("span", { children: [
 											"¿Llamar al ",
-											Xe,
+											Qe,
 											"?"
 										] }),
 										/* @__PURE__ */ (0, S.jsx)("button", {
@@ -21517,7 +21554,7 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 											children: "Ahora no"
 										}),
 										/* @__PURE__ */ (0, S.jsx)("a", {
-											href: `tel:${Xe}`,
+											href: `tel:${Qe}`,
 											onClick: () => M(!1),
 											children: "Llamar"
 										})
@@ -21533,48 +21570,55 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 								className: "context-back",
 								type: "button",
 								onClick: () => {
-									Te();
+									De();
 								},
 								children: "← Estado"
 							}),
 							D && !q && /* @__PURE__ */ (0, S.jsx)("button", {
 								className: "context-back",
 								type: "button",
-								onClick: Te,
+								onClick: De,
 								children: "← Estado"
 							}),
-							L && (q || Ce || D) && /* @__PURE__ */ (0, S.jsx)("button", {
+							L && (q || Te || D) && /* @__PURE__ */ (0, S.jsx)("button", {
 								type: "button",
 								onClick: () => re(!N),
 								children: N ? "Volver a la zona" : "Alarma activa · Ver incidente"
 							})
 						] }),
-						title: ce ? "SOS / PÁNICO ACTIVO" : L && (!(q || Ce || D) || N) ? "ALARMA ACTIVA" : qe,
-						detail: ce ? `Sistema de seguridad: ${qe}.` : L && (!(q || Ce || D) || N) ? [
-							Ge && `Modo: ${Ge}`,
-							Ee?.area || Ee?.name,
-							De?.attributes?.friendly_name || be
-						].filter(Boolean).join(" · ") : ke === F ? B ? [z && `Modo solicitado: ${z}.`, de && `Condiciones pendientes: ${U.length}.`].filter(Boolean).join(" ") : F.startsWith("armed_") ? [
-							Ke && "Protección degradada: sensor sin conexión.",
-							V.length && `Protección parcial: ${V.length} sensor(es) omitido(s)${Je.length ? " · " + Je.join(", ") : ""}.`,
-							Ye
-						].filter(Boolean).join(" ") : Le && K.length ? Ye : void 0 : "Esperando confirmación del servidor.",
-						view: q && !N ? q.area || xe.find((e) => e.id === T)?.name : Ce && !N ? `Modo de prueba · ${Se.tested_count || 0} de ${Se.total_sensors || 0} verificados` : D && !N ? "Diagnóstico de sensores" : void 0,
+						title: ce ? "SOS / PÁNICO ACTIVO" : L && (!(q || Te || D) || N) ? "ALARMA ACTIVA" : Ye,
+						detail: ce ? `Sistema de seguridad: ${Ye}.` : L && (!(q || Te || D) || N) ? [
+							qe && `Modo: ${qe}`,
+							Oe?.area || Oe?.name,
+							ke?.attributes?.friendly_name || Se
+						].filter(Boolean).join(" · ") : je === F ? B ? [z && `Modo solicitado: ${z}.`, de && `Condiciones pendientes: ${U.length}.`].filter(Boolean).join(" ") : F.startsWith("armed_") ? [
+							Je && "Protección degradada: sensor sin conexión.",
+							V.length && `Protección parcial: ${V.length} sensor(es) omitido(s)${Xe.length ? " · " + Xe.join(", ") : ""}.`,
+							Ze
+						].filter(Boolean).join(" ") : ze && xe.length ? Ze : void 0 : "Esperando confirmación del servidor.",
+						view: q && !N ? q.area || Ce.find((e) => e.id === T)?.name : Te && !N ? `Modo de prueba · ${we.tested_count || 0} de ${we.total_sensors || 0} verificados` : D && !N ? "Diagnóstico de sensores" : void 0,
 						children: [
+							W && /* @__PURE__ */ (0, S.jsx)("button", {
+								type: "button",
+								className: "context-tool",
+								disabled: s,
+								onClick: G,
+								children: "Armar con bypass"
+							}),
 							l && /* @__PURE__ */ (0, S.jsx)("small", {
 								role: "alert",
 								children: l
 							}),
-							q && !Ce && !N && /* @__PURE__ */ (0, S.jsx)("button", {
+							q && !Te && !N && /* @__PURE__ */ (0, S.jsx)("button", {
 								type: "button",
 								className: "context-back",
-								onClick: () => we(null, "pending"),
+								onClick: () => Ee(null, "pending"),
 								children: "Ver todas las zonas que requieren atención"
 							}),
-							q && !Ce && !N && /* @__PURE__ */ (0, S.jsxs)("div", {
+							q && !Te && !N && /* @__PURE__ */ (0, S.jsxs)("div", {
 								className: "context-sensor-row",
 								children: [
-									/* @__PURE__ */ (0, S.jsx)("small", { children: Ve === "ready" ? "Zona lista" : Ve === "pending" ? "Zona pendiente" : Ve === "notApplicable" ? "No aplica a este modo" : "Zona sin verificar" }),
+									/* @__PURE__ */ (0, S.jsx)("small", { children: Ue === "ready" ? "Zona lista" : Ue === "pending" ? "Zona pendiente" : Ue === "notApplicable" ? "No aplica a este modo" : "Zona sin verificar" }),
 									!q.entity_ids?.length && /* @__PURE__ */ (0, S.jsx)("small", { children: "Sin sensores configurados." }),
 									!q.entity_ids?.length && e._isAdmin && /* @__PURE__ */ (0, S.jsx)("button", {
 										className: "context-back",
@@ -21587,8 +21631,8 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									})
 								]
 							}),
-							F === "disarmed" && !B && !q && !D && !Ce || D && !N && !le ? null : Ce && !N && !ce ? (Se.all_sensors || []).filter((e) => !q || q.entity_ids?.includes(e)).map((e) => {
-								let t = Object.values(Se.tested_sensors || {}).some((t) => t === e || t.entity_id === e);
+							F === "disarmed" && !B && !q && !D && !Te || D && !N && !le ? null : Te && !N && !ce ? (we.all_sensors || []).filter((e) => !q || q.entity_ids?.includes(e)).map((e) => {
+								let t = Object.values(we.tested_sensors || {}).some((t) => t === e || t.entity_id === e);
 								return /* @__PURE__ */ (0, S.jsxs)("div", {
 									className: "context-sensor-row",
 									children: [
@@ -21597,12 +21641,12 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 										_?.states?.[e]?.attributes?.friendly_name || e
 									]
 								}, e);
-							}) : (q && !(L && N) ? (q.entity_ids || []).map((e) => G.find((t) => t.id === e) || { id: e }) : D && !B && !L || F === "disarmed" && !B ? Array.from(new Set(K.length ? K.flatMap((e) => e.entity_ids || []) : G.map((e) => e.id))).map((e) => G.find((t) => t.id === e) || { id: e }) : K.length && !q && de ? [] : de ? U.map((e) => ({ id: e })) : K.length ? [...new Set(K.flatMap((e) => e.entity_ids || []))].map((e) => ({ id: e })) : G).map((t) => {
-								let n = String(t.id || "").trim(), r = Re(n), i = String(t.name || r?.attributes?.friendly_name || n), a = String(r?.attributes?.device_class || ""), o = !a && !n.startsWith("lock.") ? "generic" : Lr(n, a), c = o === "lock", l = de && U.includes(n), u = Cr(r), f = u !== "available", p = String(r?.state || "").toLowerCase(), m = a === "timestamp", h = m ? "Dato informativo" : p, g = m && !f ? Tr(r.state, _?.language || "es", _?.config?.time_zone) : null, v = !f && d.isSensorActive(r), y = e._getSensorBattery?.(n, r) ?? null, b = Object.entries(Ae).filter(([e]) => {
-									let t = je[e];
+							}) : (q && !(L && N) ? (q.entity_ids || []).map((e) => _e.find((t) => t.id === e) || { id: e }) : D && !B && !L || F === "disarmed" && !B ? Array.from(new Set(xe.length ? xe.flatMap((e) => e.entity_ids || []) : _e.map((e) => e.id))).map((e) => _e.find((t) => t.id === e) || { id: e }) : xe.length && !q && de ? [] : de ? U.map((e) => ({ id: e })) : xe.length ? [...new Set(xe.flatMap((e) => e.entity_ids || []))].map((e) => ({ id: e })) : _e).map((t) => {
+								let n = String(t.id || "").trim(), r = Be(n), i = String(t.name || r?.attributes?.friendly_name || n), a = String(r?.attributes?.device_class || ""), o = !a && !n.startsWith("lock.") ? "generic" : Lr(n, a), c = o === "lock", l = de && U.includes(n), u = Cr(r), f = u !== "available", p = String(r?.state || "").toLowerCase(), m = a === "timestamp", h = m ? "Dato informativo" : p, g = m && !f ? Tr(r.state, _?.language || "es", _?.config?.time_zone) : null, v = !f && d.isSensorActive(r), y = e._getSensorBattery?.(n, r) ?? null, b = Object.entries(Me).filter(([e]) => {
+									let t = Ne[e];
 									return t?.sensors?.includes(n) && !(t.bypassed_sensors || t.bypassedSensors || []).includes(n);
-								}).map(([, e]) => e), x, C = W?.sensor_settings?.[t.id] || W?.sensor_settings?.[n];
-								C ? C.type === "instant" || C.delay === 0 ? x = 0 : C.delay !== void 0 && C.delay !== null && (x = Number(C.delay)) : ((W?.entry_sensors || []).includes(t.id) || (W?.entry_sensors || []).includes(n)) && (x = W?.entry_delay !== void 0 && W?.entry_delay !== null ? Number(W.entry_delay) : void 0);
+								}).map(([, e]) => e), x, C = K?.sensor_settings?.[t.id] || K?.sensor_settings?.[n];
+								C ? C.type === "instant" || C.delay === 0 ? x = 0 : C.delay !== void 0 && C.delay !== null && (x = Number(C.delay)) : ((K?.entry_sensors || []).includes(t.id) || (K?.entry_sensors || []).includes(n)) && (x = K?.entry_delay !== void 0 && K?.entry_delay !== null ? Number(K.entry_delay) : void 0);
 								let w = V.includes(n), T = l && ge.includes(n) && e._isAdmin && P.entry_id, E = w && F.startsWith("armed_") && e._isAdmin && P.entry_id, O = !f && [
 									"off",
 									"closed",
@@ -21638,7 +21682,7 @@ function Zr({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 											b.length > 0 && b.join(", "),
 											l && "Bloqueo confirmado del armado"
 										].filter(Boolean).join(" · ") }),
-										l && /* @__PURE__ */ (0, S.jsx)("small", { children: [K.find((e) => e.entity_ids?.includes(n))?.area, f ? "Bloqueo por falta de conexión o datos" : "Bloqueo por sensor abierto o activo"].filter(Boolean).join(" · ") }),
+										l && /* @__PURE__ */ (0, S.jsx)("small", { children: [xe.find((e) => e.entity_ids?.includes(n))?.area, f ? "Bloqueo por falta de conexión o datos" : "Bloqueo por sensor abierto o activo"].filter(Boolean).join(" · ") }),
 										w && O && /* @__PURE__ */ (0, S.jsx)("small", { children: "Sensor recuperado. Sigue omitido en este armado." }),
 										T && /* @__PURE__ */ (0, S.jsx)("button", {
 											className: "context-primary",
@@ -22099,7 +22143,7 @@ var _i = class extends Te {
 			visibility: n.visibility || r.visibility
 		};
 		let i = this.writes.then(async () => {
-			let n = this.v5(), { layouts: r, visibility: i } = this.desired, a = K({
+			let n = this.v5(), { layouts: r, visibility: i } = this.desired, a = ye({
 				layoutVersion: 5,
 				layouts: r,
 				visibility: i,
@@ -22130,7 +22174,7 @@ var _i = class extends Te {
 		}
 		let r = this.v4();
 		if (r?.layoutVersion === 4 && r.layouts) {
-			let n = K(r, r.visibility), i = we(n.layouts);
+			let n = ye(r, r.visibility), i = we(n.layouts);
 			return await this.persist(e, t, {
 				layouts: i,
 				visibility: n.visibility
@@ -22138,7 +22182,7 @@ var _i = class extends Te {
 		}
 		let i = this.v3();
 		if (i?.layoutVersion === 3 && i.layouts) {
-			let n = K({
+			let n = ye({
 				layoutVersion: 3,
 				layouts: U(i),
 				visibility: i.visibility,
@@ -22151,7 +22195,7 @@ var _i = class extends Te {
 		}
 		let a = await super.load(e, t);
 		if (a) {
-			let n = await super.loadVisibility(e, t) || {}, r = K({
+			let n = await super.loadVisibility(e, t) || {}, r = ye({
 				layoutVersion: 5,
 				layouts: a,
 				visibility: n
@@ -22174,7 +22218,7 @@ var _i = class extends Te {
 		return this.v5()?.visibility || this.v4()?.visibility || this.v3()?.visibility || await super.loadVisibility(e, t);
 	}
 	async saveVisibility(e, t, n) {
-		let r = this.desired?.layouts || this.v5()?.layouts || (this.v4()?.layouts ? K(this.v4()).layouts : we(this.v3() ? U(this.v3()) : await super.load(e, t)));
+		let r = this.desired?.layouts || this.v5()?.layouts || (this.v4()?.layouts ? ye(this.v4()).layouts : we(this.v3() ? U(this.v3()) : await super.load(e, t)));
 		await this.persist(e, t, {
 			layouts: r,
 			visibility: n

@@ -8522,10 +8522,13 @@ class ArgusPanel extends HTMLElement {
               const idx = Number(btn.dataset.userPerms);
               const targetUser = this._users[idx];
               if (!targetUser) return;
-              const newPerms = await this._showArgusPermissionsModal(targetUser);
-              if (newPerms === null) return;
+              const result = await this._showArgusPermissionsModal(targetUser);
+              if (result === null) return;
+              const { permissions: newPerms, overridePin } = result;
               this._runWithPin(async () => {
-                const nextUsers = this._users.map((u, k) => k === idx ? { ...u, permissions: { ...u.permissions, ...newPerms } } : u);
+                const nextUsers = this._users.map((u, k) => k === idx ? { ...u, permissions: { ...u.permissions, ...newPerms },
+                  ...(overridePin !== undefined ? { override_pin_hash: overridePin } : {}),
+                } : u);
                 try {
                   const resp = await this._send('argus/save_ui', { users: nextUsers });
                   if (resp && resp.ui) {
@@ -9478,6 +9481,14 @@ class ArgusPanel extends HTMLElement {
               <input type="checkbox" id="chk-perm-arm" ${perms.arm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
               <span>🛡️ ${this._t('perm_arm') || 'Armar Alarma'}</span>
             </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;">
+              <input type="checkbox" id="chk-perm-force-arm" ${perms.force_arm ? 'checked' : ''}>
+              <span>Permitir armado con bypass</span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#fff;">
+              PIN de override
+              <input id="override-pin" type="password" inputmode="numeric" maxlength="12" autocomplete="new-password" placeholder="${targetUser.override_pin_configured ? 'Conservar PIN actual' : 'Configurar PIN de override'}">
+            </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-disarm" ${perms.disarm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
               <span>🔓 ${this._t('perm_disarm') || 'Desarmar Alarma'}</span>
@@ -9513,11 +9524,13 @@ class ArgusPanel extends HTMLElement {
         const nextPerms = {
           view_status: true,
           arm: overlay.querySelector('#chk-perm-arm').checked,
+          force_arm: overlay.querySelector('#chk-perm-force-arm').checked,
           disarm: overlay.querySelector('#chk-perm-disarm').checked,
           sos: overlay.querySelector('#chk-perm-sos').checked,
           view_history: overlay.querySelector('#chk-perm-view-history').checked,
         };
-        cleanup(nextPerms);
+        const overridePin = (overlay.querySelector('#override-pin') as HTMLInputElement).value;
+        cleanup({ permissions: nextPerms, overridePin: nextPerms.force_arm ? (overridePin || undefined) : '' });
       });
       cancelBtn.focus();
       overlay.addEventListener('keydown', e => { if (e.key === 'Escape') cleanup(null); });

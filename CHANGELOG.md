@@ -1,3 +1,9 @@
+## [3.8.0] - 2026-11-27
+
+- Añade confirmación por grupos de sensores, acciones de Companion App y PIN de override para armado en espera.
+- Protege el estado armado restaurado y permite configurar tópicos MQTT por instancia.
+- [Configuración y notas de versión](docs/RELEASE_NOTES_3.8.0.md)
+
 ## [3.7.12] - 2026-11-27
 
 - Sincroniza los metadatos de integración, frontend y publicación sobre la base v3.7.11.

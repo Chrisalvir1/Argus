@@ -126,6 +126,7 @@ def _redact_ui_data(data: dict) -> dict:
                 user.pop("access_pin_hash", None)
                 user["master_pin_configured"] = bool(user.get("master_pin_hash"))
                 user.pop("master_pin_hash", None)
+                user["override_pin_configured"] = bool(user.pop("override_pin_hash", None))
     advanced = redacted.get("advanced")
     if isinstance(advanced, dict):
         advanced["guest_code_configured"] = bool(advanced.get("guest_code"))
@@ -425,6 +426,7 @@ _PROFILE_ALLOWLIST = {
     "access_pin_configured",
     "pin_configured",
     "master_pin_configured",
+    "override_pin_configured",
 }
 
 def _redact_user_profile(profile: dict | None) -> dict | None:
@@ -435,6 +437,7 @@ def _redact_user_profile(profile: dict | None) -> dict | None:
     p["access_pin_configured"] = bool(p.get("access_pin_hash") or p.get("access_pin_configured"))
     p["pin_configured"] = bool(p.get("pin") or p.get("pin_configured"))
     p["master_pin_configured"] = bool(p.get("master_pin_hash") or p.get("master_pin_configured"))
+    p["override_pin_configured"] = bool(p.get("override_pin_hash"))
     return {k: v for k, v in p.items() if k in _PROFILE_ALLOWLIST}
 
 
@@ -506,6 +509,12 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("dashboard"): dict,
     vol.Optional("floorplan"): dict,
     vol.Optional("notif_targets"): list,
+    vol.Optional("push_actions_enabled"): bool,
+    vol.Optional("mqtt"): {
+        vol.Required("enabled"): bool,
+        vol.Required("state_topic"): vol.All(str, vol.Length(min=1, max=250), vol.Match(r"\A[^+#\x00]+\Z")),
+        vol.Required("command_topic"): vol.All(str, vol.Length(min=1, max=250), vol.Match(r"\A[^+#\x00]+\Z")),
+    },
     vol.Optional("emergency_number"): vol.All(str, vol.Length(min=1, max=16), vol.Match(r"^[0-9+()\-\s]+$")),
     vol.Optional("panic_outputs"): list,
     vol.Optional("users"): list,
@@ -548,6 +557,9 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
     ui_data = await async_load_ui_data(hass, entry_id)
     old_users = ui_data.get("users", [])
     try:
+        mqtt = updates.get("mqtt")
+        if mqtt and mqtt["state_topic"] == mqtt["command_topic"]:
+            raise ValueError("MQTT state and command topics must differ")
         if "users" in updates:
             updates["users"] = _sanitize_users(updates["users"])
         if "floorplan" in updates and isinstance(updates["floorplan"], dict):
@@ -604,6 +616,16 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
     data = await async_load_ui_data(hass, entry_id)
     modes = copy.deepcopy(data.get("modes", {}))
     mode, config, entity_id = msg["mode"], copy.deepcopy(msg["config"]), msg["entity_id"]
+    if "sensor_groups" in config:
+        from .sensor_state_runtime import normalize_sensor_groups
+
+        try:
+            config["sensor_groups"] = normalize_sensor_groups(
+                config["sensor_groups"], config.get("sensors", [])
+            )
+        except (ValueError, TypeError) as err:
+            connection.send_error(msg["id"], "invalid_sensor_groups", str(err))
+            return
     # v2.0.29: external panels are outputs of the Sirens section.  Preserve
     # old saves while normalising the canonical field on their next save.
     legacy_panels = config.pop("sync_panels", [])
@@ -1613,8 +1635,9 @@ async def ws_argus_logout_profile(hass, connection, msg) -> None:
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/perform_alarm_action",
     vol.Optional("entry_id"): str,
-    vol.Required("action"): vol.In(["arm_home", "arm_away", "arm_night", "disarm", "sos", "stop_sos"]),
+    vol.Required("action"): vol.In(["arm_home", "arm_away", "arm_night", "disarm", "sos", "stop_sos", "force_arm"]),
     vol.Optional("code"): str,
+    vol.Optional("generation"): int,
 })
 @websocket_api.async_response
 async def ws_argus_perform_alarm_action(hass, connection, msg) -> None:
@@ -1630,11 +1653,37 @@ async def ws_argus_perform_alarm_action(hass, connection, msg) -> None:
         return
 
     # 2. Check Permission
-    req_perm = "arm" if action.startswith("arm_") else "disarm" if action == "disarm" else "sos"
+    req_perm = "arm" if action.startswith("arm_") or action == "force_arm" else "disarm" if action == "disarm" else "sos"
     try:
         await _require_permission(hass, connection, entry_id, req_perm)
     except ArgusAuthError as err:
         connection.send_error(msg["id"], err.code, err.message)
+        return
+
+    if action == "force_arm":
+        from homeassistant.exceptions import HomeAssistantError
+
+        from .auth import require_override_pin
+        from .const import DATA_PANELS
+
+        panel = hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).get(entry_id)
+        if panel is None:
+            connection.send_error(msg["id"], "not_found", "Alarm entity not found")
+            return
+        if msg.get("generation") is None:
+            connection.send_error(msg["id"], "invalid_request", "Arming generation is required")
+            return
+        try:
+            require_override_pin(profile, msg.get("code", ""), _limiter(hass, entry_id), f"override:{ha_user_id}")
+            await panel.async_force_waiting_arm(msg["generation"])
+        except ArgusAuthError as err:
+            connection.send_error(msg["id"], err.code, err.message)
+            return
+        except HomeAssistantError as err:
+            connection.send_error(msg["id"], "service_failed", str(err))
+            return
+        await async_append_audit_log(hass, "force_arm", user=profile.get("name"), entry_id=entry_id)
+        connection.send_result(msg["id"], {"success": True})
         return
 
     # 3. Perform action on the HA entity

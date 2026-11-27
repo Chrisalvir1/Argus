@@ -80,3 +80,17 @@ async def _require_permission(
         raise ArgusAuthError("unauthorized", f"Requires Argus permission: {permission}")
         
     return profile, ha_user_id
+
+
+def require_override_pin(profile: dict, code: str, limiter, key: str) -> None:
+    """Authorize an explicit forced arm with a separate user credential."""
+    from .security import verify_pin
+
+    if profile.get("permissions", {}).get("force_arm") is not True:
+        raise ArgusAuthError("unauthorized", "Requires Argus force_arm permission")
+    if limiter.is_blocked(key):
+        raise ArgusAuthError("rate_limited", "Too many failed attempts; try again later")
+    if not verify_pin(code, profile.get("override_pin_hash")):
+        limiter.record_failure(key)
+        raise ArgusAuthError("invalid_pin", "Invalid override PIN")
+    limiter.reset(key)
