@@ -1,0 +1,97 @@
+name: Dependency regression
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/dependency-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    name: Compare builds and validate dependencies on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: before
+          persist-credentials: false
+      - uses: actions/checkout@v7.0.1
+        with:
+          path: after
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: after/.node-version
+      - name: Verify npm installs, tests and builds
+        run: |
+          set -euo pipefail
+          for checkout in before after; do
+            (
+              cd "$checkout"
+              npm ci --strict-peer-deps
+              npm ls --all
+              npm exec -- tsc --noEmit
+              npm test
+              npm run build
+            )
+          done
+      - name: Measure build time, memory and bundle size
+        run: |
+          set -euo pipefail
+          for trial in {1..7}; do
+            for checkout in before after; do
+              (
+                cd "$checkout"
+                /usr/bin/time -f '%e %M' -a -o timings.txt node ./node_modules/vite/bin/vite.js build > /dev/null
+              )
+            done
+          done
+          python3 - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          from gzip import compress
+          from pathlib import Path
+          from statistics import median
+
+          print('| Checkout | Build median (s) | Peak RSS median (KiB) | Bundle (bytes) | Gzip (bytes) |')
+          print('| --- | ---: | ---: | ---: | ---: |')
+          for checkout in ('before', 'after'):
+              root = Path(checkout)
+              times, peaks = zip(*(map(float, line.split()) for line in (root / 'timings.txt').read_text().splitlines()))
+              bundle = (root / 'custom_components/argus/www/react-dist/argus-frontend.js').read_bytes()
+              print(f'| {checkout} | {median(times):.2f} | {median(peaks):.0f} | {len(bundle)} | {len(compress(bundle, compresslevel=6))} |')
+          PY
+      - name: Verify pnpm frozen install on ARM64
+        if: runner.arch == 'ARM64'
+        working-directory: after
+        run: |
+          set -euo pipefail
+          mv node_modules "$RUNNER_TEMP/argus-npm-node-modules"
+          manager="$(node -p "require('./package.json').packageManager")"
+          npm exec --yes --package="$manager" -- pnpm install --frozen-lockfile --strict-peer-dependencies
+          npm exec --yes --package="$manager" -- pnpm exec tsc --noEmit
+          npm exec --yes --package="$manager" -- pnpm test
+          npm exec --yes --package="$manager" -- pnpm build
+      - uses: actions/setup-python@v7.1.0
+        if: runner.arch == 'ARM64'
+        with:
+          python-version-file: after/.python-version
+      - name: Run backend and Home Assistant Core tests on ARM64
+        if: runner.arch == 'ARM64'
+        working-directory: after
+        run: |
+          set -euo pipefail
+          python -m venv .venv
+          .venv/bin/python -m pip install homeassistant==2026.11.3 pytest==9.0.3 pytest-asyncio==1.4.0
+          .venv/bin/python scripts/test_backend.py
+          .venv/bin/python -m pytest -q tests_core
