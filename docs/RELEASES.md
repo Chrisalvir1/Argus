@@ -1,6 +1,6 @@
 # Historial de versiones
 
-[Próxima versión v3.7.11](RELEASE_NOTES_3.7.11.md) · Modernización de dependencias, compilación más liviana y validación de Core en ARM64. [Etiquetas previstas](DEPENDENCY_TAGS.md)
+[v3.7.11](RELEASE_NOTES_3.7.11.md) · Modernización de dependencias, compilación más liviana y validación de Core en ARM64. [Etiquetas](DEPENDENCY_TAGS.md)
 
 - [v3.7.10](https://github.com/Chrisalvir1/Argus/releases/tag/v3.7.10) — versión publicada.
 

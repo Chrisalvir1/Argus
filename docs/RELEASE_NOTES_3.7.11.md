@@ -1,6 +1,6 @@
 # Argus v3.7.11 · Modernización de dependencias
 
-Notas de la próxima publicación, documentadas en el [PR #63](https://github.com/Chrisalvir1/Argus/pull/63). Etiqueta de versión prevista: `v3.7.11`. [Etiqueta técnica publicada](https://github.com/Chrisalvir1/Argus/tree/deps/argus-2026-11-26).
+Cambios documentados en el [PR #63](https://github.com/Chrisalvir1/Argus/pull/63). Etiqueta de versión: `v3.7.11`. [Etiqueta técnica publicada](https://github.com/Chrisalvir1/Argus/tree/deps/argus-2026-11-26).
 
 ## Qué mejora
 
@@ -33,4 +33,4 @@ Entorno validado con Node.js 26.13.1 LTS, Python 3.14.10, TypeScript 7.0.2 y ES2
 
 ## Verificación
 
-GitHub Actions completó 12 jobs para el candidato técnico. Se aprobaron 286 pruebas de Python, 4 de Core y 79 de Vitest. HACS y Hassfest aprobaron la validación, y el workflow Release generó un artefacto de prueba. La publicación queda pendiente de la validación en una Raspberry Pi 5 física y de la revisión visual en Home Assistant. [Checks del PR](https://github.com/Chrisalvir1/Argus/pull/63/checks)
+GitHub Actions completó 12 jobs para el candidato técnico. Se aprobaron 286 pruebas de Python, 4 de Core y 79 de Vitest. HACS y Hassfest aprobaron la validación, y el workflow Release generó un artefacto de prueba. La validación en una Raspberry Pi 5 física y la revisión visual en Home Assistant siguen pendientes. [Checks del PR](https://github.com/Chrisalvir1/Argus/pull/63/checks)

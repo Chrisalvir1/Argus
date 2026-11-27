@@ -7,7 +7,7 @@ Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de 
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-### Argus v3.7.10
+### Argus v3.7.11
 
 Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con reincorporación manual, diagnóstico y pruebas de sensores, voz general y accesibilidad.
 
@@ -27,9 +27,9 @@ Objetivo: Home Assistant Core 2026.11.3. El frontend compilado está incluido; N
 
 ---
 
-## Próxima actualización de dependencias
+## Actualización de dependencias en v3.7.11
 
-La compilación del frontend tarda alrededor de un 12 % menos en Linux x86-64 y ARM64, con menor consumo de memoria. El candidato usa Vite 8.4.0, Rolldown 1.3.4, Vitest 5.1.2 y Home Assistant Core 2026.11.3 en CI. Consulta las [notas de la próxima versión](docs/RELEASE_NOTES_3.7.11.md), la [lista de versiones](docs/RELEASE_LIST.md) y las [etiquetas de dependencias](docs/DEPENDENCY_TAGS.md).
+La compilación del frontend tarda alrededor de un 12 % menos en Linux x86-64 y ARM64, con menor consumo de memoria. El candidato usa Vite 8.4.0, Rolldown 1.3.4, Vitest 5.1.2 y Home Assistant Core 2026.11.3 en CI. Consulta las [notas de la versión](docs/RELEASE_NOTES_3.7.11.md), la [lista de versiones](docs/RELEASE_LIST.md) y las [etiquetas de dependencias](docs/DEPENDENCY_TAGS.md).
 
 ## Novedades de v3.7.9
 
