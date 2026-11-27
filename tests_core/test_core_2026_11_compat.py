@@ -12,7 +12,7 @@ def test_exact_core_target():
     assert (const.MAJOR_VERSION, const.MINOR_VERSION, str(const.PATCH_VERSION)) == (
         2026,
         11,
-        "2",
+        "3",
     )
 
 

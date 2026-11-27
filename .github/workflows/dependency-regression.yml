@@ -76,7 +76,7 @@ jobs:
         working-directory: after
         run: |
           set -euo pipefail
-          mv node_modules npm-node-modules
+          mv node_modules "$RUNNER_TEMP/argus-npm-node-modules"
           manager="$(node -p "require('./package.json').packageManager")"
           npm exec --yes --package="$manager" -- pnpm install --frozen-lockfile --strict-peer-dependencies
           npm exec --yes --package="$manager" -- pnpm exec tsc --noEmit
