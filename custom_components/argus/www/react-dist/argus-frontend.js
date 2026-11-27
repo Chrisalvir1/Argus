@@ -1,9 +1,9 @@
 // \0rolldown/runtime.js
 var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescriptor, r = Object.getOwnPropertyNames, i = Object.getPrototypeOf, a = Object.prototype.hasOwnProperty, o = (e, t) => () => (t || (e((t = { exports: {} }).exports, t, t.exports), e = null), t.exports), s = (e, i, o, s) => {
-	if (i && typeof i == "object" || typeof i == "function") for (var c = r(i), l = 0, u = c.length, d; l < u; l++) d = c[l], !a.call(e, d) && d !== o && t(e, d, {
-		get: ((e) => i[e]).bind(null, d),
-		enumerable: !(s = n(i, d)) || s.enumerable
-	});
+	if (i && typeof i == "object" || typeof i == "function") for (let c of r(i)) !a.call(e, c) && c !== o && (s = n(i, c), t(e, c, {
+		get: s && s.get && !s.configurable ? s.get : () => i[c],
+		enumerable: !s || s.enumerable
+	}));
 	return e;
 }, c = (n, r, o) => (o = n == null ? {} : e(i(n)), s(r || !n || !n.__esModule || !a.call(n, "default") ? t(o, "default", {
 	value: n,
@@ -461,12 +461,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function I(e) {
 		if (e._status === -1) {
-			var t = e._result, n = t();
-			n.then(function(t) {
-				(e._status === 0 || e._status === -1) && (e._status = 1, e._result = t, n.status === void 0 && (n.status = "fulfilled", n.value = t));
-			}, function(t) {
-				(e._status === 0 || e._status === -1) && (e._status = 2, e._result = t, n.status === void 0 && (n.status = "rejected", n.reason = t));
-			}), e._status === -1 && (e._status = 0, e._result = n);
+			var t = (0, e._result)();
+			t.then(function(n) {
+				(e._status === 0 || e._status === -1) && (e._status = 1, e._result = n, t.status === void 0 && (t.status = "fulfilled", t.value = n));
+			}, function(n) {
+				(e._status === 0 || e._status === -1) && (e._status = 2, e._result = n, t.status === void 0 && (t.status = "rejected", t.reason = n));
+			}), e._status === -1 && (e._status = 0, e._result = t);
 		}
 		if (e._status === 1) return e._result.default;
 		throw e._result;
@@ -639,11 +639,10 @@ var _ = /* @__PURE__ */ o(((e) => {
 })), y = /* @__PURE__ */ o(((e) => {
 	function t(e, t) {
 		var n = e.length;
-		e.push(t);
-		a: for (; 0 < n;) {
+		for (e.push(t); 0 < n;) {
 			var r = n - 1 >>> 1, a = e[r];
 			if (0 < i(a, t)) e[r] = t, e[n] = a, n = r;
-			else break a;
+			else break;
 		}
 	}
 	function n(e) {
@@ -654,11 +653,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var t = e[0], n = e.pop();
 		if (n !== t) {
 			e[0] = n;
-			a: for (var r = 0, a = e.length, o = a >>> 1; r < o;) {
+			for (var r = 0, a = e.length, o = a >>> 1; r < o;) {
 				var s = 2 * (r + 1) - 1, c = e[s], l = s + 1, u = e[l];
 				if (0 > i(c, n)) l < a && 0 > i(u, c) ? (e[r] = u, e[l] = n, r = l) : (e[r] = c, e[s] = n, r = s);
 				else if (l < a && 0 > i(u, n)) e[r] = u, e[l] = n, r = l;
-				else break a;
+				else break;
 			}
 		}
 		return t;
@@ -706,11 +705,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 			T = t;
 			var i = !0;
 			try {
-				a: {
+				e: {
 					m = !1, h && (h = !1, v(C), C = -1), p = !0;
 					var a = f;
 					try {
-						b: {
+						t: {
 							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && E());) {
 								var o = d.callback;
 								if (typeof o == "function") {
@@ -718,7 +717,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 									var s = o(d.expirationTime <= t);
 									if (t = e.unstable_now(), typeof s == "function") {
 										d.callback = s, b(t), i = !0;
-										break b;
+										break t;
 									}
 									d === n(c) && r(c), b(t);
 								} else r(c);
@@ -730,7 +729,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 								u !== null && j(x, u.startTime - t), i = !1;
 							}
 						}
-						break a;
+						break e;
 					} finally {
 						d = null, f = a, p = !1;
 					}
@@ -808,7 +807,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				s = 250;
 				break;
 			case 5:
-				s = 1073741823;
+				s = 0x3fffffff;
 				break;
 			case 4:
 				s = 1e4;
@@ -1179,24 +1178,24 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	var ce = Array.isArray, H = n.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = r.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ue = {
+	var ce = Array.isArray, H = n.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, U = r.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = {
 		pending: !1,
 		data: null,
 		method: null,
 		action: null
-	}, de = [], fe = -1;
-	function U(e) {
+	}, ue = [], de = -1;
+	function W(e) {
 		return { current: e };
 	}
-	function W(e) {
-		0 > fe || (e.current = de[fe], de[fe] = null, fe--);
+	function G(e) {
+		0 > de || (e.current = ue[de], ue[de] = null, de--);
 	}
-	function G(e, t) {
-		fe++, de[fe] = e.current, e.current = t;
+	function fe(e, t) {
+		de++, ue[de] = e.current, e.current = t;
 	}
-	var K = U(null), q = U(null), pe = U(null), me = U(null);
+	var K = W(null), q = W(null), pe = W(null), me = W(null);
 	function J(e, t) {
-		switch (G(pe, t), G(q, e), G(K, null), t.nodeType) {
+		switch (fe(pe, t), fe(q, e), fe(K, null), t.nodeType) {
 			case 9:
 			case 11:
 				e = (e = t.documentElement) && (e = e.namespaceURI) ? up(e) : 0;
@@ -1212,19 +1211,19 @@ var _ = /* @__PURE__ */ o(((e) => {
 				default: e = 0;
 			}
 		}
-		W(K), G(K, e);
+		G(K), fe(K, e);
 	}
 	function he() {
-		W(K), W(q), W(pe);
+		G(K), G(q), G(pe);
 	}
 	function Y(e) {
 		var t = e.memoizedState;
-		t !== null && (sh._currentValue = t.memoizedState, G(me, e)), t = K.current;
+		t !== null && (sh._currentValue = t.memoizedState, fe(me, e)), t = K.current;
 		var n = dp(t, e.type);
-		t !== n && (G(q, e), G(K, n));
+		t !== n && (fe(q, e), fe(K, n));
 	}
 	function X(e) {
-		q.current === e && (W(K), W(q)), me.current === e && (W(me), sh._currentValue = ue);
+		q.current === e && (G(K), G(q)), me.current === e && (G(me), sh._currentValue = le);
 	}
 	var ge, _e;
 	function ve(e) {
@@ -1384,10 +1383,10 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case 16777216:
 			case 33554432: return e & 62914560;
 			case 67108864: return 67108864;
-			case 134217728: return 134217728;
+			case 0x8000000: return 0x8000000;
 			case 268435456: return 268435456;
 			case 536870912: return 536870912;
-			case 1073741824: return 0;
+			case 0x40000000: return 0;
 			default: return e;
 		}
 	}
@@ -1396,7 +1395,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (r === 0) return 0;
 		var i = 0, a = e.suspendedLanes, o = e.pingedLanes;
 		e = e.warmLanes;
-		var s = r & 134217727;
+		var s = r & 0x7ffffff;
 		return s === 0 ? (s = r & ~a, s === 0 ? o === 0 ? n || (n = r & ~e, n !== 0 && (i = qe(n))) : i = qe(o) : i = qe(s)) : (r = s & ~a, r === 0 ? (o &= s, o === 0 ? n || (n = s & ~e, n !== 0 && (i = qe(n))) : i = qe(o)) : i = qe(r)), i === 0 ? 0 : t !== 0 && t !== i && (t & a) === 0 && (a = i & -i, n = t & -t, a >= n || a === 32 && n & 4194048) ? t : i;
 	}
 	function Ye(e, t) {
@@ -1435,15 +1434,6 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case 524288:
 			case 1048576:
 			case 2097152: return t + 5e3;
-			case 4194304:
-			case 8388608:
-			case 16777216:
-			case 33554432: return -1;
-			case 67108864:
-			case 134217728:
-			case 268435456:
-			case 536870912:
-			case 1073741824: return -1;
 			default: return -1;
 		}
 	}
@@ -1477,7 +1467,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function nt(e, t, n) {
 		e.pendingLanes |= t, e.suspendedLanes &= ~t;
 		var r = 31 - Be(t);
-		e.entangledLanes |= t, e.entanglements[r] = e.entanglements[r] | 1073741824 | n & 261930;
+		e.entangledLanes |= t, e.entanglements[r] = e.entanglements[r] | 0x40000000 | n & 261930;
 	}
 	function rt(e, t) {
 		var n = e.entangledLanes |= t;
@@ -1522,25 +1512,25 @@ var _ = /* @__PURE__ */ o(((e) => {
 				e = 128;
 				break;
 			case 268435456:
-				e = 134217728;
+				e = 0x8000000;
 				break;
 			default: e = 0;
 		}
 		return e;
 	}
 	function ot(e) {
-		return e &= -e, 2 < e ? 8 < e ? e & 134217727 ? 32 : 268435456 : 8 : 2;
+		return e &= -e, 2 < e ? 8 < e ? e & 0x7ffffff ? 32 : 268435456 : 8 : 2;
 	}
 	function st() {
-		var e = le.p;
+		var e = U.p;
 		return e === 0 ? (e = window.event, e === void 0 ? 32 : Ch(e.type)) : e;
 	}
 	function ct(e, t) {
-		var n = le.p;
+		var n = U.p;
 		try {
-			return le.p = e, t();
+			return U.p = e, t();
 		} finally {
-			le.p = n;
+			U.p = n;
 		}
 	}
 	var lt = Math.random().toString(36).slice(2), ut = "__reactFiber$" + lt, dt = "__reactProps$" + lt, ft = "__reactContainer$" + lt, pt = "__reactEvents$" + lt, mt = "__reactListeners$" + lt, ht = "__reactHandles$" + lt, gt = "__reactResources$" + lt, _t = "__reactMarker$" + lt, vt = "__reactLoad$" + lt;
@@ -1658,7 +1648,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case "boolean":
 			case "number":
 			case "string":
-			case "undefined": return e;
+			case "undefined":
 			case "object": return e;
 			default: return "";
 		}
@@ -1890,7 +1880,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var t = xt(e);
 		if (t && (e = t.stateNode)) {
 			var n = e[dt] || null;
-			a: switch (e = t.stateNode, t.type) {
+			switch (e = t.stateNode, t.type) {
 				case "input":
 					if (Kt(e, n.value, n.defaultValue, n.defaultValue, n.checked, n.defaultChecked, n.type, n.name), t = n.name, n.type === "radio" && t != null) {
 						for (n = e; n.parentNode;) n = n.parentNode;
@@ -1904,10 +1894,10 @@ var _ = /* @__PURE__ */ o(((e) => {
 						}
 						for (t = 0; t < n.length; t++) r = n[t], r.form === e.form && Ut(r);
 					}
-					break a;
+					break;
 				case "textarea":
 					Xt(e, n.value, n.defaultValue);
-					break a;
+					break;
 				case "select": t = n.value, t != null && Yt(e, !!n.multiple, t, !1);
 			}
 		}
@@ -1927,8 +1917,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (n === null) return null;
 		var r = n[dt] || null;
 		if (r === null) return null;
-		n = r[t];
-		a: switch (t) {
+		switch (n = r[t], t) {
 			case "onClick":
 			case "onClickCapture":
 			case "onDoubleClick":
@@ -1941,7 +1930,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case "onMouseUpCapture":
 			case "onMouseEnter":
 				(r = !r.disabled) || (e = e.type, r = e !== "button" && e !== "input" && e !== "select" && e !== "textarea"), e = !r;
-				break a;
+				break;
 			default: e = !1;
 		}
 		if (e) return null;
@@ -2315,11 +2304,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 				};
 				e = r;
 			}
-			a: {
+			e: {
 				for (; n;) {
 					if (n.nextSibling) {
 						n = n.nextSibling;
-						break a;
+						break e;
 					}
 					n = n.parentNode;
 				}
@@ -2478,13 +2467,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function Ci(e, t) {
 		var n = e.alternate;
-		return n === null ? (n = xi(e.tag, t, e.key, e.mode), n.elementType = e.elementType, n.type = e.type, n.stateNode = e.stateNode, n.alternate = e, e.alternate = n) : (n.pendingProps = t, n.type = e.type, n.flags = 0, n.subtreeFlags = 0, n.deletions = null), n.flags = e.flags & 1206910976, n.childLanes = e.childLanes, n.lanes = e.lanes, n.child = e.child, n.memoizedProps = e.memoizedProps, n.memoizedState = e.memoizedState, n.updateQueue = e.updateQueue, t = e.dependencies, n.dependencies = t === null ? null : {
+		return n === null ? (n = xi(e.tag, t, e.key, e.mode), n.elementType = e.elementType, n.type = e.type, n.stateNode = e.stateNode, n.alternate = e, e.alternate = n) : (n.pendingProps = t, n.type = e.type, n.flags = 0, n.subtreeFlags = 0, n.deletions = null), n.flags = e.flags & 0x47f00000, n.childLanes = e.childLanes, n.lanes = e.lanes, n.child = e.child, n.memoizedProps = e.memoizedProps, n.memoizedState = e.memoizedState, n.updateQueue = e.updateQueue, t = e.dependencies, n.dependencies = t === null ? null : {
 			lanes: t.lanes,
 			firstContext: t.firstContext
 		}, n.sibling = e.sibling, n.index = e.index, n.ref = e.ref, n.refCleanup = e.refCleanup, n;
 	}
 	function wi(e, t) {
-		e.flags &= 1206910978;
+		e.flags &= 0x47f00002;
 		var n = e.alternate;
 		return n === null ? (e.childLanes = 0, e.lanes = t, e.child = null, e.subtreeFlags = 0, e.memoizedProps = null, e.memoizedState = null, e.updateQueue = null, e.dependencies = null, e.stateNode = null) : (e.childLanes = n.childLanes, e.lanes = n.lanes, e.child = n.child, e.subtreeFlags = 0, e.deletions = null, e.memoizedProps = n.memoizedProps, e.memoizedState = n.memoizedState, e.updateQueue = n.updateQueue, e.type = n.type, t = n.dependencies, e.dependencies = t === null ? null : {
 			lanes: t.lanes,
@@ -2495,7 +2484,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var s = 0;
 		if (r = e, typeof r == "function") Si(r) && (s = 1);
 		else if (typeof r == "string") s = qm(e, n, K.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
-		else a: switch (r) {
+		else e: switch (r) {
 			case R: return e = xi(31, n, t, a), e.elementType = R, e.lanes = o, e;
 			case j: return Ei(n.children, a, o, t);
 			case M:
@@ -2515,19 +2504,19 @@ var _ = /* @__PURE__ */ o(((e) => {
 				if (typeof r == "object" && r) switch (r.$$typeof) {
 					case F:
 						s = 10;
-						break a;
+						break e;
 					case P:
 						s = 9;
-						break a;
+						break e;
 					case I:
 						s = 11;
-						break a;
+						break e;
 					case L:
 						s = 14;
-						break a;
+						break e;
 					case ne:
 						s = 16, r = null;
-						break a;
+						break e;
 				}
 				s = 29, n = Error(i(130, e === null ? "null" : typeof e, "")), r = null;
 		}
@@ -2669,12 +2658,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function ia(e) {
 		Yi === null ? Yi = [e] : Yi.push(e);
 	}
-	var aa = U(null), oa = null, sa = null;
+	var aa = W(null), oa = null, sa = null;
 	function ca(e, t, n) {
-		G(aa, t._currentValue), t._currentValue = n;
+		fe(aa, t._currentValue), t._currentValue = n;
 	}
 	function la(e) {
-		e._currentValue = aa.current, W(aa);
+		e._currentValue = aa.current, G(aa);
 	}
 	function ua(e, t, n) {
 		for (; e !== null;) {
@@ -2690,12 +2679,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 			if (o !== null) {
 				var s = a.child;
 				o = o.firstContext;
-				a: for (; o !== null;) {
+				e: for (; o !== null;) {
 					var c = o;
 					o = a;
 					for (var l = 0; l < t.length; l++) if (c.context === t[l]) {
 						o.lanes |= n, c = o.alternate, c !== null && (c.lanes |= n), ua(o.return, n, e), r || (s = null);
-						break a;
+						break e;
 					}
 					o = c.next;
 				}
@@ -2870,13 +2859,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		Pa !== null && Pa(e, t);
 	};
-	var Fa = U(null);
+	var Fa = W(null);
 	function Ia() {
 		var e = Fa.current;
 		return e === null ? Ju.pooledCache : e;
 	}
 	function La(e, t) {
-		t === null ? G(Fa, Fa.current) : G(Fa, t.pool);
+		t === null ? fe(Fa, Fa.current) : fe(Fa, t.pool);
 	}
 	function Ra() {
 		var e = Ia();
@@ -2918,8 +2907,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function Ga(e) {
 		try {
-			var t = e._init;
-			return t(e._payload);
+			return (0, e._init)(e._payload);
 		} catch (e) {
 			throw typeof e == "object" && e && typeof e.then == "function" ? (Ka = e, za) : e;
 		}
@@ -2964,10 +2952,10 @@ var _ = /* @__PURE__ */ o(((e) => {
 			return e = Ci(e, t), e.index = 0, e.sibling = null, e;
 		}
 		function o(t, n, r) {
-			return t.index = r, e ? (r = t.alternate, r === null ? (t.flags |= 134217730, n) : (r = r.index, r < n ? (t.flags |= 2, n) : r)) : (t.flags |= 1048576, n);
+			return t.index = r, e ? (r = t.alternate, r === null ? (t.flags |= 0x8000002, n) : (r = r.index, r < n ? (t.flags |= 2, n) : r)) : (t.flags |= 1048576, n);
 		}
 		function s(t) {
-			return e && t.alternate === null && (t.flags |= 134217730), t;
+			return e && t.alternate === null && (t.flags |= 0x8000002), t;
 		}
 		function c(e, t, n, r) {
 			return t === null || t.tag !== 6 ? (t = Di(n, e.mode, r), t.return = e, t) : (t = a(t, n), t.return = e, t);
@@ -3073,17 +3061,17 @@ var _ = /* @__PURE__ */ o(((e) => {
 			if (typeof o == "object" && o && o.type === j && o.key === null && o.props.ref === void 0 && (o = o.props.children), typeof o == "object" && o) {
 				switch (o.$$typeof) {
 					case k:
-						a: {
+						e: {
 							for (var l = o.key; r !== null;) {
 								if (r.key === l) {
 									if (l = o.type, l === j) {
 										if (r.tag === 7) {
 											n(e, r.sibling), c = a(r, o.props.children), Qa(c, o), c.return = e, e = c;
-											break a;
+											break e;
 										}
 									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === ne && Ga(l) === r.type) {
 										n(e, r.sibling), c = a(r, o.props), Qa(c, o), c.return = e, e = c;
-										break a;
+										break e;
 									}
 									n(e, r);
 									break;
@@ -3094,12 +3082,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 						}
 						return s(e);
 					case A:
-						a: {
+						e: {
 							for (l = o.key; r !== null;) {
 								if (r.key === l) {
 									if (r.tag === 4 && r.stateNode.containerInfo === o.containerInfo && r.stateNode.implementation === o.implementation) {
 										n(e, r.sibling), c = a(r, o.children || []), c.return = e, e = c;
-										break a;
+										break e;
 									}
 									n(e, r);
 									break;
@@ -3239,7 +3227,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 						callback: null,
 						next: null
 					});
-					a: {
+					e: {
 						var m = e, h = s;
 						f = t;
 						var g = n;
@@ -3247,15 +3235,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 							case 1:
 								if (m = h.payload, typeof m == "function") {
 									d = m.call(g, d, f);
-									break a;
+									break e;
 								}
 								d = m;
-								break a;
+								break e;
 							case 3: m.flags = m.flags & -65537 | 128;
 							case 0:
-								if (m = h.payload, f = typeof m == "function" ? m.call(g, d, f) : m, f == null) break a;
+								if (m = h.payload, f = typeof m == "function" ? m.call(g, d, f) : m, f == null) break e;
 								d = D({}, d, f);
-								break a;
+								break e;
 							case 2: to = !0;
 						}
 					}
@@ -3283,39 +3271,39 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var n = e.callbacks;
 		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) fo(n[e], t);
 	}
-	var mo = U(null), ho = U(0);
+	var mo = W(null), ho = W(0);
 	function go(e, t) {
-		e = nd, G(ho, e), G(mo, t), nd = e | t.baseLanes;
+		e = nd, fe(ho, e), fe(mo, t), nd = e | t.baseLanes;
 	}
 	function _o() {
-		G(ho, nd), G(mo, mo.current);
+		fe(ho, nd), fe(mo, mo.current);
 	}
 	function vo() {
-		nd = ho.current, W(mo), W(ho);
+		nd = ho.current, G(mo), G(ho);
 	}
-	var yo = U(null), bo = null;
+	var yo = W(null), bo = null;
 	function xo(e) {
 		var t = e.alternate;
-		G(Eo, Eo.current & 1), G(yo, e), bo === null && (t === null || mo.current !== null || t.memoizedState !== null) && (bo = e);
+		fe(Eo, Eo.current & 1), fe(yo, e), bo === null && (t === null || mo.current !== null || t.memoizedState !== null) && (bo = e);
 	}
 	function So(e) {
-		G(Eo, Eo.current), G(yo, e), bo === null && (bo = e);
+		fe(Eo, Eo.current), fe(yo, e), bo === null && (bo = e);
 	}
 	function Co(e) {
-		e.tag === 22 ? (G(Eo, Eo.current), G(yo, e), bo === null && (bo = e)) : wo();
+		e.tag === 22 ? (fe(Eo, Eo.current), fe(yo, e), bo === null && (bo = e)) : wo();
 	}
 	function wo() {
-		G(Eo, Eo.current), G(yo, yo.current);
+		fe(Eo, Eo.current), fe(yo, yo.current);
 	}
 	function To(e) {
-		W(yo), bo === e && (bo = null), W(Eo);
+		G(yo), bo === e && (bo = null), G(Eo);
 	}
-	var Eo = U(0);
+	var Eo = W(0);
 	function Do(e, t) {
-		G(yo, yo.current), G(Eo, t);
+		fe(yo, yo.current), fe(Eo, t);
 	}
 	function Oo(e) {
-		W(Eo), W(yo), bo === e && (bo = null);
+		G(Eo), G(yo), bo === e && (bo = null);
 	}
 	function ko(e) {
 		for (var t = e; t !== null;) {
@@ -3668,20 +3656,20 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (Ji) {
 			var n = Ju.formState;
 			if (n !== null) {
-				a: {
+				e: {
 					var r = jo;
 					if (Ji) {
 						if (qi) {
-							b: {
+							t: {
 								for (var i = qi, a = Xi; i.nodeType !== 8;) if (!a || (i = lm(i.nextSibling), i === null)) {
 									i = null;
-									break b;
+									break t;
 								}
 								a = i.data, i = a === "F!" || a === "F" ? i : null;
 							}
 							if (i) {
 								qi = lm(i.nextSibling), r = i.data === "F!";
-								break a;
+								break e;
 							}
 						}
 						Qi(r);
@@ -3831,14 +3819,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return n.memoizedState = [r, t], r;
 	}
 	function Vs(e, t, n) {
-		return n === void 0 || Ao & 1073741824 && !(Xu & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = Ad(), jo.lanes |= e, id |= e, n);
+		return n === void 0 || Ao & 0x40000000 && !(Xu & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = Ad(), jo.lanes |= e, id |= e, n);
 	}
 	function Hs(e, t, n, r) {
-		return Ar(n, t) ? n : mo.current === null ? !(Ao & 106) || Ao & 1073741824 && !(Xu & 261930) ? (wc = !0, e.memoizedState = n) : (e = Ad(), jo.lanes |= e, id |= e, t) : (e = Vs(e, n, r), Ar(e, t) || (wc = !0), e);
+		return Ar(n, t) ? n : mo.current === null ? !(Ao & 106) || Ao & 0x40000000 && !(Xu & 261930) ? (wc = !0, e.memoizedState = n) : (e = Ad(), jo.lanes |= e, id |= e, t) : (e = Vs(e, n, r), Ar(e, t) || (wc = !0), e);
 	}
 	function Us(e, t, n, r, i) {
-		var a = le.p;
-		le.p = a !== 0 && 8 > a ? a : 8;
+		var a = U.p;
+		U.p = a !== 0 && 8 > a ? a : 8;
 		var o = H.T, s = {};
 		s.types = o === null ? null : o.types, H.T = s, tc(e, !1, t, n);
 		try {
@@ -3851,14 +3839,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 				reason: n
 			}, kd());
 		} finally {
-			le.p = a, o !== null && s.types !== null && (o.types = s.types), H.T = o;
+			U.p = a, o !== null && s.types !== null && (o.types = s.types), H.T = o;
 		}
 	}
 	function Ws() {}
 	function Gs(e, t, n, r) {
 		if (e.tag !== 5) throw Error(i(476));
-		var a = Ks(e).queue;
-		Us(e, a, t, ue, n === null ? Ws : function() {
+		Us(e, Ks(e).queue, t, le, n === null ? Ws : function() {
 			return qs(e), n(r);
 		});
 	}
@@ -3866,15 +3853,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
-			memoizedState: ue,
-			baseState: ue,
+			memoizedState: le,
+			baseState: le,
 			baseQueue: null,
 			queue: {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
 				lastRenderedReducer: ns,
-				lastRenderedState: ue
+				lastRenderedState: le
 			},
 			next: null
 		};
@@ -4242,8 +4229,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function _c(e, t) {
 		try {
-			var n = e.onUncaughtError;
-			n(t.value, { componentStack: t.stack });
+			(0, e.onUncaughtError)(t.value, { componentStack: t.stack });
 		} catch (e) {
 			setTimeout(function() {
 				throw e;
@@ -4252,8 +4238,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function vc(e, t, n) {
 		try {
-			var r = e.onCaughtError;
-			r(n.value, {
+			(0, e.onCaughtError)(n.value, {
 				componentStack: n.stack,
 				errorBoundary: t.tag === 1 ? t.stateNode : null
 			});
@@ -4439,7 +4424,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 					Wd();
 				}
 				t = Nc(e, t, n);
-			} else e = o.treeContext, qi = lm(s.nextSibling), Ki = t, Ji = !0, Yi = null, Xi = !1, e !== null && Gi(t, e), t = Mc(t, r), t.flags |= 134221824;
+			} else e = o.treeContext, qi = lm(s.nextSibling), Ki = t, Ji = !0, Yi = null, Xi = !1, e !== null && Gi(t, e), t = Mc(t, r), t.flags |= 0x8001000;
 			return t;
 		}
 		return e = Ci(e.child, {
@@ -4528,7 +4513,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return i ? (wo(), i = r.fallback, a = t.mode, s = e.child, c = s.sibling, r = Ci(s, {
 			mode: "hidden",
 			children: r.children
-		}), r.subtreeFlags = s.subtreeFlags & 1206910976, c === null ? (i = Ei(i, a, n, null), i.flags |= 2) : i = Ci(c, i), i.return = t, r.return = t, r.sibling = i, t.child = r, Ac(null, r), r = t.child, i = e.child.memoizedState, i === null ? i = Vc(n) : (a = i.cachePool, a === null ? a = Ra() : (s = xa._currentValue, a = a.parent === s ? a : {
+		}), r.subtreeFlags = s.subtreeFlags & 0x47f00000, c === null ? (i = Ei(i, a, n, null), i.flags |= 2) : i = Ci(c, i), i.return = t, r.return = t, r.sibling = i, t.child = r, Ac(null, r), r = t.child, i = e.child.memoizedState, i === null ? i = Vc(n) : (a = i.cachePool, a === null ? a = Ra() : (s = xa._currentValue, a = a.parent === s ? a : {
 			parent: s,
 			pool: s
 		}), i = {
@@ -4569,7 +4554,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			if (r = Ju, r !== null && (a = it(r, c), a !== 0 && a !== s.retryLane)) throw s.retryLane = a, gi(e, a), Md(r, e, a), Cc;
 			return om(o) || Wd(), Kc(e, t, c);
 		}
-		return om(o) ? (t.flags |= 192, t.child = e.child, null) : (e = s.treeContext, qi = lm(o.nextSibling), Ki = t, Ji = !0, Yi = null, Xi = !1, e !== null && Gi(t, e), t = Wc(t, a.children), t.flags |= 134221824, t);
+		return om(o) ? (t.flags |= 192, t.child = e.child, null) : (e = s.treeContext, qi = lm(o.nextSibling), Ki = t, Ji = !0, Yi = null, Xi = !1, e !== null && Gi(t, e), t = Wc(t, a.children), t.flags |= 0x8001000, t);
 	}
 	function Jc(e, t, n) {
 		e.lanes |= t;
@@ -4608,16 +4593,16 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var o = Eo.current;
 		if (t.flags & 128) return Do(t, o), null;
 		var s = !!(o & 2);
-		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, Do(t, o), i === "backwards" && e !== null ? (Zc(e), Tc(e, t, r, n), Zc(e)) : Tc(e, t, r, n), r = Ji ? Fi : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
+		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, Do(t, o), i === "backwards" && e !== null ? (Zc(e), Tc(e, t, r, n), Zc(e)) : Tc(e, t, r, n), r = Ji ? Fi : 0, !s && e !== null && e.flags & 128) e: for (e = t.child; e !== null;) {
 			if (e.tag === 13) e.memoizedState !== null && Jc(e, n, t);
 			else if (e.tag === 19) Jc(e, n, t);
 			else if (e.child !== null) {
 				e.child.return = e, e = e.child;
 				continue;
 			}
-			if (e === t) break a;
+			if (e === t) break;
 			for (; e.sibling === null;) {
-				if (e.return === null || e.return === t) break a;
+				if (e.return === null || e.return === t) break e;
 				e = e.return;
 			}
 			e.sibling.return = e.return, e = e.sibling;
@@ -4717,7 +4702,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		} else wc = !1, Ji && t.flags & 1048576 && Hi(t, Fi, t.index);
 		switch (t.lanes = 0, t.tag) {
 			case 16:
-				a: {
+				e: {
 					var r = t.pendingProps;
 					if (e = Ga(t.elementType), t.type = e, typeof e == "function") Si(e) ? (r = pc(e, r), t.tag = 1, t = Rc(null, t, e, r, n)) : (t.tag = 0, t = Ic(null, t, e, r, n));
 					else {
@@ -4725,15 +4710,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 							var a = e.$$typeof;
 							if (a === I) {
 								t.tag = 11, t = Ec(null, t, e, r, n);
-								break a;
+								break e;
 							}
 							if (a === L) {
 								t.tag = 14, t = Dc(null, t, e, r, n);
-								break a;
+								break e;
 							}
 							if (a === F) {
 								t.tag = 10, t.type = e, t = $c(null, t, n);
-								break a;
+								break e;
 							}
 						}
 						throw t = se(e) || e, Error(i(306, t, ""));
@@ -4743,7 +4728,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case 0: return Ic(e, t, t.type, t.pendingProps, n);
 			case 1: return r = t.type, a = pc(r, t.pendingProps), Rc(e, t, r, a, n);
 			case 3:
-				a: {
+				e: {
 					if (J(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
 					r = t.pendingProps;
 					var o = t.memoizedState;
@@ -4756,23 +4741,17 @@ var _ = /* @__PURE__ */ o(((e) => {
 							cache: s.cache
 						}, t.updateQueue.baseState = o, t.memoizedState = o, t.flags & 256) {
 							t = zc(e, t, r, n);
-							break a;
+							break e;
 						}
 						if (r !== a) {
 							a = ji(Error(i(424)), t), ia(a), t = zc(e, t, r, n);
-							break a;
+							break e;
 						}
-						switch (e = t.stateNode.containerInfo, e.nodeType) {
-							case 9:
-								e = e.body;
-								break;
-							default: e = e.nodeName === "HTML" ? e.ownerDocument.body : e;
-						}
-						for (qi = lm(e.firstChild), Ki = t, Ji = !0, Yi = null, Xi = !0, n = eo(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 134221824, n = n.sibling;
+						for (e = t.stateNode.containerInfo, e = e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, qi = lm(e.firstChild), Ki = t, Ji = !0, Yi = null, Xi = !0, n = eo(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 0x8001000, n = n.sibling;
 					} else {
 						if (na(), r === a) {
 							t = el(e, t, n);
-							break a;
+							break e;
 						}
 						Tc(e, t, r, n);
 					}
@@ -4787,7 +4766,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case 4: return J(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = Q(t, null, r, n) : Tc(e, t, r, n), t.child;
 			case 11: return Ec(e, t, t.type, t.pendingProps, n);
 			case 7: return r = t.pendingProps, Fc(e, t), Tc(e, t, r, n), t.child;
-			case 8: return Tc(e, t, t.pendingProps.children, n), t.child;
+			case 8:
 			case 12: return Tc(e, t, t.pendingProps.children, n), t.child;
 			case 10: return $c(e, t, n);
 			case 9: return a = t.type._context, r = t.pendingProps.children, ma(t), a = ha(a), r = r(a), t.flags |= 1, Tc(e, t, r, n), t.child;
@@ -4850,7 +4829,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function ll(e) {
 		var t = e.alternate !== null && e.alternate.child === e.child, n = 0, r = 0;
-		if (t) for (var i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags & 1206910976, r |= i.flags & 1206910976, i.return = e, i = i.sibling;
+		if (t) for (var i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags & 0x47f00000, r |= i.flags & 0x47f00000, i.return = e, i = i.sibling;
 		else for (i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags, r |= i.flags, i.return = e, i = i.sibling;
 		return e.subtreeFlags |= r, e.childLanes = n, t;
 	}
@@ -4865,7 +4844,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case 8:
 			case 12:
 			case 9:
-			case 14: return ll(t), null;
+			case 14:
 			case 1: return ll(t), null;
 			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), la(xa), he(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (ta(t) ? il(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ra())), ll(t), null;
 			case 26:
@@ -4915,30 +4894,29 @@ var _ = /* @__PURE__ */ o(((e) => {
 							}
 						}
 						o[ut] = t, o[dt] = r;
-						a: for (s = t.child; s !== null;) {
+						e: for (s = t.child; s !== null;) {
 							if (s.tag === 5 || s.tag === 6) o.appendChild(s.stateNode);
 							else if (s.tag !== 4 && s.tag !== 27 && s.child !== null) {
 								s.child.return = s, s = s.child;
 								continue;
 							}
-							if (s === t) break a;
+							if (s === t) break;
 							for (; s.sibling === null;) {
-								if (s.return === null || s.return === t) break a;
+								if (s.return === null || s.return === t) break e;
 								s = s.return;
 							}
 							s.sibling.return = s.return, s = s.sibling;
 						}
-						t.stateNode = o;
-						a: switch (np(o, a, r), a) {
+						switch (t.stateNode = o, np(o, a, r), a) {
 							case "button":
 							case "input":
 							case "select":
 							case "textarea":
 								r = !!r.autoFocus;
-								break a;
+								break;
 							case "img":
 								r = !0;
-								break a;
+								break;
 							default: r = !1;
 						}
 						r && il(t);
@@ -5011,21 +4989,21 @@ var _ = /* @__PURE__ */ o(((e) => {
 				}
 				if (r.tail !== null) {
 					e = r.tail;
-					a: {
+					e: {
 						for (n = e; n !== null;) {
 							if (n.alternate !== null) {
 								n = !1;
-								break a;
+								break e;
 							}
 							n = n.sibling;
 						}
 						n = !0;
 					}
-					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Oe(), e.sibling = null, o = Eo.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || Ji ? Do(t, o) : (n = o, G(yo, t), G(Eo, n), bo === null && (bo = t)), Ji && Vi(t, r.treeForkCount), e;
+					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Oe(), e.sibling = null, o = Eo.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || Ji ? Do(t, o) : (n = o, fe(yo, t), fe(Eo, n), bo === null && (bo = t)), Ji && Vi(t, r.treeForkCount), e;
 				}
 				return ll(t), null;
 			case 22:
-			case 23: return To(t), vo(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (ll(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : ll(t), n = t.updateQueue, n !== null && sl(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && W(Fa), null;
+			case 23: return To(t), vo(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (ll(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : ll(t), n = t.updateQueue, n !== null && sl(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && G(Fa), null;
 			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), la(xa), ll(t), null;
 			case 25: return null;
 			case 30: return t.flags |= 33554432, ll(t), null;
@@ -5055,9 +5033,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case 4: return he(), null;
 			case 10: return la(t.type), null;
 			case 22:
-			case 23: return To(t), vo(), e !== null && W(Fa), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 23: return To(t), vo(), e !== null && G(Fa), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 24: return la(xa), null;
-			case 25: return null;
 			default: return null;
 		}
 	}
@@ -5088,7 +5065,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				break;
 			case 22:
 			case 23:
-				To(t), vo(), e !== null && W(Fa);
+				To(t), vo(), e !== null && G(Fa);
 				break;
 			case 24: la(xa);
 		}
@@ -5222,13 +5199,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function wl(e) {
 		var t = e.type, n = e.memoizedProps, r = e.stateNode;
 		try {
-			a: switch (t) {
+			switch (t) {
 				case "button":
 				case "input":
 				case "select":
 				case "textarea":
 					n.autoFocus && r.focus();
-					break a;
+					break;
 				case "img": n.src ? r.src = n.src : n.srcSet && (r.srcset = n.srcSet);
 			}
 		} catch (t) {
@@ -5247,13 +5224,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return e.tag === 5 || e.tag === 3 || e.tag === 26 || e.tag === 27 && Sp(e.type) || e.tag === 4;
 	}
 	function Dl(e) {
-		a: for (;;) {
+		e: for (;;) {
 			for (; e.sibling === null;) {
 				if (e.return === null || El(e.return)) return null;
 				e = e.return;
 			}
 			for (e.sibling.return = e.return, e = e.sibling; e.tag !== 5 && e.tag !== 6 && e.tag !== 18;) {
-				if (e.tag === 27 && Sp(e.type) || e.flags & 2 || e.child === null || e.tag === 4) continue a;
+				if (e.tag === 27 && Sp(e.type) || e.flags & 2 || e.child === null || e.tag === 4) continue e;
 				e.child.return = e, e = e.child;
 			}
 			if (!(e.flags & 2)) return e.stateNode;
@@ -5429,7 +5406,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				start: e.selectionStart,
 				end: e.selectionEnd
 			};
-			else a: {
+			else e: {
 				r = (r = e.ownerDocument) && r.defaultView || window;
 				var i = r.getSelection && r.getSelection();
 				if (i && i.rangeCount !== 0) {
@@ -5440,13 +5417,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 						r.nodeType, o.nodeType;
 					} catch {
 						r = null;
-						break a;
+						break e;
 					}
 					var s = 0, c = -1, l = -1, u = 0, d = 0, f = e, p = null;
-					b: for (;;) {
+					t: for (;;) {
 						for (var m; f !== r || a !== 0 && f.nodeType !== 3 || (c = s + a), f !== o || i !== 0 && f.nodeType !== 3 || (l = s + i), f.nodeType === 3 && (s += f.nodeValue.length), (m = f.firstChild) !== null;) p = f, f = m;
 						for (;;) {
-							if (f === e) break b;
+							if (f === e) break t;
 							if (p === r && ++u === a && (c = s), p === o && ++d === i && (l = s), (m = f.nextSibling) !== null) break;
 							f = p, p = f.parentNode;
 						}
@@ -5567,8 +5544,6 @@ var _ = /* @__PURE__ */ o(((e) => {
 					if (t = null, n.child !== null) switch (n.child.tag) {
 						case 27:
 						case 5:
-							t = n.child.stateNode;
-							break;
 						case 1: t = n.child.stateNode;
 					}
 					try {
@@ -5650,15 +5625,15 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function du(e, t) {
 		if (e.subtreeFlags & 67108864) for (e = e.child; e !== null;) {
-			a: {
+			e: {
 				var n = e, r = t;
 				switch (n.tag) {
 					case 4:
 						uu(n, r);
-						break a;
+						break e;
 					case 22:
 						n.memoizedState === null && du(n, r);
-						break a;
+						break e;
 					default: du(n, r);
 				}
 			}
@@ -5773,21 +5748,21 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var r = t.deletions;
 		if (r !== null) for (var a = 0; a < r.length; a++) {
 			var o = r[a], s = e, c = t, l = c;
-			a: for (; l !== null;) {
+			e: for (; l !== null;) {
 				switch (l.tag) {
 					case 27:
 						if (Sp(l.type)) {
 							pu = l.stateNode, mu = !1;
-							break a;
+							break e;
 						}
 						break;
 					case 5:
 						pu = l.stateNode, mu = !1;
-						break a;
+						break e;
 					case 3:
 					case 4:
 						pu = l.stateNode.containerInfo, mu = !0;
-						break a;
+						break e;
 				}
 				l = l.return;
 			}
@@ -5820,17 +5795,17 @@ var _ = /* @__PURE__ */ o(((e) => {
 							if (e.stateNode === null) {
 								if (Xl) e.stateNode = fp(e.type, e.memoizedProps, t.containerInfo, e);
 								else {
-									a: {
+									e: {
 										t = e.type, n = e.memoizedProps, a = o.ownerDocument || o;
-										b: switch (t) {
+										t: switch (t) {
 											case "title":
 												r = a.getElementsByTagName("title")[0], (!r || r[_t] || r[ut] || r.namespaceURI === "http://www.w3.org/2000/svg" || r.hasAttribute("itemprop")) && (r = a.createElement(t), a.head.insertBefore(r, a.querySelector("head > title"))), np(r, t, n), r[ut] = e, wt(r), t = r;
-												break a;
+												break e;
 											case "link":
 												if (o = Gm("link", "href", a).get(t + (n.href || ""))) {
 													for (s = 0; s < o.length; s++) if (r = o[s], r.getAttribute("href") === (n.href == null || n.href === "" ? null : n.href) && r.getAttribute("rel") === (n.rel == null ? null : n.rel) && r.getAttribute("title") === (n.title == null ? null : n.title) && r.getAttribute("crossorigin") === (n.crossOrigin == null ? null : n.crossOrigin)) {
 														o.splice(s, 1);
-														break b;
+														break t;
 													}
 												}
 												r = a.createElement(t), np(r, t, n), a.head.appendChild(r);
@@ -5839,7 +5814,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 												if (o = Gm("meta", "content", a).get(t + (n.content || ""))) {
 													for (s = 0; s < o.length; s++) if (r = o[s], r.getAttribute("content") === (n.content == null ? null : "" + n.content) && r.getAttribute("name") === (n.name == null ? null : n.name) && r.getAttribute("property") === (n.property == null ? null : n.property) && r.getAttribute("http-equiv") === (n.httpEquiv == null ? null : n.httpEquiv) && r.getAttribute("charset") === (n.charSet == null ? null : n.charSet)) {
 														o.splice(s, 1);
-														break b;
+														break t;
 													}
 												}
 												r = a.createElement(t), np(r, t, n), a.head.appendChild(r);
@@ -6163,8 +6138,6 @@ var _ = /* @__PURE__ */ o(((e) => {
 				} else Nu(e, t, n, r);
 				break;
 			case 31:
-				Nu(e, t, n, r);
-				break;
 			case 13:
 				Nu(e, t, n, r);
 				break;
@@ -6276,8 +6249,6 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Vu(e), e.flags & 2048 && ml(9, e, e.return);
 				break;
 			case 3:
-				Vu(e);
-				break;
 			case 12:
 				Vu(e);
 				break;
@@ -6331,16 +6302,16 @@ var _ = /* @__PURE__ */ o(((e) => {
 				case 24: Ca(n.memoizedState.cache);
 			}
 			if (r = n.child, r !== null) r.return = n, tu = r;
-			else a: for (n = e; tu !== null;) {
+			else for (n = e; tu !== null;) {
 				r = tu;
 				var i = r.sibling, a = r.return;
 				if (fu(r), r === n) {
 					tu = null;
-					break a;
+					break;
 				}
 				if (i !== null) {
 					i.return = a, tu = i;
-					break a;
+					break;
 				}
 				tu = a;
 			}
@@ -6354,7 +6325,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		cacheSignal: function() {
 			return ha(xa).controller.signal;
 		}
-	}, Ku = typeof WeakMap == "function" ? WeakMap : Map, qu = 0, Ju = null, Yu = null, Xu = 0, Zu = 0, Qu = null, $u = !1, ed = !1, td = !1, nd = 0, rd = 0, id = 0, ad = 0, od = 0, sd = 0, cd = 0, ld = null, ud = null, dd = !1, fd = 0, pd = 0, md = Infinity, hd = null, gd = null, _d = 0, vd = null, yd = null, bd = 0, xd = 0, Sd = null, Cd = null, wd = null, Td = null, Ed = null, Dd = 0, Od = null;
+	}, Ku = typeof WeakMap == "function" ? WeakMap : Map, qu = 0, Ju = null, Yu = null, Xu = 0, Zu = 0, Qu = null, $u = !1, ed = !1, td = !1, nd = 0, rd = 0, id = 0, ad = 0, od = 0, sd = 0, cd = 0, ld = null, ud = null, dd = !1, fd = 0, pd = 0, md = 1e400, hd = null, gd = null, _d = 0, vd = null, yd = null, bd = 0, xd = 0, Sd = null, Cd = null, wd = null, Td = null, Ed = null, Dd = 0, Od = null;
 	function kd() {
 		return qu & 2 && Xu !== 0 ? Xu & -Xu : H.T === null ? st() : Mf();
 	}
@@ -6391,14 +6362,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 					else s = e.pendingLanes & -536870913, s = s === 0 ? s & 536870912 ? 536870912 : 0 : s;
 					if (s !== 0) {
 						t = s;
-						a: {
+						e: {
 							var c = e;
 							a = ld;
 							var l = c.current.memoizedState.isDehydrated;
 							if (l && (zd(c, s).flags |= 256), s = Gd(c, s, !1), s !== 2 && s !== 6) {
 								if (td && !l) {
 									c.errorRecoveryDisabledLanes |= o, ad |= o, a = 4;
-									break a;
+									break e;
 								}
 								o = ud, ud = a, o !== null && (ud === null ? ud = o : ud.push.apply(ud, o));
 							}
@@ -6411,14 +6382,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 					zd(e, 0), Id(e, t, 0, !0);
 					break;
 				}
-				a: {
+				e: {
 					switch (r = e, o = a, o) {
 						case 0:
 						case 1: throw Error(i(345));
 						case 4: if ((t & 4194048) !== t && (t & 62914560) !== t) break;
 						case 6:
 							Id(r, t, sd, !$u);
-							break a;
+							break e;
 						case 2:
 							ud = null;
 							break;
@@ -6427,9 +6398,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 						default: throw Error(i(329));
 					}
 					if ((t & 62914560) === t && (a = fd + 300 - Oe(), 10 < a)) {
-						if (Id(r, t, sd, !$u), Je(r, 0, !0) !== 0) break a;
+						if (Id(r, t, sd, !$u), Je(r, 0, !0) !== 0) break e;
 						bd = t, r.timeoutHandle = gp(Pd.bind(null, r, n, ud, hd, dd, t, sd, ad, cd, $u, o, "Throttled", -0, 0), a);
-						break a;
+						break e;
 					}
 					Pd(r, n, ud, hd, dd, t, sd, ad, cd, $u, o, null, -0, 0);
 				}
@@ -6515,7 +6486,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 		return H.A = Gu, e;
 	}
 	function Wd() {
-		rd = 4, $u || (Xu & 4194048) !== Xu && yo.current !== null || (ed = !0), !(id & 134217727) && !(ad & 134217727) || Ju === null || Id(Ju, Xu, sd, !1);
+		rd = 4, $u || (Xu & 4194048) !== Xu && yo.current !== null || (ed = !0), !(id & 0x7ffffff) && !(ad & 0x7ffffff) || Ju === null || Id(Ju, Xu, sd, !1);
 	}
 	function Gd(e, t, n) {
 		var r = qu;
@@ -6523,14 +6494,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var i = Hd(), a = Ud();
 		(Ju !== e || Xu !== t) && (hd = null, zd(e, t)), t = !1;
 		var o = rd;
-		a: do
+		e: do
 			try {
 				if (Zu !== 0 && Yu !== null) {
 					var s = Yu, c = Qu;
 					switch (Zu) {
 						case 8:
 							Rd(), o = 6;
-							break a;
+							break e;
 						case 3:
 						case 2:
 						case 9:
@@ -6539,7 +6510,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 							var l = Zu;
 							if (Zu = 0, Qu = null, Zd(e, s, c, l), n && ed) {
 								o = 0;
-								break a;
+								break e;
 							}
 							break;
 						default: l = Zu, Zu = 0, Qu = null, Zd(e, s, c, l);
@@ -6561,12 +6532,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 		qu |= 2;
 		var r = Hd(), a = Ud();
 		Ju !== e || Xu !== t ? (hd = null, md = Oe() + 500, zd(e, t)) : ed = Ye(e, t);
-		a: do
+		e: do
 			try {
 				if (Zu !== 0 && Yu !== null) {
 					t = Yu;
 					var o = Qu;
-					b: switch (Zu) {
+					t: switch (Zu) {
 						case 1:
 							Zu = 0, Qu = null, Zd(e, t, o, 1);
 							break;
@@ -6579,13 +6550,13 @@ var _ = /* @__PURE__ */ o(((e) => {
 							t = function() {
 								Zu !== 2 && Zu !== 9 || Ju !== e || (Zu = 7), wf(e);
 							}, o.then(t, t);
-							break a;
+							break e;
 						case 3:
 							Zu = 7;
-							break a;
+							break e;
 						case 4:
 							Zu = 5;
-							break a;
+							break e;
 						case 7:
 							Ua(o) ? (Zu = 0, Qu = null, Xd(t)) : (Zu = 0, Qu = null, Zd(e, t, o, 7));
 							break;
@@ -6604,7 +6575,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 											var u = c.return;
 											u === null ? Yu = null : (Yu = u, Qd(u));
 										}
-										break b;
+										break t;
 									}
 							}
 							Zu = 0, Qu = null, Zd(e, t, o, 5);
@@ -6614,7 +6585,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 							break;
 						case 8:
 							Rd(), rd = 6;
-							break a;
+							break e;
 						default: throw Error(i(462));
 					}
 				}
@@ -6718,20 +6689,17 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (xd = s, s |= fi, tt(e, n, s, r, i, a), Td = null, (n & 335544064) === n ? (Ed = Ea(e), r = 10262) : (Ed = null, r = 10256), (t.subtreeFlags & r) !== 0 || (t.flags & r) !== 0 ? (e.callbackNode = null, e.callbackPriority = 0, vf(Me, function() {
 			return uf(), null;
 		})) : (e.callbackNode = null, e.callbackPriority = 0), jl = !1, r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-			r = H.T, H.T = null, i = le.p, le.p = 2, a = qu, qu |= 4;
+			r = H.T, H.T = null, i = U.p, U.p = 2, a = qu, qu |= 4;
 			try {
 				ou(e, t, n);
 			} finally {
-				qu = a, le.p = i, H.T = r;
+				qu = a, U.p = i, H.T = r;
 			}
 		}
 		_d = 1, jl ? wd = Mp(o, e.containerInfo, Ed, af, of, rf, sf, uf, nf, null, null) : (af(), of(), sf());
 	}
 	function nf(e) {
-		if (_d !== 0) {
-			var t = vd.onRecoverableError;
-			t(e, { componentStack: null });
-		}
+		_d !== 0 && (0, vd.onRecoverableError)(e, { componentStack: null });
 	}
 	function rf() {
 		_d === 3 && (_d = 0, Du(yd, vd), _d = 4);
@@ -6742,8 +6710,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 			var e = vd, t = yd, n = bd, r = !!(t.flags & 13878);
 			if (t.subtreeFlags & 13878 || r) {
 				r = H.T, H.T = null;
-				var i = le.p;
-				le.p = 2;
+				var i = U.p;
+				U.p = 2;
 				var a = qu;
 				qu |= 4;
 				try {
@@ -6778,7 +6746,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 					}
 					gh = !!sp, cp = sp = null;
 				} finally {
-					qu = a, le.p = i, H.T = r;
+					qu = a, U.p = i, H.T = r;
 				}
 			}
 			e.current = t, _d = 2;
@@ -6790,14 +6758,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 			var e = vd, t = yd, n = !!(t.flags & 8772);
 			if (t.subtreeFlags & 8772 || n) {
 				n = H.T, H.T = null;
-				var r = le.p;
-				le.p = 2;
+				var r = U.p;
+				U.p = 2;
 				var i = qu;
 				qu |= 4;
 				try {
 					cu(e, t.alternate, t);
 				} finally {
-					qu = i, le.p = r, H.T = n;
+					qu = i, U.p = r, H.T = n;
 				}
 			}
 			_d = 3;
@@ -6813,14 +6781,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Re.onCommitFiberRoot(Le, n, void 0, (n.current.flags & 128) == 128);
 			} catch {}
 			if (i !== null) {
-				n = H.T, a = le.p, le.p = 2, H.T = null;
+				n = H.T, a = U.p, U.p = 2, H.T = null;
 				try {
 					for (var o = t.onRecoverableError, s = 0; s < i.length; s++) {
 						var c = i[s];
 						o(c.value, { componentStack: c.stack });
 					}
 				} finally {
-					H.T = n, le.p = a;
+					H.T = n, U.p = a;
 				}
 			}
 			if (i = Td, o = Ed, Ed = null, i !== null && (Td = null, o === null && (o = []), e !== null)) for (c = 0; c < i.length; c++) n = (0, i[c])(o), n !== void 0 && e.finished.finally(n);
@@ -6837,9 +6805,9 @@ var _ = /* @__PURE__ */ o(((e) => {
 		if (_d !== 5) return !1;
 		var e = vd, t = xd;
 		xd = 0;
-		var n = ot(bd), r = H.T, a = le.p;
+		var n = ot(bd), r = H.T, a = U.p;
 		try {
-			le.p = 32 > n ? 32 : n, H.T = null, n = Sd, Sd = null;
+			U.p = 32 > n ? 32 : n, H.T = null, n = Sd, Sd = null;
 			var o = vd, s = bd;
 			if (_d = 0, yd = vd = null, bd = 0, qu & 6) throw Error(i(331));
 			var c = qu;
@@ -6848,7 +6816,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			} catch {}
 			return !0;
 		} finally {
-			le.p = a, H.T = r, cf(e, t);
+			U.p = a, H.T = r, cf(e, t);
 		}
 	}
 	function df(e, t, n) {
@@ -6927,7 +6895,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 							if (i === 0) var a = 0;
 							else {
 								var o = r.suspendedLanes, s = r.pingedLanes;
-								a = (1 << 31 - Be(42 | e) + 1) - 1, a &= i & ~(o & ~s), a = a & 201326741 ? a & 201326741 | 1 : a ? a | 2 : 0;
+								a = (1 << 31 - Be(42 | e) + 1) - 1, a &= i & ~(o & ~s), a = a & 0xc000095 ? a & 0xc000095 | 1 : a ? a | 2 : 0;
 							}
 							a !== 0 && (n = !0, Af(r, a));
 						} else a = Xu, a = Je(r, r === Ju ? a : 0, r.cancelPendingCommit !== null || r.timeoutHandle !== -1), !(a & 3) || Ye(r, a) || (n = !0, Af(r, a));
@@ -7050,11 +7018,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 		for (var n = 0; n < e.length; n++) {
 			var r = e[n], i = r.event;
 			r = r.listeners;
-			a: {
+			e: {
 				var a = void 0;
 				if (t) for (var o = r.length - 1; 0 <= o; o--) {
 					var s = r[o], c = s.instance, l = s.currentTarget;
-					if (s = s.listener, c !== a && i.isPropagationStopped()) break a;
+					if (s = s.listener, c !== a && i.isPropagationStopped()) break e;
 					a = s, i.currentTarget = l;
 					try {
 						a(i);
@@ -7064,7 +7032,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 					i.currentTarget = null, a = c;
 				}
 				else for (o = 0; o < r.length; o++) {
-					if (s = r[o], c = s.instance, l = s.currentTarget, s = s.listener, c !== a && i.isPropagationStopped()) break a;
+					if (s = r[o], c = s.instance, l = s.currentTarget, s = s.listener, c !== a && i.isPropagationStopped()) break e;
 					a = s, i.currentTarget = l;
 					try {
 						a(i);
@@ -7113,7 +7081,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	}
 	function Gf(e, t, n, r, i) {
 		var a = r;
-		if (!(t & 1) && !(t & 2) && r !== null) a: for (;;) {
+		if (!(t & 1) && !(t & 2) && r !== null) e: for (;;) {
 			if (r === null) return;
 			var s = r.tag;
 			if (s === 3 || s === 4) {
@@ -7128,7 +7096,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 					if (s = bt(c), s === null) return;
 					if (l = s.tag, l === 5 || l === 6 || l === 26 || l === 27) {
 						r = a = s;
-						continue a;
+						continue e;
 					}
 					c = c.parentNode;
 				}
@@ -7137,12 +7105,12 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		mn(function() {
 			var r = a, i = ln(n), s = [];
-			a: {
+			e: {
 				var c = ni.get(e);
 				if (c !== void 0) {
 					var l = On, u = e;
 					switch (e) {
-						case "keypress": if (Cn(n) === 0) break a;
+						case "keypress": if (Cn(n) === 0) break e;
 						case "keydown":
 						case "keyup":
 							l = Kn;
@@ -7157,7 +7125,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 						case "afterblur":
 							l = Ln;
 							break;
-						case "click": if (n.button === 2) break a;
+						case "click": if (n.button === 2) break e;
 						case "auxclick":
 						case "dblclick":
 						case "mousedown":
@@ -7234,11 +7202,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 				}
 			}
 			if (!(t & 7)) {
-				a: {
-					if (l = e === "mouseover" || e === "pointerover", c = e === "mouseout" || e === "pointerout", l && n !== cn && (u = n.relatedTarget || n.fromElement) && (bt(u) || u[ft])) break a;
+				e: {
+					if (l = e === "mouseover" || e === "pointerover", c = e === "mouseout" || e === "pointerout", l && n !== cn && (u = n.relatedTarget || n.fromElement) && (bt(u) || u[ft])) break e;
 					(c || l) && (u = i.window === i ? i : (l = i.ownerDocument) ? l.defaultView || l.parentWindow : window, c ? (l = n.relatedTarget || n.toElement, c = r, l = l ? bt(l) : null, l !== null && (f = o(l), d = l.tag, l !== f || d !== 5 && d !== 27 && d !== 6) && (l = null)) : (c = null, l = r), c !== l && (d = Fn, g = "onMouseLeave", p = "onMouseEnter", m = "mouse", (e === "pointerout" || e === "pointerover") && (d = qn, g = "onPointerLeave", p = "onPointerEnter", m = "pointer"), f = c == null ? u : St(c), h = l == null ? u : St(l), u = new d(g, m + "leave", c, n, i), u.target = f, u.relatedTarget = h, g = null, bt(i) === r && (d = new d(p, m + "enter", l, n, i), d.target = h, d.relatedTarget = f, g = d), f = g, d = c && l ? E(c, l, Jf) : null, c !== null && Yf(s, u, c, d, !1), l !== null && f !== null && Yf(s, f, l, d, !0)));
 				}
-				a: {
+				e: {
 					if (c = r ? St(r) : window, l = c.nodeName && c.nodeName.toLowerCase(), l === "select" || l === "input" && c.type === "file") var _ = vr;
 					else if (fr(c)) {
 						if (yr) _ = Or;
@@ -7249,7 +7217,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 					} else l = c.nodeName, !l || l.toLowerCase() !== "input" || c.type !== "checkbox" && c.type !== "radio" ? r && nn(r.elementType) && (_ = vr) : _ = Dr;
 					if (_ &&= _(e, r)) {
 						pr(s, _, n, i);
-						break a;
+						break e;
 					}
 					v && v(e, c, r);
 				}
@@ -7273,17 +7241,17 @@ var _ = /* @__PURE__ */ o(((e) => {
 					case "keyup": Ur(s, n, i);
 				}
 				var y;
-				if (er) b: {
+				if (er) e: {
 					switch (e) {
 						case "compositionstart":
 							var b = "onCompositionStart";
-							break b;
+							break e;
 						case "compositionend":
 							b = "onCompositionEnd";
-							break b;
+							break e;
 						case "compositionupdate":
 							b = "onCompositionUpdate";
-							break b;
+							break e;
 					}
 					b = void 0;
 				}
@@ -7415,7 +7383,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case "defaultValue":
 			case "defaultChecked":
 			case "innerHTML":
-			case "ref": break;
+			case "ref":
 			case "autoFocus": break;
 			case "xlinkHref":
 				if (r == null || typeof r == "function" || typeof r == "boolean" || typeof r == "symbol") {
@@ -7545,14 +7513,14 @@ var _ = /* @__PURE__ */ o(((e) => {
 			case "suppressContentEditableWarning":
 			case "suppressHydrationWarning":
 			case "innerHTML":
-			case "ref": return;
+			case "ref":
 			case "innerText":
 			case "textContent": return;
 			default:
-				if (!Dt.hasOwnProperty(n)) a: {
+				if (!Dt.hasOwnProperty(n)) e: {
 					if (n[0] === "o" && n[1] === "n" && (a = n.endsWith("Capture"), o = n.slice(2, a ? n.length - 7 : void 0), t = e[dt] || null, t = t == null ? null : t[n], typeof t == "function" && e.removeEventListener(o, t, a), typeof r == "function")) {
 						typeof t != "function" && t !== null && (n in e ? e[n] = null : e.hasAttribute(n) && e.removeAttribute(n)), e.addEventListener(o, r, a);
-						break a;
+						break e;
 					}
 					Pt = !0, n in e ? e[n] = r : !0 === r ? e.setAttribute(n, "") : It(e, n, r);
 				}
@@ -7654,12 +7622,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Zt(e, r, a, o);
 				return;
 			case "option":
-				for (l in n) if (n.hasOwnProperty(l) && (r = n[l], r != null)) switch (l) {
-					case "selected":
-						e.selected = r && typeof r != "function" && typeof r != "symbol";
-						break;
-					default: ep(e, t, l, r, n, null);
-				}
+				for (l in n) n.hasOwnProperty(l) && (r = n[l], r != null) && (l === "selected" ? e.selected = r && typeof r != "function" && typeof r != "symbol" : ep(e, t, l, r, n, null));
 				return;
 			case "dialog":
 				Bf("beforetoggle", e), Bf("toggle", e), Bf("cancel", e), Bf("close", e);
@@ -7721,7 +7684,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				for (m in n) {
 					var f = n[m];
 					if (n.hasOwnProperty(m) && f != null) switch (m) {
-						case "checked": break;
+						case "checked":
 						case "value": break;
 						case "defaultValue": l = f;
 						default: r.hasOwnProperty(m) || ep(e, t, m, null, r, f);
@@ -7777,7 +7740,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				return;
 			case "textarea":
 				for (c in m = p = null, n) if (a = n[c], n.hasOwnProperty(c) && a != null && !r.hasOwnProperty(c)) switch (c) {
-					case "value": break;
+					case "value":
 					case "children": break;
 					default: ep(e, t, c, null, r, a);
 				}
@@ -7797,18 +7760,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 				Xt(e, p, m);
 				return;
 			case "option":
-				for (var h in n) if (p = n[h], n.hasOwnProperty(h) && p != null && !r.hasOwnProperty(h)) switch (h) {
-					case "selected":
-						e.selected = !1;
-						break;
-					default: ep(e, t, h, null, r, p);
-				}
-				for (l in r) if (p = r[l], m = n[l], r.hasOwnProperty(l) && p !== m && (p != null || m != null)) switch (l) {
-					case "selected":
-						p !== m && (Pt = !0), e.selected = p && typeof p != "function" && typeof p != "symbol";
-						break;
-					default: ep(e, t, l, p, r, m);
-				}
+				for (var h in n) p = n[h], n.hasOwnProperty(h) && p != null && !r.hasOwnProperty(h) && (h === "selected" ? e.selected = !1 : ep(e, t, h, null, r, p));
+				for (l in r) p = r[l], m = n[l], r.hasOwnProperty(l) && p !== m && (p != null || m != null) && (l === "selected" ? (p !== m && (Pt = !0), e.selected = p && typeof p != "function" && typeof p != "symbol") : ep(e, t, l, p, r, m));
 				return;
 			case "img":
 			case "link":
@@ -8237,11 +8190,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 		var r = _(t);
 		if (n.length === 0) {
 			if (n = r, m(this._fragmentFiber)) {
-				a: {
+				e: {
 					for (t = this._fragmentFiber.return; t !== null;) {
 						if (t.tag === 4) {
 							t = t.stateNode.containerInfo;
-							break a;
+							break e;
 						}
 						if (t.tag === 3 || t.tag === 5 || t.tag === 27) break;
 						t = t.return;
@@ -8264,11 +8217,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function Xp(e, t, n, r, i) {
 		var a = bt(i);
 		if (e & Node.DOCUMENT_POSITION_CONTAINED_BY) {
-			if (n = !!a) a: {
+			if (n = !!a) e: {
 				for (; a !== null;) {
 					if (a.tag === 7 && (a === t || a.alternate === t)) {
 						n = !0;
-						break a;
+						break e;
 					}
 					a = a.return;
 				}
@@ -8278,11 +8231,11 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		if (e & Node.DOCUMENT_POSITION_CONTAINS) {
 			if (a === null) return a = i.ownerDocument, i === a || i === a.documentElement || i === a.body;
-			a: {
+			e: {
 				for (a = t, t = p(t); a !== null;) {
 					if (!(a.tag !== 5 && a.tag !== 3 && a.tag !== 27 || a !== t && a.alternate !== t)) {
 						a = !0;
-						break a;
+						break e;
 					}
 					a = a.return;
 				}
@@ -8516,8 +8469,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 		}
 		return e.nodeType === 9 ? e : e.ownerDocument;
 	}
-	var xm = le.d;
-	le.d = {
+	var xm = U.d;
+	U.d = {
 		f: Sm,
 		r: Cm,
 		D: Em,
@@ -8839,10 +8792,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 				return !0;
 			case "link":
 				if (typeof t.rel != "string" || typeof t.href != "string" || t.href === "" || t.onLoad || t.onError) break;
-				switch (t.rel) {
-					case "stylesheet": return e = t.disabled, typeof t.precedence == "string" && e == null;
-					default: return !0;
-				}
+				return t.rel !== "stylesheet" || (e = t.disabled, typeof t.precedence == "string" && e == null);
 			case "script": if (t.async && typeof t.async != "function" && typeof t.async != "symbol" && !t.onLoad && !t.onError && t.src && typeof t.src == "string") return !0;
 		}
 		return !1;
@@ -8935,8 +8885,8 @@ var _ = /* @__PURE__ */ o(((e) => {
 		$$typeof: F,
 		Provider: null,
 		Consumer: null,
-		_currentValue: ue,
-		_currentValue2: ue,
+		_currentValue: le,
+		_currentValue2: le,
 		_threadCount: 0
 	};
 	function ch(e, t, n, r, i, a, o, s, c) {
@@ -8982,21 +8932,21 @@ var _ = /* @__PURE__ */ o(((e) => {
 	function _h(e, t, n, r) {
 		var i = H.T;
 		H.T = null;
-		var a = le.p;
+		var a = U.p;
 		try {
-			le.p = 2, yh(e, t, n, r);
+			U.p = 2, yh(e, t, n, r);
 		} finally {
-			le.p = a, H.T = i;
+			U.p = a, H.T = i;
 		}
 	}
 	function vh(e, t, n, r) {
 		var i = H.T;
 		H.T = null;
-		var a = le.p;
+		var a = U.p;
 		try {
-			le.p = 8, yh(e, t, n, r);
+			U.p = 8, yh(e, t, n, r);
 		} finally {
-			le.p = a, H.T = i;
+			U.p = a, H.T = i;
 		}
 	}
 	function yh(e, t, n, r) {
@@ -9314,8 +9264,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	Gh.prototype.render = Wh.prototype.render = function(e) {
 		var t = this._internalRoot;
 		if (t === null) throw Error(i(409));
-		var n = t.current;
-		dh(n, kd(), e, t, null, null);
+		dh(t.current, kd(), e, t, null, null);
 	}, Gh.prototype.unmount = Wh.prototype.unmount = function() {
 		var e = this._internalRoot;
 		if (e !== null) {
@@ -9341,7 +9290,7 @@ var _ = /* @__PURE__ */ o(((e) => {
 	};
 	var Kh = n.version;
 	if (Kh !== "19.3.1") throw Error(i(527, Kh, "19.3.1"));
-	le.findDOMNode = function(e) {
+	U.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(i(188)) : (e = Object.keys(e).join(","), Error(i(268, e)));
 		return e = u(t), e = e === null ? null : d(e), e = e === null ? null : e.stateNode, e;
@@ -13253,7 +13202,7 @@ var ie = class extends HTMLElement {
 	}
 	_renderLiquidGlassClockSvg(e, t) {
 		let n = e === "instant", r = n ? "#38bdf8" : e === "custom" ? "#fbbf24" : "rgba(255,255,255,0.7)";
-		return `${`<svg class="liquid-glass-clock" viewBox="0 0 20 20" width="13" height="13" style="vertical-align:middle;filter:drop-shadow(0 0 3px ${r});flex-shrink:0"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.08)" stroke="${r}" stroke-width="1.4"/><path d="M5 6 A 7 7 0 0 1 15 6" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" stroke-linecap="round"/>${n ? `<path d="M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z" fill="${r}"/>` : `<line x1="10" y1="10" x2="10" y2="5.5" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="10" x2="13.5" y2="10" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><circle cx="10" cy="10" r="1.2" fill="${r}"/>`}</svg>`}${t ? `<span style="margin-left:3px;font-size:9px;font-weight:800">${t}</span>` : ""}`;
+		return `<svg class="liquid-glass-clock" viewBox="0 0 20 20" width="13" height="13" style="vertical-align:middle;filter:drop-shadow(0 0 3px ${r});flex-shrink:0"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.08)" stroke="${r}" stroke-width="1.4"/><path d="M5 6 A 7 7 0 0 1 15 6" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" stroke-linecap="round"/>${n ? `<path d="M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z" fill="${r}"/>` : `<line x1="10" y1="10" x2="10" y2="5.5" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="10" x2="13.5" y2="10" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><circle cx="10" cy="10" r="1.2" fill="${r}"/>`}</svg>${t ? `<span style="margin-left:3px;font-size:9px;font-weight:800">${t}</span>` : ""}`;
 	}
 	_chip(e, t) {
 		let n = this._getEntityState(e), r = n?.state, i = String(r || "").toLowerCase(), a = [
@@ -15310,13 +15259,13 @@ var ie = class extends HTMLElement {
 				let i = document.createElement("div");
 				i.className = "argus-profile-overlay", i.innerHTML = `
       <div style="display:flex; flex-direction:column; align-items:center;">
-        ${`
+        
       <div class="argus-profile-header">
         <h2>${this._escapeHtml(t("select_profile_title"))}</h2>
         <p>${this._escapeHtml(t("select_profile_subtitle"))}</p>
       </div>
-    `}
-        ${`
+    
+        
       <div class="argus-profile-grid">
         ${n.map((e) => {
 					let n = e.is_own_profile === !0, r = e.access_pin_configured === !0, i = e.role === "admin" ? t("role_argus_admin") : t("role_argus_standard"), a = e.picture ? `<img src="${this._escapeHtml(e.picture)}" alt="" />` : this._escapeHtml(e.name.substring(0, 2).toUpperCase()), o = r ? "<div class=\"lock-badge\">🔒</div>" : "";
@@ -15338,9 +15287,9 @@ var ie = class extends HTMLElement {
       `;
 				}).join("")}
       </div>
-    `}
+    
       </div>
-      ${`
+      
       <button id="argus-exit-ha" style="
         position: absolute; bottom: 40px;
         background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: #fff;
@@ -15349,7 +15298,7 @@ var ie = class extends HTMLElement {
       ">
         ← ${this._escapeHtml(t("exit_to_ha"))}
       </button>
-    `}
+    
     `, this.shadowRoot.appendChild(i), this._hideInitialCurtain(), i.querySelector("#argus-exit-ha").addEventListener("click", () => {
 					window.location.assign("/");
 				}), i.querySelectorAll(".argus-profile-item").forEach((e) => {
@@ -15888,7 +15837,7 @@ var se = {
 	}
 };
 customElements.get("argus-panel-card-editor") || customElements.define("argus-panel-card-editor", H);
-var le = class extends HTMLElement {
+var U = class extends HTMLElement {
 	static getStubConfig(e) {
 		return {
 			entity: oe(e) || "alarm_control_panel.argus",
@@ -16022,15 +15971,15 @@ var le = class extends HTMLElement {
 		};
 	}
 };
-customElements.get("argus-panel-card") || customElements.define("argus-panel-card", le), customElements.get("argus-card") || customElements.define("argus-card", class extends le {}), window.customCards = window.customCards || [];
-var ue = new Set(window.customCards.map((e) => e.type));
-ue.has("argus-panel-card") || window.customCards.push({
+customElements.get("argus-panel-card") || customElements.define("argus-panel-card", U), customElements.get("argus-card") || customElements.define("argus-card", class extends U {}), window.customCards = window.customCards || [];
+var le = new Set(window.customCards.map((e) => e.type));
+le.has("argus-panel-card") || window.customCards.push({
 	type: "argus-panel-card",
 	name: "Argus Security Panel",
 	description: "Panel de seguridad Argus — consola Liquid Glass de Instancias Activas, dashboard e historial.",
 	preview: !0,
 	documentationURL: "https://github.com/Chrisalvir1/Argus"
-}), ue.has("argus-card") || window.customCards.push({
+}), le.has("argus-card") || window.customCards.push({
 	type: "argus-card",
 	name: "Argus Alarm Card",
 	description: "Tarjeta de seguridad Argus — consola interactiva de Instancia Activa con Liquid Glass y pantalla completa.",
@@ -16038,13 +15987,13 @@ ue.has("argus-panel-card") || window.customCards.push({
 	documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
 // node_modules/react-grid-layout/css/styles.css?inline
-var de = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{opacity:0;width:20px;height:20px;position:absolute}.react-grid-item:hover>.react-resizable-handle{opacity:1}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", fe = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", U = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:2.6em;padding:0 18px;font-size:12px;line-height:1.25}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{cursor:grab;-webkit-user-select:none;user-select:none;align-items:center;gap:10px;min-height:50px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-dashboard--editing .argus-widget__edit-header:active{cursor:grabbing}.argus-widget__grip{opacity:.72;touch-action:none;font-size:22px;line-height:1}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:190px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu button{min-height:42px;padding:7px}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior-y:auto!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}:host{--argus-widget-ease:cubic-bezier(.22,.72,.22,1)}.argus-dashboard-grid .react-grid-item{transition:transform .26s var(--argus-widget-ease),width .22s var(--argus-widget-ease),height .22s var(--argus-widget-ease)}.argus-dashboard--editing .argus-dashboard__restore-entry{visibility:hidden}.argus-dashboard--editing .argus-widget{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}.argus-dashboard .argus-widget{-webkit-touch-callout:none}.argus-widget__resize-handle{cursor:nwse-resize;z-index:4;width:44px;height:44px;position:absolute;bottom:0;right:0}.argus-widget__resize-handle:after{content:\"\";filter:drop-shadow(0 1px 2px #000);border:3px solid #fff;border-width:0 3px 3px 0;border-radius:0 0 12px;width:15px;height:15px;position:absolute;bottom:8px;right:8px}.argus-dashboard-grid .react-grid-item.argus-widget--active{z-index:120!important;transition:none!important}.argus-dashboard .argus-widget{transition:transform .26s cubic-bezier(.22,.7,.28,1.22),width .26s cubic-bezier(.22,.7,.28,1.22),height .26s cubic-bezier(.22,.7,.28,1.22)}@keyframes argus-widget-jiggle{0%,to{rotate:-.24deg}50%{rotate:.24deg}}.argus-dashboard--editing:not(:has(.argus-widget--active)) .react-grid-item>.argus-widget{animation:.52s ease-in-out .26s infinite argus-widget-jiggle}.argus-dashboard--editing:not(:has(.argus-widget--active)) .react-grid-item:nth-child(2n)>.argus-widget{animation-delay:.52s}.argus-widget--active>.argus-widget{--argus-gesture-move:calc(1 - var(--argus-gesture-resize));transform:translate(calc(var(--argus-gesture-x) * var(--argus-gesture-move)),calc(var(--argus-gesture-y) * var(--argus-gesture-move))) scale(1.012);width:calc(100% + var(--argus-gesture-x) * var(--argus-gesture-resize));height:calc(100% + var(--argus-gesture-y) * var(--argus-gesture-resize));cursor:grabbing;outline-offset:1px;outline:2px solid #9ccaffb8;box-shadow:0 16px 42px #0000006b;transition:none!important}.argus-dashboard--editing .argus-dashboard__toolbar{z-index:150;background:#131e2df0;border-top:1px solid #ffffff26;position:sticky;bottom:0}.argus-dashboard__toolbar .argus-dashboard__done{background:#2d6ec375;border-color:#aad6ff8f;border-radius:999px;font-weight:650}.argus-widget__sizes{border:1px solid #ffffff2e;border-radius:12px;gap:4px;padding:4px;display:flex}.argus-widget__sizes>button{flex:1}@media (prefers-reduced-motion:reduce){.argus-dashboard .react-grid-item>.argus-widget{transition:none!important;animation:none!important}.argus-widget--active>.argus-widget{width:100%;height:100%;transform:none}}.argus-widget{box-sizing:border-box;container:argus-widget/size}.argus-widget__content{box-sizing:border-box;flex-direction:column;min-width:0;min-height:0;display:flex;overflow:hidden}.argus-widget__content>.panel{flex:auto;min-width:0;min-height:0}.argus-dashboard--editing .argus-widget__content>.panel{cursor:default!important;animation:none!important}#argus-dashboard-root-v3:not(.editing) .argus-widget[data-widget-kind=activity-history]{animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{overscroll-behavior-y:auto!important;flex-direction:column!important;min-width:0!important;height:100%!important;min-height:0!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;animation:none!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]>.argus-widget__content>.panel{overscroll-behavior-y:auto!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head{flex-wrap:wrap;flex:none;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{flex-wrap:wrap;gap:6px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{overscroll-behavior-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable;flex:120px;min-height:0;height:auto!important;max-height:none!important;overflow:hidden auto!important}@media (width<=760px) and (orientation:portrait){#argus-dashboard-root-v3 .argus-widget{-webkit-backdrop-filter:none!important;box-shadow:none!important;filter:none!important;isolation:isolate!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#263445,#182535)!important;border-color:#bed2e833!important}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget__content>.panel.glass.liquid-glass{box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;background:0 0!important;border:0!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3:not(.editing) .argus-dashboard-grid .react-grid-item{transition:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{filter:none!important;will-change:auto!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{scrollbar-gutter:auto!important;scroll-behavior:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log::-webkit-scrollbar{width:0;height:0;display:none}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{filter:none!important;box-shadow:none!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#5c6b7c,#374658)!important;animation:none!important;transform:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{flex-wrap:wrap;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:stretch;gap:8px;min-width:0;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>button,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div{overflow-wrap:anywhere;text-align:center;width:100%;min-width:0;min-height:44px;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div>button{min-height:44px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access{overscroll-behavior-y:auto;min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #w-modes{min-width:0;min-height:0;flex-direction:column!important;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{flex:none;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0;margin-bottom:10px!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{white-space:normal;min-width:0;min-height:46px;padding:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto;flex:auto;min-width:0;min-height:0;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(10px,1.7cqi,20px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{flex-wrap:wrap;gap:8px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid>*{flex:120px;min-width:0}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto!important}@container argus-widget (height<=300px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #h-activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #h-automations{font-size:clamp(14px,1.5cqi,18px)}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .github-desc{display:none}}@media (prefers-reduced-motion:no-preference){.argus-dashboard-grid .react-grid-item:not(.react-draggable-dragging):not(.resizing){transition-timing-function:var(--argus-widget-ease)}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{will-change:auto!important;animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs .tab-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}@media (width<=700px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:2px!important;min-height:44px!important;margin-bottom:8px!important;padding:4px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:10px!important;gap:1px!important;min-width:0!important;min-height:36px!important;padding:4px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:14px!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;font-size:clamp(8px,2.05vw,10px)!important;line-height:1.05!important}}#argus-dashboard-root-v3 .argus-widget__content,#argus-dashboard-root-v3 .argus-widget__content>.panel{min-width:0!important;max-width:100%!important}#argus-dashboard-root-v3 .argus-widget__content>.panel :where(h1,h2,h3,h4,p,small,label,button,a,input,select,textarea){box-sizing:border-box;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:clamp(1px,.65cqi,8px)!important;width:100%!important;min-width:0!important;min-height:48px!important;padding:4px!important;display:grid!important;overflow:visible!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:12px!important;gap:2px!important;min-width:0!important;min-height:42px!important;padding:clamp(2px,.7cqi,8px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:clamp(13px,1.55cqi,20px)!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;text-overflow:ellipsis!important;min-width:0!important;max-width:100%!important;font-size:clamp(9px,.95cqi,12px)!important;line-height:1.05!important;display:block!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:clamp(8px,1.2cqi,16px)!important;width:100%!important;min-width:0!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{overflow-wrap:anywhere;min-width:0!important;max-width:100%!important;padding:clamp(10px,1.6cqi,18px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-section-card{align-self:stretch!important;height:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items{grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items.is-scrollable{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:190px;overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-sirens-card{grid-column:1/-1}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot{min-width:0!important;max-width:100%!important;margin-top:clamp(8px,1.2cqi,16px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot>.argus-mode-voice-card{box-sizing:border-box;width:100%;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-mode-voice-card[open]>.argus-voice-body{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:min(45cqh,420px);overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-sensor-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card>*{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-preview{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:0 0 14px;padding:12px 14px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list{margin:8px 0;padding-left:22px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list>li{margin:6px 0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list ul{color:#ffffffd1;margin:4px 0;padding-left:20px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-message-card{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:10px 0;padding:12px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-label{color:#8fd8ff;margin-top:8px;font-size:.85em;font-weight:700}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-preview{white-space:normal;overflow-wrap:anywhere;background:#080f1b6b;border-radius:12px;margin:5px 0 10px;padding:9px 11px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-toggle{align-items:center;gap:8px;display:flex}@container argus-widget (width<=760px){#argus-dashboard-root-v3 .argus-widget__content>.panel .panel-head{flex-wrap:wrap;align-items:flex-start;gap:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head h2{overflow-wrap:anywhere;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr));width:100%;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions button{justify-content:center;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));align-items:stretch;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace .access-section{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{flex-direction:column!important;justify-content:center!important;align-items:stretch!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr))!important;max-width:100%!important}}@container argus-widget (width<=420px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{gap:1px!important;min-height:42px!important;padding:2px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:9px!important;min-height:36px!important;padding:2px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:13px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{font-size:9px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{border-radius:16px!important;padding:10px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:minmax(0,1fr)!important}}.argus-dashboard__restore-entry{color:#fff;font:inherit;cursor:pointer;-webkit-backdrop-filter:blur(16px);background:#ffffff17;border:1px solid #fff3;border-radius:14px;margin:8px 16px 12px auto;padding:9px 14px;font-weight:700;display:block}.argus-dashboard__restore-entry:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}:host(:is([argus-contrast=high],.argus-contrast-high)){--glass-bg:#080c13;--glass-border:#94a3b8;--v2066-glass:#080c13;--v2066-border:#94a3b8;--v2066-text:#fff;--v2066-muted:#e2e8f0;--primary-text-color:#fff;--secondary-text-color:#e2e8f0}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.argus-widget__menu,.argus-widget__edit-header,.security-context,.security-context .context-tools,.security-context section,.security-context article,.context-zone-picker,.context-sensor-row,.context-sensor-card,.context-verification-dialog,.modal,#profile-dropdown,.mode-section-card,.user-card,.log-item,.glass-subpanel){color:#fff!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.security-context,.modal,#profile-dropdown) :is(h1,h2,h3,h4,p,label,small,.hint,.muted,.small,.setting-help,.context-sensor-name){color:#fff!important;text-shadow:none!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(input,select,textarea){-webkit-text-fill-color:#fff;color:#fff!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) ::placeholder{opacity:1;color:#cbd5e1!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline-offset:3px!important;outline:3px solid #7dd3fc!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,summary):not(:disabled){border-color:#94a3b8}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{color:#fff!important;box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 #activity-log :is(.log-body,.log-title,.log-meta,.log-badge){color:#fff!important;opacity:1!important}", W = {
+var ue = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{opacity:0;width:20px;height:20px;position:absolute}.react-grid-item:hover>.react-resizable-handle{opacity:1}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", de = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", W = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:2.6em;padding:0 18px;font-size:12px;line-height:1.25}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{cursor:grab;-webkit-user-select:none;user-select:none;align-items:center;gap:10px;min-height:50px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-dashboard--editing .argus-widget__edit-header:active{cursor:grabbing}.argus-widget__grip{opacity:.72;touch-action:none;font-size:22px;line-height:1}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:190px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu button{min-height:42px;padding:7px}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior-y:auto!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__edit-header,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}:host{--argus-widget-ease:cubic-bezier(.22,.72,.22,1)}.argus-dashboard-grid .react-grid-item{transition:transform .26s var(--argus-widget-ease),width .22s var(--argus-widget-ease),height .22s var(--argus-widget-ease)}.argus-dashboard--editing .argus-dashboard__restore-entry{visibility:hidden}.argus-dashboard--editing .argus-widget{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}.argus-dashboard .argus-widget{-webkit-touch-callout:none}.argus-widget__resize-handle{cursor:nwse-resize;z-index:4;width:44px;height:44px;position:absolute;bottom:0;right:0}.argus-widget__resize-handle:after{content:\"\";filter:drop-shadow(0 1px 2px #000);border:3px solid #fff;border-width:0 3px 3px 0;border-radius:0 0 12px;width:15px;height:15px;position:absolute;bottom:8px;right:8px}.argus-dashboard-grid .react-grid-item.argus-widget--active{z-index:120!important;transition:none!important}.argus-dashboard .argus-widget{transition:transform .26s cubic-bezier(.22,.7,.28,1.22),width .26s cubic-bezier(.22,.7,.28,1.22),height .26s cubic-bezier(.22,.7,.28,1.22)}@keyframes argus-widget-jiggle{0%,to{rotate:-.24deg}50%{rotate:.24deg}}.argus-dashboard--editing:not(:has(.argus-widget--active)) .react-grid-item>.argus-widget{animation:.52s ease-in-out .26s infinite argus-widget-jiggle}.argus-dashboard--editing:not(:has(.argus-widget--active)) .react-grid-item:nth-child(2n)>.argus-widget{animation-delay:.52s}.argus-widget--active>.argus-widget{--argus-gesture-move:calc(1 - var(--argus-gesture-resize));transform:translate(calc(var(--argus-gesture-x) * var(--argus-gesture-move)),calc(var(--argus-gesture-y) * var(--argus-gesture-move))) scale(1.012);width:calc(100% + var(--argus-gesture-x) * var(--argus-gesture-resize));height:calc(100% + var(--argus-gesture-y) * var(--argus-gesture-resize));cursor:grabbing;outline-offset:1px;outline:2px solid #9ccaffb8;box-shadow:0 16px 42px #0000006b;transition:none!important}.argus-dashboard--editing .argus-dashboard__toolbar{z-index:150;background:#131e2df0;border-top:1px solid #ffffff26;position:sticky;bottom:0}.argus-dashboard__toolbar .argus-dashboard__done{background:#2d6ec375;border-color:#aad6ff8f;border-radius:999px;font-weight:650}.argus-widget__sizes{border:1px solid #ffffff2e;border-radius:12px;gap:4px;padding:4px;display:flex}.argus-widget__sizes>button{flex:1}@media (prefers-reduced-motion:reduce){.argus-dashboard .react-grid-item>.argus-widget{transition:none!important;animation:none!important}.argus-widget--active>.argus-widget{width:100%;height:100%;transform:none}}.argus-widget{box-sizing:border-box;container:argus-widget/size}.argus-widget__content{box-sizing:border-box;flex-direction:column;min-width:0;min-height:0;display:flex;overflow:hidden}.argus-widget__content>.panel{flex:auto;min-width:0;min-height:0}.argus-dashboard--editing .argus-widget__content>.panel{cursor:default!important;animation:none!important}#argus-dashboard-root-v3:not(.editing) .argus-widget[data-widget-kind=activity-history]{animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{overscroll-behavior-y:auto!important;flex-direction:column!important;min-width:0!important;height:100%!important;min-height:0!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;animation:none!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history]>.argus-widget__content>.panel{overscroll-behavior-y:auto!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head{flex-wrap:wrap;flex:none;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{flex-wrap:wrap;gap:6px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{overscroll-behavior-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable;flex:120px;min-height:0;height:auto!important;max-height:none!important;overflow:hidden auto!important}@media (width<=760px) and (orientation:portrait){#argus-dashboard-root-v3 .argus-widget{-webkit-backdrop-filter:none!important;box-shadow:none!important;filter:none!important;isolation:isolate!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#263445,#182535)!important;border-color:#bed2e833!important}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget__content>.panel.glass.liquid-glass{box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;background:0 0!important;border:0!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3:not(.editing) .argus-dashboard-grid .react-grid-item{transition:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity{filter:none!important;will-change:auto!important;transition:none!important;transform:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log{scrollbar-gutter:auto!important;scroll-behavior:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log::-webkit-scrollbar{width:0;height:0;display:none}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{filter:none!important;box-shadow:none!important;mix-blend-mode:normal!important;background:linear-gradient(145deg,#5c6b7c,#374658)!important;animation:none!important;transform:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{flex-wrap:wrap;gap:8px;min-width:0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:stretch;gap:8px;min-width:0;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>button,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div{overflow-wrap:anywhere;text-align:center;width:100%;min-width:0;min-height:44px;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div>div>button{min-height:44px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access{overscroll-behavior-y:auto;min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #w-modes{min-width:0;min-height:0;flex-direction:column!important;height:100%!important;max-height:none!important;padding:clamp(12px,2cqi,24px)!important;display:flex!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{flex:none;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0;margin-bottom:10px!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{white-space:normal;min-width:0;min-height:46px;padding:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto;flex:auto;min-width:0;min-height:0;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{min-width:0;min-height:0;height:100%!important;max-height:none!important;padding:clamp(10px,1.7cqi,20px)!important;overflow:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{flex-wrap:wrap;gap:8px;min-width:0;display:flex}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid>*{flex:120px;min-width:0}#argus-dashboard-root-v3 .argus-widget__content>.panel,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #w-access,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view{overscroll-behavior-y:auto!important}@container argus-widget (height<=300px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #h-activity-log,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #h-automations{font-size:clamp(14px,1.5cqi,18px)}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .github-desc{display:none}}@media (prefers-reduced-motion:no-preference){.argus-dashboard-grid .react-grid-item:not(.react-draggable-dragging):not(.resizing){transition-timing-function:var(--argus-widget-ease)}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{will-change:auto!important;animation:none!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs .tab-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}@media (width<=700px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:2px!important;min-height:44px!important;margin-bottom:8px!important;padding:4px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:10px!important;gap:1px!important;min-width:0!important;min-height:36px!important;padding:4px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:14px!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;font-size:clamp(8px,2.05vw,10px)!important;line-height:1.05!important}}#argus-dashboard-root-v3 .argus-widget__content,#argus-dashboard-root-v3 .argus-widget__content>.panel{min-width:0!important;max-width:100%!important}#argus-dashboard-root-v3 .argus-widget__content>.panel :where(h1,h2,h3,h4,p,small,label,button,a,input,select,textarea){box-sizing:border-box;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:clamp(1px,.65cqi,8px)!important;width:100%!important;min-width:0!important;min-height:48px!important;padding:4px!important;display:grid!important;overflow:visible!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:12px!important;gap:2px!important;min-width:0!important;min-height:42px!important;padding:clamp(2px,.7cqi,8px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:clamp(13px,1.55cqi,20px)!important;line-height:1!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{letter-spacing:0!important;white-space:nowrap!important;text-overflow:ellipsis!important;min-width:0!important;max-width:100%!important;font-size:clamp(9px,.95cqi,12px)!important;line-height:1.05!important;display:block!important;overflow:hidden!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:clamp(8px,1.2cqi,16px)!important;width:100%!important;min-width:0!important;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{overflow-wrap:anywhere;min-width:0!important;max-width:100%!important;padding:clamp(10px,1.6cqi,18px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-section-card{align-self:stretch!important;height:auto!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items{grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view #mode-zone-summary .mode-zone-summary-items.is-scrollable{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:190px;overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout>.mode-sirens-card{grid-column:1/-1}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot{min-width:0!important;max-width:100%!important;margin-top:clamp(8px,1.2cqi,16px)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-voice-slot>.argus-mode-voice-card{box-sizing:border-box;width:100%;min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-mode-voice-card[open]>.argus-voice-body{overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;max-height:min(45cqh,420px);overflow:hidden auto}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-sensor-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;min-width:0;display:grid}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card>*{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-preview{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:0 0 14px;padding:12px 14px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list{margin:8px 0;padding-left:22px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list>li{margin:6px 0}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-zone-list ul{color:#ffffffd1;margin:4px 0;padding-left:20px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-message-card{background:#ffffff0e;border:1px solid #ffffff1f;border-radius:16px;margin:10px 0;padding:12px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-label{color:#8fd8ff;margin-top:8px;font-size:.85em;font-weight:700}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-preview{white-space:normal;overflow-wrap:anywhere;background:#080f1b6b;border-radius:12px;margin:5px 0 10px;padding:9px 11px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] .argus-voice-default-toggle{align-items:center;gap:8px;display:flex}@container argus-widget (width<=760px){#argus-dashboard-root-v3 .argus-widget__content>.panel .panel-head{flex-wrap:wrap;align-items:flex-start;gap:8px}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity>.panel-head h2{overflow-wrap:anywhere;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr));width:100%;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #w-activity .panel-actions button{justify-content:center;white-space:normal!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));align-items:stretch;display:grid!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=access-control] #access-workspace .access-section{min-width:0;max-width:100%}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=automations] #w-automations>div,#argus-dashboard-root-v3 .argus-widget[data-widget-kind=backup-restore] #w-backup>div{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] #w-github{flex-direction:column!important;justify-content:center!important;align-items:stretch!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr))!important;max-width:100%!important}}@container argus-widget (width<=420px){#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs{gap:1px!important;min-height:42px!important;padding:2px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab{border-radius:9px!important;min-height:36px!important;padding:2px 1px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-icon{font-size:13px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-tabs>.tab .tab-label{font-size:9px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-grid-layout{grid-template-columns:minmax(0,1fr)!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=alarm-configuration] #mode-view .mode-section-card{border-radius:16px!important;padding:10px!important}#argus-dashboard-root-v3 .argus-widget[data-widget-kind=security-status] .support-actions-grid{grid-template-columns:minmax(0,1fr)!important}}.argus-dashboard__restore-entry{color:#fff;font:inherit;cursor:pointer;-webkit-backdrop-filter:blur(16px);background:#ffffff17;border:1px solid #fff3;border-radius:14px;margin:8px 16px 12px auto;padding:9px 14px;font-weight:700;display:block}.argus-dashboard__restore-entry:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}:host(:is([argus-contrast=high],.argus-contrast-high)){--glass-bg:#080c13;--glass-border:#94a3b8;--v2066-glass:#080c13;--v2066-border:#94a3b8;--v2066-text:#fff;--v2066-muted:#e2e8f0;--primary-text-color:#fff;--secondary-text-color:#e2e8f0}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.argus-widget__menu,.argus-widget__edit-header,.security-context,.security-context .context-tools,.security-context section,.security-context article,.context-zone-picker,.context-sensor-row,.context-sensor-card,.context-verification-dialog,.modal,#profile-dropdown,.mode-section-card,.user-card,.log-item,.glass-subpanel){color:#fff!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(.argus-widget,.security-context,.modal,#profile-dropdown) :is(h1,h2,h3,h4,p,label,small,.hint,.muted,.small,.setting-help,.context-sensor-name){color:#fff!important;text-shadow:none!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(input,select,textarea){-webkit-text-fill-color:#fff;color:#fff!important;background:#080c13!important;border-color:#94a3b8!important}:host(:is([argus-contrast=high],.argus-contrast-high)) ::placeholder{opacity:1;color:#cbd5e1!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline-offset:3px!important;outline:3px solid #7dd3fc!important}:host(:is([argus-contrast=high],.argus-contrast-high)) :is(button,a,summary):not(:disabled){border-color:#94a3b8}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 .argus-widget[data-widget-kind=activity-history] #activity-log .log-item{color:#fff!important;box-shadow:none!important;background:#000!important;border:2px solid #fff!important}:host(:is([argus-contrast=high],.argus-contrast-high)) #argus-dashboard-root-v3 #activity-log :is(.log-body,.log-title,.log-meta,.log-badge){color:#fff!important;opacity:1!important}", G = {
 	lg: 1200,
 	md: 996,
 	sm: 768,
 	xs: 480,
 	xxs: 0
-}, G = {
+}, fe = {
 	lg: 96,
 	md: 80,
 	sm: 64,
@@ -16113,7 +16062,7 @@ function he(e, t, n, r) {
 		0
 	]);
 	for (let n of t) i.add(n.x + n.w), i.add(n.x - e.w), a.add(n.y + n.h), a.add(n.y - e.h);
-	let o, s = Infinity;
+	let o, s = 1e400;
 	for (let r of i) for (let i of a) {
 		if (r < 0 || r + e.w > n || i < 0 || i + e.h > 480 || Math.abs(r - e.x) > e.w || Math.abs(i - e.y) > e.h) continue;
 		let a = Math.abs(r - e.x) / n + Math.abs(i - e.y) / e.h, c = {
@@ -16137,7 +16086,7 @@ function Y(e, t, n) {
 	return n.map((e) => i.get(e.i));
 }
 function X(e, t) {
-	let n = ye[t]?.find((t) => t.i === e.i) ?? e, r = Math.min(e.maxW ?? G[t], G[t] - e.x), i = Math.min(e.maxH ?? 480, 480 - e.y), a = t === "xs" || t === "xxs", o = [
+	let n = ye[t]?.find((t) => t.i === e.i) ?? e, r = Math.min(e.maxW ?? fe[t], fe[t] - e.x), i = Math.min(e.maxH ?? 480, 480 - e.y), a = t === "xs" || t === "xxs", o = [
 		["compact", .72],
 		["medium", 1],
 		["large", 1.32]
@@ -16229,7 +16178,7 @@ var ve = (e, t, n, r, i) => ({
 	"security-status": 12
 };
 function Se(e, t) {
-	let n = G[t], r = Math.min(n, be[e.i] || 12), i = Math.min(n, Math.max(r, Math.round(e.w))), a = Math.min(q, Math.max(xe[e.i] || 2, Math.round(e.h)));
+	let n = fe[t], r = Math.min(n, be[e.i] || 12), i = Math.min(n, Math.max(r, Math.round(e.w))), a = Math.min(q, Math.max(xe[e.i] || 2, Math.round(e.h)));
 	return {
 		...e,
 		x: Math.max(0, Math.min(Math.round(e.x), n - i)),
@@ -16251,7 +16200,7 @@ function Ce(e, t = {}) {
 			if (Array.isArray(n) && n.length) return n;
 		}
 	};
-	return Object.keys(G).forEach((e) => {
+	return Object.keys(fe).forEach((e) => {
 		let t = o(e);
 		if (!i && t) {
 			a[e] = t.map((t) => Se(t, e));
@@ -16264,7 +16213,7 @@ function Ce(e, t = {}) {
 		let r = K[e], s = new Map(t.map((e) => [e.i, e])), c = ye[e] || [], l = new Map(c.map((e) => [e.i, e])), u = [...c.map((t) => {
 			let i = s.get(t.i);
 			if (!i) return t;
-			let a = Math.round(i.x * G[e] / r), o = Math.max(1, Math.round(i.w * G[e] / r)), c = n.layoutVersion === 3 ? 9 : 4.5;
+			let a = Math.round(i.x * fe[e] / r), o = Math.max(1, Math.round(i.w * fe[e] / r)), c = n.layoutVersion === 3 ? 9 : 4.5;
 			return {
 				...t,
 				...i,
@@ -16277,15 +16226,15 @@ function Ce(e, t = {}) {
 			let i = n.layoutVersion === 3 ? 9 : 4.5;
 			return {
 				...t,
-				x: Math.round(t.x * G[e] / r),
-				w: Math.max(1, Math.round(t.w * G[e] / r)),
+				x: Math.round(t.x * fe[e] / r),
+				w: Math.max(1, Math.round(t.w * fe[e] / r)),
 				y: Math.round(t.y * i),
 				h: Math.round(t.h * i)
 			};
 		})], d = [];
 		for (let t of u) {
 			let n = Se(t, e);
-			d.push(we(d, n) ? Te(d, n, G[e]) : n);
+			d.push(we(d, n) ? Te(d, n, fe[e]) : n);
 		}
 		a[e] = d;
 	}), {
@@ -16330,15 +16279,15 @@ function Ee(e) {
 	return t;
 }
 function De(e) {
-	return Object.keys(G).some((t) => {
+	return Object.keys(fe).some((t) => {
 		let n = e[t] || [];
 		return n.some((e, t) => n.slice(t + 1).some((t) => we([e], t)));
 	});
 }
 function Oe(e) {
 	let t = {};
-	return Object.keys(G).forEach((n) => {
-		let r = G[n], i = Array.isArray(e?.[n]) ? e[n] : [], a = /* @__PURE__ */ new Map();
+	return Object.keys(fe).forEach((n) => {
+		let r = fe[n], i = Array.isArray(e?.[n]) ? e[n] : [], a = /* @__PURE__ */ new Map();
 		for (let e of i) e && typeof e == "object" && typeof e.i == "string" && e.i && [
 			e.x,
 			e.y,
@@ -16430,7 +16379,7 @@ function Ne(e, t) {
 	t < 56 ? window.scrollBy(0, -12) : t > window.innerHeight - 56 && window.scrollBy(0, 12);
 }
 function Pe(e) {
-	let { item: t, grid: n, origin: r, pointer: i, layout: a, resizing: o, bp: s } = e, c = G[s], l = (n.clientWidth - 32 + 2) / c, u = Me(n), d = i.x - r.x + e.gridOrigin.x - u.x, f = i.y - r.y + e.gridOrigin.y - u.y, p = o ? {
+	let { item: t, grid: n, origin: r, pointer: i, layout: a, resizing: o, bp: s } = e, c = fe[s], l = (n.clientWidth - 32 + 2) / c, u = Me(n), d = i.x - r.x + e.gridOrigin.x - u.x, f = i.y - r.y + e.gridOrigin.y - u.y, p = o ? {
 		...t,
 		w: t.w + d / l,
 		h: t.h + f / 12
@@ -16735,7 +16684,7 @@ function rt(e, t) {
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
 		if (i !== void 0) {
-			if (i.x + i.w > t.cols && (i.x = t.cols - i.w), i.x < 0 && (i.x = 0, i.w = t.cols), i.y === Infinity && (i.y = Xe(n)), !i.static) n.push(i);
+			if (i.x + i.w > t.cols && (i.x = t.cols - i.w), i.x < 0 && (i.x = 0, i.w = t.cols), i.y === 1e400 && (i.y = Xe(n)), !i.static) n.push(i);
 			else for (; Ge(n, i);) i.y++;
 		}
 	}
@@ -16802,8 +16751,8 @@ var st = [{
 	name: "minMaxSize",
 	constrainSize(e, t, n) {
 		return {
-			w: ot(t, e.minW ?? 1, e.maxW ?? Infinity),
-			h: ot(n, e.minH ?? 1, e.maxH ?? Infinity)
+			w: ot(t, e.minW ?? 1, e.maxW ?? 1e400),
+			h: ot(n, e.minH ?? 1, e.maxH ?? 1e400)
 		};
 	}
 }];
@@ -16949,7 +16898,7 @@ var Et = Ct, Dt = {
 	rowHeight: 150,
 	margin: [10, 10],
 	containerPadding: null,
-	maxRows: Infinity
+	maxRows: 1e400
 }, Ot = {
 	enabled: !0,
 	bounded: !1,
@@ -17270,7 +17219,7 @@ function bn(e, t) {
 }
 function xn({ x: e, y: t }, n, r) {
 	let i = `translate(${e}${r},${t}${r})`;
-	return n && (i = `translate(${`${typeof n.x == "string" ? n.x : n.x + r}`}, ${`${typeof n.y == "string" ? n.y : n.y + r}`})` + i), i;
+	return n && (i = `translate(${typeof n.x == "string" ? n.x : n.x + r}, ${typeof n.y == "string" ? n.y : n.y + r})` + i), i;
 }
 function Sn(e, t) {
 	return e.targetTouches && Qt(e.targetTouches, (e) => t === e.identifier) || e.changedTouches && Qt(e.changedTouches, (e) => t === e.identifier);
@@ -17803,7 +17752,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 	}
 	function R({ x: e, y: t }, n, r) {
 		let i = `translate(${e}${r},${t}${r})`;
-		return n && (i = `translate(${`${typeof n.x == "string" ? n.x : n.x + r}`}, ${`${typeof n.y == "string" ? n.y : n.y + r}`})` + i), i;
+		return n && (i = `translate(${typeof n.x == "string" ? n.x : n.x + r}, ${typeof n.y == "string" ? n.y : n.y + r})` + i), i;
 	}
 	function z(e, t) {
 		return e.targetTouches && _(e.targetTouches, (e) => t === e.identifier) || e.changedTouches && _(e.changedTouches, (e) => t === e.identifier);
@@ -17850,8 +17799,8 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 	function ce(e, t, n) {
 		if (!e.props.bounds) return [t, n];
 		let { bounds: r } = e.props;
-		r = typeof r == "string" ? r : W(r);
-		let i = G(e);
+		r = typeof r == "string" ? r : G(r);
+		let i = fe(e);
 		if (typeof r == "string") {
 			let { ownerDocument: e } = i, t = e.defaultView;
 			if (!t) throw Error("Cannot resolve the owner window of the draggable node.");
@@ -17870,20 +17819,20 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 	function H(e, t, n) {
 		return [Math.round(t / e[0]) * e[0], Math.round(n / e[1]) * e[1]];
 	}
-	function le(e) {
+	function U(e) {
 		return e.props.axis === "both" || e.props.axis === "x";
 	}
-	function ue(e) {
+	function le(e) {
 		return e.props.axis === "both" || e.props.axis === "y";
 	}
-	function de(e, t, n) {
+	function ue(e, t, n) {
 		let r = typeof t == "number" ? z(e, t) : null;
 		if (typeof t == "number" && !r) return null;
-		let i = G(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
+		let i = fe(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
 		return te(r || e, a, n.props.scale);
 	}
-	function fe(e, t, n) {
-		let r = !b(e.lastX), i = G(e);
+	function de(e, t, n) {
+		let r = !b(e.lastX), i = fe(e);
 		return r ? {
 			node: i,
 			deltaX: 0,
@@ -17902,7 +17851,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 			y: n
 		};
 	}
-	function U(e, t) {
+	function W(e, t) {
 		let n = e.props.scale;
 		return {
 			node: t.node,
@@ -17914,7 +17863,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 			lastY: e.state.y
 		};
 	}
-	function W(e) {
+	function G(e) {
 		return {
 			left: e.left,
 			top: e.top,
@@ -17922,7 +17871,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 			bottom: e.bottom
 		};
 	}
-	function G(e) {
+	function fe(e) {
 		let t = e.findDOMNode();
 		if (!t) throw Error("<DraggableCore>: Unmounted during event!");
 		return t;
@@ -17949,12 +17898,12 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 				e.type === "touchstart" && !this.props.allowMobileScroll && e.preventDefault();
 				let r = re(e);
 				this.touchIdentifier = r;
-				let i = de(e, r, this);
+				let i = ue(e, r, this);
 				if (i == null) return;
-				let { x: a, y: o } = i, s = fe(this, a, o);
+				let { x: a, y: o } = i, s = de(this, a, o);
 				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && V(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, M(n, J.move, this.handleDrag), M(n, J.stop, this.handleDragStop));
 			}, this.handleDrag = (e) => {
-				let t = de(e, this.touchIdentifier, this);
+				let t = ue(e, this.touchIdentifier, this);
 				if (t == null) return;
 				let { x: n, y: r } = t;
 				if (Array.isArray(this.props.grid)) {
@@ -17962,7 +17911,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 					if ([e, t] = H(this.props.grid, e, t), !e && !t) return;
 					n = this.lastX + e, r = this.lastY + t;
 				}
-				let i = fe(this, n, r);
+				let i = de(this, n, r);
 				if (this.props.onDrag(e, i) === !1 || this.mounted === !1) try {
 					this.handleDragStop(new MouseEvent("mouseup"));
 				} catch {
@@ -17972,14 +17921,14 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 				else this.lastX = n, this.lastY = r;
 			}, this.handleDragStop = (e) => {
 				if (!this.dragging) return;
-				let t = de(e, this.touchIdentifier, this);
+				let t = ue(e, this.touchIdentifier, this);
 				if (t == null) return;
 				let { x: n, y: r } = t;
 				if (Array.isArray(this.props.grid)) {
 					let e = n - this.lastX || 0, t = r - this.lastY || 0;
 					[e, t] = H(this.props.grid, e, t), n = this.lastX + e, r = this.lastY + t;
 				}
-				let i = fe(this, n, r);
+				let i = de(this, n, r);
 				if (this.props.onStop(e, i) === !1 || this.mounted === !1) return !1;
 				let a = this.findDOMNode();
 				a && this.props.enableUserSelectHack && ie(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (N(a.ownerDocument, J.move, this.handleDrag), N(a.ownerDocument, J.stop, this.handleDragStop));
@@ -18047,14 +17996,14 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 	var Y = class extends p.Component {
 		constructor(e) {
 			super(e), this.onDragStart = (e, t) => {
-				if (this.props.onStart(e, U(this, t)) === !1) return !1;
+				if (this.props.onStart(e, W(this, t)) === !1) return !1;
 				this.setState({
 					dragging: !0,
 					dragged: !0
 				});
 			}, this.onDrag = (e, t) => {
 				if (!this.state.dragging) return !1;
-				let n = U(this, t), r = {
+				let n = W(this, t), r = {
 					x: n.x,
 					y: n.y,
 					slackX: 0,
@@ -18069,7 +18018,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 				if (this.props.onDrag(e, n) === !1) return !1;
 				this.setState(r);
 			}, this.onDragStop = (e, t) => {
-				if (!this.state.dragging || this.props.onStop(e, U(this, t)) === !1) return !1;
+				if (!this.state.dragging || this.props.onStop(e, W(this, t)) === !1) return !1;
 				let n = {
 					dragging: !1,
 					slackX: 0,
@@ -18111,8 +18060,8 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 		}
 		render() {
 			let { axis: e, bounds: t, children: n, defaultPosition: r, defaultClassName: i, defaultClassNameDragging: a, defaultClassNameDragged: o, position: s, positionOffset: c, scale: l, ...u } = this.props, d = {}, f = null, m = !s || this.state.dragging, h = s || r, _ = {
-				x: le(this) && m ? this.state.x : h.x,
-				y: ue(this) && m ? this.state.y : h.y
+				x: U(this) && m ? this.state.x : h.x,
+				y: le(this) && m ? this.state.y : h.y
 			};
 			this.state.isElementSVG ? f = ne(_, c) : d = L(_, c);
 			let v = p.Children.only(n), y = (0, g.clsx)(v.props.className || "", i, {
@@ -18494,7 +18443,7 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 		handleSize: [20, 20],
 		lockAspectRatio: !1,
 		minConstraints: [20, 20],
-		maxConstraints: [Infinity, Infinity],
+		maxConstraints: [1e400, 1e400],
 		resizeHandles: ["se"],
 		transformScale: 1
 	};
@@ -18651,8 +18600,9 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 		throw Error("Don't instantiate Resizable directly! Use require('react-resizable').Resizable");
 	}, t.exports.Resizable = Jn().default, t.exports.ResizableBox = Yn().default;
 })), Zn = /* @__PURE__ */ o(((e, t, n) => {
-	(function(n, r) {
-		typeof e == "object" && t !== void 0 ? r(e) : typeof define == "function" && define.amd ? define(["exports"], r) : (n = typeof globalThis < "u" ? globalThis : n || self, r(n["fast-equals"] = {}));
+	var r;
+	(function(n, i) {
+		typeof e == "object" && t !== void 0 ? i(e) : typeof r == "function" && r.amd ? r(["exports"], i) : (n = typeof globalThis < "u" ? globalThis : n || self, i(n["fast-equals"] = {}));
 	})(n, (function(e) {
 		function t(e) {
 			return function(t, n, r, i, a, o, s) {
@@ -18686,17 +18636,17 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 		}
 		var s = Object.prototype.toString;
 		function c(e) {
-			var t = e.areArraysEqual, n = e.areDatesEqual, r = e.areMapsEqual, c = e.areObjectsEqual, l = e.areRegExpsEqual, u = e.areSetsEqual, d = e.createIsNestedEqual, f = d(p);
-			function p(e, d, p) {
-				if (e === d) return !0;
-				if (!e || !d || typeof e != "object" || typeof d != "object") return e !== e && d !== d;
-				if (i(e) && i(d)) return c(e, d, f, p);
-				var m = Array.isArray(e), h = Array.isArray(d);
-				if (m || h) return m === h && t(e, d, f, p);
+			var t = e.areArraysEqual, n = e.areDatesEqual, r = e.areMapsEqual, c = e.areObjectsEqual, l = e.areRegExpsEqual, u = e.areSetsEqual, d = (0, e.createIsNestedEqual)(f);
+			function f(e, f, p) {
+				if (e === f) return !0;
+				if (!e || !f || typeof e != "object" || typeof f != "object") return e !== e && f !== f;
+				if (i(e) && i(f)) return c(e, f, d, p);
+				var m = Array.isArray(e), h = Array.isArray(f);
+				if (m || h) return m === h && t(e, f, d, p);
 				var g = s.call(e);
-				return g === s.call(d) ? g === "[object Date]" ? n(e, d, f, p) : g === "[object RegExp]" ? l(e, d, f, p) : g === "[object Map]" ? r(e, d, f, p) : g === "[object Set]" ? u(e, d, f, p) : g === "[object Object]" || g === "[object Arguments]" ? a(e) || a(d) ? !1 : c(e, d, f, p) : g === "[object Boolean]" || g === "[object Number]" || g === "[object String]" ? o(e.valueOf(), d.valueOf()) : !1 : !1;
+				return g === s.call(f) ? g === "[object Date]" ? n(e, f, d, p) : g === "[object RegExp]" ? l(e, f, d, p) : g === "[object Map]" ? r(e, f, d, p) : g === "[object Set]" ? u(e, f, d, p) : g === "[object Object]" || g === "[object Arguments]" ? a(e) || a(f) ? !1 : c(e, f, d, p) : g === "[object Boolean]" || g === "[object Number]" || g === "[object String]" ? o(e.valueOf(), f.valueOf()) : !1 : !1;
 			}
-			return p;
+			return f;
 		}
 		function l(e, t, n, r) {
 			var i = e.length;
@@ -18769,36 +18719,27 @@ var Un = /* @__PURE__ */ o(((e, t) => {
 			areRegExpsEqual: v,
 			areSetsEqual: b,
 			createIsNestedEqual: t
-		}), C = c(x);
-		function w(e, t) {
-			return C(e, t, void 0);
-		}
-		var T = c(r(x, { createIsNestedEqual: function() {
+		}), C = c(x), w = c(r(x, { createIsNestedEqual: function() {
+			return o;
+		} })), T = c(S), E = c(r(S, { createIsNestedEqual: function() {
 			return o;
 		} }));
-		function E(e, t) {
-			return T(e, t, void 0);
-		}
-		var D = c(S);
-		function O(e, t) {
-			return D(e, t, /* @__PURE__ */ new WeakMap());
-		}
-		var k = c(r(S, { createIsNestedEqual: function() {
-			return o;
-		} }));
-		function A(e, t) {
-			return k(e, t, /* @__PURE__ */ new WeakMap());
-		}
-		function j(e) {
-			return c(r(x, e(x)));
-		}
-		function M(e) {
+		e.circularDeepEqual = function(e, t) {
+			return T(e, t, /* @__PURE__ */ new WeakMap());
+		}, e.circularShallowEqual = function(e, t) {
+			return E(e, t, /* @__PURE__ */ new WeakMap());
+		}, e.createCustomCircularEqual = function(e) {
 			var t = c(r(S, e(S)));
 			return (function(e, n, r) {
 				return r === void 0 && (r = /* @__PURE__ */ new WeakMap()), t(e, n, r);
 			});
-		}
-		e.circularDeepEqual = O, e.circularShallowEqual = A, e.createCustomCircularEqual = M, e.createCustomEqual = j, e.deepEqual = w, e.sameValueZeroEqual = o, e.shallowEqual = E, Object.defineProperty(e, "__esModule", { value: !0 });
+		}, e.createCustomEqual = function(e) {
+			return c(r(x, e(x)));
+		}, e.deepEqual = function(e, t) {
+			return C(e, t, void 0);
+		}, e.sameValueZeroEqual = o, e.shallowEqual = function(e, t) {
+			return w(e, t, void 0);
+		}, Object.defineProperty(e, "__esModule", { value: !0 });
 	}));
 })), Qn = Xn(), $n = Zn(), er = 50, tr = 12;
 function nr(e) {
@@ -18828,7 +18769,7 @@ function rr(e) {
 	};
 }
 function ir(e) {
-	let { children: t, cols: n, containerWidth: r, margin: i, containerPadding: a, rowHeight: o, maxRows: s, isDraggable: c, isResizable: l, isBounded: u, allowMobileScroll: d, static: f, useCSSTransforms: p = !0, usePercentages: m = !1, transformScale: h = 1, positionStrategy: g, dragThreshold: _ = 0, droppingPosition: v, className: y = "", style: b, handle: x = "", cancel: S = "", x: C, y: w, w: T, h: E, minW: O = 1, maxW: k = Infinity, minH: j = 1, maxH: M = Infinity, i: N, resizeHandles: P, resizeHandle: F, constraints: I = st, layoutItem: ee, layout: te = [], onDragStart: L, onDrag: ne, onDragStop: R, onResizeStart: z, onResize: re, onResizeStop: B } = e, [V, ie] = (0, D.useState)(!1), [ae, oe] = (0, D.useState)(!1), se = (0, D.useRef)(null), ce = (0, D.useRef)({
+	let { children: t, cols: n, containerWidth: r, margin: i, containerPadding: a, rowHeight: o, maxRows: s, isDraggable: c, isResizable: l, isBounded: u, allowMobileScroll: d, static: f, useCSSTransforms: p = !0, usePercentages: m = !1, transformScale: h = 1, positionStrategy: g, dragThreshold: _ = 0, droppingPosition: v, className: y = "", style: b, handle: x = "", cancel: S = "", x: C, y: w, w: T, h: E, minW: O = 1, maxW: k = 1e400, minH: j = 1, maxH: M = 1e400, i: N, resizeHandles: P, resizeHandle: F, constraints: I = st, layoutItem: ee, layout: te = [], onDragStart: L, onDrag: ne, onDragStop: R, onResizeStart: z, onResize: re, onResizeStop: B } = e, [V, ie] = (0, D.useState)(!1), [ae, oe] = (0, D.useState)(!1), se = (0, D.useRef)(null), ce = (0, D.useRef)({
 		left: 0,
 		top: 0
 	}), H = (0, D.useRef)({
@@ -18836,12 +18777,12 @@ function ir(e) {
 		left: 0,
 		width: 0,
 		height: 0
-	}), le = (0, D.useRef)(void 0), ue = (0, D.useRef)(te);
-	ue.current = te;
-	let de = (0, D.useRef)(null), fe = (0, D.useRef)(null), U = (0, D.useRef)(!1), W = (0, D.useRef)({
+	}), U = (0, D.useRef)(void 0), le = (0, D.useRef)(te);
+	le.current = te;
+	let ue = (0, D.useRef)(null), de = (0, D.useRef)(null), W = (0, D.useRef)(!1), G = (0, D.useRef)({
 		x: 0,
 		y: 0
-	}), G = (0, D.useRef)(!1), K = (0, D.useRef)(null), q = (0, D.useMemo)(() => ({
+	}), fe = (0, D.useRef)(!1), K = (0, D.useRef)(null), q = (0, D.useMemo)(() => ({
 		cols: n,
 		containerPadding: a,
 		containerWidth: r,
@@ -18872,7 +18813,7 @@ function ir(e) {
 	]), me = (0, D.useCallback)((e) => ({
 		...pe,
 		containerHeight: e ?? pe.containerHeight,
-		layout: ue.current
+		layout: le.current
 	}), [pe]), J = (0, D.useMemo)(() => ee ?? {
 		i: N,
 		x: C,
@@ -18922,10 +18863,10 @@ function ir(e) {
 		};
 		if (ce.current = l, K.current ||= rr(t instanceof HTMLElement ? t : null), _ > 0) {
 			let t = e;
-			W.current = {
+			G.current = {
 				x: t.clientX,
 				y: t.clientY
-			}, U.current = !0, G.current = !1, ie(!0);
+			}, W.current = !0, fe.current = !1, ie(!0);
 			return;
 		}
 		ie(!0);
@@ -18948,10 +18889,10 @@ function ir(e) {
 	]), X = (0, D.useCallback)((e, { node: t, deltaX: n, deltaY: a }) => {
 		if (!ne || !V) return;
 		let s = e;
-		if (U.current && !G.current) {
-			let n = s.clientX - W.current.x, r = s.clientY - W.current.y;
+		if (W.current && !fe.current) {
+			let n = s.clientX - G.current.x, r = s.clientY - G.current.y;
 			if (Math.hypot(n, r) < _) return;
-			if (G.current = !0, U.current = !1, L) {
+			if (fe.current = !0, W.current = !1, L) {
 				let n = Ve(q, ce.current.top, ce.current.left), { x: r, y: i } = ct(I, J, n.x, n.y, me());
 				L(N, r, i, {
 					e,
@@ -19001,8 +18942,8 @@ function ir(e) {
 	]), ge = (0, D.useCallback)((e, { node: t }) => {
 		if (!R || !V) return;
 		K.current?.stop(), K.current = null;
-		let n = U.current;
-		if (U.current = !1, G.current = !1, W.current = {
+		let n = W.current;
+		if (W.current = !1, fe.current = !1, G.current = {
 			x: 0,
 			y: 0
 		}, n) {
@@ -19035,7 +18976,7 @@ function ir(e) {
 		me,
 		N
 	]);
-	de.current = Y, fe.current = X;
+	ue.current = Y, de.current = X;
 	let _e = (0, D.useCallback)((e, { node: t, size: n, handle: i }, a, o) => {
 		let s = o === "onResizeStart" ? z : o === "onResize" ? re : B;
 		if (!s) return;
@@ -19113,7 +19054,7 @@ function ir(e) {
 		if (!v) return;
 		let e = se.current;
 		if (!e) return;
-		let t = le.current || {
+		let t = U.current || {
 			left: 0,
 			top: 0
 		}, n = V && (v.left !== t.left || v.top !== t.top);
@@ -19127,7 +19068,7 @@ function ir(e) {
 				x: v.left,
 				y: v.top
 			};
-			de.current?.(v.e, t);
+			ue.current?.(v.e, t);
 		} else if (n) {
 			let t = {
 				node: e,
@@ -19138,9 +19079,9 @@ function ir(e) {
 				x: v.left,
 				y: v.top
 			};
-			fe.current?.(v.e, t);
+			de.current?.(v.e, t);
 		}
-		le.current = v;
+		U.current = v;
 	}, [
 		v,
 		V,
@@ -19272,10 +19213,10 @@ function fr(e) {
 	}), [a]), k = (0, D.useMemo)(() => ({
 		...At,
 		...o
-	}), [o]), { cols: j, rowHeight: M, maxRows: N, margin: P, containerPadding: F } = T, { enabled: I, bounded: ee, handle: te, cancel: L, threshold: ne, allowMobileScroll: R } = E, { enabled: z, handles: re, handleComponent: B } = O, { enabled: V, defaultItem: ie, onDragOver: ae, touchEnabled: oe = !0, touchDragSource: se = "[data-rgl-draggable]" } = k, ce = c ?? Bt("vertical"), H = ce.type, le = ce.allowOverlap, ue = ce.preventCollision ?? !1, de = (0, D.useMemo)(() => d ?? {
+	}), [o]), { cols: j, rowHeight: M, maxRows: N, margin: P, containerPadding: F } = T, { enabled: I, bounded: ee, handle: te, cancel: L, threshold: ne, allowMobileScroll: R } = E, { enabled: z, handles: re, handleComponent: B } = O, { enabled: V, defaultItem: ie, onDragOver: ae, touchEnabled: oe = !0, touchDragSource: se = "[data-rgl-draggable]" } = k, ce = c ?? Bt("vertical"), H = ce.type, U = ce.allowOverlap, le = ce.preventCollision ?? !1, ue = (0, D.useMemo)(() => d ?? {
 		i: "__dropping-elem__",
 		...ie
-	}, [d, ie]), fe = s.type === "transform", U = s.scale, W = F ?? P, [G, K] = (0, D.useState)(!1), [q, pe] = (0, D.useState)(() => dr(u, t, j, ce)), [me, J] = (0, D.useState)(null), [he, Y] = (0, D.useState)(!1), [X, ge] = (0, D.useState)(null), [_e, ve] = (0, D.useState)(), ye = (0, D.useRef)(void 0);
+	}, [d, ie]), de = s.type === "transform", W = s.scale, G = F ?? P, [fe, K] = (0, D.useState)(!1), [q, pe] = (0, D.useState)(() => dr(u, t, j, ce)), [me, J] = (0, D.useState)(null), [he, Y] = (0, D.useState)(!1), [X, ge] = (0, D.useState)(null), [_e, ve] = (0, D.useState)(), ye = (0, D.useRef)(void 0);
 	ye.current = _e;
 	let be = (0, D.useRef)(null), xe = (0, D.useRef)(null), Se = (0, D.useRef)(null), Ce = (0, D.useRef)(0), we = (0, D.useRef)(q), Te = (0, D.useRef)(u), Ee = (0, D.useRef)(t), De = (0, D.useRef)(H), Oe = (0, D.useRef)(null), ke = (0, D.useRef)(!1), Ae = (0, D.useRef)(null), je = (0, D.useRef)(null);
 	je.current = X;
@@ -19306,7 +19247,7 @@ function fr(e) {
 	]), (0, D.useEffect)(() => {
 		if (!me && !X && !(0, $n.deepEqual)(q, we.current)) {
 			we.current = q;
-			let e = q.filter((e) => e.i !== de.i);
+			let e = q.filter((e) => e.i !== ue.i);
 			g(e);
 		}
 	}, [
@@ -19314,18 +19255,18 @@ function fr(e) {
 		me,
 		X,
 		g,
-		de.i
+		ue.i
 	]);
 	let Pe = (0, D.useMemo)(() => {
 		if (!f) return;
-		let e = Xe(q), t = W[1];
+		let e = Xe(q), t = G[1];
 		return e * M + (e - 1) * P[1] + t * 2 + "px";
 	}, [
 		f,
 		q,
 		M,
 		P,
-		W
+		G
 	]), Fe = (0, D.useCallback)((e, t, n, r) => {
 		let i = Ne.current, a = Ze(i, e);
 		if (!a) return;
@@ -19346,28 +19287,28 @@ function fr(e) {
 			x: o.x,
 			y: o.y,
 			i: e
-		}, c = it(i, o, t, n, !0, ue, H, j, le);
+		}, c = it(i, o, t, n, !0, le, H, j, U);
 		v(c, a, o, s, r.e, r.node), pe(ce.compact(c, j)), J(s);
 	}, [
-		ue,
+		le,
 		H,
 		j,
-		le,
+		U,
 		ce,
 		v
 	]), Le = (0, D.useCallback)((e, t, n, r) => {
 		if (!be.current) return;
 		let i = Ne.current, a = be.current, o = Ze(i, e);
 		if (!o) return;
-		let s = it(i, o, t, n, !0, ue, H, j, le), c = ce.compact(s, j);
+		let s = it(i, o, t, n, !0, le, H, j, U), c = ce.compact(s, j);
 		y(c, a, o, null, r.e, r.node);
 		let l = Se.current;
 		be.current = null, Se.current = null, J(null), pe(c), l && !(0, $n.deepEqual)(l, c) && g(c);
 	}, [
-		ue,
+		le,
 		H,
 		j,
-		le,
+		U,
 		ce,
 		y,
 		g
@@ -19389,7 +19330,7 @@ function fr(e) {
 			"ne",
 			"n",
 			"nw"
-		].includes(o) && (l = e.y + (e.h - n), n = e.y !== l && l < 0 ? e.h : n, l = l < 0 ? 0 : l), s = !0), ue && !le && Ke(i, {
+		].includes(o) && (l = e.y + (e.h - n), n = e.y !== l && l < 0 ? e.h : n, l = l < 0 ? 0 : l), s = !0), le && !U && Ke(i, {
 			...e,
 			w: t,
 			h: n,
@@ -19398,7 +19339,7 @@ function fr(e) {
 		}).filter((t) => t.i !== e.i).length > 0 && (l = e.y, n = e.h, c = e.x, t = e.w, s = !1), e.w = t, e.h = n, (o === "n" || o === "nw" || o === "ne") && (e.y = l ?? e.y), e));
 		if (!d) return;
 		let f = u;
-		s && c !== void 0 && l !== void 0 && (f = it(u, d, c, l, !0, ue, H, j, le));
+		s && c !== void 0 && l !== void 0 && (f = it(u, d, c, l, !0, le, H, j, U));
 		let p = {
 			w: d.w,
 			h: d.h,
@@ -19415,10 +19356,10 @@ function fr(e) {
 		}
 		pe(m), J(p);
 	}, [
-		ue,
+		le,
 		H,
 		j,
-		le,
+		U,
 		ce,
 		x
 	]), Be = (0, D.useCallback)((e, t, n, r) => {
@@ -19455,37 +19396,37 @@ function fr(e) {
 			clientX: e,
 			clientY: t,
 			gridElement: i,
-			droppingItem: de,
+			droppingItem: ue,
 			event: r,
-			transformScale: U,
+			transformScale: W,
 			cols: j,
 			margin: P,
 			maxRows: N,
 			rowHeight: M,
 			width: n,
-			containerPadding: W
+			containerPadding: G
 		});
-		Ve(de, a, o, !!je.current);
+		Ve(ue, a, o, !!je.current);
 	}, [
-		de,
-		U,
+		ue,
+		W,
 		j,
 		P,
 		N,
 		M,
 		n,
-		W,
+		G,
 		Ve
 	]), Ue = (0, D.useCallback)(() => {
 		let e = Ne.current;
-		if (!e.some((e) => e.i === de.i)) {
+		if (!e.some((e) => e.i === ue.i)) {
 			ge(null), J(null), ve(void 0);
 			return;
 		}
-		let t = ce.compact(e.filter((e) => e.i !== de.i), j);
+		let t = ce.compact(e.filter((e) => e.i !== ue.i), j);
 		pe(t), ge(null), J(null), ve(void 0);
 	}, [
-		de.i,
+		ue.i,
 		j,
 		ce
 	]), We = (0, D.useCallback)((e) => {
@@ -19493,7 +19434,7 @@ function fr(e) {
 		let t = ae ? ae(e.nativeEvent) : w(e);
 		if (t === !1) return X && Ue(), !1;
 		let { dragOffsetX: r = 0, dragOffsetY: i = 0, ...a } = t ?? {}, o = {
-			...de,
+			...ue,
 			...a
 		}, { newDroppingPosition: s, calculatedXY: c } = or({
 			clientX: e.clientX,
@@ -19503,37 +19444,37 @@ function fr(e) {
 			event: e.nativeEvent,
 			dragOffsetX: r,
 			dragOffsetY: i,
-			transformScale: U,
+			transformScale: W,
 			cols: j,
 			margin: P,
 			maxRows: N,
 			rowHeight: M,
 			width: n,
-			containerPadding: W
+			containerPadding: G
 		});
 		Ve(o, s, c, !!X);
 	}, [
 		X,
-		de,
+		ue,
 		ae,
 		w,
 		Ue,
 		Ve,
-		U,
+		W,
 		j,
 		P,
 		N,
 		M,
 		n,
-		W
+		G
 	]), Ge = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), Ce.current--, Ce.current < 0 && (Ce.current = 0), Ce.current === 0 && Ue();
 	}, [Ue]), qe = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), Ce.current++;
 	}, []), Je = (0, D.useCallback)((e) => {
-		let t = Ne.current, n = t.find((e) => e.i === de.i);
+		let t = Ne.current, n = t.find((e) => e.i === ue.i);
 		Ue(), Me.current(t, n, e);
-	}, [de.i, Ue]), Ye = (0, D.useCallback)((e) => {
+	}, [ue.i, Ue]), Ye = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), Ce.current = 0, Je(e.nativeEvent);
 	}, [Je]);
 	(0, D.useEffect)(() => {
@@ -19580,7 +19521,7 @@ function fr(e) {
 		He,
 		Ue,
 		Je,
-		de.i
+		ue.i
 	]);
 	let Qe = (0, D.useCallback)((e, t) => {
 		if (!e || !e.key) return null;
@@ -19591,7 +19532,7 @@ function fr(e) {
 			containerWidth: n,
 			cols: j,
 			margin: P,
-			containerPadding: W,
+			containerPadding: G,
 			maxRows: N,
 			rowHeight: M,
 			cancel: L,
@@ -19606,9 +19547,9 @@ function fr(e) {
 			isResizable: a,
 			isBounded: c,
 			allowMobileScroll: R,
-			useCSSTransforms: fe && G,
-			usePercentages: !G,
-			transformScale: U,
+			useCSSTransforms: de && fe,
+			usePercentages: !fe,
+			transformScale: W,
 			positionStrategy: s,
 			dragThreshold: ne,
 			w: r.w,
@@ -19634,7 +19575,7 @@ function fr(e) {
 		n,
 		j,
 		P,
-		W,
+		G,
 		N,
 		M,
 		L,
@@ -19648,9 +19589,9 @@ function fr(e) {
 		I,
 		z,
 		ee,
+		de,
 		fe,
-		G,
-		U,
+		W,
 		s,
 		ne,
 		_e,
@@ -19667,14 +19608,14 @@ function fr(e) {
 		containerWidth: n,
 		cols: j,
 		margin: P,
-		containerPadding: W,
+		containerPadding: G,
 		maxRows: N,
 		rowHeight: M,
 		isDraggable: !1,
 		isResizable: !1,
 		isBounded: !1,
-		useCSSTransforms: fe,
-		transformScale: U,
+		useCSSTransforms: de,
+		transformScale: W,
 		constraints: l,
 		layout: q,
 		children: /* @__PURE__ */ (0, A.jsx)("div", {})
@@ -19756,7 +19697,7 @@ function gr(e, t, n, r, i = !1) {
 	return r.compact(o, n);
 }
 function _r(e) {
-	let { children: t, width: n, breakpoint: r, breakpoints: i = pr, cols: a = mr, layouts: o = {}, rowHeight: s = 150, maxRows: c = Infinity, margin: l = [10, 10], containerPadding: u = null, compactor: d, onBreakpointChange: f = hr, onLayoutChange: p = hr, onWidthChange: m = hr, ...h } = e, g = d ?? Bt("vertical"), _ = g.type, v = g.allowOverlap, y = (0, D.useMemo)(() => r ?? Ht(i, n), []), b = (0, D.useMemo)(() => Ut(y, a), [y, a]), x = (0, D.useMemo)(() => Wt(o, i, y, y, b, _), []), [S, C] = (0, D.useState)(y), [w, T] = (0, D.useState)(b), [E, O] = (0, D.useState)(x), [k, j] = (0, D.useState)(o), M = (0, D.useRef)(n), N = (0, D.useRef)(r), P = (0, D.useRef)(i), F = (0, D.useRef)(a), I = (0, D.useRef)(o), ee = (0, D.useRef)(_), te = (0, D.useRef)(k);
+	let { children: t, width: n, breakpoint: r, breakpoints: i = pr, cols: a = mr, layouts: o = {}, rowHeight: s = 150, maxRows: c = 1e400, margin: l = [10, 10], containerPadding: u = null, compactor: d, onBreakpointChange: f = hr, onLayoutChange: p = hr, onWidthChange: m = hr, ...h } = e, g = d ?? Bt("vertical"), _ = g.type, v = g.allowOverlap, y = (0, D.useMemo)(() => r ?? Ht(i, n), []), b = (0, D.useMemo)(() => Ut(y, a), [y, a]), x = (0, D.useMemo)(() => Wt(o, i, y, y, b, _), []), [S, C] = (0, D.useState)(y), [w, T] = (0, D.useState)(b), [E, O] = (0, D.useState)(x), [k, j] = (0, D.useState)(o), M = (0, D.useRef)(n), N = (0, D.useRef)(r), P = (0, D.useRef)(i), F = (0, D.useRef)(a), I = (0, D.useRef)(o), ee = (0, D.useRef)(_), te = (0, D.useRef)(k);
 	(0, D.useEffect)(() => {
 		te.current = k;
 	}, [k]);
@@ -20051,7 +19992,7 @@ function Dr({ widget: e, node: t, editing: n, onHide: r, onReset: i, sizes: a, o
 	});
 }
 function Or({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEditing: a, registerEditor: o }) {
-	let s = e.map((e) => `${e.id}:${e.visible}`).join("|"), c = (0, D.useMemo)(() => Object.fromEntries(e.map((e) => [e.id, e.visible])), [s]), [l, u] = (0, D.useState)(ye), [d, f] = (0, D.useState)(c), [p, m] = (0, D.useState)(!1), [h, g] = (0, D.useState)(!1), [_, v] = (0, D.useState)(() => typeof window < "u" && window.innerWidth < W.sm ? "xs" : "lg"), [y, b] = (0, D.useState)(""), [, x] = (0, D.useState)(0), [S, C] = (0, D.useState)(0), w = (0, D.useRef)(ye), T = (0, D.useRef)(null), E = (t, n) => {
+	let s = e.map((e) => `${e.id}:${e.visible}`).join("|"), c = (0, D.useMemo)(() => Object.fromEntries(e.map((e) => [e.id, e.visible])), [s]), [l, u] = (0, D.useState)(ye), [d, f] = (0, D.useState)(c), [p, m] = (0, D.useState)(!1), [h, g] = (0, D.useState)(!1), [_, v] = (0, D.useState)(() => typeof window < "u" && window.innerWidth < G.sm ? "xs" : "lg"), [y, b] = (0, D.useState)(""), [, x] = (0, D.useState)(0), [S, C] = (0, D.useState)(0), w = (0, D.useRef)(ye), T = (0, D.useRef)(null), E = (t, n) => {
 		if (e[0]?.t) {
 			let n = e[0].t(t);
 			if (n && n !== t) return n;
@@ -20062,7 +20003,7 @@ function Or({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 		let e = () => x((e) => e + 1);
 		return window.addEventListener("argus-lang-changed", e), () => window.removeEventListener("argus-lang-changed", e);
 	}, []), (0, D.useEffect)(() => {
-		let e = () => v(window.innerWidth < W.sm ? "xs" : "lg");
+		let e = () => v(window.innerWidth < G.sm ? "xs" : "lg");
 		return window.addEventListener("resize", e, { passive: !0 }), e(), () => window.removeEventListener("resize", e);
 	}, []), (0, D.useEffect)(() => {
 		o(m);
@@ -20136,12 +20077,12 @@ function Or({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 		let r = pe(M, {
 			...n,
 			...t
-		}, G[j], !0);
+		}, fe[j], !0);
 		r === M ? (t.w !== n.w || t.h !== n.h) && b(E("position_collision", "Posición bloqueada por colisión")) : N(r, E("widget_size_saved", "Tamaño guardado"));
 	}, te = (e) => {
 		let t = ye[j]?.find((t) => t.i === e), n = M.find((t) => t.i === e);
 		if (!t || !n || n.static) return;
-		let r = pe(pe(M, t, G[j]), t, G[j], !0), i = r.find((t) => t.i === e);
+		let r = pe(pe(M, t, fe[j]), t, fe[j], !0), i = r.find((t) => t.i === e);
 		i?.x !== t.x || i.y !== t.y || i.w !== t.w || i.h !== t.h ? b(E("position_collision", "Posición bloqueada por colisión")) : r !== M && N(r, E("reset_widget", "Widget restablecido"));
 	};
 	return h ? /* @__PURE__ */ (0, A.jsxs)("section", {
@@ -20163,8 +20104,8 @@ function Or({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 				className: "argus-dashboard-grid",
 				layouts: I,
 				breakpoint: _,
-				breakpoints: W,
-				cols: G,
+				breakpoints: G,
+				cols: fe,
 				rowHeight: 10,
 				margin: [2, 2],
 				containerPadding: [16, 16],
@@ -20777,7 +20718,7 @@ var Ca = {
 	}
 }, Ta = /* @__PURE__ */ "00.01.02.03.04.05.06.07.08.09.0a.0b.0c.0d.0e.0f.10.11.12.13.14.15.16.17.18.19.1a.1b.1c.1d.1e.1f.20.21.22.23.24.25.26.27.28.29.2a.2b.2c.2d.2e.2f.30.31.32.33.34.35.36.37.38.39.3a.3b.3c.3d.3e.3f.40.41.42.43.44.45.46.47.48.49.4a.4b.4c.4d.4e.4f.50.51.52.53.54.55.56.57.58.59.5a.5b.5c.5d.5e.5f.60.61.62.63.64.65.66.67.68.69.6a.6b.6c.6d.6e.6f.70.71.72.73.74.75.76.77.78.79.7a.7b.7c.7d.7e.7f.80.81.82.83.84.85.86.87.88.89.8a.8b.8c.8d.8e.8f.90.91.92.93.94.95.96.97.98.99.9a.9b.9c.9d.9e.9f.a0.a1.a2.a3.a4.a5.a6.a7.a8.a9.aa.ab.ac.ad.ae.af.b0.b1.b2.b3.b4.b5.b6.b7.b8.b9.ba.bb.bc.bd.be.bf.c0.c1.c2.c3.c4.c5.c6.c7.c8.c9.ca.cb.cc.cd.ce.cf.d0.d1.d2.d3.d4.d5.d6.d7.d8.d9.da.db.dc.dd.de.df.e0.e1.e2.e3.e4.e5.e6.e7.e8.e9.ea.eb.ec.ed.ee.ef.f0.f1.f2.f3.f4.f5.f6.f7.f8.f9.fa.fb.fc.fd.fe.ff".split("."), Ea = 1234567, Da = Math.PI / 180, Oa = 180 / Math.PI;
 function ka() {
-	let e = Math.random() * 4294967295 | 0, t = Math.random() * 4294967295 | 0, n = Math.random() * 4294967295 | 0, r = Math.random() * 4294967295 | 0;
+	let e = Math.random() * 0xffffffff | 0, t = Math.random() * 0xffffffff | 0, n = Math.random() * 0xffffffff | 0, r = Math.random() * 0xffffffff | 0;
 	return (Ta[e & 255] + Ta[e >> 8 & 255] + Ta[e >> 16 & 255] + Ta[e >> 24 & 255] + "-" + Ta[t & 255] + Ta[t >> 8 & 255] + "-" + Ta[t >> 16 & 15 | 64] + Ta[t >> 24 & 255] + "-" + Ta[n & 63 | 128] + Ta[n >> 8 & 255] + "-" + Ta[n >> 16 & 255] + Ta[n >> 24 & 255] + Ta[r & 255] + Ta[r >> 8 & 255] + Ta[r >> 16 & 255] + Ta[r >> 24 & 255]).toLowerCase();
 }
 function Aa(e, t, n) {
@@ -20818,7 +20759,7 @@ function Va(e) {
 }
 function Ha(e) {
 	e !== void 0 && (Ea = e);
-	let t = Ea += 1831565813;
+	let t = Ea += 0x6d2b79f5;
 	return t = Math.imul(t ^ t >>> 15, t | 1), t ^= t + Math.imul(t ^ t >>> 7, t | 61), ((t ^ t >>> 14) >>> 0) / 4294967296;
 }
 function Ua(e) {
@@ -20862,11 +20803,11 @@ function Ja(e, t, n, r, i) {
 }
 function Ya(e) {
 	switch (e.constructor) {
-		case Uint32Array: return 4294967295;
+		case Uint32Array: return 0xffffffff;
 		case Uint16Array: return 65535;
 		case Uint8Array:
 		case Uint8ClampedArray: return 255;
-		case Int32Array: return 2147483647;
+		case Int32Array: return 0x7fffffff;
 		case Int16Array: return 32767;
 		case Int8Array: return 127;
 		default: return;
@@ -22913,154 +22854,154 @@ var Qo = class extends Zo {
 		return e.joints[t.jointName];
 	}
 }, ts = {
-	aliceblue: 15792383,
-	antiquewhite: 16444375,
+	aliceblue: 0xf0f8ff,
+	antiquewhite: 0xfaebd7,
 	aqua: 65535,
 	aquamarine: 8388564,
-	azure: 15794175,
-	beige: 16119260,
-	bisque: 16770244,
+	azure: 0xf0ffff,
+	beige: 0xf5f5dc,
+	bisque: 0xffe4c4,
 	black: 0,
-	blanchedalmond: 16772045,
+	blanchedalmond: 0xffebcd,
 	blue: 255,
 	blueviolet: 9055202,
-	brown: 10824234,
-	burlywood: 14596231,
+	brown: 0xa52a2a,
+	burlywood: 0xdeb887,
 	cadetblue: 6266528,
 	chartreuse: 8388352,
-	chocolate: 13789470,
-	coral: 16744272,
+	chocolate: 0xd2691e,
+	coral: 0xff7f50,
 	cornflowerblue: 6591981,
-	cornsilk: 16775388,
-	crimson: 14423100,
+	cornsilk: 0xfff8dc,
+	crimson: 0xdc143c,
 	cyan: 65535,
 	darkblue: 139,
 	darkcyan: 35723,
-	darkgoldenrod: 12092939,
-	darkgray: 11119017,
+	darkgoldenrod: 0xb8860b,
+	darkgray: 0xa9a9a9,
 	darkgreen: 25600,
-	darkgrey: 11119017,
-	darkkhaki: 12433259,
+	darkgrey: 0xa9a9a9,
+	darkkhaki: 0xbdb76b,
 	darkmagenta: 9109643,
 	darkolivegreen: 5597999,
-	darkorange: 16747520,
-	darkorchid: 10040012,
+	darkorange: 0xff8c00,
+	darkorchid: 0x9932cc,
 	darkred: 9109504,
-	darksalmon: 15308410,
+	darksalmon: 0xe9967a,
 	darkseagreen: 9419919,
 	darkslateblue: 4734347,
 	darkslategray: 3100495,
 	darkslategrey: 3100495,
 	darkturquoise: 52945,
 	darkviolet: 9699539,
-	deeppink: 16716947,
+	deeppink: 0xff1493,
 	deepskyblue: 49151,
 	dimgray: 6908265,
 	dimgrey: 6908265,
 	dodgerblue: 2003199,
-	firebrick: 11674146,
-	floralwhite: 16775920,
+	firebrick: 0xb22222,
+	floralwhite: 0xfffaf0,
 	forestgreen: 2263842,
-	fuchsia: 16711935,
-	gainsboro: 14474460,
-	ghostwhite: 16316671,
-	gold: 16766720,
-	goldenrod: 14329120,
+	fuchsia: 0xff00ff,
+	gainsboro: 0xdcdcdc,
+	ghostwhite: 0xf8f8ff,
+	gold: 0xffd700,
+	goldenrod: 0xdaa520,
 	gray: 8421504,
 	green: 32768,
-	greenyellow: 11403055,
+	greenyellow: 0xadff2f,
 	grey: 8421504,
-	honeydew: 15794160,
-	hotpink: 16738740,
-	indianred: 13458524,
+	honeydew: 0xf0fff0,
+	hotpink: 0xff69b4,
+	indianred: 0xcd5c5c,
 	indigo: 4915330,
-	ivory: 16777200,
-	khaki: 15787660,
-	lavender: 15132410,
-	lavenderblush: 16773365,
+	ivory: 0xfffff0,
+	khaki: 0xf0e68c,
+	lavender: 0xe6e6fa,
+	lavenderblush: 0xfff0f5,
 	lawngreen: 8190976,
-	lemonchiffon: 16775885,
-	lightblue: 11393254,
-	lightcoral: 15761536,
-	lightcyan: 14745599,
-	lightgoldenrodyellow: 16448210,
-	lightgray: 13882323,
+	lemonchiffon: 0xfffacd,
+	lightblue: 0xadd8e6,
+	lightcoral: 0xf08080,
+	lightcyan: 0xe0ffff,
+	lightgoldenrodyellow: 0xfafad2,
+	lightgray: 0xd3d3d3,
 	lightgreen: 9498256,
-	lightgrey: 13882323,
-	lightpink: 16758465,
-	lightsalmon: 16752762,
+	lightgrey: 0xd3d3d3,
+	lightpink: 0xffb6c1,
+	lightsalmon: 0xffa07a,
 	lightseagreen: 2142890,
 	lightskyblue: 8900346,
 	lightslategray: 7833753,
 	lightslategrey: 7833753,
-	lightsteelblue: 11584734,
-	lightyellow: 16777184,
+	lightsteelblue: 0xb0c4de,
+	lightyellow: 0xffffe0,
 	lime: 65280,
 	limegreen: 3329330,
-	linen: 16445670,
-	magenta: 16711935,
+	linen: 0xfaf0e6,
+	magenta: 0xff00ff,
 	maroon: 8388608,
 	mediumaquamarine: 6737322,
 	mediumblue: 205,
-	mediumorchid: 12211667,
+	mediumorchid: 0xba55d3,
 	mediumpurple: 9662683,
 	mediumseagreen: 3978097,
 	mediumslateblue: 8087790,
 	mediumspringgreen: 64154,
 	mediumturquoise: 4772300,
-	mediumvioletred: 13047173,
+	mediumvioletred: 0xc71585,
 	midnightblue: 1644912,
-	mintcream: 16121850,
-	mistyrose: 16770273,
-	moccasin: 16770229,
-	navajowhite: 16768685,
+	mintcream: 0xf5fffa,
+	mistyrose: 0xffe4e1,
+	moccasin: 0xffe4b5,
+	navajowhite: 0xffdead,
 	navy: 128,
-	oldlace: 16643558,
+	oldlace: 0xfdf5e6,
 	olive: 8421376,
 	olivedrab: 7048739,
-	orange: 16753920,
-	orangered: 16729344,
-	orchid: 14315734,
-	palegoldenrod: 15657130,
-	palegreen: 10025880,
-	paleturquoise: 11529966,
-	palevioletred: 14381203,
-	papayawhip: 16773077,
-	peachpuff: 16767673,
-	peru: 13468991,
-	pink: 16761035,
-	plum: 14524637,
-	powderblue: 11591910,
+	orange: 0xffa500,
+	orangered: 0xff4500,
+	orchid: 0xda70d6,
+	palegoldenrod: 0xeee8aa,
+	palegreen: 0x98fb98,
+	paleturquoise: 0xafeeee,
+	palevioletred: 0xdb7093,
+	papayawhip: 0xffefd5,
+	peachpuff: 0xffdab9,
+	peru: 0xcd853f,
+	pink: 0xffc0cb,
+	plum: 0xdda0dd,
+	powderblue: 0xb0e0e6,
 	purple: 8388736,
 	rebeccapurple: 6697881,
-	red: 16711680,
-	rosybrown: 12357519,
+	red: 0xff0000,
+	rosybrown: 0xbc8f8f,
 	royalblue: 4286945,
 	saddlebrown: 9127187,
-	salmon: 16416882,
-	sandybrown: 16032864,
+	salmon: 0xfa8072,
+	sandybrown: 0xf4a460,
 	seagreen: 3050327,
-	seashell: 16774638,
-	sienna: 10506797,
-	silver: 12632256,
+	seashell: 0xfff5ee,
+	sienna: 0xa0522d,
+	silver: 0xc0c0c0,
 	skyblue: 8900331,
 	slateblue: 6970061,
 	slategray: 7372944,
 	slategrey: 7372944,
-	snow: 16775930,
+	snow: 0xfffafa,
 	springgreen: 65407,
 	steelblue: 4620980,
-	tan: 13808780,
+	tan: 0xd2b48c,
 	teal: 32896,
-	thistle: 14204888,
-	tomato: 16737095,
+	thistle: 0xd8bfd8,
+	tomato: 0xff6347,
 	turquoise: 4251856,
-	violet: 15631086,
-	wheat: 16113331,
-	white: 16777215,
-	whitesmoke: 16119285,
-	yellow: 16776960,
-	yellowgreen: 10145074
+	violet: 0xee82ee,
+	wheat: 0xf5deb3,
+	white: 0xffffff,
+	whitesmoke: 0xf5f5f5,
+	yellow: 0xffff00,
+	yellowgreen: 0x9acd32
 }, ns = {
 	h: 0,
 	s: 0,
@@ -23071,7 +23012,7 @@ var Qo = class extends Zo {
 	l: 0
 };
 function is(e, t, n) {
-	return n < 0 && (n += 1), n > 1 && --n, n < 1 / 6 ? e + (t - e) * 6 * n : n < 1 / 2 ? t : n < 2 / 3 ? e + (t - e) * 6 * (2 / 3 - n) : e;
+	return n < 0 && (n += 1), n > 1 && --n, n < 1 / 6 ? e + (t - e) * 6 * n : n < .5 ? t : n < 2 / 3 ? e + (t - e) * 6 * (2 / 3 - n) : e;
 }
 var as = class {
 	constructor(e, t, n) {
@@ -23347,7 +23288,7 @@ var ss = class extends Zo {
 		return e.a.equals(this.a) && e.b.equals(this.b) && e.c.equals(this.c);
 	}
 }, Ss = class {
-	constructor(e = new Q(Infinity, Infinity, Infinity), t = new Q(-Infinity, -Infinity, -Infinity)) {
+	constructor(e = new Q(1e400, 1e400, 1e400), t = new Q(-1e400, -1e400, -1e400)) {
 		this.isBox3 = !0, this.min = e, this.max = t;
 	}
 	set(e, t) {
@@ -23382,7 +23323,7 @@ var ss = class extends Zo {
 		return this.min.copy(e.min), this.max.copy(e.max), this;
 	}
 	makeEmpty() {
-		return this.min.x = this.min.y = this.min.z = Infinity, this.max.x = this.max.y = this.max.z = -Infinity, this;
+		return this.min.x = this.min.y = this.min.z = 1e400, this.max.x = this.max.y = this.max.z = -1e400, this;
 	}
 	isEmpty() {
 		return this.max.x < this.min.x || this.max.y < this.min.y || this.max.z < this.min.z;
@@ -23750,7 +23691,7 @@ var Ls = /*@__PURE__*/ new Q(), Rs = /*@__PURE__*/ new Z(), zs = 0, Bs = class e
 	constructor() {
 		super(), this.isBufferGeometry = !0, Object.defineProperty(this, "id", { value: Js++ }), this.uuid = ka(), this.name = "", this.type = "BufferGeometry", this.index = null, this.indirect = null, this.indirectOffset = 0, this.attributes = {}, this.morphAttributes = {}, this.morphTargetsRelative = !1, this.groups = [], this.boundingBox = null, this.boundingSphere = null, this.drawRange = {
 			start: 0,
-			count: Infinity
+			count: 1e400
 		}, this.userData = {}, this._transformed = !1;
 	}
 	getIndex() {
@@ -23847,7 +23788,7 @@ var Ls = /*@__PURE__*/ new Q(), Rs = /*@__PURE__*/ new Z(), zs = 0, Bs = class e
 	computeBoundingBox() {
 		this.boundingBox === null && (this.boundingBox = new Ss());
 		let e = this.attributes.position, t = this.morphAttributes.position;
-		if (e && e.isGLBufferAttribute) ba("BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.", this), this.boundingBox.set(new Q(-Infinity, -Infinity, -Infinity), new Q(Infinity, Infinity, Infinity));
+		if (e && e.isGLBufferAttribute) ba("BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.", this), this.boundingBox.set(new Q(-1e400, -1e400, -1e400), new Q(1e400, 1e400, 1e400));
 		else {
 			if (e !== void 0) {
 				if (this.boundingBox.setFromBufferAttribute(e), t) for (let e = 0, n = t.length; e < n; e++) {
@@ -23861,7 +23802,7 @@ var Ls = /*@__PURE__*/ new Q(), Rs = /*@__PURE__*/ new Z(), zs = 0, Bs = class e
 	computeBoundingSphere() {
 		this.boundingSphere === null && (this.boundingSphere = new qs());
 		let e = this.attributes.position, t = this.morphAttributes.position;
-		if (e && e.isGLBufferAttribute) ba("BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.", this), this.boundingSphere.set(new Q(), Infinity);
+		if (e && e.isGLBufferAttribute) ba("BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.", this), this.boundingSphere.set(new Q(), 1e400);
 		else if (e) {
 			let n = this.boundingSphere.center;
 			if (Qs.setFromBufferAttribute(e), t) for (let e = 0, n = t.length; e < n; e++) {
@@ -23945,15 +23886,15 @@ var Ls = /*@__PURE__*/ new Q(), Rs = /*@__PURE__*/ new Z(), zs = 0, Bs = class e
 		if (this.index === null) return ya("BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed."), this;
 		let n = new e(), r = this.index.array, i = this.attributes;
 		for (let e in i) {
-			let a = i[e], o = t(a, r);
-			n.setAttribute(e, o);
+			let a = t(i[e], r);
+			n.setAttribute(e, a);
 		}
 		let a = this.morphAttributes;
 		for (let e in a) {
 			let i = [], o = a[e];
 			for (let e = 0, n = o.length; e < n; e++) {
-				let n = o[e], a = t(n, r);
-				i.push(a);
+				let n = t(o[e], r);
+				i.push(n);
 			}
 			n.morphAttributes[e] = i;
 		}
@@ -24362,7 +24303,7 @@ var ic = /*@__PURE__*/ new Q(), ac = class e {
 	}
 }, fc = class extends dc {
 	constructor(e) {
-		super(), this.isSpriteMaterial = !0, this.type = "SpriteMaterial", this.color = new as(16777215), this.map = null, this.alphaMap = null, this.rotation = 0, this.sizeAttenuation = !0, this.transparent = !0, this.fog = !0, this.setValues(e);
+		super(), this.isSpriteMaterial = !0, this.type = "SpriteMaterial", this.color = new as(0xffffff), this.map = null, this.alphaMap = null, this.rotation = 0, this.sizeAttenuation = !0, this.transparent = !0, this.fog = !0, this.setValues(e);
 	}
 	copy(e) {
 		return super.copy(e), this.color.copy(e.color), this.map = e.map, this.alphaMap = e.alphaMap, this.rotation = e.rotation, this.sizeAttenuation = e.sizeAttenuation, this.fog = e.fog, this;
@@ -24536,7 +24477,7 @@ var Oc = /*@__PURE__*/ new Q(), kc = /*@__PURE__*/ new Q(), Ac = /*@__PURE__*/ n
 	}
 }, Nc = class extends dc {
 	constructor(e) {
-		super(), this.isMeshBasicMaterial = !0, this.type = "MeshBasicMaterial", this.color = new as(16777215), this.map = null, this.lightMap = null, this.lightMapIntensity = 1, this.aoMap = null, this.aoMapIntensity = 1, this.specularMap = null, this.alphaMap = null, this.envMap = null, this.envMapRotation = new Po(), this.combine = 0, this.reflectivity = 1, this.refractionRatio = .98, this.wireframe = !1, this.wireframeLinewidth = 1, this.wireframeLinecap = "round", this.wireframeLinejoin = "round", this.fog = !0, this.setValues(e);
+		super(), this.isMeshBasicMaterial = !0, this.type = "MeshBasicMaterial", this.color = new as(0xffffff), this.map = null, this.lightMap = null, this.lightMapIntensity = 1, this.aoMap = null, this.aoMapIntensity = 1, this.specularMap = null, this.alphaMap = null, this.envMap = null, this.envMapRotation = new Po(), this.combine = 0, this.reflectivity = 1, this.refractionRatio = .98, this.wireframe = !1, this.wireframeLinewidth = 1, this.wireframeLinecap = "round", this.wireframeLinejoin = "round", this.fog = !0, this.setValues(e);
 	}
 	copy(e) {
 		return super.copy(e), this.color.copy(e.color), this.map = e.map, this.lightMap = e.lightMap, this.lightMapIntensity = e.lightMapIntensity, this.aoMap = e.aoMap, this.aoMapIntensity = e.aoMapIntensity, this.specularMap = e.specularMap, this.alphaMap = e.alphaMap, this.envMap = e.envMap, this.envMapRotation.copy(e.envMapRotation), this.combine = e.combine, this.reflectivity = e.reflectivity, this.refractionRatio = e.refractionRatio, this.wireframe = e.wireframe, this.wireframeLinewidth = e.wireframeLinewidth, this.wireframeLinecap = e.wireframeLinecap, this.wireframeLinejoin = e.wireframeLinejoin, this.fog = e.fog, this;
@@ -24832,7 +24773,7 @@ var Jc = class extends vo {
 	}
 }, ul = class extends dc {
 	constructor(e) {
-		super(), this.isLineBasicMaterial = !0, this.type = "LineBasicMaterial", this.color = new as(16777215), this.map = null, this.linewidth = 1, this.linecap = "round", this.linejoin = "round", this.fog = !0, this.setValues(e);
+		super(), this.isLineBasicMaterial = !0, this.type = "LineBasicMaterial", this.color = new as(0xffffff), this.map = null, this.linewidth = 1, this.linecap = "round", this.linejoin = "round", this.fog = !0, this.setValues(e);
 	}
 	copy(e) {
 		return super.copy(e), this.color.copy(e.color), this.map = e.map, this.linewidth = e.linewidth, this.linecap = e.linecap, this.linejoin = e.linejoin, this.fog = e.fog, this;
@@ -25704,7 +25645,7 @@ function pu(e, t) {
 	return au(r, r.next), au(n, n.next);
 }
 function mu(e, t) {
-	let n = t, r = e.x, i = e.y, a = -Infinity, o;
+	let n = t, r = e.x, i = e.y, a = -1e400, o;
 	if (wu(e, n)) return n;
 	do {
 		if (wu(e, n.next)) return n.next;
@@ -25715,7 +25656,7 @@ function mu(e, t) {
 		n = n.next;
 	} while (n !== t);
 	if (!o) return null;
-	let s = o, c = o.x, l = o.y, u = Infinity;
+	let s = o, c = o.x, l = o.y, u = 1e400;
 	n = o;
 	do {
 		if (r >= n.x && n.x >= c && r !== n.x && bu(i < l ? r : a, i, c, l, i < l ? a : r, i, n.x, n.y)) {
@@ -25755,7 +25696,7 @@ function _u(e) {
 	return e;
 }
 function vu(e, t, n, r, i) {
-	return e = (e - n) * i | 0, t = (t - r) * i | 0, e = (e | e << 8) & 16711935, e = (e | e << 4) & 252645135, e = (e | e << 2) & 858993459, e = (e | e << 1) & 1431655765, t = (t | t << 8) & 16711935, t = (t | t << 4) & 252645135, t = (t | t << 2) & 858993459, t = (t | t << 1) & 1431655765, e | t << 1;
+	return e = (e - n) * i | 0, t = (t - r) * i | 0, e = (e | e << 8) & 0xff00ff, e = (e | e << 4) & 0xf0f0f0f, e = (e | e << 2) & 858993459, e = (e | e << 1) & 0x55555555, t = (t | t << 8) & 0xff00ff, t = (t | t << 4) & 0xf0f0f0f, t = (t | t << 2) & 858993459, t = (t | t << 1) & 0x55555555, e | t << 1;
 }
 function yu(e) {
 	let t = e, n = e;
@@ -25879,10 +25820,7 @@ var Bu = class e extends tc {
 			options: t
 		}, e = Array.isArray(e) ? e : [e];
 		let n = this, r = [], i = [];
-		for (let t = 0, n = e.length; t < n; t++) {
-			let n = e[t];
-			a(n);
-		}
+		for (let t = 0, n = e.length; t < n; t++) a(e[t]);
 		this.setAttribute("position", new Us(r, 3)), this.setAttribute("uv", new Us(i, 2)), this.computeVertexNormals();
 		function a(e) {
 			let a = [], o = t.curveSegments === void 0 ? 12 : t.curveSegments, s = t.steps === void 0 ? 1 : t.steps, c = t.depth === void 0 ? 1 : t.depth, l = t.bevelEnabled === void 0 || t.bevelEnabled, u = t.bevelThickness === void 0 ? .2 : t.bevelThickness, d = t.bevelSize === void 0 ? u - .1 : t.bevelSize, f = t.bevelOffset === void 0 ? 0 : t.bevelOffset, p = t.bevelSegments === void 0 ? 3 : t.bevelSegments, m = t.extrudePath, h = t.UVGenerator === void 0 ? Vu : t.UVGenerator, g, _ = !1, v, y, b, x;
@@ -26058,8 +25996,8 @@ var Bu = class e extends tc {
 		return super.copy(e), this.parameters = Object.assign({}, e.parameters), this;
 	}
 	toJSON() {
-		let e = super.toJSON(), t = this.parameters.shapes, n = this.parameters.options;
-		return Hu(t, n, e);
+		let e = super.toJSON();
+		return Hu(this.parameters.shapes, this.parameters.options, e);
 	}
 	static fromJSON(t, n) {
 		let r = [];
@@ -26369,7 +26307,7 @@ var Qu = {
 	}
 }, rd = class extends dc {
 	constructor(e) {
-		super(), this.isMeshStandardMaterial = !0, this.type = "MeshStandardMaterial", this.defines = { STANDARD: "" }, this.color = new as(16777215), this.roughness = 1, this.metalness = 0, this.map = null, this.lightMap = null, this.lightMapIntensity = 1, this.aoMap = null, this.aoMapIntensity = 1, this.emissive = new as(0), this.emissiveIntensity = 1, this.emissiveMap = null, this.bumpMap = null, this.bumpScale = 1, this.normalMap = null, this.normalMapType = 0, this.normalScale = new Z(1, 1), this.displacementMap = null, this.displacementScale = 1, this.displacementBias = 0, this.roughnessMap = null, this.metalnessMap = null, this.alphaMap = null, this.envMap = null, this.envMapRotation = new Po(), this.envMapIntensity = 1, this.wireframe = !1, this.wireframeLinewidth = 1, this.wireframeLinecap = "round", this.wireframeLinejoin = "round", this.flatShading = !1, this.fog = !0, this.setValues(e);
+		super(), this.isMeshStandardMaterial = !0, this.type = "MeshStandardMaterial", this.defines = { STANDARD: "" }, this.color = new as(0xffffff), this.roughness = 1, this.metalness = 0, this.map = null, this.lightMap = null, this.lightMapIntensity = 1, this.aoMap = null, this.aoMapIntensity = 1, this.emissive = new as(0), this.emissiveIntensity = 1, this.emissiveMap = null, this.bumpMap = null, this.bumpScale = 1, this.normalMap = null, this.normalMapType = 0, this.normalScale = new Z(1, 1), this.displacementMap = null, this.displacementScale = 1, this.displacementBias = 0, this.roughnessMap = null, this.metalnessMap = null, this.alphaMap = null, this.envMap = null, this.envMapRotation = new Po(), this.envMapIntensity = 1, this.wireframe = !1, this.wireframeLinewidth = 1, this.wireframeLinecap = "round", this.wireframeLinejoin = "round", this.flatShading = !1, this.fog = !0, this.setValues(e);
 	}
 	copy(e) {
 		return super.copy(e), this.defines = { STANDARD: "" }, this.color.copy(e.color), this.roughness = e.roughness, this.metalness = e.metalness, this.map = e.map, this.lightMap = e.lightMap, this.lightMapIntensity = e.lightMapIntensity, this.aoMap = e.aoMap, this.aoMapIntensity = e.aoMapIntensity, this.emissive.copy(e.emissive), this.emissiveMap = e.emissiveMap, this.emissiveIntensity = e.emissiveIntensity, this.bumpMap = e.bumpMap, this.bumpScale = e.bumpScale, this.normalMap = e.normalMap, this.normalMapType = e.normalMapType, this.normalScale.copy(e.normalScale), this.displacementMap = e.displacementMap, this.displacementScale = e.displacementScale, this.displacementBias = e.displacementBias, this.roughnessMap = e.roughnessMap, this.metalnessMap = e.metalnessMap, this.alphaMap = e.alphaMap, this.envMap = e.envMap, this.envMapRotation.copy(e.envMapRotation), this.envMapIntensity = e.envMapIntensity, this.wireframe = e.wireframe, this.wireframeLinewidth = e.wireframeLinewidth, this.wireframeLinecap = e.wireframeLinecap, this.wireframeLinejoin = e.wireframeLinejoin, this.flatShading = e.flatShading, this.fog = e.fog, this;
@@ -26386,7 +26324,7 @@ var Qu = {
 			set: function(e) {
 				this.ior = (1 + .4 * e) / (1 - .4 * e);
 			}
-		}), this.iridescenceMap = null, this.iridescenceIOR = 1.3, this.iridescenceThicknessMinimum = 100, this.iridescenceThicknessMaximum = 400, this.iridescenceThicknessMap = null, this.sheenColor = new as(0), this.sheenColorMap = null, this.sheenRoughness = 1, this.sheenRoughnessMap = null, this.transmissionMap = null, this.thickness = 0, this.thicknessMap = null, this.attenuationDistance = Infinity, this.attenuationColor = new as(1, 1, 1), this.specularIntensity = 1, this.specularIntensityMap = null, this.specularColor = new as(1, 1, 1), this.specularColorMap = null, this._anisotropy = 0, this._clearcoat = 0, this._diffuseRoughness = 0, this._dispersion = 0, this._iridescence = 0, this._retroreflectivity = 0, this._sheen = 0, this._transmission = 0, this.setValues(e);
+		}), this.iridescenceMap = null, this.iridescenceIOR = 1.3, this.iridescenceThicknessMinimum = 100, this.iridescenceThicknessMaximum = 400, this.iridescenceThicknessMap = null, this.sheenColor = new as(0), this.sheenColorMap = null, this.sheenRoughness = 1, this.sheenRoughnessMap = null, this.transmissionMap = null, this.thickness = 0, this.thicknessMap = null, this.attenuationDistance = 1e400, this.attenuationColor = new as(1, 1, 1), this.specularIntensity = 1, this.specularIntensityMap = null, this.specularColor = new as(1, 1, 1), this.specularColorMap = null, this._anisotropy = 0, this._clearcoat = 0, this._diffuseRoughness = 0, this._dispersion = 0, this._iridescence = 0, this._retroreflectivity = 0, this._sheen = 0, this._transmission = 0, this.setValues(e);
 	}
 	get anisotropy() {
 		return this._anisotropy;
@@ -26450,7 +26388,7 @@ var Qu = {
 	}
 }, ad = class extends dc {
 	constructor(e) {
-		super(), this.isMeshLambertMaterial = !0, this.type = "MeshLambertMaterial", this.color = new as(16777215), this.map = null, this.lightMap = null, this.lightMapIntensity = 1, this.aoMap = null, this.aoMapIntensity = 1, this.emissive = new as(0), this.emissiveIntensity = 1, this.emissiveMap = null, this.bumpMap = null, this.bumpScale = 1, this.normalMap = null, this.normalMapType = 0, this.normalScale = new Z(1, 1), this.displacementMap = null, this.displacementScale = 1, this.displacementBias = 0, this.specularMap = null, this.alphaMap = null, this.envMap = null, this.envMapRotation = new Po(), this.combine = 0, this.reflectivity = 1, this.envMapIntensity = 1, this.refractionRatio = .98, this.wireframe = !1, this.wireframeLinewidth = 1, this.wireframeLinecap = "round", this.wireframeLinejoin = "round", this.flatShading = !1, this.fog = !0, this.setValues(e);
+		super(), this.isMeshLambertMaterial = !0, this.type = "MeshLambertMaterial", this.color = new as(0xffffff), this.map = null, this.lightMap = null, this.lightMapIntensity = 1, this.aoMap = null, this.aoMapIntensity = 1, this.emissive = new as(0), this.emissiveIntensity = 1, this.emissiveMap = null, this.bumpMap = null, this.bumpScale = 1, this.normalMap = null, this.normalMapType = 0, this.normalScale = new Z(1, 1), this.displacementMap = null, this.displacementScale = 1, this.displacementBias = 0, this.specularMap = null, this.alphaMap = null, this.envMap = null, this.envMapRotation = new Po(), this.combine = 0, this.reflectivity = 1, this.envMapIntensity = 1, this.refractionRatio = .98, this.wireframe = !1, this.wireframeLinewidth = 1, this.wireframeLinecap = "round", this.wireframeLinejoin = "round", this.flatShading = !1, this.fog = !0, this.setValues(e);
 	}
 	copy(e) {
 		return super.copy(e), this.color.copy(e.color), this.map = e.map, this.lightMap = e.lightMap, this.lightMapIntensity = e.lightMapIntensity, this.aoMap = e.aoMap, this.aoMapIntensity = e.aoMapIntensity, this.emissive.copy(e.emissive), this.emissiveMap = e.emissiveMap, this.emissiveIntensity = e.emissiveIntensity, this.bumpMap = e.bumpMap, this.bumpScale = e.bumpScale, this.normalMap = e.normalMap, this.normalMapType = e.normalMapType, this.normalScale.copy(e.normalScale), this.displacementMap = e.displacementMap, this.displacementScale = e.displacementScale, this.displacementBias = e.displacementBias, this.specularMap = e.specularMap, this.alphaMap = e.alphaMap, this.envMap = e.envMap, this.envMapRotation.copy(e.envMapRotation), this.combine = e.combine, this.reflectivity = e.reflectivity, this.envMapIntensity = e.envMapIntensity, this.refractionRatio = e.refractionRatio, this.wireframe = e.wireframe, this.wireframeLinewidth = e.wireframeLinewidth, this.wireframeLinecap = e.wireframeLinecap, this.wireframeLinejoin = e.wireframeLinejoin, this.flatShading = e.flatShading, this.fog = e.fog, this;
@@ -26482,21 +26420,21 @@ var ud = class {
 	}
 	evaluate(e) {
 		let t = this.parameterPositions, n = this._cachedIndex, r = t[n], i = t[n - 1];
-		validate_interval: {
-			seek: {
+		e: {
+			t: {
 				let a;
-				linear_scan: {
-					forward_scan: if (!(e < r)) {
+				n: {
+					r: if (!(e < r)) {
 						for (let a = n + 2;;) {
 							if (r === void 0) {
-								if (e < i) break forward_scan;
+								if (e < i) break r;
 								return n = t.length, this._cachedIndex = n, this.copySampleValue_(n - 1);
 							}
 							if (n === a) break;
-							if (i = r, r = t[++n], e < r) break seek;
+							if (i = r, r = t[++n], e < r) break t;
 						}
 						a = t.length;
-						break linear_scan;
+						break n;
 					}
 					if (!(e >= i)) {
 						let o = t[1];
@@ -26504,12 +26442,12 @@ var ud = class {
 						for (let a = n - 2;;) {
 							if (i === void 0) return this._cachedIndex = 0, this.copySampleValue_(0);
 							if (n === a) break;
-							if (r = i, i = t[--n - 1], e >= i) break seek;
+							if (r = i, i = t[--n - 1], e >= i) break t;
 						}
 						a = n, n = 0;
-						break linear_scan;
+						break n;
 					}
-					break validate_interval;
+					break e;
 				}
 				for (; n < a;) {
 					let r = n + a >>> 1;
@@ -26779,11 +26717,11 @@ var vd = class {
 		return a === e.length ? (this.times = e, this.values = t) : (this.times = e.slice(0, a), this.values = t.slice(0, a * n)), this;
 	}
 	clone() {
-		let e = this.times.slice(), t = this.values.slice(), n = this.constructor, r = new n(this.name, e, t);
-		return r.createInterpolant = this.createInterpolant, ld(this.settings) && (r.settings = {
+		let e = this.times.slice(), t = this.values.slice(), n = new this.constructor(this.name, e, t);
+		return n.createInterpolant = this.createInterpolant, ld(this.settings) && (n.settings = {
 			inTangents: this.settings.inTangents.slice(),
 			outTangents: this.settings.outTangents.slice()
-		}), r;
+		}), n;
 	}
 };
 function yd(e, t) {
@@ -27299,8 +27237,7 @@ var Od = class extends Zo {
 		}
 		let o = t[i];
 		if (o === void 0) {
-			let e = n.nodeName;
-			ba("PropertyBinding: Trying to update property for track: " + e + "." + i + " but it wasn't found.", t);
+			ba("PropertyBinding: Trying to update property for track: " + n.nodeName + "." + i + " but it wasn't found.", t);
 			return;
 		}
 		let s = this.Versioning.None;
@@ -27363,7 +27300,7 @@ lf.Composite = cf, lf.prototype.BindingType = {
 	]
 ];
 var uf = /*@__PURE__*/ new wo(), df = class {
-	constructor(e, t, n = 0, r = Infinity) {
+	constructor(e, t, n = 0, r = 1e400) {
 		this.ray = new Mc(e, t), this.near = n, this.far = r, this.camera = null, this.layers = new Fo(), this.params = {
 			Mesh: {},
 			Line: { threshold: 1 },
@@ -27427,12 +27364,12 @@ function mf(e, t, n, r) {
 	let i = hf(r);
 	switch (n) {
 		case ai: return e * t;
-		case ui: return e * t / i.components * i.byteLength;
+		case ui:
 		case di: return e * t / i.components * i.byteLength;
-		case fi: return e * t * 2 / i.components * i.byteLength;
+		case fi:
 		case pi: return e * t * 2 / i.components * i.byteLength;
 		case oi: return e * t * 3 / i.components * i.byteLength;
-		case si: return e * t * 4 / i.components * i.byteLength;
+		case si:
 		case mi: return e * t * 4 / i.components * i.byteLength;
 		case hi:
 		case gi: return Math.floor((e + 3) / 4) * Math.floor((t + 3) / 4) * 8;
@@ -27448,7 +27385,7 @@ function mf(e, t, n, r) {
 		case Di: return Math.floor((e + 3) / 4) * Math.floor((t + 3) / 4) * 8;
 		case Ti:
 		case Oi:
-		case ki: return Math.floor((e + 3) / 4) * Math.floor((t + 3) / 4) * 16;
+		case ki:
 		case Ai: return Math.floor((e + 3) / 4) * Math.floor((t + 3) / 4) * 16;
 		case ji: return Math.floor((e + 4) / 5) * Math.floor((t + 3) / 4) * 16;
 		case Mi: return Math.floor((e + 4) / 5) * Math.floor((t + 4) / 5) * 16;
@@ -27746,7 +27683,7 @@ var vf = {
 	sprite_frag: "uniform vec3 diffuse;\nuniform float opacity;\n#include <common>\n#include <uv_pars_fragment>\n#include <map_pars_fragment>\n#include <alphamap_pars_fragment>\n#include <alphatest_pars_fragment>\n#include <alphahash_pars_fragment>\n#include <fog_pars_fragment>\n#include <logdepthbuf_pars_fragment>\n#include <clipping_planes_pars_fragment>\nvoid main() {\n	vec4 diffuseColor = vec4( diffuse, opacity );\n	#include <clipping_planes_fragment>\n	vec3 outgoingLight = vec3( 0.0 );\n	#include <logdepthbuf_fragment>\n	#include <map_fragment>\n	#include <alphamap_fragment>\n	#include <alphatest_fragment>\n	#include <alphahash_fragment>\n	outgoingLight = diffuseColor.rgb;\n	#include <opaque_fragment>\n	#include <tonemapping_fragment>\n	#include <colorspace_fragment>\n	#include <fog_fragment>\n}"
 }, $ = {
 	common: {
-		diffuse: { value: /*@__PURE__*/ new as(16777215) },
+		diffuse: { value: /*@__PURE__*/ new as(0xffffff) },
 		opacity: { value: 1 },
 		map: { value: null },
 		mapTransform: { value: /*@__PURE__*/ new no() },
@@ -27809,7 +27746,7 @@ var vf = {
 		fogDensity: { value: 25e-5 },
 		fogNear: { value: 1 },
 		fogFar: { value: 2e3 },
-		fogColor: { value: /*@__PURE__*/ new as(16777215) }
+		fogColor: { value: /*@__PURE__*/ new as(0xffffff) }
 	},
 	lights: {
 		ambientLightColor: { value: [] },
@@ -27922,7 +27859,7 @@ var vf = {
 		probesResolution: { value: [] }
 	},
 	points: {
-		diffuse: { value: /*@__PURE__*/ new as(16777215) },
+		diffuse: { value: /*@__PURE__*/ new as(0xffffff) },
 		opacity: { value: 1 },
 		size: { value: 1 },
 		scale: { value: 1 },
@@ -27933,7 +27870,7 @@ var vf = {
 		uvTransform: { value: /*@__PURE__*/ new no() }
 	},
 	sprite: {
-		diffuse: { value: /*@__PURE__*/ new as(16777215) },
+		diffuse: { value: /*@__PURE__*/ new as(0xffffff) },
 		opacity: { value: 1 },
 		center: { value: /*@__PURE__*/ new Z(.5, .5) },
 		rotation: { value: 0 },
@@ -28478,23 +28415,19 @@ function wf(e, t) {
 }
 function Tf(e, t, n) {
 	let r;
-	function i(e) {
+	this.setMode = function(e) {
 		r = e;
-	}
-	function a(t, i) {
+	}, this.render = function(t, i) {
 		e.drawArrays(r, t, i), n.update(i, r, 1);
-	}
-	function o(t, i, a) {
+	}, this.renderInstances = function(t, i, a) {
 		a !== 0 && (e.drawArraysInstanced(r, t, i, a), n.update(i, r, a));
-	}
-	function s(e, i, a) {
+	}, this.renderMultiDraw = function(e, i, a) {
 		if (a === 0) return;
 		t.get("WEBGL_multi_draw").multiDrawArraysWEBGL(r, e, 0, i, 0, a);
 		let o = 0;
 		for (let e = 0; e < a; e++) o += i[e];
 		n.update(o, r, 1);
-	}
-	this.setMode = i, this.render = a, this.renderInstances = o, this.renderMultiDraw = s;
+	};
 }
 function Ef(e, t, n, r) {
 	let i;
@@ -28904,10 +28837,7 @@ function Gf(e) {
 		if (n && n.isTexture) {
 			let r = n.mapping;
 			if (r === 303 || r === 304) {
-				if (t.has(n)) {
-					let e = t.get(n).texture;
-					return s(e, n.mapping);
-				}
+				if (t.has(n)) return s(t.get(n).texture, n.mapping);
 				{
 					let r = n.image;
 					if (r && r.height > 0) {
@@ -29046,28 +28976,22 @@ function qf(e, t, n, r) {
 	};
 }
 function Jf(e, t, n) {
-	let r;
-	function i(e) {
+	let r, i, a;
+	this.setMode = function(e) {
 		r = e;
-	}
-	let a, o;
-	function s(e) {
-		a = e.type, o = e.bytesPerElement;
-	}
-	function c(t, i) {
-		e.drawElements(r, i, a, t * o), n.update(i, r, 1);
-	}
-	function l(t, i, s) {
-		s !== 0 && (e.drawElementsInstanced(r, i, a, t * o, s), n.update(i, r, s));
-	}
-	function u(e, i, o) {
+	}, this.setIndex = function(e) {
+		i = e.type, a = e.bytesPerElement;
+	}, this.render = function(t, o) {
+		e.drawElements(r, o, i, t * a), n.update(o, r, 1);
+	}, this.renderInstances = function(t, o, s) {
+		s !== 0 && (e.drawElementsInstanced(r, o, i, t * a, s), n.update(o, r, s));
+	}, this.renderMultiDraw = function(e, a, o) {
 		if (o === 0) return;
-		t.get("WEBGL_multi_draw").multiDrawElementsWEBGL(r, i, 0, a, e, 0, o);
+		t.get("WEBGL_multi_draw").multiDrawElementsWEBGL(r, a, 0, i, e, 0, o);
 		let s = 0;
-		for (let e = 0; e < o; e++) s += i[e];
+		for (let e = 0; e < o; e++) s += a[e];
 		n.update(s, r, 1);
-	}
-	this.setMode = i, this.setIndex = s, this.render = c, this.renderInstances = l, this.renderMultiDraw = u;
+	};
 }
 function Yf(e) {
 	let t = {
@@ -30174,7 +30098,7 @@ function Gm(e, t, n, r, i, a) {
 			let e = s.getVertexShaderStage(i), t = s.getFragmentShaderStage(i);
 			s.update(i, e, t), O = e.id, k = t.id;
 		}
-		let A = e.getRenderTarget(), j = e.state.buffers.depth.getReversed(), M = m.isInstancedMesh === !0, N = m.isBatchedMesh === !0, P = !!i.map, F = !!i.matcap, I = !!b, ee = I && b.isPMREMTexture === !0, te = !!i.aoMap, L = !!i.lightMap, ne = !!i.bumpMap && i.wireframe === !1, R = !!i.normalMap, z = !!i.displacementMap, re = !!i.emissiveMap, B = !!i.metalnessMap, V = !!i.roughnessMap, ie = i.anisotropy > 0, ae = i.clearcoat > 0, oe = i.diffuseRoughness > 0, se = i.dispersion > 0, ce = i.retroreflectivity > 0, H = i.iridescence > 0, le = i.sheen > 0, ue = i.transmission > 0, de = ie && !!i.anisotropyMap, fe = ae && !!i.clearcoatMap, U = ae && !!i.clearcoatNormalMap, W = ae && !!i.clearcoatRoughnessMap, G = oe && !!i.diffuseRoughnessMap, K = H && !!i.iridescenceMap, q = H && !!i.iridescenceThicknessMap, pe = le && !!i.sheenColorMap, me = le && !!i.sheenRoughnessMap, J = !!i.specularMap, he = !!i.specularColorMap, Y = !!i.specularIntensityMap, X = ue && !!i.transmissionMap, ge = ue && !!i.thicknessMap, _e = !!i.gradientMap, ve = !!i.alphaMap, ye = i.alphaTest > 0, be = !!i.alphaHash, xe = !!i.extensions, Se = 0;
+		let A = e.getRenderTarget(), j = e.state.buffers.depth.getReversed(), M = m.isInstancedMesh === !0, N = m.isBatchedMesh === !0, P = !!i.map, F = !!i.matcap, I = !!b, ee = I && b.isPMREMTexture === !0, te = !!i.aoMap, L = !!i.lightMap, ne = !!i.bumpMap && i.wireframe === !1, R = !!i.normalMap, z = !!i.displacementMap, re = !!i.emissiveMap, B = !!i.metalnessMap, V = !!i.roughnessMap, ie = i.anisotropy > 0, ae = i.clearcoat > 0, oe = i.diffuseRoughness > 0, se = i.dispersion > 0, ce = i.retroreflectivity > 0, H = i.iridescence > 0, U = i.sheen > 0, le = i.transmission > 0, ue = ie && !!i.anisotropyMap, de = ae && !!i.clearcoatMap, W = ae && !!i.clearcoatNormalMap, G = ae && !!i.clearcoatRoughnessMap, fe = oe && !!i.diffuseRoughnessMap, K = H && !!i.iridescenceMap, q = H && !!i.iridescenceThicknessMap, pe = U && !!i.sheenColorMap, me = U && !!i.sheenRoughnessMap, J = !!i.specularMap, he = !!i.specularColorMap, Y = !!i.specularIntensityMap, X = le && !!i.transmissionMap, ge = le && !!i.thicknessMap, _e = !!i.gradientMap, ve = !!i.alphaMap, ye = i.alphaTest > 0, be = !!i.alphaHash, xe = !!i.extensions, Se = 0;
 		i.toneMapped && (A === null || A.isXRRenderTarget === !0) && (Se = e.toneMapping);
 		let Ce = ee ? b.isCompressedCubeTexture ? b.image[0].mipmaps : b.mipmaps : null, we = {
 			shaderID: x,
@@ -30214,25 +30138,25 @@ function Gm(e, t, n, r, i, a) {
 			metalnessMap: B,
 			roughnessMap: V,
 			anisotropy: ie,
-			anisotropyMap: de,
+			anisotropyMap: ue,
 			clearcoat: ae,
-			clearcoatMap: fe,
-			clearcoatNormalMap: U,
-			clearcoatRoughnessMap: W,
+			clearcoatMap: de,
+			clearcoatNormalMap: W,
+			clearcoatRoughnessMap: G,
 			diffuseRoughness: oe,
-			diffuseRoughnessMap: G,
+			diffuseRoughnessMap: fe,
 			dispersion: se,
 			retroreflection: ce,
 			iridescence: H,
 			iridescenceMap: K,
 			iridescenceThicknessMap: q,
-			sheen: le,
+			sheen: U,
 			sheenColorMap: pe,
 			sheenRoughnessMap: me,
 			specularMap: J,
 			specularColorMap: he,
 			specularIntensityMap: Y,
-			transmission: ue,
+			transmission: le,
 			transmissionMap: X,
 			thicknessMap: ge,
 			gradientMap: _e,
@@ -30250,11 +30174,11 @@ function Gm(e, t, n, r, i, a) {
 			emissiveMapUv: re && p(i.emissiveMap.channel),
 			metalnessMapUv: B && p(i.metalnessMap.channel),
 			roughnessMapUv: V && p(i.roughnessMap.channel),
-			anisotropyMapUv: de && p(i.anisotropyMap.channel),
-			clearcoatMapUv: fe && p(i.clearcoatMap.channel),
-			clearcoatNormalMapUv: U && p(i.clearcoatNormalMap.channel),
-			clearcoatRoughnessMapUv: W && p(i.clearcoatRoughnessMap.channel),
-			diffuseRoughnessMapUv: G && p(i.diffuseRoughnessMap.channel),
+			anisotropyMapUv: ue && p(i.anisotropyMap.channel),
+			clearcoatMapUv: de && p(i.clearcoatMap.channel),
+			clearcoatNormalMapUv: W && p(i.clearcoatNormalMap.channel),
+			clearcoatRoughnessMapUv: G && p(i.clearcoatRoughnessMap.channel),
+			diffuseRoughnessMapUv: fe && p(i.diffuseRoughnessMap.channel),
 			iridescenceMapUv: K && p(i.iridescenceMap.channel),
 			iridescenceThicknessMapUv: q && p(i.iridescenceThicknessMap.channel),
 			sheenColorMapUv: pe && p(i.sheenColorMap.channel),
@@ -30521,14 +30445,6 @@ function Qm() {
 		switch (t.type) {
 			case "SunLight":
 			case "DirectionalLight":
-				n = {
-					shadowIntensity: 1,
-					shadowBias: 0,
-					shadowNormalBias: 0,
-					shadowRadius: 1,
-					shadowMapSize: new Z()
-				};
-				break;
 			case "SpotLight":
 				n = {
 					shadowIntensity: 1,
@@ -30826,7 +30742,7 @@ function dh(e, t, n) {
 			d.map.isWebGLCubeRenderTarget !== !0 && (d.map.width !== i.x || d.map.height !== i.y) && d.map.setSize(i.x, i.y);
 			let g = d.map.isWebGLCubeRenderTarget ? 6 : d.getViewportCount();
 			l.isPointLight !== !0 && d.updateMatrices(l, s);
-			let _ = d.camera.layers.mask & 4294967294 ? d.camera.layers : s.layers;
+			let _ = d.camera.layers.mask & 0xfffffffe ? d.camera.layers : s.layers;
 			for (let t = 0; t < g; t++) {
 				let i = d.getCamera(t);
 				if (l.isPointLight) {
@@ -31014,7 +30930,7 @@ function fh(e, t) {
 		return o;
 	}
 	let re = {};
-	re[e.TEXTURE_2D] = z(e.TEXTURE_2D, e.TEXTURE_2D, 1), re[e.TEXTURE_CUBE_MAP] = z(e.TEXTURE_CUBE_MAP, e.TEXTURE_CUBE_MAP_POSITIVE_X, 6), re[e.TEXTURE_2D_ARRAY] = z(e.TEXTURE_2D_ARRAY, e.TEXTURE_2D_ARRAY, 1, 1), re[e.TEXTURE_3D] = z(e.TEXTURE_3D, e.TEXTURE_3D, 1, 1), a.setClear(0, 0, 0, 1), o.setClear(1), s.setClear(0), B(e.DEPTH_TEST), o.setFunc(3), ue(!1), de(1), B(e.CULL_FACE), H(0);
+	re[e.TEXTURE_2D] = z(e.TEXTURE_2D, e.TEXTURE_2D, 1), re[e.TEXTURE_CUBE_MAP] = z(e.TEXTURE_CUBE_MAP, e.TEXTURE_CUBE_MAP_POSITIVE_X, 6), re[e.TEXTURE_2D_ARRAY] = z(e.TEXTURE_2D_ARRAY, e.TEXTURE_2D_ARRAY, 1, 1), re[e.TEXTURE_3D] = z(e.TEXTURE_3D, e.TEXTURE_3D, 1, 1), a.setClear(0, 0, 0, 1), o.setClear(1), s.setClear(0), B(e.DEPTH_TEST), o.setFunc(3), le(!1), ue(1), B(e.CULL_FACE), H(0);
 	function B(t) {
 		u[t] !== !0 && (e.enable(t), u[t] = !0);
 	}
@@ -31100,29 +31016,29 @@ function fh(e, t) {
 			}
 		} else a ||= n, o ||= r, s ||= i, (n !== v || a !== x) && (e.blendEquationSeparate(se[n], se[a]), v = n, x = a), (r !== y || i !== b || o !== S || s !== C) && (e.blendFuncSeparate(ce[r], ce[i], ce[o], ce[s]), y = r, b = i, S = o, C = s), (c.equals(w) === !1 || l !== T) && (e.blendColor(c.r, c.g, c.b, l), w.copy(c), T = l), _ = t, E = !1;
 	}
-	function le(t, n) {
+	function U(t, n) {
 		t.side === 2 ? V(e.CULL_FACE) : B(e.CULL_FACE);
 		let r = t.side === 1;
-		n && (r = !r), ue(r), t.blending === 1 && t.transparent === !1 ? H(0) : H(t.blending, t.blendEquation, t.blendSrc, t.blendDst, t.blendEquationAlpha, t.blendSrcAlpha, t.blendDstAlpha, t.blendColor, t.blendAlpha, t.premultipliedAlpha), o.setFunc(t.depthFunc), o.setTest(t.depthTest), o.setMask(t.depthWrite), a.setMask(t.colorWrite);
+		n && (r = !r), le(r), t.blending === 1 && t.transparent === !1 ? H(0) : H(t.blending, t.blendEquation, t.blendSrc, t.blendDst, t.blendEquationAlpha, t.blendSrcAlpha, t.blendDstAlpha, t.blendColor, t.blendAlpha, t.premultipliedAlpha), o.setFunc(t.depthFunc), o.setTest(t.depthTest), o.setMask(t.depthWrite), a.setMask(t.colorWrite);
 		let i = t.stencilWrite;
-		s.setTest(i), i && (s.setMask(t.stencilWriteMask), s.setFunc(t.stencilFunc, t.stencilRef, t.stencilFuncMask), s.setOp(t.stencilFail, t.stencilZFail, t.stencilZPass)), U(t.polygonOffset, t.polygonOffsetFactor, t.polygonOffsetUnits), t.alphaToCoverage === !0 ? B(e.SAMPLE_ALPHA_TO_COVERAGE) : V(e.SAMPLE_ALPHA_TO_COVERAGE);
+		s.setTest(i), i && (s.setMask(t.stencilWriteMask), s.setFunc(t.stencilFunc, t.stencilRef, t.stencilFuncMask), s.setOp(t.stencilFail, t.stencilZFail, t.stencilZPass)), W(t.polygonOffset, t.polygonOffsetFactor, t.polygonOffsetUnits), t.alphaToCoverage === !0 ? B(e.SAMPLE_ALPHA_TO_COVERAGE) : V(e.SAMPLE_ALPHA_TO_COVERAGE);
 	}
-	function ue(t) {
+	function le(t) {
 		D !== t && (t ? e.frontFace(e.CW) : e.frontFace(e.CCW), D = t);
 	}
-	function de(t) {
+	function ue(t) {
 		t === 0 ? V(e.CULL_FACE) : (B(e.CULL_FACE), t !== O && (t === 1 ? e.cullFace(e.BACK) : t === 2 ? e.cullFace(e.FRONT) : e.cullFace(e.FRONT_AND_BACK))), O = t;
 	}
-	function fe(t) {
+	function de(t) {
 		t !== k && (N && e.lineWidth(t), k = t);
 	}
-	function U(t, n, r) {
+	function W(t, n, r) {
 		t ? (B(e.POLYGON_OFFSET_FILL), (A !== n || j !== r) && (A = n, j = r, o.getReversed() && (n = -n, r = -r), e.polygonOffset(n, r))) : V(e.POLYGON_OFFSET_FILL);
 	}
-	function W(t) {
+	function G(t) {
 		t ? B(e.SCISSOR_TEST) : V(e.SCISSOR_TEST);
 	}
-	function G(t) {
+	function fe(t) {
 		t === void 0 && (t = e.TEXTURE0 + M - 1), I !== t && (e.activeTexture(t), I = t);
 	}
 	function K(t, n, r) {
@@ -31230,7 +31146,7 @@ function fh(e, t) {
 		c[i] !== r && (e.bindBufferBase(e.UNIFORM_BUFFER, i, r), c[i] = r);
 	}
 	function Ee() {
-		e.disable(e.BLEND), e.disable(e.CULL_FACE), e.disable(e.DEPTH_TEST), e.disable(e.POLYGON_OFFSET_FILL), e.disable(e.SCISSOR_TEST), e.disable(e.STENCIL_TEST), e.disable(e.SAMPLE_ALPHA_TO_COVERAGE), e.blendEquation(e.FUNC_ADD), e.blendFunc(e.ONE, e.ZERO), e.blendFuncSeparate(e.ONE, e.ZERO, e.ONE, e.ZERO), e.blendColor(0, 0, 0, 0), e.colorMask(!0, !0, !0, !0), e.clearColor(0, 0, 0, 0), e.depthMask(!0), e.depthFunc(e.LESS), o.setReversed(!1), e.clearDepth(1), e.stencilMask(4294967295), e.stencilFunc(e.ALWAYS, 0, 4294967295), e.stencilOp(e.KEEP, e.KEEP, e.KEEP), e.clearStencil(0), e.cullFace(e.BACK), e.frontFace(e.CCW), e.polygonOffset(0, 0), e.activeTexture(e.TEXTURE0), e.bindFramebuffer(e.FRAMEBUFFER, null), e.bindFramebuffer(e.DRAW_FRAMEBUFFER, null), e.bindFramebuffer(e.READ_FRAMEBUFFER, null), e.useProgram(null), e.lineWidth(1), e.scissor(0, 0, e.canvas.width, e.canvas.height), e.viewport(0, 0, e.canvas.width, e.canvas.height), e.pixelStorei(e.PACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_FLIP_Y_WEBGL, !1), e.pixelStorei(e.UNPACK_PREMULTIPLY_ALPHA_WEBGL, !1), e.pixelStorei(e.UNPACK_COLORSPACE_CONVERSION_WEBGL, e.BROWSER_DEFAULT_WEBGL), e.pixelStorei(e.PACK_ROW_LENGTH, 0), e.pixelStorei(e.PACK_SKIP_PIXELS, 0), e.pixelStorei(e.PACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_ROW_LENGTH, 0), e.pixelStorei(e.UNPACK_IMAGE_HEIGHT, 0), e.pixelStorei(e.UNPACK_SKIP_PIXELS, 0), e.pixelStorei(e.UNPACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_SKIP_IMAGES, 0), u = {}, d = {}, I = null, ee = {}, f = {}, c = {}, p = /* @__PURE__ */ new WeakMap(), m = [], h = null, g = !1, _ = null, v = null, y = null, b = null, x = null, S = null, C = null, w = new as(0, 0, 0), T = 0, E = !1, D = null, O = null, k = null, A = null, j = null, ne.set(0, 0, e.canvas.width, e.canvas.height), R.set(0, 0, e.canvas.width, e.canvas.height), a.reset(), o.reset(), s.reset();
+		e.disable(e.BLEND), e.disable(e.CULL_FACE), e.disable(e.DEPTH_TEST), e.disable(e.POLYGON_OFFSET_FILL), e.disable(e.SCISSOR_TEST), e.disable(e.STENCIL_TEST), e.disable(e.SAMPLE_ALPHA_TO_COVERAGE), e.blendEquation(e.FUNC_ADD), e.blendFunc(e.ONE, e.ZERO), e.blendFuncSeparate(e.ONE, e.ZERO, e.ONE, e.ZERO), e.blendColor(0, 0, 0, 0), e.colorMask(!0, !0, !0, !0), e.clearColor(0, 0, 0, 0), e.depthMask(!0), e.depthFunc(e.LESS), o.setReversed(!1), e.clearDepth(1), e.stencilMask(0xffffffff), e.stencilFunc(e.ALWAYS, 0, 0xffffffff), e.stencilOp(e.KEEP, e.KEEP, e.KEEP), e.clearStencil(0), e.cullFace(e.BACK), e.frontFace(e.CCW), e.polygonOffset(0, 0), e.activeTexture(e.TEXTURE0), e.bindFramebuffer(e.FRAMEBUFFER, null), e.bindFramebuffer(e.DRAW_FRAMEBUFFER, null), e.bindFramebuffer(e.READ_FRAMEBUFFER, null), e.useProgram(null), e.lineWidth(1), e.scissor(0, 0, e.canvas.width, e.canvas.height), e.viewport(0, 0, e.canvas.width, e.canvas.height), e.pixelStorei(e.PACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_ALIGNMENT, 4), e.pixelStorei(e.UNPACK_FLIP_Y_WEBGL, !1), e.pixelStorei(e.UNPACK_PREMULTIPLY_ALPHA_WEBGL, !1), e.pixelStorei(e.UNPACK_COLORSPACE_CONVERSION_WEBGL, e.BROWSER_DEFAULT_WEBGL), e.pixelStorei(e.PACK_ROW_LENGTH, 0), e.pixelStorei(e.PACK_SKIP_PIXELS, 0), e.pixelStorei(e.PACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_ROW_LENGTH, 0), e.pixelStorei(e.UNPACK_IMAGE_HEIGHT, 0), e.pixelStorei(e.UNPACK_SKIP_PIXELS, 0), e.pixelStorei(e.UNPACK_SKIP_ROWS, 0), e.pixelStorei(e.UNPACK_SKIP_IMAGES, 0), u = {}, d = {}, I = null, ee = {}, f = {}, c = {}, p = /* @__PURE__ */ new WeakMap(), m = [], h = null, g = !1, _ = null, v = null, y = null, b = null, x = null, S = null, C = null, w = new as(0, 0, 0), T = 0, E = !1, D = null, O = null, k = null, A = null, j = null, ne.set(0, 0, e.canvas.width, e.canvas.height), R.set(0, 0, e.canvas.width, e.canvas.height), a.reset(), o.reset(), s.reset();
 	}
 	return {
 		buffers: {
@@ -31244,13 +31160,13 @@ function fh(e, t) {
 		drawBuffers: ae,
 		useProgram: oe,
 		setBlending: H,
-		setMaterial: le,
-		setFlipSided: ue,
-		setCullFace: de,
-		setLineWidth: fe,
-		setPolygonOffset: U,
-		setScissorTest: W,
-		activeTexture: G,
+		setMaterial: U,
+		setFlipSided: le,
+		setCullFace: ue,
+		setLineWidth: de,
+		setPolygonOffset: W,
+		setScissorTest: G,
+		activeTexture: fe,
 		bindTexture: K,
 		unbindTexture: q,
 		compressedTexImage2D: pe,
@@ -31281,7 +31197,7 @@ function ph(e, t, n, r, i, a, o) {
 		return g ? new OffscreenCanvas(e, t) : ma("canvas");
 	}
 	function v(e, t, n) {
-		let r = 1, i = ge(e);
+		let r = 1, i = W(e);
 		if ((i.width > n || i.height > n) && (r = n / Math.max(i.width, i.height)), r < 1) {
 			if (typeof HTMLImageElement < "u" && e instanceof HTMLImageElement || typeof HTMLCanvasElement < "u" && e instanceof HTMLCanvasElement || typeof ImageBitmap < "u" && e instanceof ImageBitmap || typeof VideoFrame < "u" && e instanceof VideoFrame) {
 				let n = Math.floor(r * i.width), a = Math.floor(r * i.height);
@@ -31338,35 +31254,28 @@ function ph(e, t, n, r, i, a, o) {
 		A(e.target);
 	}
 	function k(e) {
-		e.removeEventListener("dispose", D), E(e), M(e), e.isVideoTexture && u.delete(e), e.isHTMLTexture && d.delete(e);
+		e.removeEventListener("dispose", D), E(e), j(e), e.isVideoTexture && u.delete(e), e.isHTMLTexture && d.delete(e);
 	}
 	function A(e) {
-		e.removeEventListener("dispose", O), E(e), P(e);
+		e.removeEventListener("dispose", O), E(e), N(e);
 	}
-	function j() {
-		for (let e of m) {
-			let t = e.deref();
-			t !== void 0 && (t.isRenderTarget === !0 ? A(t) : k(t));
-		}
-		m.clear(), d.clear();
-	}
-	function M(e) {
+	function j(e) {
 		let t = r.get(e);
 		if (t.__webglInit === void 0) return;
 		let n = e.source, i = p.get(n);
 		if (i) {
 			let r = i[t.__cacheKey];
-			r.usedTimes--, r.usedTimes === 0 && N(e), Object.keys(i).length === 0 && p.delete(n);
+			r.usedTimes--, r.usedTimes === 0 && M(e), Object.keys(i).length === 0 && p.delete(n);
 		}
 		r.remove(e);
 	}
-	function N(t) {
+	function M(t) {
 		let n = r.get(t);
 		e.deleteTexture(n.__webglTexture);
 		let i = t.source, a = p.get(i);
 		delete a[n.__cacheKey], o.memory.textures--;
 	}
-	function P(t) {
+	function N(t) {
 		let n = r.get(t);
 		n.__depthDisposeCallback && n.__depthDisposeCallback();
 		let i = t.depthTexture;
@@ -31388,61 +31297,40 @@ function ph(e, t, n, r, i, a, o) {
 		}
 		r.remove(t);
 	}
-	let F = 0;
-	function I() {
-		F = 0;
-	}
-	function ee() {
-		return F;
-	}
-	function te(e) {
-		F = e;
-	}
-	function L() {
-		let e = F;
-		return e >= i.maxTextures && ya("WebGLTextures: Trying to use " + (e + 1) + " texture units while this GPU supports only " + i.maxTextures), F += 1, e;
-	}
-	function ne(e) {
+	let P = 0;
+	function F(e) {
 		let t = [];
 		return t.push(e.wrapS), t.push(e.wrapT), t.push(e.wrapR || 0), t.push(e.magFilter), t.push(e.minFilter), t.push(e.anisotropy), t.push(e.internalFormat), t.push(e.format), t.push(e.type), t.push(e.generateMipmaps), t.push(e.mipmapsAutoUpdate), t.push(e.premultiplyAlpha), t.push(e.flipY), t.push(e.unpackAlignment), t.push(e.colorSpace), t.join();
 	}
-	function R(t, i) {
+	function I(t, i) {
 		let a = r.get(t);
-		if (t.isVideoTexture && Y(t), t.isRenderTargetTexture === !1 && t.isExternalTexture !== !0 && t.version > 0 && a.__version !== t.version) {
+		if (t.isVideoTexture && ue(t), t.isRenderTargetTexture === !1 && t.isExternalTexture !== !0 && t.version > 0 && a.__version !== t.version) {
 			let e = t.image;
 			if (e === null) ya("WebGLRenderer: Texture marked for update but no image data found.");
 			else if (e.complete === !1) ya("WebGLRenderer: Texture marked for update but image is incomplete");
 			else {
-				le(a, t, i);
+				V(a, t, i);
 				return;
 			}
 		} else t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null);
 		n.bindTexture(e.TEXTURE_2D, a.__webglTexture, e.TEXTURE0 + i);
 	}
-	function z(t, i) {
+	function ee(t, i) {
 		let a = r.get(t);
-		t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version ? le(a, t, i) : (t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null), n.bindTexture(e.TEXTURE_2D_ARRAY, a.__webglTexture, e.TEXTURE0 + i));
+		t.version > 0 && a.__version !== t.version ? ie(a, t, i) : n.bindTexture(e.TEXTURE_CUBE_MAP, a.__webglTexture, e.TEXTURE0 + i);
 	}
-	function re(t, i) {
-		let a = r.get(t);
-		t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version ? le(a, t, i) : n.bindTexture(e.TEXTURE_3D, a.__webglTexture, e.TEXTURE0 + i);
-	}
-	function B(t, i) {
-		let a = r.get(t);
-		t.version > 0 && a.__version !== t.version ? ue(a, t, i) : n.bindTexture(e.TEXTURE_CUBE_MAP, a.__webglTexture, e.TEXTURE0 + i);
-	}
-	let V = {
+	let te = {
 		[Lr]: e.REPEAT,
 		[Rr]: e.CLAMP_TO_EDGE,
 		[zr]: e.MIRRORED_REPEAT
-	}, ie = {
+	}, L = {
 		[Br]: e.NEAREST,
 		[Vr]: e.NEAREST_MIPMAP_NEAREST,
 		[Hr]: e.NEAREST_MIPMAP_LINEAR,
 		[Ur]: e.LINEAR,
 		[Wr]: e.LINEAR_MIPMAP_NEAREST,
 		[Gr]: e.LINEAR_MIPMAP_LINEAR
-	}, ae = {
+	}, ne = {
 		512: e.NEVER,
 		519: e.ALWAYS,
 		513: e.LESS,
@@ -31452,8 +31340,8 @@ function ph(e, t, n, r, i, a, o) {
 		516: e.GREATER,
 		517: e.NOTEQUAL
 	};
-	function oe(n, a) {
-		if (a.type === 1015 && t.has("OES_texture_float_linear") === !1 && (a.magFilter === 1006 || a.magFilter === 1007 || a.magFilter === 1005 || a.magFilter === 1008 || a.minFilter === 1006 || a.minFilter === 1007 || a.minFilter === 1005 || a.minFilter === 1008) && ya("WebGLRenderer: Unable to use linear filtering with floating point textures. OES_texture_float_linear not supported on this device."), e.texParameteri(n, e.TEXTURE_WRAP_S, V[a.wrapS]), e.texParameteri(n, e.TEXTURE_WRAP_T, V[a.wrapT]), (n === e.TEXTURE_3D || n === e.TEXTURE_2D_ARRAY) && e.texParameteri(n, e.TEXTURE_WRAP_R, V[a.wrapR]), e.texParameteri(n, e.TEXTURE_MAG_FILTER, ie[a.magFilter]), e.texParameteri(n, e.TEXTURE_MIN_FILTER, ie[a.minFilter]), a.compareFunction && (e.texParameteri(n, e.TEXTURE_COMPARE_MODE, e.COMPARE_REF_TO_TEXTURE), e.texParameteri(n, e.TEXTURE_COMPARE_FUNC, ae[a.compareFunction])), t.has("EXT_texture_filter_anisotropic") === !0) {
+	function R(n, a) {
+		if (a.type === 1015 && t.has("OES_texture_float_linear") === !1 && (a.magFilter === 1006 || a.magFilter === 1007 || a.magFilter === 1005 || a.magFilter === 1008 || a.minFilter === 1006 || a.minFilter === 1007 || a.minFilter === 1005 || a.minFilter === 1008) && ya("WebGLRenderer: Unable to use linear filtering with floating point textures. OES_texture_float_linear not supported on this device."), e.texParameteri(n, e.TEXTURE_WRAP_S, te[a.wrapS]), e.texParameteri(n, e.TEXTURE_WRAP_T, te[a.wrapT]), (n === e.TEXTURE_3D || n === e.TEXTURE_2D_ARRAY) && e.texParameteri(n, e.TEXTURE_WRAP_R, te[a.wrapR]), e.texParameteri(n, e.TEXTURE_MAG_FILTER, L[a.magFilter]), e.texParameteri(n, e.TEXTURE_MIN_FILTER, L[a.minFilter]), a.compareFunction && (e.texParameteri(n, e.TEXTURE_COMPARE_MODE, e.COMPARE_REF_TO_TEXTURE), e.texParameteri(n, e.TEXTURE_COMPARE_FUNC, ne[a.compareFunction])), t.has("EXT_texture_filter_anisotropic") === !0) {
 			if (a.magFilter === 1003 || a.minFilter !== 1005 && a.minFilter !== 1008 || a.type === 1015 && t.has("OES_texture_float_linear") === !1) return;
 			if (a.anisotropy > 1 || r.get(a).__currentAnisotropy) {
 				let o = t.get("EXT_texture_filter_anisotropic");
@@ -31461,34 +31349,34 @@ function ph(e, t, n, r, i, a, o) {
 			}
 		}
 	}
-	function se(t, n) {
+	function z(t, n) {
 		let r = !1;
 		t.__webglInit === void 0 && (t.__webglInit = !0, n.addEventListener("dispose", D), T(n));
 		let i = n.source, a = p.get(i);
 		a === void 0 && (a = {}, p.set(i, a));
-		let s = ne(n);
+		let s = F(n);
 		if (s !== t.__cacheKey) {
 			a[s] === void 0 && (a[s] = {
 				texture: e.createTexture(),
 				usedTimes: 0
 			}, o.memory.textures++, r = !0), a[s].usedTimes++;
 			let i = a[t.__cacheKey];
-			i !== void 0 && (a[t.__cacheKey].usedTimes--, i.usedTimes === 0 && N(n)), t.__cacheKey = s, t.__webglTexture = a[s].texture;
+			i !== void 0 && (a[t.__cacheKey].usedTimes--, i.usedTimes === 0 && M(n)), t.__cacheKey = s, t.__webglTexture = a[s].texture;
 		}
 		return r;
 	}
-	function ce(e, t, n) {
+	function re(e, t, n) {
 		return Math.floor(Math.floor(e / n) / t);
 	}
-	function H(t, r, i, a) {
+	function B(t, r, i, a) {
 		let o = t.updateRanges;
 		if (o.length === 0) n.texSubImage2D(e.TEXTURE_2D, 0, 0, 0, r.width, r.height, i, a, r.data);
 		else {
 			o.sort((e, t) => e.start - t.start);
 			let s = 0;
 			for (let e = 1; e < o.length; e++) {
-				let t = o[s], n = o[e], i = t.start + t.count, a = ce(n.start, r.width, 4), c = ce(t.start, r.width, 4);
-				n.start <= i + 1 && a === c && ce(n.start + n.count - 1, r.width, 4) === a ? t.count = Math.max(t.count, n.start + n.count - t.start) : (++s, o[s] = n);
+				let t = o[s], n = o[e], i = t.start + t.count, a = re(n.start, r.width, 4), c = re(t.start, r.width, 4);
+				n.start <= i + 1 && a === c && re(n.start + n.count - 1, r.width, 4) === a ? t.count = Math.max(t.count, n.start + n.count - t.start) : (++s, o[s] = n);
 			}
 			o.length = s + 1;
 			let c = n.getParameter(e.UNPACK_ROW_LENGTH), l = n.getParameter(e.UNPACK_SKIP_PIXELS), u = n.getParameter(e.UNPACK_SKIP_ROWS);
@@ -31500,10 +31388,10 @@ function ph(e, t, n, r, i, a, o) {
 			t.clearUpdateRanges(), n.pixelStorei(e.UNPACK_ROW_LENGTH, c), n.pixelStorei(e.UNPACK_SKIP_PIXELS, l), n.pixelStorei(e.UNPACK_SKIP_ROWS, u);
 		}
 	}
-	function le(t, o, s) {
+	function V(t, o, s) {
 		let c = e.TEXTURE_2D;
 		(o.isDataArrayTexture || o.isCompressedArrayTexture) && (c = e.TEXTURE_2D_ARRAY), o.isData3DTexture && (c = e.TEXTURE_3D);
-		let l = se(t, o), u = o.source;
+		let l = z(t, o), u = o.source;
 		n.bindTexture(c, t.__webglTexture, e.TEXTURE0 + s);
 		let f = r.get(u);
 		if (u.version !== f.__version || l === !0) {
@@ -31513,9 +31401,9 @@ function ph(e, t, n, r, i, a, o) {
 			}
 			n.pixelStorei(e.UNPACK_ALIGNMENT, o.unpackAlignment);
 			let t = v(o.image, !1, i.maxTextureSize);
-			t = X(o, t);
+			t = de(o, t);
 			let r = a.convert(o.format, o.colorSpace), p = a.convert(o.type), m = S(o.internalFormat, r, p, o.normalized, o.colorSpace, o.isVideoTexture);
-			oe(c, o);
+			R(c, o);
 			let h, g = o.mipmaps, _ = o.isVideoTexture !== !0, x = f.__version === void 0 || l === !0, T = u.dataReady, E = w(o, t);
 			if (o.isDepthTexture) m = C(o.format === li, o.type), x && (_ ? n.texStorage2D(e.TEXTURE_2D, 1, m, t.width, t.height) : n.texImage2D(e.TEXTURE_2D, 0, m, t.width, t.height, 0, r, p, null));
 			else if (o.isDataTexture) {
@@ -31523,7 +31411,7 @@ function ph(e, t, n, r, i, a, o) {
 					_ && x && n.texStorage2D(e.TEXTURE_2D, E, m, g[0].width, g[0].height);
 					for (let t = 0, i = g.length; t < i; t++) h = g[t], _ ? T && n.texSubImage2D(e.TEXTURE_2D, t, 0, 0, h.width, h.height, r, p, h.data) : n.texImage2D(e.TEXTURE_2D, t, m, h.width, h.height, 0, r, p, h.data);
 					o.generateMipmaps = !1;
-				} else _ ? (x && n.texStorage2D(e.TEXTURE_2D, E, m, t.width, t.height), T && H(o, t, r, p)) : n.texImage2D(e.TEXTURE_2D, 0, m, t.width, t.height, 0, r, p, t.data);
+				} else _ ? (x && n.texStorage2D(e.TEXTURE_2D, E, m, t.width, t.height), T && B(o, t, r, p)) : n.texImage2D(e.TEXTURE_2D, 0, m, t.width, t.height, 0, r, p, t.data);
 			} else if (o.isCompressedTexture) {
 				if (o.isCompressedArrayTexture) {
 					_ && x && n.texStorage3D(e.TEXTURE_2D_ARRAY, E, m, g[0].width, g[0].height, t.depth);
@@ -31588,14 +31476,14 @@ function ph(e, t, n, r, i, a, o) {
 				}
 			} else if (g.length > 0) {
 				if (_ && x) {
-					let t = ge(g[0]);
+					let t = W(g[0]);
 					n.texStorage2D(e.TEXTURE_2D, E, m, t.width, t.height);
 				}
 				for (let t = 0, i = g.length; t < i; t++) h = g[t], _ ? T && n.texSubImage2D(e.TEXTURE_2D, t, 0, 0, r, p, h) : n.texImage2D(e.TEXTURE_2D, t, m, r, p, h);
 				o.generateMipmaps = !1;
 			} else if (_) {
 				if (x) {
-					let r = ge(t);
+					let r = W(t);
 					n.texStorage2D(e.TEXTURE_2D, E, m, r.width, r.height);
 				}
 				T && n.texSubImage2D(e.TEXTURE_2D, 0, 0, 0, r, p, t);
@@ -31604,9 +31492,9 @@ function ph(e, t, n, r, i, a, o) {
 		}
 		t.__version = o.version;
 	}
-	function ue(t, o, s) {
+	function ie(t, o, s) {
 		if (o.image.length !== 6) return;
-		let c = se(t, o), l = o.source;
+		let c = z(t, o), l = o.source;
 		n.bindTexture(e.TEXTURE_CUBE_MAP, t.__webglTexture, e.TEXTURE0 + s);
 		let u = r.get(l);
 		if (l.version !== u.__version || c === !0) {
@@ -31614,9 +31502,9 @@ function ph(e, t, n, r, i, a, o) {
 			let t = so.getPrimaries(so.workingColorSpace), r = o.colorSpace === "" ? null : so.getPrimaries(o.colorSpace), d = o.colorSpace === "" || t === r ? e.NONE : e.BROWSER_DEFAULT_WEBGL;
 			n.pixelStorei(e.UNPACK_FLIP_Y_WEBGL, o.flipY), n.pixelStorei(e.UNPACK_PREMULTIPLY_ALPHA_WEBGL, o.premultiplyAlpha), n.pixelStorei(e.UNPACK_ALIGNMENT, o.unpackAlignment), n.pixelStorei(e.UNPACK_COLORSPACE_CONVERSION_WEBGL, d);
 			let f = o.isCompressedTexture || o.image[0].isCompressedTexture, p = o.image[0] && o.image[0].isDataTexture, m = [];
-			for (let e = 0; e < 6; e++) !f && !p ? m[e] = v(o.image[e], !0, i.maxCubemapSize) : m[e] = p ? o.image[e].image : o.image[e], m[e] = X(o, m[e]);
+			for (let e = 0; e < 6; e++) !f && !p ? m[e] = v(o.image[e], !0, i.maxCubemapSize) : m[e] = p ? o.image[e].image : o.image[e], m[e] = de(o, m[e]);
 			let h = m[0], g = a.convert(o.format, o.colorSpace), _ = a.convert(o.type), x = S(o.internalFormat, g, _, o.normalized, o.colorSpace), T = o.isVideoTexture !== !0, E = u.__version === void 0 || c === !0, D = l.dataReady, O = w(o, h);
-			oe(e.TEXTURE_CUBE_MAP, o);
+			R(e.TEXTURE_CUBE_MAP, o);
 			let k;
 			if (o.isDepthTexture) {
 				if (x = C(o.format === li, o.type), E) {
@@ -31635,7 +31523,7 @@ function ph(e, t, n, r, i, a, o) {
 			} else {
 				if (k = o.mipmaps, T && E) {
 					k.length > 0 && O++;
-					let t = ge(m[0]);
+					let t = W(m[0]);
 					n.texStorage2D(e.TEXTURE_CUBE_MAP, O, x, t.width, t.height);
 				}
 				for (let t = 0; t < 6; t++) if (p) {
@@ -31656,40 +31544,40 @@ function ph(e, t, n, r, i, a, o) {
 		}
 		t.__version = o.version;
 	}
-	function de(t, i, o, c, l, u) {
+	function ae(t, i, o, c, l, u) {
 		let d = a.convert(o.format, o.colorSpace), f = a.convert(o.type), p = S(o.internalFormat, d, f, o.normalized, o.colorSpace), m = r.get(i), h = r.get(o);
 		if (h.__renderTarget = i, !m.__hasExternalTextures) {
 			let t = Math.max(1, i.width >> u), r = Math.max(1, i.height >> u);
 			l === e.TEXTURE_3D || l === e.TEXTURE_2D_ARRAY ? n.texImage3D(l, u, p, t, r, i.depth, 0, d, f, null) : n.texImage2D(l, u, p, t, r, 0, d, f, null);
 		}
-		n.bindFramebuffer(e.FRAMEBUFFER, t), he(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, c, l, h.__webglTexture, 0, J(i)) : (l === e.TEXTURE_2D || l >= e.TEXTURE_CUBE_MAP_POSITIVE_X && l <= e.TEXTURE_CUBE_MAP_NEGATIVE_Z) && e.framebufferTexture2D(e.FRAMEBUFFER, c, l, h.__webglTexture, u), n.bindFramebuffer(e.FRAMEBUFFER, null);
+		n.bindFramebuffer(e.FRAMEBUFFER, t), le(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, c, l, h.__webglTexture, 0, U(i)) : (l === e.TEXTURE_2D || l >= e.TEXTURE_CUBE_MAP_POSITIVE_X && l <= e.TEXTURE_CUBE_MAP_NEGATIVE_Z) && e.framebufferTexture2D(e.FRAMEBUFFER, c, l, h.__webglTexture, u), n.bindFramebuffer(e.FRAMEBUFFER, null);
 	}
-	function fe(t, n, r) {
+	function oe(t, n, r) {
 		if (e.bindRenderbuffer(e.RENDERBUFFER, t), n.depthBuffer) {
 			let i = n.depthTexture, a = i && i.isDepthTexture ? i.type : null, o = C(n.stencilBuffer, a), c = n.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT;
-			he(n) ? s.renderbufferStorageMultisampleEXT(e.RENDERBUFFER, J(n), o, n.width, n.height) : r ? e.renderbufferStorageMultisample(e.RENDERBUFFER, J(n), o, n.width, n.height) : e.renderbufferStorage(e.RENDERBUFFER, o, n.width, n.height), e.framebufferRenderbuffer(e.FRAMEBUFFER, c, e.RENDERBUFFER, t);
+			le(n) ? s.renderbufferStorageMultisampleEXT(e.RENDERBUFFER, U(n), o, n.width, n.height) : r ? e.renderbufferStorageMultisample(e.RENDERBUFFER, U(n), o, n.width, n.height) : e.renderbufferStorage(e.RENDERBUFFER, o, n.width, n.height), e.framebufferRenderbuffer(e.FRAMEBUFFER, c, e.RENDERBUFFER, t);
 		} else {
 			let t = n.textures;
 			for (let i = 0; i < t.length; i++) {
 				let o = t[i], c = a.convert(o.format, o.colorSpace), l = a.convert(o.type), u = S(o.internalFormat, c, l, o.normalized, o.colorSpace);
-				he(n) ? s.renderbufferStorageMultisampleEXT(e.RENDERBUFFER, J(n), u, n.width, n.height) : r ? e.renderbufferStorageMultisample(e.RENDERBUFFER, J(n), u, n.width, n.height) : e.renderbufferStorage(e.RENDERBUFFER, u, n.width, n.height);
+				le(n) ? s.renderbufferStorageMultisampleEXT(e.RENDERBUFFER, U(n), u, n.width, n.height) : r ? e.renderbufferStorageMultisample(e.RENDERBUFFER, U(n), u, n.width, n.height) : e.renderbufferStorage(e.RENDERBUFFER, u, n.width, n.height);
 			}
 		}
 		e.bindRenderbuffer(e.RENDERBUFFER, null);
 	}
-	function U(t, i, a) {
+	function se(t, i, a) {
 		let o = i.isWebGLCubeRenderTarget === !0;
 		if (n.bindFramebuffer(e.FRAMEBUFFER, t), !(i.depthTexture && i.depthTexture.isDepthTexture)) throw Error("THREE.WebGLTextures: renderTarget.depthTexture must be an instance of THREE.DepthTexture.");
 		let c = r.get(i.depthTexture);
 		c.__renderTarget = i;
 		let l = o ? i.depthTexture.image[0] : i.depthTexture.image;
-		c.__webglTexture && l.width === i.width && l.height === i.height || (l.width = i.width, l.height = i.height, i.depthTexture.needsUpdate = !0), o ? B(i.depthTexture, 0) : R(i.depthTexture, 0);
-		let u = c.__webglTexture, d = J(i), f = o ? e.TEXTURE_CUBE_MAP_POSITIVE_X + a : e.TEXTURE_2D, p = i.depthTexture.format === 1027 ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT;
-		if (i.depthTexture.format === 1026) he(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, p, f, u, 0, d) : e.framebufferTexture2D(e.FRAMEBUFFER, p, f, u, 0);
-		else if (i.depthTexture.format === 1027) he(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, p, f, u, 0, d) : e.framebufferTexture2D(e.FRAMEBUFFER, p, f, u, 0);
+		c.__webglTexture && l.width === i.width && l.height === i.height || (l.width = i.width, l.height = i.height, i.depthTexture.needsUpdate = !0), o ? ee(i.depthTexture, 0) : I(i.depthTexture, 0);
+		let u = c.__webglTexture, d = U(i), f = o ? e.TEXTURE_CUBE_MAP_POSITIVE_X + a : e.TEXTURE_2D, p = i.depthTexture.format === 1027 ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT;
+		if (i.depthTexture.format === 1026) le(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, p, f, u, 0, d) : e.framebufferTexture2D(e.FRAMEBUFFER, p, f, u, 0);
+		else if (i.depthTexture.format === 1027) le(i) ? s.framebufferTexture2DMultisampleEXT(e.FRAMEBUFFER, p, f, u, 0, d) : e.framebufferTexture2D(e.FRAMEBUFFER, p, f, u, 0);
 		else throw Error("THREE.WebGLTextures: Unknown depthTexture format.");
 	}
-	function W(t) {
+	function ce(t) {
 		let i = r.get(t), a = t.isWebGLCubeRenderTarget === !0;
 		if (i.__boundDepthTexture !== t.depthTexture) {
 			let e = t.depthTexture;
@@ -31702,27 +31590,60 @@ function ph(e, t, n, r, i, a, o) {
 			i.__boundDepthTexture = e;
 		}
 		if (t.depthTexture && !i.__autoAllocateDepthBuffer) {
-			if (a) for (let e = 0; e < 6; e++) U(i.__webglFramebuffer[e], t, e);
-			else t.texture.mipmaps.length > 0 ? U(i.__webglFramebuffer[0], t, 0) : U(i.__webglFramebuffer, t, 0);
+			if (a) for (let e = 0; e < 6; e++) se(i.__webglFramebuffer[e], t, e);
+			else t.texture.mipmaps.length > 0 ? se(i.__webglFramebuffer[0], t, 0) : se(i.__webglFramebuffer, t, 0);
 		} else if (a) {
 			i.__webglDepthbuffer = [];
-			for (let r = 0; r < 6; r++) if (n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[r]), i.__webglDepthbuffer[r] === void 0) i.__webglDepthbuffer[r] = e.createRenderbuffer(), fe(i.__webglDepthbuffer[r], t, !1);
+			for (let r = 0; r < 6; r++) if (n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[r]), i.__webglDepthbuffer[r] === void 0) i.__webglDepthbuffer[r] = e.createRenderbuffer(), oe(i.__webglDepthbuffer[r], t, !1);
 			else {
 				let n = t.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT, a = i.__webglDepthbuffer[r];
 				e.bindRenderbuffer(e.RENDERBUFFER, a), e.framebufferRenderbuffer(e.FRAMEBUFFER, n, e.RENDERBUFFER, a);
 			}
-		} else if (t.texture.mipmaps.length > 0 ? n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[0]) : n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer), i.__webglDepthbuffer === void 0) i.__webglDepthbuffer = e.createRenderbuffer(), fe(i.__webglDepthbuffer, t, !1);
+		} else if (t.texture.mipmaps.length > 0 ? n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer[0]) : n.bindFramebuffer(e.FRAMEBUFFER, i.__webglFramebuffer), i.__webglDepthbuffer === void 0) i.__webglDepthbuffer = e.createRenderbuffer(), oe(i.__webglDepthbuffer, t, !1);
 		else {
 			let n = t.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT, r = i.__webglDepthbuffer;
 			e.bindRenderbuffer(e.RENDERBUFFER, r), e.framebufferRenderbuffer(e.FRAMEBUFFER, n, e.RENDERBUFFER, r);
 		}
 		n.bindFramebuffer(e.FRAMEBUFFER, null);
 	}
-	function G(t, n, i) {
-		let a = r.get(t);
-		n !== void 0 && de(a.__webglFramebuffer, t, t.texture, e.COLOR_ATTACHMENT0, e.TEXTURE_2D, 0), i !== void 0 && W(t);
+	let H = [];
+	function U(e) {
+		return Math.min(i.maxSamples, e.samples);
 	}
-	function K(t) {
+	function le(e) {
+		let n = r.get(e);
+		return e.samples > 0 && t.has("WEBGL_multisampled_render_to_texture") === !0 && n.__useRenderToTexture !== !1;
+	}
+	function ue(e) {
+		let t = o.render.frame;
+		u.get(e) !== t && (u.set(e, t), e.update());
+	}
+	function de(e, t) {
+		let n = e.colorSpace, r = e.format, i = e.type;
+		return e.isCompressedTexture === !0 || e.isVideoTexture === !0 || n !== "srgb-linear" && n !== "" && (so.getTransfer(n) === "srgb" ? (r !== 1023 || i !== 1009) && ya("WebGLTextures: sRGB encoded textures have to use RGBAFormat and UnsignedByteType.") : ba("WebGLTextures: Unsupported texture color space:", n)), t;
+	}
+	function W(e) {
+		return typeof HTMLImageElement < "u" && e instanceof HTMLImageElement ? (l.width = e.naturalWidth || e.width, l.height = e.naturalHeight || e.height) : typeof VideoFrame < "u" && e instanceof VideoFrame ? (l.width = e.displayWidth, l.height = e.displayHeight) : (l.width = e.width, l.height = e.height), l;
+	}
+	this.allocateTextureUnit = function() {
+		let e = P;
+		return e >= i.maxTextures && ya("WebGLTextures: Trying to use " + (e + 1) + " texture units while this GPU supports only " + i.maxTextures), P += 1, e;
+	}, this.resetTextureUnits = function() {
+		P = 0;
+	}, this.getTextureUnits = function() {
+		return P;
+	}, this.setTextureUnits = function(e) {
+		P = e;
+	}, this.setTexture2D = I, this.setTexture2DArray = function(t, i) {
+		let a = r.get(t);
+		t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version ? V(a, t, i) : (t.isExternalTexture && (a.__webglTexture = t.sourceTexture ? t.sourceTexture : null), n.bindTexture(e.TEXTURE_2D_ARRAY, a.__webglTexture, e.TEXTURE0 + i));
+	}, this.setTexture3D = function(t, i) {
+		let a = r.get(t);
+		t.isRenderTargetTexture === !1 && t.version > 0 && a.__version !== t.version ? V(a, t, i) : n.bindTexture(e.TEXTURE_3D, a.__webglTexture, e.TEXTURE0 + i);
+	}, this.setTextureCube = ee, this.rebindTextures = function(t, n, i) {
+		let a = r.get(t);
+		n !== void 0 && ae(a.__webglFramebuffer, t, t.texture, e.COLOR_ATTACHMENT0, e.TEXTURE_2D, 0), i !== void 0 && ce(t);
+	}, this.setupRenderTarget = function(t) {
 		let i = t.texture, s = r.get(t), c = r.get(i);
 		t.addEventListener("dispose", O), T(t);
 		let l = t.textures, u = t.isWebGLCubeRenderTarget === !0, d = l.length > 1;
@@ -31741,37 +31662,36 @@ function ph(e, t, n, r, i, a, o) {
 				let n = r.get(l[t]);
 				n.__webglTexture === void 0 && (n.__webglTexture = e.createTexture(), o.memory.textures++);
 			}
-			if (t.samples > 0 && he(t) === !1) {
+			if (t.samples > 0 && le(t) === !1) {
 				s.__webglMultisampledFramebuffer = e.createFramebuffer(), s.__webglColorRenderbuffer = [], n.bindFramebuffer(e.FRAMEBUFFER, s.__webglMultisampledFramebuffer);
 				for (let n = 0; n < l.length; n++) {
 					let r = l[n];
 					s.__webglColorRenderbuffer[n] = e.createRenderbuffer(), e.bindRenderbuffer(e.RENDERBUFFER, s.__webglColorRenderbuffer[n]);
-					let i = a.convert(r.format, r.colorSpace), o = a.convert(r.type), c = S(r.internalFormat, i, o, r.normalized, r.colorSpace, t.isXRRenderTarget === !0), u = J(t);
+					let i = a.convert(r.format, r.colorSpace), o = a.convert(r.type), c = S(r.internalFormat, i, o, r.normalized, r.colorSpace, t.isXRRenderTarget === !0), u = U(t);
 					e.renderbufferStorageMultisample(e.RENDERBUFFER, u, c, t.width, t.height), e.framebufferRenderbuffer(e.FRAMEBUFFER, e.COLOR_ATTACHMENT0 + n, e.RENDERBUFFER, s.__webglColorRenderbuffer[n]);
 				}
-				e.bindRenderbuffer(e.RENDERBUFFER, null), t.depthBuffer && (s.__webglDepthRenderbuffer = e.createRenderbuffer(), fe(s.__webglDepthRenderbuffer, t, !0)), n.bindFramebuffer(e.FRAMEBUFFER, null);
+				e.bindRenderbuffer(e.RENDERBUFFER, null), t.depthBuffer && (s.__webglDepthRenderbuffer = e.createRenderbuffer(), oe(s.__webglDepthRenderbuffer, t, !0)), n.bindFramebuffer(e.FRAMEBUFFER, null);
 			}
 		}
 		if (u) {
-			n.bindTexture(e.TEXTURE_CUBE_MAP, c.__webglTexture), oe(e.TEXTURE_CUBE_MAP, i);
-			for (let n = 0; n < 6; n++) if (i.mipmaps.length > 0) for (let r = 0; r < i.mipmaps.length; r++) de(s.__webglFramebuffer[n][r], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, r);
-			else de(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, 0);
+			n.bindTexture(e.TEXTURE_CUBE_MAP, c.__webglTexture), R(e.TEXTURE_CUBE_MAP, i);
+			for (let n = 0; n < 6; n++) if (i.mipmaps.length > 0) for (let r = 0; r < i.mipmaps.length; r++) ae(s.__webglFramebuffer[n][r], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, r);
+			else ae(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, e.TEXTURE_CUBE_MAP_POSITIVE_X + n, 0);
 			y(i) ? b(e.TEXTURE_CUBE_MAP) : i.mipmaps.length > 0 && e.texParameteri(e.TEXTURE_CUBE_MAP, e.TEXTURE_MAX_LEVEL, i.mipmaps.length - 1), n.unbindTexture();
 		} else if (d) {
 			for (let i = 0, a = l.length; i < a; i++) {
 				let a = l[i], o = r.get(a), c = e.TEXTURE_2D;
-				(t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (c = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(c, o.__webglTexture), oe(c, a), de(s.__webglFramebuffer, t, a, e.COLOR_ATTACHMENT0 + i, c, 0), y(a) && b(c);
+				(t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (c = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(c, o.__webglTexture), R(c, a), ae(s.__webglFramebuffer, t, a, e.COLOR_ATTACHMENT0 + i, c, 0), y(a) && b(c);
 			}
 			n.unbindTexture();
 		} else {
 			let r = e.TEXTURE_2D;
-			if ((t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (r = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(r, c.__webglTexture), oe(r, i), i.mipmaps.length > 0) for (let n = 0; n < i.mipmaps.length; n++) de(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, r, n);
-			else de(s.__webglFramebuffer, t, i, e.COLOR_ATTACHMENT0, r, 0);
+			if ((t.isWebGL3DRenderTarget || t.isWebGLArrayRenderTarget) && (r = t.isWebGL3DRenderTarget ? e.TEXTURE_3D : e.TEXTURE_2D_ARRAY), n.bindTexture(r, c.__webglTexture), R(r, i), i.mipmaps.length > 0) for (let n = 0; n < i.mipmaps.length; n++) ae(s.__webglFramebuffer[n], t, i, e.COLOR_ATTACHMENT0, r, n);
+			else ae(s.__webglFramebuffer, t, i, e.COLOR_ATTACHMENT0, r, 0);
 			y(i) ? b(r) : i.mipmaps.length > 0 && e.texParameteri(r, e.TEXTURE_MAX_LEVEL, i.mipmaps.length - 1), n.unbindTexture();
 		}
-		t.depthBuffer && W(t);
-	}
-	function q(e) {
+		t.depthBuffer && ce(t);
+	}, this.updateRenderTargetMipmap = function(e) {
 		let t = e.textures;
 		for (let i = 0, a = t.length; i < a; i++) {
 			let a = t[i];
@@ -31780,11 +31700,9 @@ function ph(e, t, n, r, i, a, o) {
 				n.bindTexture(t, i), b(t), n.unbindTexture();
 			}
 		}
-	}
-	let pe = [];
-	function me(t) {
+	}, this.updateMultisampleRenderTarget = function(t) {
 		if (t.samples > 0) {
-			if (he(t) === !1) {
+			if (le(t) === !1) {
 				let i = t.textures, a = t.width, o = t.height, s = e.COLOR_BUFFER_BIT, l = t.stencilBuffer ? e.DEPTH_STENCIL_ATTACHMENT : e.DEPTH_ATTACHMENT, u = r.get(t), d = i.length > 1;
 				if (d) for (let t = 0; t < i.length; t++) n.bindFramebuffer(e.FRAMEBUFFER, u.__webglMultisampledFramebuffer), e.framebufferRenderbuffer(e.FRAMEBUFFER, e.COLOR_ATTACHMENT0 + t, e.RENDERBUFFER, null), n.bindFramebuffer(e.FRAMEBUFFER, u.__webglFramebuffer), e.framebufferTexture2D(e.DRAW_FRAMEBUFFER, e.COLOR_ATTACHMENT0 + t, e.TEXTURE_2D, null, 0);
 				n.bindFramebuffer(e.READ_FRAMEBUFFER, u.__webglMultisampledFramebuffer), t.texture.mipmaps.length > 0 ? n.bindFramebuffer(e.DRAW_FRAMEBUFFER, u.__webglFramebuffer[0]) : n.bindFramebuffer(e.DRAW_FRAMEBUFFER, u.__webglFramebuffer);
@@ -31794,7 +31712,7 @@ function ph(e, t, n, r, i, a, o) {
 						let t = r.get(i[n]).__webglTexture;
 						e.framebufferTexture2D(e.DRAW_FRAMEBUFFER, e.COLOR_ATTACHMENT0, e.TEXTURE_2D, t, 0);
 					}
-					e.blitFramebuffer(0, 0, a, o, 0, 0, a, o, s, e.NEAREST), c === !0 && (pe.length = 0, pe.push(e.COLOR_ATTACHMENT0 + n), t.depthBuffer && t.storeMultisampledDepthBuffer === !1 && pe.push(l), e.invalidateFramebuffer(e.READ_FRAMEBUFFER, pe));
+					e.blitFramebuffer(0, 0, a, o, 0, 0, a, o, s, e.NEAREST), c === !0 && (H.length = 0, H.push(e.COLOR_ATTACHMENT0 + n), t.depthBuffer && t.storeMultisampledDepthBuffer === !1 && H.push(l), e.invalidateFramebuffer(e.READ_FRAMEBUFFER, H));
 				}
 				if (n.bindFramebuffer(e.READ_FRAMEBUFFER, null), n.bindFramebuffer(e.DRAW_FRAMEBUFFER, null), d) for (let t = 0; t < i.length; t++) {
 					n.bindFramebuffer(e.FRAMEBUFFER, u.__webglMultisampledFramebuffer), e.framebufferRenderbuffer(e.FRAMEBUFFER, e.COLOR_ATTACHMENT0 + t, e.RENDERBUFFER, u.__webglColorRenderbuffer[t]);
@@ -31807,26 +31725,13 @@ function ph(e, t, n, r, i, a, o) {
 				e.invalidateFramebuffer(e.DRAW_FRAMEBUFFER, [n]);
 			}
 		}
-	}
-	function J(e) {
-		return Math.min(i.maxSamples, e.samples);
-	}
-	function he(e) {
-		let n = r.get(e);
-		return e.samples > 0 && t.has("WEBGL_multisampled_render_to_texture") === !0 && n.__useRenderToTexture !== !1;
-	}
-	function Y(e) {
-		let t = o.render.frame;
-		u.get(e) !== t && (u.set(e, t), e.update());
-	}
-	function X(e, t) {
-		let n = e.colorSpace, r = e.format, i = e.type;
-		return e.isCompressedTexture === !0 || e.isVideoTexture === !0 || n !== "srgb-linear" && n !== "" && (so.getTransfer(n) === "srgb" ? (r !== 1023 || i !== 1009) && ya("WebGLTextures: sRGB encoded textures have to use RGBAFormat and UnsignedByteType.") : ba("WebGLTextures: Unsupported texture color space:", n)), t;
-	}
-	function ge(e) {
-		return typeof HTMLImageElement < "u" && e instanceof HTMLImageElement ? (l.width = e.naturalWidth || e.width, l.height = e.naturalHeight || e.height) : typeof VideoFrame < "u" && e instanceof VideoFrame ? (l.width = e.displayWidth, l.height = e.displayHeight) : (l.width = e.width, l.height = e.height), l;
-	}
-	this.allocateTextureUnit = L, this.resetTextureUnits = I, this.getTextureUnits = ee, this.setTextureUnits = te, this.setTexture2D = R, this.setTexture2DArray = z, this.setTexture3D = re, this.setTextureCube = B, this.rebindTextures = G, this.setupRenderTarget = K, this.updateRenderTargetMipmap = q, this.updateMultisampleRenderTarget = me, this.setupDepthRenderbuffer = W, this.setupFrameBufferTexture = de, this.useMultisampledRTT = he, this.dispose = j;
+	}, this.setupDepthRenderbuffer = ce, this.setupFrameBufferTexture = ae, this.useMultisampledRTT = le, this.dispose = function() {
+		for (let e of m) {
+			let t = e.deref();
+			t !== void 0 && (t.isRenderTarget === !0 ? A(t) : k(t));
+		}
+		m.clear(), d.clear();
+	};
 }
 function mh(e, t) {
 	function n(n, r = "") {
@@ -32290,8 +32195,8 @@ function Sh(e, t, n, r) {
 			for (let i = 0, a = r.length; i < a; i++) {
 				let a = r[i], o = Array.isArray(a.value) ? a.value : [a.value], s = Array.isArray(t[e]) || Array.isArray(a.value), c = n;
 				for (let e = 0, t = o.length; e < t; e++) {
-					let t = o[e], r = h(t, s), i = n % 16, a = i % r.boundary, l = i + a;
-					n += a, l !== 0 && 16 - l < r.storage && (n += 16 - l), e === 0 && (c = n), n += r.storage;
+					let t = h(o[e], s), r = n % 16, i = r % t.boundary, a = r + i;
+					n += i, a !== 0 && 16 - a < t.storage && (n += 16 - a), e === 0 && (c = n), n += t.storage;
 				}
 				a.__data = new (a.type === "int" ? Int32Array : a.type === "uint" ? Uint32Array : Float32Array)((n - c) / Float32Array.BYTES_PER_ELEMENT), a.__offset = c;
 			}
@@ -32870,14 +32775,14 @@ var Eh = class {
 		}, this.autoClear = !0, this.autoClearColor = !0, this.autoClearDepth = !0, this.autoClearStencil = !0, this.sortObjects = !0, this.clippingPlanes = [], this.localClippingEnabled = !1, this.toneMapping = 0, this.toneMappingExposure = 1, this.transmissionResolutionScale = 1;
 		let T = this, E = !1, D = null, O = null, k = null, A = null;
 		this._outputColorSpace = aa;
-		let j = 0, M = 0, N = null, P = -1, F = null, I = new yo(), ee = new yo(), te = null, L = new as(0), ne = 0, R = t.width, z = t.height, re = 1, B = null, V = null, ie = new yo(0, 0, R, z), ae = new yo(0, 0, R, z), oe = !1, se = new sl(), ce = new ll(), H = !1, le = !1, ue = new wo(), de = new Q(), fe = new yo(), U = {
+		let j = 0, M = 0, N = null, P = -1, F = null, I = new yo(), ee = new yo(), te = null, L = new as(0), ne = 0, R = t.width, z = t.height, re = 1, B = null, V = null, ie = new yo(0, 0, R, z), ae = new yo(0, 0, R, z), oe = !1, se = new sl(), ce = new ll(), H = !1, U = !1, le = new wo(), ue = new Q(), de = new yo(), W = {
 			background: null,
 			fog: null,
 			environment: null,
 			overrideMaterial: null,
 			isScene: !0
-		}, W = !1;
-		function G() {
+		}, G = !1;
+		function fe() {
 			return N === null ? re : 1;
 		}
 		let K = n;
@@ -32947,11 +32852,11 @@ var Eh = class {
 		}, this.getViewport = function(e) {
 			return e.copy(ie);
 		}, this.setViewport = function(e, t, n, r) {
-			e.isVector4 ? ie.set(e.x, e.y, e.z, e.w) : ie.set(e, t, n, r), J.viewport(I.copy(ie).multiplyScalar(G()).round());
+			e.isVector4 ? ie.set(e.x, e.y, e.z, e.w) : ie.set(e, t, n, r), J.viewport(I.copy(ie).multiplyScalar(fe()).round());
 		}, this.getScissor = function(e) {
 			return e.copy(ae);
 		}, this.setScissor = function(e, t, n, r) {
-			e.isVector4 ? ae.set(e.x, e.y, e.z, e.w) : ae.set(e, t, n, r), J.scissor(ee.copy(ae).multiplyScalar(G()).round());
+			e.isVector4 ? ae.set(e.x, e.y, e.z, e.w) : ae.set(e, t, n, r), J.scissor(ee.copy(ae).multiplyScalar(fe()).round());
 		}, this.getScissorTest = function() {
 			return oe;
 		}, this.setScissorTest = function(e) {
@@ -32981,7 +32886,7 @@ var Eh = class {
 					t ? (_[0] = i, _[1] = a, _[2] = o, _[3] = r, K.clearBufferuiv(K.COLOR, 0, _)) : (v[0] = i, v[1] = a, v[2] = o, v[3] = r, K.clearBufferiv(K.COLOR, 0, v));
 				} else r |= K.COLOR_BUFFER_BIT;
 			}
-			t && (r |= K.DEPTH_BUFFER_BIT, this.state.buffers.depth.setMask(!0)), n && (r |= K.STENCIL_BUFFER_BIT, this.state.buffers.stencil.setMask(4294967295)), r !== 0 && K.clear(r);
+			t && (r |= K.DEPTH_BUFFER_BIT, this.state.buffers.depth.setMask(!0)), n && (r |= K.STENCIL_BUFFER_BIT, this.state.buffers.stencil.setMask(0xffffffff)), r !== 0 && K.clear(r);
 		}, this.clearColor = function() {
 			this.clear(!0, !1, !1);
 		}, this.clearDepth = function() {
@@ -33018,7 +32923,7 @@ var Eh = class {
 			}), e.isShaderMaterial && be.releaseShaderCache(e));
 		}
 		this.renderBufferDirect = function(e, t, n, r, i, a) {
-			t === null && (t = U);
+			t === null && (t = W);
 			let o = i.isMesh && i.matrixWorld.determinantAffine() < 0, s = rt(e, t, n, r, i);
 			J.setMaterial(r, o);
 			let c = n.index, l = 1;
@@ -33029,13 +32934,13 @@ var Eh = class {
 			let u = n.drawRange, d = n.attributes.position, f = u.start * l, p = (u.start + u.count) * l;
 			a !== null && (f = Math.max(f, a.start * l), p = Math.min(p, (a.start + a.count) * l)), c === null ? d != null && (f = Math.max(f, 0), p = Math.min(p, d.count)) : (f = Math.max(f, 0), p = Math.min(p, c.count));
 			let m = p - f;
-			if (m < 0 || m === Infinity) return;
+			if (m < 0 || m === 1e400) return;
 			je.setup(i, r, s, n, c);
 			let h, g = Oe;
-			if (c !== null && (h = _e.get(c), g = ke, g.setIndex(h)), i.isMesh) r.wireframe === !0 ? (J.setLineWidth(r.wireframeLinewidth * G()), g.setMode(K.LINES)) : g.setMode(K.TRIANGLES);
+			if (c !== null && (h = _e.get(c), g = ke, g.setIndex(h)), i.isMesh) r.wireframe === !0 ? (J.setLineWidth(r.wireframeLinewidth * fe()), g.setMode(K.LINES)) : g.setMode(K.TRIANGLES);
 			else if (i.isLine) {
 				let e = r.linewidth;
-				e === void 0 && (e = 1), J.setLineWidth(e * G()), i.isLineSegments ? g.setMode(K.LINES) : i.isLineLoop ? g.setMode(K.LINE_LOOP) : g.setMode(K.LINE_STRIP);
+				e === void 0 && (e = 1), J.setLineWidth(e * fe()), i.isLineSegments ? g.setMode(K.LINES) : i.isLineLoop ? g.setMode(K.LINE_LOOP) : g.setMode(K.LINE_STRIP);
 			} else i.isPoints ? g.setMode(K.POINTS) : i.isSprite && g.setMode(K.TRIANGLES);
 			if (i.isBatchedMesh) {
 				if (pe.get("WEBGL_multi_draw")) g.renderMultiDraw(i._multiDrawStarts, i._multiDrawCounts, i._multiDrawCount);
@@ -33045,7 +32950,7 @@ var Eh = class {
 				}
 			} else if (i.isInstancedMesh) g.renderInstances(f, m, i.count);
 			else if (n.isInstancedBufferGeometry) {
-				let e = n._maxInstanceCount === void 0 ? Infinity : n._maxInstanceCount, t = Math.min(n.instanceCount, e);
+				let e = n._maxInstanceCount === void 0 ? 1e400 : n._maxInstanceCount, t = Math.min(n.instanceCount, e);
 				g.renderInstances(f, m, t);
 			} else g.render(f, m);
 		};
@@ -33057,7 +32962,7 @@ var Eh = class {
 				e.isLight && e.layers.test(t.layers) && (x.pushLight(e), e.castShadow && x.pushShadow(e));
 			}), e !== n && e.traverseVisible(function(e) {
 				e.isLight && e.layers.test(t.layers) && (x.pushLight(e), e.castShadow && x.pushShadow(e));
-			}), x.setupLights(), D !== null && D.updateLights(x.state.lightsArray), le = this.localClippingEnabled, H = we.init(this.clippingPlanes, le), H === !0 && we.setGlobalState(this.clippingPlanes, t), D !== null && Te.render(x.state.shadowsArray, n, t);
+			}), x.setupLights(), D !== null && D.updateLights(x.state.lightsArray), U = this.localClippingEnabled, H = we.init(this.clippingPlanes, U), H === !0 && we.setGlobalState(this.clippingPlanes, t), D !== null && Te.render(x.state.shadowsArray, n, t);
 			let r = /* @__PURE__ */ new Set();
 			return e.traverse(function(e) {
 				if (!(e.isMesh || e.isPoints || e.isLine || e.isSprite)) return;
@@ -33103,26 +33008,23 @@ var Eh = class {
 			if (E === !0) return;
 			D !== null && D.renderStart(e, t);
 			let n = Pe.enabled === !0 && Pe.isPresenting === !0, r = w !== null && (N === null || n) && w.begin(T, N);
-			if (e.matrixWorldAutoUpdate === !0 && e.updateMatrixWorld(), t.parent === null && t.matrixWorldAutoUpdate === !0 && t.updateMatrixWorld(), Pe.enabled === !0 && Pe.isPresenting === !0 && (w === null || w.isCompositing() === !1) && (Pe.cameraAutoUpdate === !0 && Pe.updateCamera(t), t = Pe.getCamera()), e.isScene === !0 && e.onBeforeRender(T, e, t, N), x = Ce.get(e, C.length), x.init(t), x.state.textureUnits = X.getTextureUnits(), C.push(x), ue.multiplyMatrices(t.projectionMatrix, t.matrixWorldInverse), t.isArrayCamera ? ce.setFromArrayCamera(t) : se.setFromProjectionMatrix(ue, da, t.reversedDepth), le = this.localClippingEnabled, H = we.init(this.clippingPlanes, le), b = Se.get(e, S.length), b.init(), S.push(b), this.info.render.frame++, Pe.enabled === !0 && Pe.isPresenting === !0) {
+			if (e.matrixWorldAutoUpdate === !0 && e.updateMatrixWorld(), t.parent === null && t.matrixWorldAutoUpdate === !0 && t.updateMatrixWorld(), Pe.enabled === !0 && Pe.isPresenting === !0 && (w === null || w.isCompositing() === !1) && (Pe.cameraAutoUpdate === !0 && Pe.updateCamera(t), t = Pe.getCamera()), e.isScene === !0 && e.onBeforeRender(T, e, t, N), x = Ce.get(e, C.length), x.init(t), x.state.textureUnits = X.getTextureUnits(), C.push(x), le.multiplyMatrices(t.projectionMatrix, t.matrixWorldInverse), t.isArrayCamera ? ce.setFromArrayCamera(t) : se.setFromProjectionMatrix(le, da, t.reversedDepth), U = this.localClippingEnabled, H = we.init(this.clippingPlanes, U), b = Se.get(e, S.length), b.init(), S.push(b), this.info.render.frame++, Pe.enabled === !0 && Pe.isPresenting === !0) {
 				let e = T.xr.getDepthSensingMesh();
-				e !== null && qe(e, t, -Infinity, T.sortObjects);
+				e !== null && qe(e, t, -1e400, T.sortObjects);
 			}
-			qe(e, t, 0, T.sortObjects), b.finish(), D !== null && D.updateLights(x.state.lightsArray), T.sortObjects === !0 && b.sort(B, V), W = Pe.enabled === !1 || Pe.isPresenting === !1 || Pe.hasDepthSensing() === !1, W && Ee.addToRenderList(b, e), this.info.autoReset === !0 && this.info.reset(), H === !0 && we.beginShadows();
+			qe(e, t, 0, T.sortObjects), b.finish(), D !== null && D.updateLights(x.state.lightsArray), T.sortObjects === !0 && b.sort(B, V), G = Pe.enabled === !1 || Pe.isPresenting === !1 || Pe.hasDepthSensing() === !1, G && Ee.addToRenderList(b, e), this.info.autoReset === !0 && this.info.reset(), H === !0 && we.beginShadows();
 			let i = x.state.shadowsArray;
 			if (Te.render(i, e, t), H === !0 && we.endShadows(), (r && w.hasRenderPass()) === !1) {
 				let n = b.opaque, r = b.transmissive;
 				if (x.setupLights(), t.isArrayCamera) {
 					let i = t.cameras;
-					if (r.length > 0) for (let t = 0, a = i.length; t < a; t++) {
-						let a = i[t];
-						Ye(n, r, e, a);
-					}
-					W && Ee.render(e);
+					if (r.length > 0) for (let t = 0, a = i.length; t < a; t++) Ye(n, r, e, i[t]);
+					G && Ee.render(e);
 					for (let t = 0, n = i.length; t < n; t++) {
 						let n = i[t];
 						Je(b, e, n, n.viewport);
 					}
-				} else r.length > 0 && Ye(n, r, e, t), W && Ee.render(e), Je(b, e, t);
+				} else r.length > 0 && Ye(n, r, e, t), G && Ee.render(e), Je(b, e, t);
 			}
 			N !== null && M === 0 && (X.updateMultisampleRenderTarget(N), X.updateRenderTargetMipmap(N)), r && w.end(T), e.isScene === !0 && e.onAfterRender(T, e, t), je.resetDefaultState(), P = -1, F = null, C.pop(), C.length > 0 ? (x = C[C.length - 1], X.setTextureUnits(x.state.textureUnits), H === !0 && we.setGlobalState(T.clippingPlanes, x.state.camera)) : x = null, S.pop(), b = S.length > 0 ? S[S.length - 1] : null, D !== null && D.renderEnd();
 		};
@@ -33135,21 +33037,21 @@ var Eh = class {
 				else if (e.isSprite) {
 					let i = t.isArrayCamera ? ce : se;
 					if (!e.frustumCulled || e.intersectsFrustum(i)) {
-						r && fe.setFromMatrixPosition(e.matrixWorld).applyMatrix4(ue);
+						r && de.setFromMatrixPosition(e.matrixWorld).applyMatrix4(le);
 						let i = ye.update(e), a = e.material;
-						a.visible && b.push(e, i, a, n, fe.z, null, t);
+						a.visible && b.push(e, i, a, n, de.z, null, t);
 					}
 				} else if (e.isMesh || e.isLine || e.isPoints) {
 					let i = t.isArrayCamera ? ce : se;
 					if (!e.frustumCulled || e.intersectsFrustum(i)) {
 						let i = ye.update(e), a = e.material;
-						if (r && (e.boundingSphere === void 0 ? (i.boundingSphere === null && i.computeBoundingSphere(), fe.copy(i.boundingSphere.center)) : (e.boundingSphere === null && e.computeBoundingSphere(), fe.copy(e.boundingSphere.center)), fe.applyMatrix4(e.matrixWorld).applyMatrix4(ue)), Array.isArray(a)) {
+						if (r && (e.boundingSphere === void 0 ? (i.boundingSphere === null && i.computeBoundingSphere(), de.copy(i.boundingSphere.center)) : (e.boundingSphere === null && e.computeBoundingSphere(), de.copy(e.boundingSphere.center)), de.applyMatrix4(e.matrixWorld).applyMatrix4(le)), Array.isArray(a)) {
 							let r = i.groups;
 							for (let o = 0, s = r.length; o < s; o++) {
 								let s = r[o], c = a[s.materialIndex];
-								c && c.visible && b.push(e, i, c, n, fe.z, s, t);
+								c && c.visible && b.push(e, i, c, n, de.z, s, t);
 							}
-						} else a.visible && b.push(e, i, a, n, fe.z, null, t);
+						} else a.visible && b.push(e, i, a, n, de.z, null, t);
 					}
 				}
 			}
@@ -33180,7 +33082,7 @@ var Eh = class {
 			let a = x.state.transmissionRenderTarget[r.id], o = r.viewport || I;
 			a.setSize(o.z * T.transmissionResolutionScale, o.w * T.transmissionResolutionScale);
 			let s = T.getRenderTarget(), c = T.getActiveCubeFace(), l = T.getActiveMipmapLevel();
-			T.setRenderTarget(a), T.getClearColor(L), ne = T.getClearAlpha(), ne < 1 && T.setClearColor(16777215, .5), T.clear(), W && Ee.render(n);
+			T.setRenderTarget(a), T.getClearColor(L), ne = T.getClearAlpha(), ne < 1 && T.setClearColor(0xffffff, .5), T.clear(), G && Ee.render(n);
 			let u = T.toneMapping;
 			T.toneMapping = 0;
 			let d = r.viewport;
@@ -33213,7 +33115,7 @@ var Eh = class {
 			return t;
 		}
 		function $e(e, t, n) {
-			t.isScene !== !0 && (t = U);
+			t.isScene !== !0 && (t = W);
 			let r = Y.get(e), i = x.state.lights, a = x.state.shadowsArray, o = i.state.version, s = be.getParameters(e, i.state, a, t, n, x.state.lightProbeGridArray), c = be.getProgramCacheKey(s), l = r.programs;
 			r.environment = e.isMeshStandardMaterial || e.isMeshLambertMaterial || e.isMeshPhongMaterial ? t.environment : null, r.fog = t.fog;
 			let u = e.isMeshStandardMaterial || e.isMeshLambertMaterial && !e.envMap || e.isMeshPhongMaterial && !e.envMap;
@@ -33241,11 +33143,11 @@ var Eh = class {
 			n.outputColorSpace = t.outputColorSpace, n.batching = t.batching, n.batchingColor = t.batchingColor, n.instancing = t.instancing, n.instancingColor = t.instancingColor, n.instancingMorph = t.instancingMorph, n.skinning = t.skinning, n.morphTargets = t.morphTargets, n.morphNormals = t.morphNormals, n.morphColors = t.morphColors, n.morphTargetsCount = t.morphTargetsCount, n.numClippingPlanes = t.numClippingPlanes, n.numIntersection = t.numClipIntersection, n.vertexAlphas = t.vertexAlphas, n.vertexTangents = t.vertexTangents, n.toneMapping = t.toneMapping;
 		}
 		function rt(e, t, n, r, i) {
-			t.isScene !== !0 && (t = U), X.resetTextureUnits();
+			t.isScene !== !0 && (t = W), X.resetTextureUnits();
 			let a = t.fog, o = r.isMeshStandardMaterial || r.isMeshLambertMaterial || r.isMeshPhongMaterial ? t.environment : null, s = N === null ? T.outputColorSpace : N.isXRRenderTarget === !0 ? N.texture.colorSpace : so.workingColorSpace, c = r.isMeshStandardMaterial || r.isMeshLambertMaterial && !r.envMap || r.isMeshPhongMaterial && !r.envMap, l = ge.get(r.envMap || o, c), u = r.vertexColors === !0 && !!n.attributes.color && n.attributes.color.itemSize === 4, d = !!n.attributes.tangent && (!!r.normalMap || r.anisotropy > 0), f = !!n.morphAttributes.position, p = !!n.morphAttributes.normal, m = !!n.morphAttributes.color, h = 0;
 			r.toneMapped && (N === null || N.isXRRenderTarget === !0) && (h = T.toneMapping);
 			let g = n.morphAttributes.position || n.morphAttributes.normal || n.morphAttributes.color, _ = g === void 0 ? 0 : g.length, v = Y.get(r), b = x.state.lights;
-			if (H === !0 && (le === !0 || e !== F)) {
+			if (H === !0 && (U === !0 || e !== F)) {
 				let t = e === F && r.id === P;
 				we.setState(r, e, t);
 			}
@@ -33257,7 +33159,7 @@ var Eh = class {
 			if (J.useProgram(w.program) && (E = !0, O = !0, k = !0), r.id !== P && (P = r.id, O = !0), E || F !== e) {
 				J.buffers.depth.getReversed() && e.reversedDepth !== !0 && (e._reversedDepth = !0, e.updateProjectionMatrix()), A.setValue(K, "projectionMatrix", e.projectionMatrix), A.setValue(K, "viewMatrix", e.matrixWorldInverse);
 				let t = A.map.cameraPosition;
-				t !== void 0 && t.setValue(K, de.setFromMatrixPosition(e.matrixWorld)), me.logarithmicDepthBuffer && A.setValue(K, "logDepthBufFC", 2 / (Math.log(e.far + 1) / Math.LN2)), (r.isMeshPhongMaterial || r.isMeshToonMaterial || r.isMeshLambertMaterial || r.isMeshBasicMaterial || r.isMeshStandardMaterial || r.isShaderMaterial) && A.setValue(K, "isOrthographic", e.isOrthographicCamera === !0), F !== e && (F = e, O = !0, k = !0);
+				t !== void 0 && t.setValue(K, ue.setFromMatrixPosition(e.matrixWorld)), me.logarithmicDepthBuffer && A.setValue(K, "logDepthBufFC", 2 / (Math.log(e.far + 1) / Math.LN2)), (r.isMeshPhongMaterial || r.isMeshToonMaterial || r.isMeshLambertMaterial || r.isMeshBasicMaterial || r.isMeshStandardMaterial || r.isShaderMaterial) && A.setValue(K, "isOrthographic", e.isOrthographicCamera === !0), F !== e && (F = e, O = !0, k = !0);
 			}
 			if (v.needsLights && (b.state.sunShadowMap.length > 0 && A.setValue(K, "sunShadowMap", b.state.sunShadowMap, X), b.state.directionalShadowMap.length > 0 && A.setValue(K, "directionalShadowMap", b.state.directionalShadowMap, X), b.state.spotShadowMap.length > 0 && A.setValue(K, "spotShadowMap", b.state.spotShadowMap, X), b.state.pointShadowMap.length > 0 && A.setValue(K, "pointShadowMap", b.state.pointShadowMap, X)), i.isSkinnedMesh) {
 				A.setOptional(K, i, "bindMatrix"), A.setOptional(K, i, "bindMatrixInverse");
@@ -33442,7 +33344,7 @@ var Eh = class {
 		super(), this.name = "RoomEnvironment", this.position.y = -3.5;
 		let e = new Tl();
 		e.deleteAttribute("uv");
-		let t = new rd({ side: 1 }), n = new rd(), r = new Ud(16777215, 900, 28, 2);
+		let t = new rd({ side: 1 }), n = new rd(), r = new Ud(0xffffff, 900, 28, 2);
 		r.position.set(.418, 16.199, .3), this.add(r);
 		let i = new Gc(e, t);
 		i.position.set(-.757, 13.219, .717), i.scale.set(31.713, 28.305, 28.591), this.add(i);
@@ -33472,7 +33374,7 @@ var Eh = class {
 function Oh(e) {
 	return new ad({
 		color: 0,
-		emissive: 16777215,
+		emissive: 0xffffff,
 		emissiveIntensity: e
 	});
 }
@@ -33495,7 +33397,7 @@ var jh = class {
 	since = 0;
 	unhealthy = 0;
 	healthy = 0;
-	changedAt = -Infinity;
+	changedAt = -1e400;
 	reset() {
 		this.intervals = [], this.costs = [], this.previous = 0, this.since = 0, this.unhealthy = 0, this.healthy = 0;
 	}
@@ -33517,11 +33419,11 @@ var jh = class {
 	},
 	home: {
 		css: "#ffad55",
-		three: 16756053
+		three: 0xffad55
 	},
 	away: {
 		css: "#a855f7",
-		three: 11032055
+		three: 0xa855f7
 	},
 	night: {
 		css: "#72b6ff",
@@ -33529,7 +33431,7 @@ var jh = class {
 	},
 	alarm: {
 		css: "#ff1810",
-		three: 16717840
+		three: 0xff1810
 	}
 };
 // src/features/dashboard/components/crystal-layout.ts
@@ -33556,7 +33458,7 @@ function Ph(e) {
 	}
 	for (let e of [0, t]) {
 		let t = s.length / 3;
-		s.push(2.6100000000000003 / 2, e === 0 ? -1 : 1, a / 2);
+		s.push(1.3050000000000002, e === 0 ? -1 : 1, a / 2);
 		for (let n = 0; n < 8; n++) {
 			let r = e * 8 + n, i = e * 8 + (n + 1) % 8;
 			c.push(...e === 0 ? [
@@ -33590,8 +33492,8 @@ var Ih = {
 	triggered: Mh.alarm.three,
 	unavailable: 8557480,
 	unknown: 8557480,
-	pending: 16761684,
-	arming: 16761684
+	pending: 0xffc354,
+	arming: 0xffc354
 };
 function Lh(e) {
 	let t = (0, D.useRef)(null), n = (0, D.useRef)(e);
@@ -33827,45 +33729,45 @@ function Lh(e) {
 			]);
 			E.push(n), e.add(new vl(n, ce));
 		}
-		let le = [
+		let U = [
 			0,
 			1,
 			2
 		].map(() => new Nc({
-			color: 16715816,
+			color: 0xff1028,
 			transparent: !0,
 			opacity: 0,
 			depthWrite: !1,
 			side: 2,
 			toneMapped: !1
-		})), ue = le.map((e, t) => {
+		})), le = U.map((e, t) => {
 			let n = O(1, t === 0 ? .042 : .032, e, h);
 			return n.visible = !1, n;
 		});
-		h.add(new kd(12181503, 527904, .65));
-		let de = new Kd(15332607, 2);
-		de.position.set(-3, 4, 5), h.add(de);
-		let fe = new Ud(x, 18, 12);
-		fe.position.set(2, -1, 3), h.add(fe);
-		let U = 0, W = 0, G = 0, K = !0, q = !1, pe = !1, me = 0, J = 0, he = "", Y = "", X = 0, ge = -10, _e = -10, ve = -10, ye = !1, be = 0, xe = 28, Se = 0, Ce = 0, we = new jh(c), Te = new as(), Ee = new Z(), De = new Z(), Oe = window.matchMedia("(prefers-reduced-motion: reduce)"), ke = r.getRootNode() instanceof ShadowRoot ? r.getRootNode().host : r.closest("argus-panel"), Ae = () => Oe.matches || !!ke?.classList.contains("argus-perf-essential"), je = -1, Me = -1, Ne = -1, Pe = !0, Fe = () => {
+		h.add(new kd(0xb9dfff, 527904, .65));
+		let ue = new Kd(0xe9f4ff, 2);
+		ue.position.set(-3, 4, 5), h.add(ue);
+		let de = new Ud(x, 18, 12);
+		de.position.set(2, -1, 3), h.add(de);
+		let W = 0, G = 0, fe = 0, K = !0, q = !1, pe = !1, me = 0, J = 0, he = "", Y = "", X = 0, ge = -10, _e = -10, ve = -10, ye = !1, be = 0, xe = 28, Se = 0, Ce = 0, we = new jh(c), Te = new as(), Ee = new Z(), De = new Z(), Oe = window.matchMedia("(prefers-reduced-motion: reduce)"), ke = r.getRootNode() instanceof ShadowRoot ? r.getRootNode().host : r.closest("argus-panel"), Ae = () => Oe.matches || !!ke?.classList.contains("argus-perf-essential"), je = -1, Me = -1, Ne = -1, Pe = !0, Fe = () => {
 			Pe = !0;
 		}, Ie = () => {
 			let e = ke?.classList.contains("argus-perf-light") ? .75 : 1, t = Ae() ? .6 : Math.min(e, we.quality), n = t <= .7;
 			f.dataset.argusRenderQuality = n ? "light" : "full", C.transmission = n ? 0 : .8, l.transmissionResolutionScale = n ? .25 : .5;
-			let r = Math.min(window.devicePixelRatio || 1, 2), i = n ? 4e6 : 8e6, a = Math.max(Math.min(r, n ? 1 : 1.75), r * t), o = Math.min(a, Math.sqrt(i / (U * W)));
-			U > 0 && W > 0 && (U !== je || W !== Me || o !== Ne) && (l.setDrawingBufferSize(U, W, o), je = U, Me = W, Ne = o);
+			let r = Math.min(window.devicePixelRatio || 1, 2), i = n ? 4e6 : 8e6, a = Math.max(Math.min(r, n ? 1 : 1.75), r * t), o = Math.min(a, Math.sqrt(i / (W * G)));
+			W > 0 && G > 0 && (W !== je || G !== Me || o !== Ne) && (l.setDrawingBufferSize(W, G, o), je = W, Me = G, Ne = o);
 		}, Le = () => {
 			q || pe || !K || document.hidden || me || (me = window.requestAnimationFrame(Xe));
 		};
 		a.current = Le;
 		let Re = new ResizeObserver(() => {
-			let e = f.getBoundingClientRect(), t = U !== e.width || W !== e.height;
-			if (U = e.width, W = e.height, U <= 0 || W <= 0) return;
-			t && Fe(), g.aspect = U / W, g.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(Qa.degToRad(g.fov / 2)) * g.aspect)), g.updateProjectionMatrix(), xe = Number.parseFloat(getComputedStyle(f).borderTopLeftRadius) || 0;
+			let e = f.getBoundingClientRect(), t = W !== e.width || G !== e.height;
+			if (W = e.width, G = e.height, W <= 0 || G <= 0) return;
+			t && Fe(), g.aspect = W / G, g.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(Qa.degToRad(g.fov / 2)) * g.aspect)), g.updateProjectionMatrix(), xe = Number.parseFloat(getComputedStyle(f).borderTopLeftRadius) || 0;
 			let n = d?.getBoundingClientRect();
-			if (G = n ? Math.min(n.width, n.height) : Math.min(U, W), n) {
+			if (fe = n ? Math.min(n.width, n.height) : Math.min(W, G), n) {
 				let t = 2 * g.position.z * Math.tan(Qa.degToRad(g.fov / 2)), r = t * g.aspect;
-				De.set(((n.left + n.width / 2 - e.left) / U - .5) * r, -((n.top + n.height / 2 - e.top) / W - .5) * t);
+				De.set(((n.left + n.width / 2 - e.left) / W - .5) * r, -((n.top + n.height / 2 - e.top) / G - .5) * t);
 			} else De.set(0, 0);
 			Le();
 		});
@@ -33892,19 +33794,19 @@ function Lh(e) {
 		};
 		ze.addEventListener("pointermove", Be), ze.addEventListener("pointerdown", Ve), ze.addEventListener("pointerleave", He), l.domElement.addEventListener("webglcontextlost", Ge);
 		let Ke = new Q(), qe = new Q(), Je = new Q(), Ye = (t) => {
-			if (pe || document.hidden || !K || U <= 0 || W <= 0) return;
+			if (pe || document.hidden || !K || W <= 0 || G <= 0) return;
 			Pe &&= (Ie(), !1);
 			let r = t / 1e3, i = n.current, a = Ae(), s = i.state !== he || `${i.pulse}:${i.pulseKey}` !== Y, c = J ? t - J : 1e3 / 60, u = (e) => a ? 1 : kh(e, c);
 			J = t, i.state !== he && (i.state === "disarmed" && (he.startsWith("armed_") || he === "triggered") && (ge = r), he = i.state, X = r);
 			let d = `${i.pulse}:${i.pulseKey}`;
 			d !== Y && (Y = d, i.pulse && (_e = r));
 			let p = i.state === "triggered" || i.pulse === "sos";
-			x.lerp(Te.set(p ? Ih.triggered : Ih[i.state] ?? Ih.unknown), u(.12)), T.color.copy(x), T.emissive.copy(x), fe.color.copy(x), w.color.lerp(S.set(1190212).lerp(x, .38), u(.12)), S.set(1582138).lerp(x, .92), C.color.lerp(S, u(.16));
+			x.lerp(Te.set(p ? Ih.triggered : Ih[i.state] ?? Ih.unknown), u(.12)), T.color.copy(x), T.emissive.copy(x), de.color.copy(x), w.color.lerp(S.set(1190212).lerp(x, .38), u(.12)), S.set(1582138).lerp(x, .92), C.color.lerp(S, u(.16));
 			let m = i.state === "armed_away" && !p;
 			ce.color.setHex(p ? Mh.alarm.three : Mh.away.three), ce.opacity = m ? 1 : .58, L.emissive.copy(x), k.children.forEach((e) => {
 				e instanceof vl && e.material.color.copy(x);
 			});
-			let _ = r - _e, v = i.pulse === "sos" ? 1.3 : .65, y = p || i.state === "armed_away", E = i.state === "armed_away" ? r - X : Infinity, D = p ? Math.min(r - _e, r - X) : Infinity;
+			let _ = r - _e, v = i.pulse === "sos" ? 1.3 : .65, y = p || i.state === "armed_away", E = i.state === "armed_away" ? r - X : 1e400, D = p ? Math.min(r - _e, r - X) : 1e400;
 			(y && !ye || p && s) && (ve = r), ye = y;
 			let O = (p ? D : E) - .65, N = !a && O >= 0 && O < .4 ? Math.sin(Math.PI * O / .4) : 0, P = r - ve, F = a ? Number(y) : y ? 1 - (1 - Math.min(1, Math.max(0, P - 1.05) / .85)) ** 3 : 0, ne = a ? 0 : p ? Math.sin(r * 43) * .022 + Math.sin(r * 67) * .009 : Math.sin(r * 82) * .105 * N, R = a ? 0 : p ? Math.cos(r * 47) * .014 + Math.sin(r * 71) * .006 : Math.cos(r * 74) * .035 * N, z = i.state !== "disarmed" && i.state !== "unavailable" && i.state !== "unknown" || performance.now() < be, re = 2 * g.position.z * Math.tan(Qa.degToRad(g.fov / 2)), B = re * g.aspect, ie = [
 				[-.18, .16],
@@ -33912,7 +33814,7 @@ function Lh(e) {
 				[.18, -.16],
 				[-.18, -.16],
 				[0, 0]
-			], H = i.state === "armed_away" && !p, de = y && !a && !H ? ie[Math.floor(r * 1.15) % ie.length] : [Ee.x * .55, -Ee.y * .55], q = H ? 0 : y || z || i.pulse === "sensor" ? 1 : 0, me = de[0] * q, Se = de[1] * q, Ce = u(.1), we = i.state === "disarmed" ? r - ge : Infinity, Oe = !a && we >= 0 && we < 1.05 ? Math.sin(Math.PI * we / 1.05) : 0;
+			], H = i.state === "armed_away" && !p, ue = y && !a && !H ? ie[Math.floor(r * 1.15) % ie.length] : [Ee.x * .55, -Ee.y * .55], q = H ? 0 : y || z || i.pulse === "sensor" ? 1 : 0, me = ue[0] * q, Se = ue[1] * q, Ce = u(.1), we = i.state === "disarmed" ? r - ge : 1e400, Oe = !a && we >= 0 && we < 1.05 ? Math.sin(Math.PI * we / 1.05) : 0;
 			te.position.x += (me + Math.sin(r * 92) * .09 * Oe - te.position.x) * Ce, te.position.y += (Se + Math.cos(r * 88) * .07 * Oe - te.position.y) * Ce;
 			let ke = !z && i.pulse !== "sensor" && i.state === "disarmed";
 			te.rotation.x += ((a ? 0 : Ee.y * .12) - te.rotation.x) * Ce;
@@ -33933,12 +33835,12 @@ function Lh(e) {
 			}
 			let Ne = i.state === "disarmed" && !p && !a;
 			b.rotation.x += ((Ne ? Ee.y * .16 + Math.sin(r * .6) * .018 : 0) - b.rotation.x) * u(.22), b.rotation.y += ((Ne ? Ee.x * .25 + Math.sin(r * .45) * .035 : 0) - b.rotation.y) * u(.22), b.position.set(De.x + ne, De.y + R, 0);
-			let Fe = Math.max(0, 1 - (r - X) / .8), Le = !!f.closest(".ios-fullscreen") && window.matchMedia("(max-width: 760px) and (orientation: portrait)").matches, Re = Le ? Math.min(440, G * .86) : Math.min(260, G * .5), ze = Le ? 5.4 : 3.2, Be = re * Re / (W * ze);
+			let Fe = Math.max(0, 1 - (r - X) / .8), Le = !!f.closest(".ios-fullscreen") && window.matchMedia("(max-width: 760px) and (orientation: portrait)").matches, Re = Le ? Math.min(440, fe * .86) : Math.min(260, fe * .5), ze = Le ? 5.4 : 3.2, Be = re * Re / (G * ze);
 			b.scale.setScalar(Be * (a ? 1 : 1 + Math.sin(r * 1.6) * .009 - Fe * .07)), M.forEach((e, t) => {
 				e.visible = y && (a || P >= 1.05);
 				let n = e.children.find((e) => e instanceof Gc);
 				n && (n.material = p ? se : oe);
-				let r = t === 0 || t === 3 ? -1 : 1, i = t < 2 ? 1 : -1, o = re * (U < 600 ? 30 : 42) / W, s = B * xe / U, c = re * xe / W, l = U < 600 ? o * .6 : s + o * .3, u = U < 600 ? o * .6 : c + o * .3, d = r * (B / 2 - l), m = f.getBoundingClientRect(), h = f.closest(".ios-fullscreen"), g = h ? Math.max(0, -m.top) : 0, _ = h ? Math.min(W, (window.visualViewport?.height || window.innerHeight) - m.top) : W, v = re * (.5 - (i > 0 ? g : _) / W) - i * u;
+				let r = t === 0 || t === 3 ? -1 : 1, i = t < 2 ? 1 : -1, o = re * (W < 600 ? 30 : 42) / G, s = B * xe / W, c = re * xe / G, l = W < 600 ? o * .6 : s + o * .3, u = W < 600 ? o * .6 : c + o * .3, d = r * (B / 2 - l), m = f.getBoundingClientRect(), h = f.closest(".ios-fullscreen"), g = h ? Math.max(0, -m.top) : 0, _ = h ? Math.min(G, (window.visualViewport?.height || window.innerHeight) - m.top) : G, v = re * (.5 - (i > 0 ? g : _) / G) - i * u;
 				e.position.set(Qa.lerp(De.x + r * .72 * Be, d, F), Qa.lerp(De.y + i * .72 * Be, v, F), 0);
 				let b = Qa.lerp(.6, o, F);
 				e.scale.set(-r * b, i * b, b), e.rotation.z = a ? 0 : (1 - F) * Math.PI * 2;
@@ -33955,10 +33857,7 @@ function Lh(e) {
 				let n = Number(e.userData.angle) || 0, s = .95, c = i.state === "pending" || i.state === "arming", l = c ? Math.min(1, Math.max(0, (r - X) / .48)) : i.state === "disarmed" ? 0 : 1, d = l;
 				e.userData.closure += (d - e.userData.closure) * u(.2);
 				let f = Nh(o, e.userData.closure);
-				if (Math.abs(f - e.userData.appliedSpan) > 1e-4) {
-					let t = e.userData.crystalGeometry;
-					Fh(t, f), e.userData.appliedSpan = f;
-				}
+				Math.abs(f - e.userData.appliedSpan) > 1e-4 && (Fh(e.userData.crystalGeometry, f), e.userData.appliedSpan = f);
 				let m = i.state === "disarmed" && we >= 0 ? Math.min(1, Math.max(0, we / 1.05)) : 1, h = 1 - (1 - m) ** 3, g = i.state === "disarmed" ? s * h : c ? Qa.lerp(s, .42, l) : 0, _ = i.zones?.length ? !!i.zones[t]?.open : i.pulse === "sensor" && t === 0, v = g + (_ ? .82 : 0), y = Math.cos(n) * v, b = Math.sin(n) * v, x = i.state === "disarmed" && !a, S = x ? Math.sin(r * .8 + t) * .025 : 0;
 				i.state === "disarmed" && m >= 1 ? (e.position.x = y, e.position.y = b) : (e.position.x += (y - e.position.x) * u(.12), e.position.y += (b - e.position.y) * u(.12)), e.position.z = .05 + S, e.rotation.z = n, e.scale.setScalar(x ? 1 + Math.sin(r * 1.3 + t) * .018 : 1);
 				let C = e.userData.material;
@@ -33971,21 +33870,21 @@ function Lh(e) {
 				ee(t);
 			}), T.emissiveIntensity = a ? .65 : .7 + Math.sin(r * 2) * .1 + (_ < v || p ? .35 : 0), L.emissiveIntensity = ke ? .004 : p ? .055 : i.state === "armed_away" ? .045 : z ? .012 : .006;
 			let Ue = !a && (p || i.pulse === "sensor"), We = 2.35, Ge = 2.2, Ye = Math.min(B, re) * .43;
-			ue.forEach((e, t) => {
+			le.forEach((e, t) => {
 				let n = (r % We + We - t * .28) % We, i = n / Ge, a = Ue && n < Ge;
 				if (e.visible = a, !a) return;
-				let o = Be * .72 + (Ye - Be * .72) * i, s = le[t];
+				let o = Be * .72 + (Ye - Be * .72) * i, s = U[t];
 				e.position.set(De.x, De.y, .05 - t * .002), e.scale.setScalar(o), s.opacity = .56 * (1 - i) ** 1.35, e.scale.set(o, o, Math.max(.28, 1 - i * .72));
 			}), l.render(h, g);
 			for (let { object: e, group: t, width: n } of I) {
 				e.localToWorld(Ke.set(0, 0, 0)).project(g), e.localToWorld(qe.set(n / 2, 0, 0)).project(g), e.localToWorld(Je.set(0, -.15, 0)).project(g);
-				let r = (qe.x - Ke.x) * U / 512, i = (Ke.y - qe.y) * W / 512, a = (Je.x - Ke.x) * U / 144, o = (Ke.y - Je.y) * W / 144;
-				t.setAttribute("transform", `matrix(${r} ${i} ${a} ${o} ${(1 + Ke.x) * U / 2} ${(1 - Ke.y) * W / 2})`);
+				let r = (qe.x - Ke.x) * W / 512, i = (Ke.y - qe.y) * G / 512, a = (Je.x - Ke.x) * W / 144, o = (Ke.y - Je.y) * G / 144;
+				t.setAttribute("transform", `matrix(${r} ${i} ${a} ${o} ${(1 + Ke.x) * W / 2} ${(1 - Ke.y) * G / 2})`);
 			}
 		}, Xe = (e) => {
 			me = 0;
 			let t = performance.now();
-			if (Ye(e), !Ae() && K && !document.hidden && U > 0 && W > 0) {
+			if (Ye(e), !Ae() && K && !document.hidden && W > 0 && G > 0) {
 				if (e >= Ce) {
 					let n = we.quality, r = we.sample(e, performance.now() - t);
 					r && (l.domElement.dataset.argusFrames = JSON.stringify(r), l.domElement.dataset.argusColorSpace = l.outputColorSpace, n !== we.quality && Fe());
@@ -34022,7 +33921,7 @@ function Lh(e) {
 		return at.observe(f), document.addEventListener("visibilitychange", Qe), Oe.addEventListener("change", tt), Le(), () => {
 			q = !0, a.current = () => {}, window.clearTimeout(Se), Se = 0, Ze(), Re.disconnect(), at.disconnect(), it.disconnect(), delete f.dataset.argusRenderQuality, window.removeEventListener("scroll", $e, et), window.removeEventListener("wheel", $e, et), window.removeEventListener("touchmove", $e, et), document.removeEventListener("visibilitychange", Qe), Oe.removeEventListener("change", tt), ze.removeEventListener("click", We), ze.removeEventListener("pointermove", Be), ze.removeEventListener("pointerdown", Ve), ze.removeEventListener("pointerleave", He), l.domElement.removeEventListener("webglcontextlost", Ge), m.remove(), E.forEach((e) => e.dispose()), h.traverse((e) => {
 				e instanceof vl && e.material.dispose();
-			}), C.dispose(), w.dispose(), T.dispose(), L.dispose(), oe.dispose(), se.dispose(), ce.dispose(), P.forEach((e) => e.dispose()), re.dispose(), B.dispose(), ie.dispose(), le.forEach((e) => e.dispose()), y.dispose(), l.dispose(), l.domElement.remove();
+			}), C.dispose(), w.dispose(), T.dispose(), L.dispose(), oe.dispose(), se.dispose(), ce.dispose(), P.forEach((e) => e.dispose()), re.dispose(), B.dispose(), ie.dispose(), U.forEach((e) => e.dispose()), y.dispose(), l.dispose(), l.domElement.remove();
 		};
 	}, [
 		e.variant,
@@ -34734,21 +34633,21 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		armed_home: z("mode_home"),
 		armed_away: z("mode_away"),
 		armed_night: z("mode_night")
-	}[se], H = R === "pending" || R === "arming" || oe, le = !ae || ["unknown", "unavailable"].includes(R) || B || R !== "disarmed" || H, ue = () => {
+	}[se], H = R === "pending" || R === "arming" || oe, U = !ae || ["unknown", "unavailable"].includes(R) || B || R !== "disarmed" || H, le = () => {
 		if (B) return z("system_triggered") || "ALARMA ACTIVADA";
 		if (oe) {
 			let e = g?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [];
 			return e.length ? (z("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(e.length)) : z("waiting_sensors") || "ESPERANDO SENSORES";
 		}
 		return R === "unknown" || R === "unavailable" ? z("unavailable") : R === "arming" ? z("arming") : R === "pending" ? z("pending") : R === "disarmed" ? "DESARMADO" : R === "armed_home" ? (z("system_armed") || "ARMADO") + " · " + (z("mode_home") || "CASA") : R === "armed_away" ? (z("system_armed") || "ARMADO") + " · " + (z("mode_away") || "AUSENTE") : R === "armed_night" ? (z("system_armed") || "ARMADO") + " · " + (z("mode_night") || "NOCHE") : z("system_armed") || "ARMADO";
-	}, de = {
+	}, ue = {
 		"--console-accent": ie ? Mh.alarm.css : R === "armed_home" ? Mh.home.css : R === "armed_away" ? Mh.away.css : R === "armed_night" ? Mh.night.css : R === "disarmed" ? Mh.disarmed.css : "#a4aab4",
 		"--argus-mode-disarmed": Mh.disarmed.css,
 		"--argus-mode-home": Mh.home.css,
 		"--argus-mode-away": Mh.away.css,
 		"--argus-mode-night": Mh.night.css,
 		"--argus-mode-alarm": Mh.alarm.css
-	}, fe = [], U = g?.states?.[L.entity_id]?.attributes?.cycle_bypassed_sensors || [], W = async (t, n, r) => {
+	}, de = [], W = g?.states?.[L.entity_id]?.attributes?.cycle_bypassed_sensors || [], G = async (t, n, r) => {
 		if (a.current) return;
 		let i = g?.states?.[L.entity_id]?.attributes?.arming_generation;
 		a.current = !0, s(!0), l(null);
@@ -34765,7 +34664,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		} finally {
 			a.current = !1, s(!1);
 		}
-	}, G = g?.states?.[L.entity_id]?.attributes?.arming_bypass_eligible_sensors || [], K = g?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [], q = {};
+	}, fe = g?.states?.[L.entity_id]?.attributes?.arming_bypass_eligible_sensors || [], K = g?.states?.[L.entity_id]?.attributes?.arming_blocking_sensors || [], q = {};
 	if (L.entity_id) {
 		let t = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, n = g?.states?.[L.entity_id]?.attributes || {};
 		R.startsWith("armed_") && (p.current[L.entity_id] = R.slice(6));
@@ -34773,14 +34672,14 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		q = t[R.startsWith("armed_") ? R.slice(6) : (H || B) && (r || p.current[L.entity_id]) || "disarmed"] || {};
 		let i = q.bypassed_sensors || [];
 		[.../* @__PURE__ */ new Set([...q.sensors || [], ...i])].forEach((e) => {
-			fe.push({
+			de.push({
 				id: e,
 				isBypassed: i.includes(e)
 			});
 		});
 	}
-	let pe = fe;
-	pe.length, fe.map((e) => e.id);
+	let pe = de;
+	pe.length, de.map((e) => e.id);
 	let me = pe.filter((e) => {
 		let t = g?.states?.[e.id];
 		return !t || [
@@ -34848,15 +34747,15 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 		home: "En Casa",
 		away: "Ausente",
 		night: "Noche"
-	}, De = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, Oe = String(we?.attributes?.arming_target || Te).replace(/^armed_/, ""), ke = Ee[Oe], Ae = !!we?.attributes?.arming_waiting_for_sensors, je = ke && De[Oe], Me = je && new Set((je.sensors || []).filter((e) => !(je.bypassed_sensors || je.bypassedSensors || []).includes(e) && !U.includes(e))), Ne = !ve && !xe && !w && !H && !ie && (Te === "disarmed" || !!Me), Pe = (e) => ae ? u.getEntityState(e) : void 0, Fe = (e) => Ar(e, Pe, u.isSensorActive), Ie = Y.map((e) => Fe(e.entity_ids || [])).filter((e) => e !== "notApplicable"), Le = xe && Fe(xe.entity_ids || []), Re = Ie.filter((e) => e === "ready").length, ze = Ie.filter((e) => e === "pending").length, Be = Y.filter((e) => !e.entity_ids?.length || e.entity_ids.some((e) => Fe([e]) === "unknown")).length, Ve = {
+	}, De = e._ui?.modes?.__by_entity__?.[L.entity_id] || e._ui?.modes || {}, Oe = String(we?.attributes?.arming_target || Te).replace(/^armed_/, ""), ke = Ee[Oe], Ae = !!we?.attributes?.arming_waiting_for_sensors, je = ke && De[Oe], Me = je && new Set((je.sensors || []).filter((e) => !(je.bypassed_sensors || je.bypassedSensors || []).includes(e) && !W.includes(e))), Ne = !ve && !xe && !w && !H && !ie && (Te === "disarmed" || !!Me), Pe = (e) => ae ? u.getEntityState(e) : void 0, Fe = (e) => Ar(e, Pe, u.isSensorActive), Ie = Y.map((e) => Fe(e.entity_ids || [])).filter((e) => e !== "notApplicable"), Le = xe && Fe(xe.entity_ids || []), Re = Ie.filter((e) => e === "ready").length, ze = Ie.filter((e) => e === "pending").length, Be = Y.filter((e) => !e.entity_ids?.length || e.entity_ids.some((e) => Fe([e]) === "unknown")).length, Ve = {
 		home: "En Casa",
 		away: "Ausente",
 		night: "Noche"
-	}[String(g?.states?.[L.entity_id]?.attributes?.triggered_mode || "").replace(/^armed_/, "")], He = pe.some((e) => !e.isBypassed && !U.includes(e.id) && (!g?.states?.[e.id] || [
+	}[String(g?.states?.[L.entity_id]?.attributes?.triggered_mode || "").replace(/^armed_/, "")], He = pe.some((e) => !e.isBypassed && !W.includes(e.id) && (!g?.states?.[e.id] || [
 		"unknown",
 		"unavailable",
 		"offline"
-	].includes(g.states[e.id].state))), Ue = Ae ? "Armado en espera" : Te === "triggered" ? "ALARMA ACTIVA" : Te.startsWith("armed_") && ke ? `Armado · ${ke}` : Te === "disarmed" ? "Desarmado" : ["arming", "pending"].includes(Te) ? "Armado en curso" : "Estado sin verificar", We = Y.filter((e) => e.entity_ids?.some((e) => U.includes(e))).map((e) => e.area || `Zona ${e.number}`), Ge = [
+	].includes(g.states[e.id].state))), Ue = Ae ? "Armado en espera" : Te === "triggered" ? "ALARMA ACTIVA" : Te.startsWith("armed_") && ke ? `Armado · ${ke}` : Te === "disarmed" ? "Desarmado" : ["arming", "pending"].includes(Te) ? "Armado en curso" : "Estado sin verificar", We = Y.filter((e) => e.entity_ids?.some((e) => W.includes(e))).map((e) => e.area || `Zona ${e.number}`), Ge = [
 		ze ? `Zonas que requieren atención: ${ze}.` : "",
 		Be ? `${Be} zona(s) sin verificar.` : "",
 		Ie.length ? "" : "No hay zonas evaluables en este alcance."
@@ -34905,7 +34804,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 				"data-context-view": x ? "details" : "summary",
 				"data-context-expanded": oe || x || xe ? "true" : "false",
 				"data-alarm-state": oe ? "pending" : R,
-				style: de,
+				style: ue,
 				children: [
 					/* @__PURE__ */ (0, A.jsxs)("div", {
 						className: "console-hud",
@@ -35000,7 +34899,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							className: "console-emblem-viewport",
 							children: /* @__PURE__ */ (0, A.jsx)(zh, {
 								state: oe ? "pending" : R,
-								label: ue(),
+								label: le(),
 								variant: e._getProfileShieldStyle?.() || "core",
 								pulse: V ? "sos" : J,
 								pulseKey: he,
@@ -35013,7 +34912,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 					/* @__PURE__ */ (0, A.jsxs)("nav", {
 						inert: x || void 0,
 						"aria-label": "Modos de seguridad y emergencia",
-						className: `liquid-stack console-modes-vertical ${le ? "sos-modes-locked" : ""}`,
+						className: `liquid-stack console-modes-vertical ${U ? "sos-modes-locked" : ""}`,
 						children: [
 							/* @__PURE__ */ (0, A.jsx)("span", {
 								className: "console-nav-caption",
@@ -35022,7 +34921,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							/* @__PURE__ */ (0, A.jsxs)("button", {
 								type: "button",
 								"aria-pressed": R === "armed_home",
-								disabled: le,
+								disabled: U,
 								className: `liquid-btn btn-home ${R === "armed_home" ? "active" : H && se === "armed_home" ? "mode-requested" : ""}`,
 								onClick: () => u.handleAction(te, "home"),
 								children: [/* @__PURE__ */ (0, A.jsx)("span", {
@@ -35036,7 +34935,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							/* @__PURE__ */ (0, A.jsxs)("button", {
 								type: "button",
 								"aria-pressed": R === "armed_away",
-								disabled: le,
+								disabled: U,
 								className: `liquid-btn btn-away ${R === "armed_away" ? "active" : H && se === "armed_away" ? "mode-requested" : ""}`,
 								onClick: () => u.handleAction(te, "away"),
 								children: [/* @__PURE__ */ (0, A.jsx)("span", {
@@ -35050,7 +34949,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							/* @__PURE__ */ (0, A.jsxs)("button", {
 								type: "button",
 								"aria-pressed": R === "armed_night",
-								disabled: le,
+								disabled: U,
 								className: `liquid-btn btn-night ${R === "armed_night" ? "active" : H && se === "armed_night" ? "mode-requested" : ""}`,
 								onClick: () => u.handleAction(te, "night"),
 								children: [/* @__PURE__ */ (0, A.jsx)("span", {
@@ -35134,9 +35033,9 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							onClick: be,
 							children: "Cerrar"
 						}),
-						tone: ie ? "alarm" : H || U.length ? "warning" : "normal",
+						tone: ie ? "alarm" : H || W.length ? "warning" : "normal",
 						overviewAttention: Ne && ze > 0,
-						accent: R.startsWith("armed_") && !ie ? de["--console-accent"] : void 0,
+						accent: R.startsWith("armed_") && !ie ? ue["--console-accent"] : void 0,
 						indicatorScope: "global",
 						notice: Be ? `${Be} zona(s) sin verificar: revisa conexión o configuración.` : void 0,
 						indicators: Y.length ? [
@@ -35299,7 +35198,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							Ce?.attributes?.friendly_name || X
 						].filter(Boolean).join(" · ") : Te === R ? H ? [ce && `Modo solicitado: ${ce}.`, oe && `Condiciones pendientes: ${K.length}.`].filter(Boolean).join(" ") : R.startsWith("armed_") ? [
 							He && "Protección degradada: sensor sin conexión.",
-							U.length && `Protección parcial: ${U.length} sensor(es) omitido(s)${We.length ? " · " + We.join(", ") : ""}.`,
+							W.length && `Protección parcial: ${W.length} sensor(es) omitido(s)${We.length ? " · " + We.join(", ") : ""}.`,
 							Ge
 						].filter(Boolean).join(" ") : Ne && Y.length ? Ge : void 0 : "Esperando confirmación del servidor.",
 						view: xe && !F ? xe.area || ge.find((e) => e.id === S)?.name : ve && !F ? `Modo de prueba · ${_e.tested_count || 0} de ${_e.total_sensors || 0} verificados` : w && !F ? "Diagnóstico de sensores" : void 0,
@@ -35346,7 +35245,7 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 									return t?.sensors?.includes(n) && !(t.bypassed_sensors || t.bypassedSensors || []).includes(n);
 								}).map(([, e]) => e), x, S = q?.sensor_settings?.[t.id] || q?.sensor_settings?.[n];
 								S ? S.type === "instant" || S.delay === 0 ? x = 0 : S.delay !== void 0 && S.delay !== null && (x = Number(S.delay)) : ((q?.entry_sensors || []).includes(t.id) || (q?.entry_sensors || []).includes(n)) && (x = q?.entry_delay !== void 0 && q?.entry_delay !== null ? Number(q.entry_delay) : void 0);
-								let C = U.includes(n), T = l && G.includes(n) && e._isAdmin && L.entry_id, E = C && R.startsWith("armed_") && e._isAdmin && L.entry_id, D = !f && [
+								let C = W.includes(n), T = l && fe.includes(n) && e._isAdmin && L.entry_id, E = C && R.startsWith("armed_") && e._isAdmin && L.entry_id, D = !f && [
 									"off",
 									"closed",
 									"locked",
@@ -35387,14 +35286,14 @@ function rg({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 											className: "context-primary",
 											type: "button",
 											disabled: o,
-											onClick: () => void W(n, i, !0),
+											onClick: () => void G(n, i, !0),
 											children: "Omitir por este armado"
 										}),
 										E && /* @__PURE__ */ (0, A.jsx)("button", {
 											className: "context-primary",
 											type: "button",
 											disabled: !D || o,
-											onClick: () => void W(n, i, !1),
+											onClick: () => void G(n, i, !1),
 											children: D ? "Reincorporar al armado" : "Esperando que el sensor vuelva a estado normal"
 										})
 									]
@@ -35975,7 +35874,7 @@ function Tg(e) {
 		return;
 	}
 	let s = e.shadowRoot.getElementById("argus-react-dashboard-style");
-	s || (s = document.createElement("style"), s.id = "argus-react-dashboard-style", s.textContent = de + fe + U + "#argus-dashboard-root-v3{display:block;width:100%;min-width:0;contain:layout style;}#argus-dashboard-root-v3>.argus-dashboard{width:100%;min-width:0;}", e.shadowRoot.appendChild(s));
+	s || (s = document.createElement("style"), s.id = "argus-react-dashboard-style", s.textContent = ue + de + W + "#argus-dashboard-root-v3{display:block;width:100%;min-width:0;contain:layout style;}#argus-dashboard-root-v3>.argus-dashboard{width:100%;min-width:0;}", e.shadowRoot.appendChild(s));
 	let c = (0, O.createRoot)(o);
 	e._argusReactRoot = c, c.render(/* @__PURE__ */ (0, A.jsx)(Or, {
 		widgets: r,

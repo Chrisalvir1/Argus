@@ -13,7 +13,7 @@ Dashboard contextual, zonas opcionales, armado en espera, bypass temporal con re
 
 **Actualización desde v2.6.8:** conserva la integración existente y sus entidades. Lee la [guía de migración](docs/MIGRATION_3.0.0.md) y las [notas de versión](docs/RELEASE_NOTES_3.0.0.md) antes de actualizar. Las novedades se configuran voluntariamente; no es obligatorio activar Zonas.
 
-Objetivo: Home Assistant Core 2026.11.2. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
+Objetivo: Home Assistant Core 2026.11.3. El frontend compilado está incluido; Node.js no es necesario para instalar Argus.
 
 <br>
 
