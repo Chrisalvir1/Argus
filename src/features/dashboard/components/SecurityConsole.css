@@ -572,3 +572,14 @@
 .context-verification-dialog .context-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .context-verification-dialog .context-verification { margin-block: 16px; }
 .context-verification-dialog button:focus-visible { outline: 2px solid #54d9b4; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .argus-lite-rotor {
+    transform-origin: 80px 80px;
+    animation: argus-lite-rotation 25s linear infinite;
+  }
+}
+
+@keyframes argus-lite-rotation {
+  to { transform: rotate(360deg); }
+}

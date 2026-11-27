@@ -34,17 +34,24 @@ jobs:
       - uses: actions/setup-node@v7.1.0
         with:
           node-version-file: after/.node-version
-      - name: Verify npm installs, tests and builds
+      - name: Verify frozen installs, tests and builds
         run: |
           set -euo pipefail
           for checkout in before after; do
             (
               cd "$checkout"
-              npm ci --strict-peer-deps
-              npm ls --all
-              npm exec -- tsc --noEmit
-              npm test
-              npm run build
+              if [[ -f package-lock.json ]]; then
+                npm ci --strict-peer-deps
+                npm exec -- tsc --noEmit
+                npm test
+                npm run build
+              else
+                manager="$(node -p "require('./package.json').packageManager")"
+                npm exec --yes --package="$manager" -- pnpm install --frozen-lockfile --strict-peer-dependencies
+                npm exec --yes --package="$manager" -- pnpm exec tsc --noEmit
+                npm exec --yes --package="$manager" -- pnpm test
+                npm exec --yes --package="$manager" -- pnpm build
+              fi
             )
           done
       - name: Measure build time, memory and bundle size
@@ -71,17 +78,6 @@ jobs:
               bundle = (root / 'custom_components/argus/www/react-dist/argus-frontend.js').read_bytes()
               print(f'| {checkout} | {median(times):.2f} | {median(peaks):.0f} | {len(bundle)} | {len(compress(bundle, compresslevel=6))} |')
           PY
-      - name: Verify pnpm frozen install on ARM64
-        if: runner.arch == 'ARM64'
-        working-directory: after
-        run: |
-          set -euo pipefail
-          mv node_modules "$RUNNER_TEMP/argus-npm-node-modules"
-          manager="$(node -p "require('./package.json').packageManager")"
-          npm exec --yes --package="$manager" -- pnpm install --frozen-lockfile --strict-peer-dependencies
-          npm exec --yes --package="$manager" -- pnpm exec tsc --noEmit
-          npm exec --yes --package="$manager" -- pnpm test
-          npm exec --yes --package="$manager" -- pnpm build
       - uses: actions/setup-python@v7.1.0
         if: runner.arch == 'ARM64'
         with:

@@ -14,7 +14,7 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
         cls.gesture=(SRC/'useWidgetGesture.ts').read_text(encoding='utf-8')
         cls.types=(SRC/'types.ts').read_text(encoding='utf-8')
         cls.style=(SRC/'style.css').read_text(encoding='utf-8')
-        cls.legacy=(ROOT/'src'/'legacy'/'argus-panel.ts').read_text(encoding='utf-8')
+        cls.legacy=(ROOT/'src'/'panel'/'argus-panel.ts').read_text(encoding='utf-8')
         cls.bootstrap=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
         cls.package=json.loads((ROOT/'package.json').read_text(encoding='utf-8'))
     def test_real_react_grid_layout_dependencies(self):

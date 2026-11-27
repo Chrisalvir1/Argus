@@ -1,6 +1,6 @@
 import { applyNightMode } from '../features/night';
-import '../legacy/argus-panel';
-import '../legacy/argus-card';
+import '../panel/argus-panel';
+import '../panel/argus-card';
 import{applyReactDashboardLayout}from'../features/dashboard';
 import { applyReactSecurityConsole } from '../features/dashboard/components';
 import{applyMediaClient}from'../features/media/client';

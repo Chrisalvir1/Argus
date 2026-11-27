@@ -250,11 +250,11 @@ Argus cuenta con una suite completa de pruebas unitarias y verificación de cont
 
 ```bash
 # Compilar el frontend en React 19
-npm ci
-npm run build
+pnpm install --frozen-lockfile
+pnpm build
 
 # Ejecutar pruebas unitarias de frontend
-npm test
+pnpm test
 
 # Ejecutar suite de pruebas unitarias de backend Python
 python3 scripts/test_backend.py

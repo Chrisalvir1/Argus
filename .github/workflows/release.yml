@@ -30,7 +30,6 @@ jobs:
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '26.13.1'
-          cache: npm
 
       - name: Install the supported Home Assistant runtime
         run: python -m pip install homeassistant==2026.11.3
@@ -42,6 +41,7 @@ jobs:
           python -c 'import sys; assert (3, 14, 0) <= sys.version_info < (3, 16, 0), f"Need Python 3.14-3.15, got {sys.version}"; print(sys.version)'
           test "$(node -p "process.versions.node")" = "26.13.1"
           VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
+          test "$(node -p 'require("./package.json").version')" = "$VERSION"
           if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             test "${GITHUB_REF_NAME#v}" = "$VERSION"
           fi
@@ -58,11 +58,12 @@ jobs:
       - name: Build React dashboard with TypeScript 7.0.2 and Vite
         run: |
           set -euo pipefail
-          npm ci
-          test "$(npx tsc --version)" = "Version 7.0.2"
-          npx tsc --noEmit
-          npm test
-          npm run build
+          npm install --global "$(node -p 'require("./package.json").packageManager')"
+          pnpm install --frozen-lockfile --strict-peer-dependencies
+          test "$(pnpm exec tsc --version)" = "Version 7.0.2"
+          pnpm exec tsc --noEmit
+          pnpm test
+          pnpm build
           test -s custom_components/argus/www/react-dist/argus-frontend.js
           ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-frontend.js
 

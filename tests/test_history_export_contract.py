@@ -3,7 +3,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PANEL_SOURCE = (ROOT / "src/legacy/argus-panel.ts").read_text(encoding="utf-8")
+PANEL_SOURCE = (ROOT / "src/panel/argus-panel.ts").read_text(encoding="utf-8")
 
 
 class TestActivityHistoryExportContract(unittest.TestCase):

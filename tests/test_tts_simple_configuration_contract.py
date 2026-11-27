@@ -12,14 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class TestTtsSimpleConfigurationContract(unittest.TestCase):
     def test_ui_explains_default_messages_and_zone_assignment(self):
-        source = (ROOT / "src/legacy/argus-panel.ts").read_text(encoding="utf-8")
+        source = (ROOT / "src/panel/argus-panel.ts").read_text(encoding="utf-8")
         self.assertIn("Zonas configuradas · Todos los modos", source)
         self.assertIn("Cada mensaje se usa solo en la situación que indica su título", source)
         self.assertIn("Usar mensaje predeterminado", source)
         self.assertNotIn("Variables: {count}", source)
 
     def test_voice_editor_shows_defaults_and_the_zones_for_the_selected_mode(self):
-        source = (ROOT / "src/legacy/argus-panel.ts").read_text(encoding="utf-8")
+        source = (ROOT / "src/panel/argus-panel.ts").read_text(encoding="utf-8")
         api = (ROOT / "custom_components/argus/websocket_api.py").read_text(encoding="utf-8")
         self.assertIn("defaultMessages = data.default_messages", source)
         self.assertIn("data-voice-zone-sensor", source)
@@ -45,7 +45,7 @@ class TestTtsSimpleConfigurationContract(unittest.TestCase):
         self.assertIn("message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_ARMED, \"msg_armed\"", (ROOT / "custom_components/argus/arming_voice.py").read_text(encoding="utf-8"))
 
     def test_ui_caps_selected_speakers_at_five_and_lists_home_assistant_tts(self):
-        source = (ROOT / "src/legacy/argus-panel.ts").read_text(encoding="utf-8")
+        source = (ROOT / "src/panel/argus-panel.ts").read_text(encoding="utf-8")
         self.assertIn(".slice(0, 5)", source)
         self.assertIn("hasta 5", source)
         self.assertIn("data.tts_entities", source)
@@ -106,7 +106,7 @@ class TestTtsSimpleConfigurationContract(unittest.TestCase):
         self.assertEqual(join_spoken_list(["Zona A, sensor Puerta"], "es"), "Zona A, sensor Puerta")
         self.assertEqual(join_spoken_list(["Zona A, sensor Puerta", "Zona B, sensor Ventana"], "es"), "Zona A, sensor Puerta y Zona B, sensor Ventana")
         self.assertEqual(join_spoken_list(["Zona A, sensor Puerta", "Zona B, sensor Ventana", "Zona C, sensor Garaje"], "es"), "Zona A, sensor Puerta, Zona B, sensor Ventana y Zona C, sensor Garaje")
-        self.assertIn("joinSpokenItems(sampleSensors)", (ROOT / "src/legacy/argus-panel.ts").read_text(encoding="utf-8"))
+        self.assertIn("joinSpokenItems(sampleSensors)", (ROOT / "src/panel/argus-panel.ts").read_text(encoding="utf-8"))
 
     def test_custom_arming_phrase_can_get_automatic_mode_zone_and_sensor_context(self):
         source = (ROOT / "custom_components/argus/arming_voice.py").read_text(encoding="utf-8")
@@ -123,7 +123,7 @@ class TestTtsSimpleConfigurationContract(unittest.TestCase):
             summary,
             "Hay 2 zonas con 3 sensores abiertos: Zona de Cocina, sensor Puerta sigue abierto, Zona de Patio, sensor Ventana sigue abierto y Zona de Garaje, sensor Portón sigue abierto.",
         )
-        self.assertIn("Argus añade automáticamente el conteo", (ROOT / "src/legacy/argus-panel.ts").read_text(encoding="utf-8"))
+        self.assertIn("Argus añade automáticamente el conteo", (ROOT / "src/panel/argus-panel.ts").read_text(encoding="utf-8"))
 
 
 class TestCustomTtsAutomaticContext(IsolatedAsyncioTestCase):

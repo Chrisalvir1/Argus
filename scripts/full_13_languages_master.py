@@ -619,22 +619,22 @@ lines.append("};\n")
 
 new_texts_block = "\n".join(lines) + "\n"
 
-# Inject into src/legacy/argus-panel.ts
-with open("src/legacy/argus-panel.ts") as f:
+# Inject into src/panel/argus-panel.ts
+with open("src/panel/argus-panel.ts") as f:
     full_content = f.read()
 
 texts_start = full_content.find("const TEXTS = {")
 tmpl_start = full_content.find("const _tmpl = document.createElement('template');")
 
 if texts_start == -1 or tmpl_start == -1:
-    raise ValueError("Could not find markers in src/legacy/argus-panel.ts")
+    raise ValueError("Could not find markers in src/panel/argus-panel.ts")
 
 header_block = full_content[:texts_start]
 rest_block = full_content[tmpl_start:]
 
 updated_content = header_block + new_texts_block + rest_block
 
-with open("src/legacy/argus-panel.ts", "w") as f:
+with open("src/panel/argus-panel.ts", "w") as f:
     f.write(updated_content)
 
-print("Successfully injected 100% full 13-language database into src/legacy/argus-panel.ts")
+print("Successfully injected 100% full 13-language database into src/panel/argus-panel.ts")

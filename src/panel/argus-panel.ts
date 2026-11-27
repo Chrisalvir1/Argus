@@ -4711,6 +4711,10 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Init ────────────────────────────────────────────────────────── */
   connectedCallback() {
+    try {
+      this.classList.toggle('argus-perf-essential', localStorage.getItem('argus_visual_mode') === 'lite');
+    } catch { /* Storage is optional for embedded panels. */ }
+
     // Restore persisted language
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
 
@@ -10373,6 +10377,12 @@ class ArgusPanel extends HTMLElement {
           </select>
         </div>
 
+        <label for="dropdown-visual-select">Modo de efectos</label>
+        <select id="dropdown-visual-select" class="glass-control">
+          <option value="3d" ${!this.classList.contains('argus-perf-essential') ? 'selected' : ''}>Efectos 3D</option>
+          <option value="lite" ${this.classList.contains('argus-perf-essential') ? 'selected' : ''}>Modo Lite (solo CSS)</option>
+        </select>
+
         <!-- Interaction / Gesture Selector (WCAG 2.5.1) -->
         <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
           <label style="font-size: 11.5px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 6px;">${this._t('gesture_selector_lbl') || '🕹️ Modo de Control (Accesibilidad)'}</label>
@@ -10531,6 +10541,12 @@ class ArgusPanel extends HTMLElement {
         select.value = previous;
         await this._showArgusConfirmModal(error.message || String(error), {confirmLabel: 'OK'});
       } finally { select.disabled = false; }
+    });
+
+    dropdown.querySelector('#dropdown-visual-select')?.addEventListener('change', (event: Event) => {
+      const mode = (event.target as HTMLSelectElement).value;
+      this.classList.toggle('argus-perf-essential', mode === 'lite');
+      try { localStorage.setItem('argus_visual_mode', mode); } catch { /* Keep the current selection. */ }
     });
 
     // Contrast dropdown change listener

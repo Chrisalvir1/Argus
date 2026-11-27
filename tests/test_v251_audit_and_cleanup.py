@@ -13,8 +13,8 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).parents[1]
-PANEL_SRC = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
-CARD_SRC = (ROOT / "src" / "legacy" / "argus-card.ts").read_text(encoding="utf-8")
+PANEL_SRC = (ROOT / "src" / "panel" / "argus-panel.ts").read_text(encoding="utf-8")
+CARD_SRC = (ROOT / "src" / "panel" / "argus-card.ts").read_text(encoding="utf-8")
 ACP_SRC = (ROOT / "custom_components" / "argus" / "alarm_control_panel.py").read_text(encoding="utf-8")
 CONST_SRC = (ROOT / "custom_components" / "argus" / "const.py").read_text(encoding="utf-8")
 STORAGE_SRC = (ROOT / "custom_components" / "argus" / "storage.py").read_text(encoding="utf-8")

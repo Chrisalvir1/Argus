@@ -25,3 +25,7 @@ local/config/*
 !local/config/configuration.yaml
 !local/config/custom_components/
 !local/config/custom_components/*
+
+/package-lock.json
+/remove_gooey.py
+/src/legacy/

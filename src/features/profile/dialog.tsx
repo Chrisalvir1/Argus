@@ -103,7 +103,7 @@ function renderSettingsMarkup(markup: string): React.ReactNode {
       else props[REACT_ATTRIBUTE_NAMES[attribute.name] || attribute.name] = attribute.value;
     }
     const children = Array.from(node.childNodes).map(renderNode);
-    if (node.tagName === 'SELECT' && ['dropdown-shield-select', 'dropdown-contrast-select', 'dropdown-gesture-select', 'dropdown-clock-select'].includes(node.id)) {
+    if (node.tagName === 'SELECT' && ['dropdown-shield-select', 'dropdown-contrast-select', 'dropdown-gesture-select', 'dropdown-clock-select', 'dropdown-visual-select'].includes(node.id)) {
       const select = node as HTMLSelectElement;
       return <ProfileChoices key={key} nativeProps={props} initial={select.value} choices={Array.from(select.options).map(option => ({value: option.value, label: option.text}))}>{children}</ProfileChoices>;
     }

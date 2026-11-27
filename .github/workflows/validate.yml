@@ -60,12 +60,12 @@ jobs:
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '26.13.1'
-          cache: npm
-      - run: npm ci
-      - run: test "$(npx tsc --version)" = "Version 7.0.2"
-      - run: npx tsc --noEmit
-      - run: npm test
-      - run: npm run build
+      - run: npm install --global "$(node -p 'require("./package.json").packageManager')"
+      - run: pnpm install --frozen-lockfile --strict-peer-dependencies
+      - run: test "$(pnpm exec tsc --version)" = "Version 7.0.2"
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm test
+      - run: pnpm build
       - name: Verify browser-safe bundle
         run: |
           test -s custom_components/argus/www/react-dist/argus-frontend.js
@@ -80,9 +80,9 @@ jobs:
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '26.13.1'
-          cache: npm
-      - run: npm ci
-      - run: npm run build
+      - run: npm install --global "$(node -p 'require("./package.json").packageManager')"
+      - run: pnpm install --frozen-lockfile --strict-peer-dependencies
+      - run: pnpm build
       - run: |
           set -euo pipefail
           cd custom_components/argus
@@ -120,7 +120,7 @@ jobs:
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '26.13.1'
-          cache: npm
-      - run: npm ci
+      - run: npm install --global "$(node -p 'require("./package.json").packageManager')"
+      - run: pnpm install --frozen-lockfile --strict-peer-dependencies
       - name: Report high-severity dependency findings
-        run: npm audit --audit-level=high
+        run: pnpm audit --audit-level=high

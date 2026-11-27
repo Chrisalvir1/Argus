@@ -3,8 +3,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, expect, it, vi } from 'vitest';
 import { SecurityConsole } from './SecurityConsole';
 import { SecurityContext } from './SecurityContext';
-import legacySource from '../../../legacy/argus-panel.ts?raw';
-import cardSource from '../../../legacy/argus-card.ts?raw';
+import legacySource from '../../../panel/argus-panel.ts?raw';
+import cardSource from '../../../panel/argus-card.ts?raw';
 import shieldSource from './SecurityShield.tsx?raw';
 
 afterEach(() => vi.unstubAllGlobals());

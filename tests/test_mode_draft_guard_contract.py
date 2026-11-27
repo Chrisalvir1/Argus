@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class TestModeDraftGuardContract(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.source = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
+        cls.source = (ROOT / "src" / "panel" / "argus-panel.ts").read_text(encoding="utf-8")
         cls.dashboard_css = (ROOT / "src" / "features" / "dashboard" / "style.css").read_text(encoding="utf-8")
 
     def test_voice_settings_have_a_separate_slot_before_mode_save(self):

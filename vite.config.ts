@@ -17,6 +17,11 @@ export default defineConfig({
     outDir: 'custom_components/argus/www/react-dist',
     emptyOutDir: true,
     cssCodeSplit: false,
-    rollupOptions: { output: { codeSplitting: false } },
+    rolldownOptions: {
+      output: {
+        chunkFileNames: '[name]-[hash].js',
+        codeSplitting: { groups: [{ name: 'three', test: /[\/]node_modules[\/]three[\/]/ }] },
+      },
+    },
   },
 });

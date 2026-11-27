@@ -543,7 +543,7 @@ full_file = header_block + new_texts_block + tmpl_block + class_and_rest
 if "customElements.define('argus-panel'," not in full_file:
     full_file += "\ntry { if (!customElements.get('argus-panel')) customElements.define('argus-panel', ArgusPanel); } catch(_) {}\n"
 
-with open("src/legacy/argus-panel.ts", "w") as f:
+with open("src/panel/argus-panel.ts", "w") as f:
     f.write(full_file)
 
-print("Successfully injected 100% comprehensive 13-language translations into src/legacy/argus-panel.ts")
+print("Successfully injected 100% comprehensive 13-language translations into src/panel/argus-panel.ts")
