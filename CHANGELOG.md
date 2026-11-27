@@ -1,3 +1,9 @@
+## Próxima versión · Dependencias
+
+- Actualiza Vite, Vitest, Rolldown y PostCSS. Reduce el tiempo mediano de compilación alrededor de un 12 % en CI.
+- Regenera los lockfiles y valida npm y pnpm 12.24.0. Simplifica el árbol WASI al retirar EMNAPI.
+- Verifica Home Assistant Core 2026.11.3, HACS, Hassfest y Linux ARM64. [Notas completas](docs/RELEASE_NOTES_3.7.11.md)
+
 ## [3.7.10] - 2026-11-17
 
 - Actualiza Vite a 8.3.8 y el plugin React a 6.3.0, conservando TypeScript 7.0.2.
