@@ -7,7 +7,7 @@ class TestV2039TtsContract(unittest.TestCase):
         flow=(COMPONENT/'config_flow.py').read_text(encoding='utf-8')
         voice=(COMPONENT/'arming_voice.py').read_text(encoding='utf-8')
         api=(COMPONENT/'websocket_api.py').read_text(encoding='utf-8')
-        ui=(ROOT/'src/legacy/argus-panel.ts').read_text(encoding='utf-8')
+        ui=(ROOT/'src/panel/argus-panel.ts').read_text(encoding='utf-8')
         self.assertIn('voice_settings_in_panel', flow)
         self.assertIn('hass.states.async_all("tts")', api)
         self.assertIn('hass.states.async_all("media_player")', api)

@@ -21,7 +21,7 @@ def _load_module(name: str, path: Path):
 
 class SupportedLanguagesContractTests(unittest.TestCase):
     def test_user_language_selector_only_offers_auto_spanish_and_english(self):
-        source = (ROOT / "src/legacy/argus-panel.ts").read_text()
+        source = (ROOT / "src/panel/argus-panel.ts").read_text()
         match = re.search(r"const LANG_LIST = \[(.*?)\];", source, re.DOTALL)
         self.assertIsNotNone(match)
         codes = re.findall(r"code:'([^']+)'", match.group(1))

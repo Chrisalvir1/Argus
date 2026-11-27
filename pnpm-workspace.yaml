@@ -1,0 +1,21 @@
+# Exact releases verified for the 2026-11-26 upgrade while pnpm applies its publication-age policy.
+
+minimumReleaseAgeExclude:
+  - '@rolldown/binding-android-arm-eabi@1.3.4'
+  - '@rolldown/binding-android-arm64@1.3.4'
+  - '@rolldown/binding-darwin-arm64@1.3.4'
+  - '@rolldown/binding-darwin-x64@1.3.4'
+  - '@rolldown/binding-freebsd-x64@1.3.4'
+  - '@rolldown/binding-linux-arm-gnueabihf@1.3.4'
+  - '@rolldown/binding-linux-arm64-gnu@1.3.4'
+  - '@rolldown/binding-linux-arm64-musl@1.3.4'
+  - '@rolldown/binding-linux-ppc64-gnu@1.3.4'
+  - '@rolldown/binding-linux-s390x-gnu@1.3.4'
+  - '@rolldown/binding-linux-x64-gnu@1.3.4'
+  - '@rolldown/binding-linux-x64-musl@1.3.4'
+  - '@rolldown/binding-openharmony-arm64@1.3.4'
+  - '@rolldown/binding-wasm32-wasi@1.3.4'
+  - '@rolldown/binding-win32-arm64-msvc@1.3.4'
+  - '@rolldown/binding-win32-x64-msvc@1.3.4'
+  - 'rolldown@1.3.4'
+  - 'vite@8.4.0'

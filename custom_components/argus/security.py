@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 import base64
-from dataclasses import dataclass
+from collections.abc import Callable
+from dataclasses import asdict, dataclass
 import hashlib
 import hmac
 import os
@@ -29,6 +30,11 @@ def hash_pin(pin: str) -> str:
     """Return a salted scrypt representation of a validated PIN."""
     if not validate_pin(pin):
         raise ValueError("PIN does not satisfy the Argus security policy")
+    return hash_legacy_pin(pin)
+
+
+def hash_legacy_pin(pin: str) -> str:
+    """Preserve an existing credential irrespective of current PIN policy."""
     salt = os.urandom(16)
     prefix = _PREFIX if hasattr(hashlib, "scrypt") else "pbkdf2_sha256"
     if hasattr(hashlib, "scrypt"):
@@ -41,11 +47,11 @@ def hash_pin(pin: str) -> str:
 
 
 def verify_pin(pin: str | None, stored: str | None) -> bool:
-    """Compare a PIN against a current hash or legacy plaintext value."""
-    if not pin or not stored:
+    """Compare a PIN against a stored credential hash."""
+    if not pin or not isinstance(stored, str) or not stored:
         return False
     if not stored.startswith((f"{_PREFIX}:", "pbkdf2_sha256:")):
-        return hmac.compare_digest(str(pin), str(stored))
+        return False
     try:
         prefix, raw_salt, raw_digest = stored.split(":", 2)
         salt = base64.b64decode(raw_salt, validate=True)
@@ -65,7 +71,7 @@ def verify_pin(pin: str | None, stored: str | None) -> bool:
         return False
 
 
-def needs_rehash(stored: str | None) -> bool:
+def needs_rehash(stored: str | int | None) -> bool:
     """Return whether a stored credential still uses the legacy format."""
     return bool(stored) and not str(stored).startswith((f"{_PREFIX}:", "pbkdf2_sha256:"))
 
@@ -76,33 +82,80 @@ class PinAttemptState:
 
     failures: int = 0
     blocked_until: float = 0.0
+    retry_level: int = 0
+    expires_at: float = 0.0
 
 
 class PinAttemptLimiter:
-    """Bound repeated online PIN attempts using monotonic time."""
+    """Rate-limit PIN attempts with bounded, restart-safe deadlines."""
 
-    def __init__(self, max_attempts: int = 5, block_seconds: int = 300) -> None:
+    _IDLE_SECONDS = 24 * 60 * 60
+    _MAX_RETRY_LEVEL = 8
+
+    def __init__(
+        self,
+        max_attempts: int = 5,
+        block_seconds: int = 300,
+        *,
+        saved: dict | None = None,
+        on_change: Callable[[], None] | None = None,
+    ) -> None:
         self.max_attempts = max_attempts
         self.block_seconds = block_seconds
+        self._on_change = on_change
         self._states: dict[str, PinAttemptState] = {}
+        now = time.time()
+        for key, state in (saved if isinstance(saved, dict) else {}).items():
+            try:
+                candidate = PinAttemptState(**state)
+                if (
+                    0 <= candidate.failures < max_attempts
+                    and 0 <= candidate.retry_level <= self._MAX_RETRY_LEVEL
+                    and 0 <= candidate.blocked_until <= candidate.expires_at
+                    and now < candidate.expires_at <= now + self._IDLE_SECONDS
+                ):
+                    self._states[key] = candidate
+            except (TypeError, ValueError):
+                continue
+
+    def snapshot(self) -> dict:
+        now = time.time()
+        return {
+            key: asdict(state)
+            for key, state in self._states.items()
+            if state.expires_at > now
+        }
+
+    def _changed(self) -> None:
+        if self._on_change:
+            self._on_change()
 
     def is_blocked(self, key: str) -> bool:
         state = self._states.get(key)
-        if not state:
+        if state is None:
             return False
-        if state.blocked_until <= time.monotonic():
-            if state.blocked_until:
-                self._states.pop(key, None)
+        now = time.time()
+        if state.expires_at <= now:
+            self._states.pop(key, None)
             return False
-        return True
+        return state.blocked_until > now
 
     def record_failure(self, key: str) -> bool:
-        state = self._states.setdefault(key, PinAttemptState())
-        state.failures += 1
-        if state.failures >= self.max_attempts:
-            state.blocked_until = time.monotonic() + self.block_seconds
+        if self.is_blocked(key):
             return True
-        return False
+        now = time.time()
+        state = self._states.setdefault(key, PinAttemptState())
+        state.expires_at = now + self._IDLE_SECONDS
+        state.failures += 1
+        blocked = state.failures >= self.max_attempts
+        if blocked:
+            delay = min(self.block_seconds * 2 ** state.retry_level, 60 * 60)
+            state.blocked_until = now + delay
+            state.retry_level = min(state.retry_level + 1, self._MAX_RETRY_LEVEL)
+            state.failures = 0
+        self._changed()
+        return blocked
 
     def reset(self, key: str) -> None:
-        self._states.pop(key, None)
+        if self._states.pop(key, None) is not None:
+            self._changed()

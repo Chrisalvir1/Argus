@@ -1,8 +1,6 @@
 import { applyNightMode } from '../features/night';
-import '../legacy/argus-panel';
-import '../legacy/argus-card';
-import{applyReactDashboardLayout}from'../features/dashboard';
-import { applyReactSecurityConsole } from '../features/dashboard/components';
+import '../panel/argus-panel';
+import '../panel/argus-card';
 import{applyMediaClient}from'../features/media/client';
 import{applySecurityClient}from'../features/security/client';
 import{applyPremiumExperience}from'../features/premium';
@@ -26,7 +24,9 @@ import type{ArgusPanelConstructor}from'../core/panel';
    applyStableInstancesRender(C);
    applyV2050AlarmVisuals(C);
    applyMoreInfoHook(C);
-  applyReactDashboardLayout(C);
-  applyReactSecurityConsole(C);
+  (C.prototype as any)._prepareArgusDashboard = async function () {
+    const { installDashboard } = await import('./dashboard');
+    installDashboard(C, this);
+  };
   applyNightMode(C);
  }

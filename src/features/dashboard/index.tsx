@@ -93,7 +93,7 @@ class PanelDashboardStorage extends LocalStorageDashboardLayoutStorage{
  }
 }
 
-function removeLegacyEditor(panel:Panel){
+export function removeLegacyEditor(panel:Panel){
  const label=panel.shadowRoot?.getElementById('edit-widgets-label');
  (label?.closest('button')||label)?.remove();
  panel.shadowRoot?.querySelectorAll('.panel-edit-overlay,.widget-drag-handle').forEach(node=>node.remove());

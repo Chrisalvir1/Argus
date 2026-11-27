@@ -12,11 +12,12 @@ import uuid
 
 _LOGGER = logging.getLogger(__name__)
 
+from homeassistant.const import CONF_CODE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
 
 from .const import DOMAIN
-from .security import hash_pin, validate_pin
+from .security import PinAttemptLimiter, hash_legacy_pin, hash_pin, needs_rehash, validate_pin
 
 _STORAGE_VERSION = 1
 _STORAGE_KEY_GLOBAL = f"{DOMAIN}.ui"
@@ -32,6 +33,77 @@ def _storage_lock(hass: HomeAssistant) -> asyncio.Lock:
 def _store(hass: HomeAssistant, entry_id: str | None = None) -> Store:
     key = f"{_STORAGE_KEY_GLOBAL}.{entry_id}" if entry_id else _STORAGE_KEY_GLOBAL
     return Store(hass, _STORAGE_VERSION, key)
+
+
+async def async_restore_pin_limiters(hass: HomeAssistant, entry_id: str) -> None:
+    """Hydrate PIN attempt counters before the entry starts handling requests."""
+    keys = {
+        "websocket": f"{DOMAIN}_limiter_{entry_id}",
+        "panel": f"{DOMAIN}_pin_limiter_{entry_id}",
+    }
+    if all(key in hass.data for key in keys.values()):
+        return
+    store = Store(hass, 1, f"{DOMAIN}.pin_attempts.{entry_id}", private=True)
+    raw = await store.async_load()
+    saved = raw if isinstance(raw, dict) else {}
+    limiters = {}
+
+    def snapshot():
+        return {name: limiter.snapshot() for name, limiter in limiters.items()}
+
+    def persist():
+        store.async_delay_save(snapshot, 0)
+
+    for name, key in keys.items():
+        limiters[name] = PinAttemptLimiter(saved=saved.get(name), on_change=persist)
+        hass.data[key] = limiters[name]
+
+
+async def _async_hash_legacy_fields(hass: HomeAssistant, fields: list[tuple[dict, str]]) -> bool:
+    pending = [
+        (record, field, str(value))
+        for record, field in fields
+        if isinstance(value := record.get(field), (str, int))
+        and not isinstance(value, bool)
+        and needs_rehash(value)
+    ]
+    if not pending:
+        return False
+    hashes = await hass.async_add_executor_job(
+        lambda: [hash_legacy_pin(pin) for _, _, pin in pending]
+    )
+    for (record, field, _), hashed in zip(pending, hashes, strict=True):
+        record[field] = hashed
+    return True
+
+
+async def _async_migrate_ui_pins(hass: HomeAssistant, data: dict) -> bool:
+    advanced = data.get("advanced")
+    fields = []
+    if isinstance(advanced, dict):
+        fields.extend((advanced, field) for field in ("guest_code", "duress_pin"))
+    if isinstance(users := data.get("users"), list):
+        fields.extend(
+            (user, field)
+            for user in users if isinstance(user, dict)
+            for field in ("pin", "master_pin_hash", "access_pin_hash")
+        )
+    return await _async_hash_legacy_fields(hass, fields)
+
+
+async def async_migrate_pin_credentials(hass: HomeAssistant, entry) -> None:
+    """Migrate entry credentials and its historical UI store at startup."""
+    async with _storage_lock(hass):
+        data, options = dict(entry.data), dict(entry.options)
+        if await _async_hash_legacy_fields(hass, [(data, CONF_CODE), (options, CONF_CODE)]):
+            hass.config_entries.async_update_entry(entry, data=data, options=options)
+        legacy_store = _store(hass)
+        legacy = await legacy_store.async_load()
+        if isinstance(legacy, dict):
+            legacy = copy.deepcopy(legacy)
+            if await _async_migrate_ui_pins(hass, legacy):
+                await legacy_store.async_save(legacy)
+        await async_load_ui_data(hass, entry.entry_id)
 
 
 def _default_payload() -> dict:
@@ -138,6 +210,7 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
                     if key == "zones" and isinstance(val, list):
                         zones_explicitly_saved = True
                     
+            await _async_migrate_ui_pins(hass, data)
             if "users" in data and isinstance(data["users"], list):
                 data["users"] = _sanitize_users(data["users"])
                 
@@ -191,6 +264,8 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
                         away_sensors.append(s)
         changed = True
 
+    if await _async_migrate_ui_pins(hass, data):
+        changed = True
     if changed:
         await store.async_save(data)
     return data
@@ -335,19 +410,12 @@ def _sanitize_users(users: object) -> list[dict]:
             "admin_profiles": bool(perms.get("admin_profiles", False)),
         }
 
-        # Validate/Hash alarm pin
-        pin = user.get("pin")
-        if pin and not str(pin).startswith(("scrypt:", "pbkdf2_sha256:")):
-            if not validate_pin(str(pin)):
-                raise ValueError("backup contains an invalid user PIN")
-            user["pin"] = hash_pin(str(pin))
-
-        # Validate/Hash access pin
-        access_pin = user.get("access_pin_hash")
-        if access_pin and not str(access_pin).startswith(("scrypt:", "pbkdf2_sha256:")):
-            if not validate_pin(str(access_pin)):
-                raise ValueError("backup contains an invalid access PIN")
-            user["access_pin_hash"] = hash_pin(str(access_pin))
+        for field in ("pin", "master_pin_hash", "access_pin_hash"):
+            value = user.get(field)
+            if needs_rehash(value):
+                if not validate_pin(str(value)):
+                    raise ValueError(f"backup contains an invalid {field} PIN")
+                user[field] = hash_pin(str(value))
 
         result.append(user)
     return result
@@ -366,11 +434,12 @@ def _sanitize_restore(payload: object, runtime: dict) -> dict:
     advanced = restored.get("advanced")
     if not isinstance(advanced, dict):
         raise ValueError("advanced must be an object")
-    guest = advanced.get("guest_code")
-    if guest and not str(guest).startswith(("scrypt:", "pbkdf2_sha256:")):
-        if not validate_pin(str(guest)):
-            raise ValueError("backup contains an invalid guest PIN")
-        advanced["guest_code"] = hash_pin(str(guest))
+    for field in ("guest_code", "duress_pin"):
+        value = advanced.get(field)
+        if needs_rehash(value):
+            if not validate_pin(str(value)):
+                raise ValueError(f"backup contains an invalid {field} PIN")
+            advanced[field] = hash_pin(str(value))
     return restored
 
 

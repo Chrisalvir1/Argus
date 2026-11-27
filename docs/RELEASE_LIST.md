@@ -1,5 +1,9 @@
 # Versiones recientes
 
+[Candidato v3.7.12](RELEASE_NOTES_3.7.12.md) · Mantenimiento, seguridad de PIN y carga diferida de WebGL.
+
+[v3.7.11](RELEASE_NOTES_3.7.11.md) · Modernización de dependencias, compilación más liviana y validación de Core en ARM64. [Etiquetas](DEPENDENCY_TAGS.md)
+
 | Versión | Descripción | Notas |
 |---|---|---|
 | 3.7.6 | Núcleo 3D y safe areas en fullscreen horizontal | [Notas](RELEASE_NOTES_3.7.6.md) |
