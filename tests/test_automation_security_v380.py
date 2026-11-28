@@ -16,11 +16,34 @@ from custom_components.argus.sensor_state_runtime import (
     RecoveredSensorGate,
     SensorGroupWindow,
     normalize_sensor_groups,
+    sensor_group_ready,
 )
 from custom_components.argus.websocket_api import _redact_ui_data
 
 
 class SensorWindowTests(TestCase):
+    def test_group_threshold_and_window_require_manual_configuration(self):
+        members = ["binary_sensor.front", "binary_sensor.back"]
+        for incomplete in ({"required": 2}, {"window_seconds": 137}):
+            with self.subTest(incomplete=incomplete), self.assertRaises(ValueError):
+                normalize_sensor_groups([{"sensors": members, **incomplete}], members)
+
+        for seconds in (137, 263):
+            group = {"sensors": members, "required": 2, "window_seconds": seconds}
+            with self.subTest(seconds=seconds):
+                self.assertEqual(normalize_sensor_groups([group], members), [group])
+
+    def test_absent_or_empty_groups_preserve_individual_sensor_trigger(self):
+        entity_id = "binary_sensor.front"
+        for config in ({"sensors": [entity_id]}, {"sensors": [entity_id], "sensor_groups": []}):
+            panel = SimpleNamespace(
+                _alarm_state=SimpleNamespace(value="armed_away"),
+                _mode_config=Mock(return_value=config),
+            )
+            with self.subTest(config=config):
+                self.assertTrue(sensor_group_ready(panel, entity_id))
+                panel._mode_config.assert_called_once_with("away")
+
     def test_counts_distinct_members_and_expires_old_events(self):
         members = ("binary_sensor.front", "binary_sensor.back", "binary_sensor.motion")
         group = {"sensors": list(members), "required": 2, "window_seconds": 120}
