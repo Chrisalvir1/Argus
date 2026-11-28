@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 from datetime import timedelta
 
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
@@ -23,6 +24,99 @@ _ARMED_STATES = {
     AlarmControlPanelState.ARMED_AWAY,
     AlarmControlPanelState.ARMED_NIGHT,
 }
+
+
+_UNKNOWN_STATES = {None, "unknown", "unavailable", "offline"}
+
+
+def normalize_sensor_groups(value, sensors) -> list[dict]:
+    """Validate distinct groups attached to the mode's existing sensor list."""
+    if not isinstance(value, list):
+        raise ValueError("sensor_groups must be a list")
+    allowed = set(sensors)
+    assigned = set()
+    result = []
+    for group in value:
+        if not isinstance(group, dict):
+            raise ValueError("each sensor group must be an object")
+        members = group.get("sensors")
+        required = group.get("required")
+        window = group.get("window_seconds")
+        if not isinstance(members, list) or any(not isinstance(item, str) for item in members):
+            raise ValueError("sensor group members must be entity IDs")
+        unique = set(members)
+        if (
+            len(unique) != len(members) or not unique <= allowed or assigned & unique
+            or type(required) is not int or not 2 <= required <= len(members)
+            or type(window) is not int or not 120 <= window <= 300
+        ):
+            raise ValueError("sensor groups need distinct mode sensors, a valid threshold and a 120–300 s window")
+        assigned.update(unique)
+        result.append({"sensors": members.copy(), "required": required, "window_seconds": window})
+    return result
+
+
+class SensorGroupWindow:
+    """Count distinct sensor events in the configured rolling window."""
+
+    def __init__(self) -> None:
+        self._events: dict[str, float] = {}
+
+    def observe(self, entity_id, members, required, window, now) -> bool:
+        self._events[entity_id] = now
+        self._events = {entity: timestamp for entity, timestamp in self._events.items() if now - timestamp <= window}
+        return sum(entity in self._events for entity in members) >= required
+
+
+class RecoveredSensorGate:
+    """Consume the first available reading of previously unknown sensors."""
+
+    def __init__(self, allow_initial: set[str]) -> None:
+        self._unseen = set(allow_initial)
+        self._held: set[str] = set()
+
+    def allow(self, entity_id: str, state: str | None, active: bool) -> bool:
+        if state in _UNKNOWN_STATES:
+            return entity_id not in self._held
+        if entity_id in self._unseen:
+            self._unseen.remove(entity_id)
+            if active:
+                self._held.add(entity_id)
+        if not active:
+            self._held.discard(entity_id)
+        return entity_id not in self._held
+
+
+def sensor_group_ready(panel, entity_id: str) -> bool:
+    """Opt-in groups share the same window for events and watchdog observations."""
+    if not hasattr(panel, "_mode_config"):
+        return True
+    mode = panel._alarm_state.value.replace("armed_", "")
+    config = panel._mode_config(mode)
+    raw_groups = config.get("sensor_groups")
+    if not raw_groups:
+        return True
+    if panel._requires_immediate_trigger(entity_id):
+        return True
+    try:
+        groups = normalize_sensor_groups(raw_groups, config.get("sensors", []))
+    except (ValueError, TypeError):
+        # Malformed configuration must leave single-sensor protection active.
+        return True
+    for group in groups:
+        members = group["sensors"]
+        if entity_id not in members:
+            continue
+        eligible = tuple(sensor for sensor in members if sensor not in panel._cycle_bypassed)
+        if len(eligible) < group["required"]:
+            return True
+        signature = (getattr(panel, "_arm_generation", 0), mode)
+        windows = getattr(panel, "_argus_group_windows", None)
+        if not windows or windows[0] != signature:
+            windows = panel._argus_group_windows = (signature, {})
+        state = windows[1].setdefault((eligible, group["required"], group["window_seconds"]), SensorGroupWindow())
+        return state.observe(entity_id, eligible, group["required"], group["window_seconds"], time.monotonic())
+    return True
 
 
 def is_sensor_active(hass, entity_id: str) -> bool:
@@ -308,9 +402,19 @@ def install_sensor_state_runtime() -> None:
 
             if self._alarm_state not in _ARMED_STATES:
                 self._argus_last_active_sensors = set()
+                self._argus_recovery_gate = None
+                self._argus_group_windows = None
                 return
 
             active = active_for_state(self, self._alarm_state)
+            gate = getattr(self, "_argus_recovery_gate", None)
+            if gate is not None:
+                for sensor in self._sensors_for_state(self._alarm_state):
+                    reading = self.hass.states.get(sensor)
+                    if self._requires_immediate_trigger(sensor):
+                        continue
+                    if not gate.allow(sensor, reading.state if reading else None, sensor in active):
+                        active.discard(sensor)
             previous = set(
                 getattr(self, "_argus_last_active_sensors", set())
             )
@@ -318,7 +422,9 @@ def install_sensor_state_runtime() -> None:
             newly_active = active - previous
             if not newly_active:
                 return
-            entity_id = sorted(newly_active)[0]
+            entity_id = next((sensor for sensor in sorted(newly_active) if sensor_group_ready(self, sensor)), None)
+            if entity_id is None:
+                return
             _LOGGER.warning(
                 "Argus watchdog detected newly active sensor %s while %s",
                 entity_id,
@@ -346,6 +452,18 @@ def install_sensor_state_runtime() -> None:
         self._argus_last_active_sensors = active_for_state(
             self, self._alarm_state
         )
+        if self._alarm_state in _ARMED_STATES and hasattr(self, "_mode_config"):
+            mode = self._alarm_state.value.replace("armed_", "")
+            settings = self._mode_config(mode).get("sensor_settings", {})
+            if isinstance(settings, dict):
+                initially_unknown = {
+                    sensor for sensor in self._sensors_for_state(self._alarm_state)
+                    if isinstance(config := settings.get(sensor), dict)
+                    and config.get("allow_open_initially") is True
+                    and getattr(self.hass.states.get(sensor), "state", None) in _UNKNOWN_STATES
+                    and not self._requires_immediate_trigger(sensor)
+                }
+                self._argus_recovery_gate = RecoveredSensorGate(initially_unknown)
         existing = getattr(self, "_argus_sensor_watchdog_unsub", None)
         if existing:
             existing()
@@ -371,6 +489,8 @@ def install_sensor_state_runtime() -> None:
 
     async def complete_with_baseline(self, target) -> None:
         await original_complete(self, target)
+        self._argus_recovery_gate = None
+        self._argus_group_windows = None
         self._argus_last_active_sensors = active_for_state(self, target)
         self._argus_last_arming_target = None
         self._argus_last_blocking_sensors = []

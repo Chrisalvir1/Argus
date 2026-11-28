@@ -86,7 +86,7 @@ async def _async_migrate_ui_pins(hass: HomeAssistant, data: dict) -> bool:
         fields.extend(
             (user, field)
             for user in users if isinstance(user, dict)
-            for field in ("pin", "master_pin_hash", "access_pin_hash")
+            for field in ("pin", "master_pin_hash", "access_pin_hash", "override_pin_hash")
         )
     return await _async_hash_legacy_fields(hass, fields)
 
@@ -114,7 +114,7 @@ def _default_payload() -> dict:
         "modes": {"home": {}, "away": {}, "night": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
         "advanced": {"guest_code": None, "guest_code_enabled": False, "duress_pin": None},
-        "automations": [], "notif_targets": [],
+        "automations": [], "notif_targets": [], "push_actions_enabled": False, "mqtt": {},
         "emergency_number": "911", "panic_outputs": [], "users": [],
         "home_name": "", "background_mode": "weather", "background_images": [],
         "temperature_source": "auto", "weather_source": "auto", "clock_format": "auto",
@@ -288,7 +288,7 @@ def _preserve_redacted_user_pins(current: object, incoming: object) -> list[dict
         if previous:
             # Missing fields are redaction; an explicit empty value removes a PIN.
             # Names are editable and cannot identify the credential owner.
-            for field in ("pin", "access_pin_hash", "master_pin_hash"):
+            for field in ("pin", "access_pin_hash", "master_pin_hash", "override_pin_hash"):
                 if field not in user and field in previous:
                     user[field] = previous[field]
         merged.append(user)
@@ -402,6 +402,7 @@ def _sanitize_users(users: object) -> list[dict]:
             "view_status": bool(perms.get("view_status", True)),
             "view_history": bool(perms.get("view_history", False)),
             "arm": bool(perms.get("arm", False)),
+            "force_arm": bool(perms.get("force_arm", False)),
             "disarm": bool(perms.get("disarm", False)),
             "sos": bool(perms.get("sos", False)),
             "change_pin": bool(perms.get("change_pin", False)),
@@ -410,7 +411,7 @@ def _sanitize_users(users: object) -> list[dict]:
             "admin_profiles": bool(perms.get("admin_profiles", False)),
         }
 
-        for field in ("pin", "master_pin_hash", "access_pin_hash"):
+        for field in ("pin", "master_pin_hash", "access_pin_hash", "override_pin_hash"):
             value = user.get(field)
             if needs_rehash(value):
                 if not validate_pin(str(value)):

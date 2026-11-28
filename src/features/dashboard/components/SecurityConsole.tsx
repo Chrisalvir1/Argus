@@ -225,6 +225,33 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   };
   const bypassEligible: string[] = hass?.states?.[entry.entity_id]?.attributes?.arming_bypass_eligible_sensors || [];
   const blockingSensors = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || [];
+  const forceArmAvailable = isWaiting && blockingSensors.length > 0
+    && blockingSensors.every((sensor: string) => bypassEligible.includes(sensor))
+    && panel._currentProfile?.permissions?.force_arm
+    && panel._currentProfile?.override_pin_configured;
+  const forceArm = async () => {
+    if (bypassInFlight.current) return;
+    const generation = hass?.states?.[entry.entity_id]?.attributes?.arming_generation;
+    bypassInFlight.current = true;
+    setBypassPending(true);
+    setBypassError(null);
+    try {
+      const code = await panel._showArgusInputModal({
+        title: 'Armar con bypass',
+        label: 'Los sensores pendientes quedarán omitidos durante este armado. Introduce el PIN de override.',
+        type: 'password',
+        numeric: true,
+      });
+      if (code) await panel._send('argus/perform_alarm_action', {
+        action: 'force_arm', code, generation, entry_id: entry.entry_id,
+      });
+    } catch (error) {
+      setBypassError(String((error as Error).message || error));
+    } finally {
+      bypassInFlight.current = false;
+      setBypassPending(false);
+    }
+  };
   let eCfg: any = {};
   
   if (entry.entity_id) {
@@ -530,6 +557,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               : diagnosticOpen && !incidentOpen ? 'Diagnóstico de sensores' : undefined}
 
           >
+            {forceArmAvailable && <button type="button" className="context-tool" disabled={bypassPending} onClick={forceArm}>Armar con bypass</button>}
             {bypassError && <small role="alert">{bypassError}</small>}
             {selectedZone && !testing && !incidentOpen && <button type="button" className="context-back" onClick={() => selectContextZone(null, 'pending')}>Ver todas las zonas que requieren atención</button>}
             {selectedZone && !testing && !incidentOpen && <div className="context-sensor-row">

@@ -353,6 +353,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         attrs["arming_generation"] = self._arm_generation
         if self._cycle_bypassed:
             attrs["cycle_bypassed_sensors"] = sorted(self._cycle_bypassed)
+            attrs["bypassed_sensors"] = attrs["cycle_bypassed_sensors"]
         if self._panic_active:
             attrs["argus_panic_active"] = True
         if self._alarm_state in (
@@ -562,6 +563,24 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         else:
             await self._async_persist_stable_state("sensor_reincluded")
 
+    async def async_force_waiting_arm(self, generation: int | None = None) -> None:
+        """Bypass only eligible blockers in the pending arm request."""
+        request = self._arm_request
+        if generation is not None and generation != self._arm_generation:
+            raise HomeAssistantError("The pending arm request has changed")
+        if not request or not request["wait_for_sensors"] or request.get("completing"):
+            raise HomeAssistantError("No pending arm request")
+        blockers = self._open_blocking_sensors(request["target"])
+        if any(not self._can_omit_blocker(sensor) for sensor in blockers):
+            raise HomeAssistantError("A protected sensor still blocks arming")
+        self._cycle_bypassed.update(blockers)
+        self.async_write_ha_state()
+        await self._async_recheck_arm_request()
+        await async_append_audit_log(
+            self.hass, "forced_arm_bypass", "Authorized forced arm",
+            severity="warning", metadata={"sensors": blockers}, entry_id=self._config_entry.entry_id,
+        )
+
     def _open_sensor_policy(self, mode_key: str) -> str:
         config = self._mode_config(mode_key)
         if config.get("require_closed") or config.get("requireClosed"):
@@ -648,8 +667,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self.hass, all_sensors, self._async_sensor_changed
             )
 
+        from .push_actions import handle_notification_action
+
+        async def on_notification_action(event):
+            await handle_notification_action(self, event)
+
+        self.async_on_remove(self.hass.bus.async_listen("mobile_app_notification_action", on_notification_action))
+
         # MQTT
-        if self._mqtt_enabled:
+        self._apply_mqtt_topics()
+        if self._mqtt_enabled or any(self._get_mode_val(mode, "mqtt_enabled", False) for mode in ("home", "away", "night")):
             await self._async_setup_mqtt()
 
         # Re-subscribe sensors & reload config when panel saves changes
@@ -793,6 +820,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self.hass, all_sensors, self._async_sensor_changed
             )
 
+        self._apply_mqtt_topics()
         # Update MQTT status dynamically on config reload
         global_mqtt = self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled)
         any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night"])
@@ -1034,6 +1062,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         if new_state is None or entity_id in self._cycle_bypassed:
             return
+        gate = getattr(self, "_argus_recovery_gate", None)
+        if (
+            gate is not None
+            and not self._requires_immediate_trigger(entity_id)
+            and not gate.allow(entity_id, new_state.state, new_state.state in _INTRUSION_ACTIVE_STATES)
+        ):
+            return
         reincluded_at = getattr(self, "_cycle_reincluded_at", {}).get(entity_id)
         if reincluded_at and event.time_fired <= reincluded_at:
             return
@@ -1126,6 +1161,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                      event.data.get("old_state").state if event.data.get("old_state") else None,
                                      new_state.state,
                                      new_state.attributes.get("device_class")):
+                return
+
+        if mode_cfg.get("sensor_groups"):
+            from .sensor_state_runtime import sensor_group_ready
+
+            if old_state and old_state.state in _INTRUSION_ACTIVE_STATES:
+                return
+            if not sensor_group_ready(self, entity_id):
                 return
 
         _LOGGER.warning("Argus: Sensor %s tripped while %s", entity_id, self._alarm_state)
@@ -1229,10 +1272,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             else:
                 sensor_name = self._triggered_by
 
+        from .push_actions import notification_actions
+
         await self._async_notify_configured(
             "🚨 ARGUS — ALARMA DISPARADA",
             f"Sensor: {sensor_name}\nModo activo: {self._triggered_mode or 'desconocido'}",
-            {"priority": "high", "ttl": 0},
+            {"priority": "high", "ttl": 0, **notification_actions(self, "ARGUS_DISARM")},
         )
 
         mode_label = self._alarm_state.value.replace("armed_", "").capitalize()
@@ -1421,6 +1466,25 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     _LOGGER.error("Argus: siren control failed for %s: %s", entity_id, e2)
 
     # ── MQTT ────────────────────────────────────────────────────────
+    def _apply_mqtt_topics(self) -> None:
+        entry_config = {**self._config_entry.data, **self._config_entry.options}
+        self._mqtt_enabled = entry_config.get(CONF_MQTT_ENABLED, False)
+        self._mqtt_topic_state = entry_config.get(CONF_MQTT_TOPIC_STATE, "argus/alarm/state")
+        self._mqtt_topic_command = entry_config.get(CONF_MQTT_TOPIC_COMMAND, "argus/alarm/set")
+        config = self._ui_config.get("mqtt")
+        if not isinstance(config, dict) or not config:
+            return
+        state_topic = config.get("state_topic")
+        command_topic = config.get("command_topic")
+        if (
+            isinstance(state_topic, str) and isinstance(command_topic, str)
+            and state_topic and command_topic and state_topic != command_topic
+            and not any(character in state_topic + command_topic for character in "+#\x00")
+        ):
+            self._mqtt_enabled = config.get("enabled") is True
+            self._mqtt_topic_state = state_topic
+            self._mqtt_topic_command = command_topic
+
     async def _async_setup_mqtt(self):
         """Subscribe to MQTT command topic."""
         if "mqtt" not in self.hass.config.components:
@@ -1787,6 +1851,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._alarm_state = AlarmControlPanelState.ARMING
             self.async_write_ha_state()
             if open_sensors and policy == "pending":
+                if self._ui_config.get("push_actions_enabled") is True:
+                    from .push_actions import notification_actions
+
+                    actions = ["ARGUS_RETRY_ARM"]
+                    if not self._code_arm_required and all(self._can_omit_blocker(sensor) for sensor in open_sensors):
+                        actions.append("ARGUS_FORCE_ARM")
+                    self.hass.async_create_task(self._async_notify_configured(
+                        "Argus — Armado en espera",
+                        "Revisa los sensores que bloquean el armado.",
+                        notification_actions(self, *actions),
+                    ))
                 # Voice feedback is helpful, never a prerequisite for the
                 # security state machine.  A temporary TTS/storage failure
                 # must not leave the request half-created in ARMING.

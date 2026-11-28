@@ -1,12 +1,12 @@
 import type {HomeAssistant} from './home-assistant';
 import type { ArgusZone } from '../engine/types';
 
-export type AlarmAction='arm_home'|'arm_away'|'arm_night'|'disarm'|'sos';
+export type AlarmAction='arm_home'|'arm_away'|'arm_night'|'disarm'|'sos'|'force_arm';
 export type ArgusMode='disarmed'|'home'|'away'|'night';
 export type IncidentAction='confirm'|'false_alarm'|'silence_siren'|'resolve';
 export type JsonObject=Record<string,unknown>;
 export interface EntryScoped{entry_id?:string}
-export interface ArgusProfile{id:string;name:string;role:'admin'|'standard';enabled?:boolean;permissions?:Record<string,boolean>;shared_kiosk_profile?:boolean}
+export interface ArgusProfile{id:string;name:string;role:'admin'|'standard';enabled?:boolean;permissions?:Record<string,boolean>;shared_kiosk_profile?:boolean;override_pin_configured?:boolean}
 export interface ArgusEntity{entity_id:string;name:string;domain:string;device_class?:string|null;state:string;area?:string|null;icon?:string|null;device_id?:string|null}
 export interface ArgusEntry{entry_id:string;title:string;entity_id?:string|null;state:string;attributes:JsonObject;pin_configured:boolean;user_pin_configured:boolean}
 export interface DashboardResponse{entry_id?:string|null;entries:ArgusEntry[];current_profile?:ArgusProfile|null;ui:JsonObject;available_entities:ArgusEntity[]}
@@ -21,7 +21,7 @@ export interface ArgusRequestMap{
  'argus/verify_access_pin':EntryScoped&{argus_user_id:string;pin:string};
  'argus/select_profile':EntryScoped&{argus_user_id:string};
  'argus/logout_profile':EntryScoped;
- 'argus/perform_alarm_action':EntryScoped&{action:AlarmAction;code?:string};
+ 'argus/perform_alarm_action':EntryScoped&{action:AlarmAction;code?:string;generation?:number};
  'argus/get_ha_users':EntryScoped;
  'argus/get_ha_persons':EntryScoped;
  'argus/save_user_access_pin':EntryScoped&{argus_user_id:string;pin:string};
